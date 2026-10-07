@@ -1,0 +1,866 @@
+{
+ "last_refresh": null,
+ "urls": {},
+ "pending": {
+  "src_632ad1ffa8": {
+   "url": "https://cognition.com",
+   "lastmod": "2026-10-02T00:22:31.082Z",
+   "sha": "a6d7f50ce779f8b1",
+   "kind": "cognition"
+  },
+  "src_f4092070fe": {
+   "url": "https://cognition.com/about",
+   "lastmod": "2026-08-12T18:18:50.113Z",
+   "sha": "7be981b76c2c6c70",
+   "kind": "cognition"
+  },
+  "src_6220572852": {
+   "url": "https://cognition.com/blog/1b-run-rate",
+   "lastmod": "2026-09-25T18:22:27.400Z",
+   "sha": "bfedd7ffd9c9b51e",
+   "kind": "cognition"
+  },
+  "src_41b40375b4": {
+   "url": "https://cognition.com/blog/ai-data-analyst",
+   "lastmod": "2026-08-12T18:18:50.638Z",
+   "sha": "62b6e96c409d5765",
+   "kind": "cognition"
+  },
+  "src_28549a6272": {
+   "url": "https://cognition.com/blog/ai-guarantee",
+   "lastmod": "2026-08-12T18:18:50.754Z",
+   "sha": "fcba0664abeec91a",
+   "kind": "cognition"
+  },
+  "src_2b56dd5797": {
+   "url": "https://cognition.com/blog/ai-productivity",
+   "lastmod": "2026-08-12T18:18:50.698Z",
+   "sha": "36a18a138bf57418",
+   "kind": "cognition"
+  },
+  "src_2e4e2e4369": {
+   "url": "https://cognition.com/blog/android-emulator",
+   "lastmod": "2026-08-12T18:18:50.978Z",
+   "sha": "3e9fee1951a3aec3",
+   "kind": "cognition"
+  },
+  "src_2434e7a526": {
+   "url": "https://cognition.com/blog/auto-triage",
+   "lastmod": "2026-08-12T18:18:50.964Z",
+   "sha": "c84a35540fc649b1",
+   "kind": "cognition"
+  },
+  "src_bfc8c893c4": {
+   "url": "https://cognition.com/blog/aws-sca",
+   "lastmod": "2026-09-15T18:18:28.343Z",
+   "sha": "af3785cc6b11007c",
+   "kind": "cognition"
+  },
+  "src_3b83f673d2": {
+   "url": "https://cognition.com/blog/closing-the-agent-loop-devin-autofixes-review-comments",
+   "lastmod": "2026-08-12T18:18:50.903Z",
+   "sha": "c604ccb55b848ccc",
+   "kind": "cognition"
+  },
+  "src_516c1a389b": {
+   "url": "https://cognition.com/blog/codemaps",
+   "lastmod": "2026-08-12T18:18:50.927Z",
+   "sha": "51b08bbc7ae4d8f3",
+   "kind": "cognition"
+  },
+  "src_5da0a28d90": {
+   "url": "https://cognition.com/blog/coding-agents-101-the-art-of-actually-getting-things-done",
+   "lastmod": "2026-08-12T18:18:51.165Z",
+   "sha": "1547da2a9de4abe1",
+   "kind": "cognition"
+  },
+  "src_30fb648243": {
+   "url": "https://cognition.com/blog/cognition-doe-genesis-mission",
+   "lastmod": "2026-08-12T18:18:51.200Z",
+   "sha": "05c7178c0ef80e42",
+   "kind": "cognition"
+  },
+  "src_6602afa92b": {
+   "url": "https://cognition.com/blog/cognition-for-government",
+   "lastmod": "2026-08-12T18:18:51.241Z",
+   "sha": "5d4a9d6ad410ebe7",
+   "kind": "cognition"
+  },
+  "src_9bb302d439": {
+   "url": "https://cognition.com/blog/cognition-london",
+   "lastmod": "2026-08-12T18:18:51.257Z",
+   "sha": "5fb3ee39beedb743",
+   "kind": "cognition"
+  },
+  "src_769ffb261d": {
+   "url": "https://cognition.com/blog/cognition-open-source-initiative",
+   "lastmod": "2026-08-12T18:18:51.520Z",
+   "sha": "dbc40c61f339950a",
+   "kind": "cognition"
+  },
+  "src_6569ecf224": {
+   "url": "https://cognition.com/blog/cognizant-cognition",
+   "lastmod": "2026-08-12T18:18:51.303Z",
+   "sha": "85d9f475bebf7808",
+   "kind": "cognition"
+  },
+  "src_7d460c033b": {
+   "url": "https://cognition.com/blog/crossmint-devin",
+   "lastmod": "2026-08-12T18:18:51.574Z",
+   "sha": "ef53e6d01ec63730",
+   "kind": "cognition"
+  },
+  "src_db51438f66": {
+   "url": "https://cognition.com/blog/deepwiki",
+   "lastmod": "2026-08-12T18:18:51.475Z",
+   "sha": "0de2588dd9c31cc4",
+   "kind": "cognition"
+  },
+  "src_6b34af9205": {
+   "url": "https://cognition.com/blog/deepwiki-mcp-server",
+   "lastmod": "2026-08-12T18:18:51.810Z",
+   "sha": "874843fe9c32f9d4",
+   "kind": "cognition"
+  },
+  "src_71aa34d1ff": {
+   "url": "https://cognition.com/blog/devin-101-automatic-pr-reviews-with-the-devin-api",
+   "lastmod": "2026-08-12T18:18:51.682Z",
+   "sha": "0cae034bc7a7c1a1",
+   "kind": "cognition"
+  },
+  "src_3f1110ace2": {
+   "url": "https://cognition.com/blog/devin-2",
+   "lastmod": "2026-08-12T18:18:51.858Z",
+   "sha": "b1b689f5c582f386",
+   "kind": "cognition"
+  },
+  "src_7b8d04cb1f": {
+   "url": "https://cognition.com/blog/devin-2-1",
+   "lastmod": "2026-08-12T18:18:51.767Z",
+   "sha": "4cbcfd8d198cf2c6",
+   "kind": "cognition"
+  },
+  "src_0f8c427244": {
+   "url": "https://cognition.com/blog/devin-annual-performance-review-2025",
+   "lastmod": "2026-08-12T18:18:51.838Z",
+   "sha": "add2e9ecf02d758f",
+   "kind": "cognition"
+  },
+  "src_98bfe184b4": {
+   "url": "https://cognition.com/blog/devin-can-now-manage-devins",
+   "lastmod": "2026-08-12T18:18:52.111Z",
+   "sha": "925f9c077792018b",
+   "kind": "cognition"
+  },
+  "src_de72d6cfa8": {
+   "url": "https://cognition.com/blog/devin-can-now-schedule-devins",
+   "lastmod": "2026-08-12T18:18:51.960Z",
+   "sha": "d6866832818b70c9",
+   "kind": "cognition"
+  },
+  "src_510b8033bc": {
+   "url": "https://cognition.com/blog/devin-comes-to-sao-paulo",
+   "lastmod": "2026-10-07T06:22:41.693Z",
+   "sha": "9176215663187340",
+   "kind": "cognition"
+  },
+  "src_14db9b4ebe": {
+   "url": "https://cognition.com/blog/devin-crowdstrike-outage",
+   "lastmod": "2026-08-12T18:18:52.240Z",
+   "sha": "e49af97e19b35103",
+   "kind": "cognition"
+  },
+  "src_2bd536e7be": {
+   "url": "https://cognition.com/blog/devin-fedramp-high-in-process",
+   "lastmod": "2026-08-26T00:19:00.300Z",
+   "sha": "83543c55eb2d36cd",
+   "kind": "cognition"
+  },
+  "src_3aca49751c": {
+   "url": "https://cognition.com/blog/devin-for-terminal",
+   "lastmod": "2026-08-12T18:18:52.135Z",
+   "sha": "4c83cb7c2172a1a1",
+   "kind": "cognition"
+  },
+  "src_eb5085ee3c": {
+   "url": "https://cognition.com/blog/devin-fusion",
+   "lastmod": "2026-10-07T06:22:41.791Z",
+   "sha": "91ddf2aa5a86e25f",
+   "kind": "cognition"
+  },
+  "src_b3f98e4f02": {
+   "url": "https://cognition.com/blog/devin-generally-available",
+   "lastmod": "2026-08-12T18:18:52.532Z",
+   "sha": "a2978c5d013091e8",
+   "kind": "cognition"
+  },
+  "src_17e9d85130": {
+   "url": "https://cognition.com/blog/devin-in-windsurf",
+   "lastmod": "2026-08-12T18:18:52.460Z",
+   "sha": "ec164c65cfa1cf01",
+   "kind": "cognition"
+  },
+  "src_9d6b644f5f": {
+   "url": "https://cognition.com/blog/devin-is-getting-a-windows-pc",
+   "lastmod": "2026-08-12T18:18:52.481Z",
+   "sha": "efcde0dab3375d32",
+   "kind": "cognition"
+  },
+  "src_5d13c40e84": {
+   "url": "https://cognition.com/blog/devin-review",
+   "lastmod": "2026-08-12T18:18:52.391Z",
+   "sha": "459108c29baca0a9",
+   "kind": "cognition"
+  },
+  "src_5d18830aec": {
+   "url": "https://cognition.com/blog/devin-security-vulnerability-remediation-program",
+   "lastmod": "2026-08-26T00:19:00.614Z",
+   "sha": "c34ba730019af1fa",
+   "kind": "cognition"
+  },
+  "src_266e614978": {
+   "url": "https://cognition.com/blog/dont-build-multi-agents",
+   "lastmod": "2026-08-12T18:18:52.609Z",
+   "sha": "359728abae70924f",
+   "kind": "cognition"
+  },
+  "src_12bf544ead": {
+   "url": "https://cognition.com/blog/dotnet-migration-with-devin",
+   "lastmod": "2026-08-12T18:18:52.806Z",
+   "sha": "9359a722c23bbfa3",
+   "kind": "cognition"
+  },
+  "src_012c6474c6": {
+   "url": "https://cognition.com/blog/evaluating-coding-agents",
+   "lastmod": "2026-08-12T18:18:52.848Z",
+   "sha": "6ccb1a5a766401f6",
+   "kind": "cognition"
+  },
+  "src_d6ba377018": {
+   "url": "https://cognition.com/blog/from-jenkins-to-github-actions",
+   "lastmod": "2026-08-12T18:18:52.937Z",
+   "sha": "f93cb31e4bb0f0eb",
+   "kind": "cognition"
+  },
+  "src_07f1bfa671": {
+   "url": "https://cognition.com/blog/funding-growth-and-the-next-frontier-of-ai-coding-agents",
+   "lastmod": "2026-08-12T18:18:52.957Z",
+   "sha": "048bc604aa390b06",
+   "kind": "cognition"
+  },
+  "src_c8ffd7ed07": {
+   "url": "https://cognition.com/blog/how-cognition-uses-devin-to-build-devin",
+   "lastmod": "2026-08-12T18:18:53.232Z",
+   "sha": "44d26daaf73ea0bb",
+   "kind": "cognition"
+  },
+  "src_32b80cb36c": {
+   "url": "https://cognition.com/blog/how-devin-is-modernizing-cobol-at-fortune-500-companies",
+   "lastmod": "2026-08-12T18:18:53.199Z",
+   "sha": "4bb8c9f1637125ef",
+   "kind": "cognition"
+  },
+  "src_d87cb46229": {
+   "url": "https://cognition.com/blog/how-eight-sleep-uses-devin-as-a-data-analyst",
+   "lastmod": "2026-08-12T18:18:53.281Z",
+   "sha": "bc6792ffbc259bb5",
+   "kind": "cognition"
+  },
+  "src_d21772fba1": {
+   "url": "https://cognition.com/blog/how-to-automate-failure-triages-and-10x-test-generation-what-weve-learned-deploying-ai-across-hilsil-workflows",
+   "lastmod": "2026-08-12T18:18:53.170Z",
+   "sha": "2562be4f3992c791",
+   "kind": "cognition"
+  },
+  "src_88cfcae61e": {
+   "url": "https://cognition.com/blog/infosys-cognition",
+   "lastmod": "2026-08-12T18:18:53.428Z",
+   "sha": "f8f2acbb04fe1a0d",
+   "kind": "cognition"
+  },
+  "src_f5845b1473": {
+   "url": "https://cognition.com/blog/interaction",
+   "lastmod": "2026-08-12T18:18:53.322Z",
+   "sha": "ca01241c0ca5dad6",
+   "kind": "cognition"
+  },
+  "src_0949f9b725": {
+   "url": "https://cognition.com/blog/introducing-devin",
+   "lastmod": "2026-08-12T18:18:53.363Z",
+   "sha": "bd65a69ca0e3b813",
+   "kind": "cognition"
+  },
+  "src_e461ee7df5": {
+   "url": "https://cognition.com/blog/introducing-devin-2-2",
+   "lastmod": "2026-08-12T18:18:53.408Z",
+   "sha": "058dd61bc8f3c757",
+   "kind": "cognition"
+  },
+  "src_8a1c6f6e1a": {
+   "url": "https://cognition.com/blog/introducing-devin-desktop",
+   "lastmod": "2026-08-12T18:18:53.570Z",
+   "sha": "23974622d3fc207f",
+   "kind": "cognition"
+  },
+  "src_b4c8372f22": {
+   "url": "https://cognition.com/blog/introducing-devin-security-swarm",
+   "lastmod": "2026-08-26T00:19:01.713Z",
+   "sha": "0aed1f5144c6033d",
+   "kind": "cognition"
+  },
+  "src_ecaa4c23d2": {
+   "url": "https://cognition.com/blog/launching-in-japan",
+   "lastmod": "2026-08-12T18:18:53.926Z",
+   "sha": "68be9c88e653b68f",
+   "kind": "cognition"
+  },
+  "src_5de9170e65": {
+   "url": "https://cognition.com/blog/linktree",
+   "lastmod": "2026-08-12T18:18:53.944Z",
+   "sha": "a2762d0e7901c96c",
+   "kind": "cognition"
+  },
+  "src_8900558cf9": {
+   "url": "https://cognition.com/blog/local-fusion",
+   "lastmod": "2026-10-07T06:22:44.025Z",
+   "sha": "ab64729097e311fe",
+   "kind": "cognition"
+  },
+  "src_c96d740826": {
+   "url": "https://cognition.com/blog/ltm-cognition-partnership",
+   "lastmod": "2026-08-12T18:18:53.966Z",
+   "sha": "8ac9f962c3b2409f",
+   "kind": "cognition"
+  },
+  "src_325f378d4d": {
+   "url": "https://cognition.com/blog/mcp-marketplace",
+   "lastmod": "2026-08-12T18:18:54.077Z",
+   "sha": "0376dc9c95c1a532",
+   "kind": "cognition"
+  },
+  "src_d347984f66": {
+   "url": "https://cognition.com/blog/mercedes-benz-cognition",
+   "lastmod": "2026-08-12T18:18:54.223Z",
+   "sha": "7c8c431f372132c9",
+   "kind": "cognition"
+  },
+  "src_31ff0acd7e": {
+   "url": "https://cognition.com/blog/multi-agents-working",
+   "lastmod": "2026-08-12T18:18:54.109Z",
+   "sha": "974ad74d29136cf0",
+   "kind": "cognition"
+  },
+  "src_c4a482f868": {
+   "url": "https://cognition.com/blog/new-self-serve-plans-for-devin",
+   "lastmod": "2026-08-12T18:18:54.147Z",
+   "sha": "68c8257443b91cd4",
+   "kind": "cognition"
+  },
+  "src_db1af0c7b1": {
+   "url": "https://cognition.com/blog/one-year-of-building-together",
+   "lastmod": "2026-08-12T18:18:54.311Z",
+   "sha": "8cd1cff61660355a",
+   "kind": "cognition"
+  },
+  "src_3af48d67a7": {
+   "url": "https://cognition.com/blog/open-source-initiative-is-back",
+   "lastmod": "2026-08-12T18:18:54.364Z",
+   "sha": "2b299e826c20c8b1",
+   "kind": "cognition"
+  },
+  "src_93167f6d01": {
+   "url": "https://cognition.com/blog/series-d",
+   "lastmod": "2026-08-27T12:19:45.705Z",
+   "sha": "85004ea21c79cf34",
+   "kind": "cognition"
+  },
+  "src_9a4d9ab473": {
+   "url": "https://cognition.com/blog/series-e",
+   "lastmod": "2026-10-07T06:22:44.594Z",
+   "sha": "98ef76b8228d3dc9",
+   "kind": "cognition"
+  },
+  "src_d74a61d6fa": {
+   "url": "https://cognition.com/blog/singapore",
+   "lastmod": "2026-08-12T18:18:54.901Z",
+   "sha": "7461dfb9815f59ba",
+   "kind": "cognition"
+  },
+  "src_9b26a1422e": {
+   "url": "https://cognition.com/blog/testing-development",
+   "lastmod": "2026-08-12T18:18:55.237Z",
+   "sha": "6b20a55171f80480",
+   "kind": "cognition"
+  },
+  "src_45e7f2bfae": {
+   "url": "https://cognition.com/blog/welcoming-dioxus",
+   "lastmod": "2026-09-10T18:18:45.278Z",
+   "sha": "08cfeea1ea102e8b",
+   "kind": "cognition"
+  },
+  "src_6f461e84c8": {
+   "url": "https://cognition.com/blog/welcoming-tierzero",
+   "lastmod": "2026-08-12T18:18:55.293Z",
+   "sha": "7b7eae12ca540dc4",
+   "kind": "cognition"
+  },
+  "src_fac8d36cbd": {
+   "url": "https://cognition.com/blog/what-we-learned-building-cloud-agents",
+   "lastmod": "2026-08-12T18:18:55.278Z",
+   "sha": "a494f7ab0d08bb2d",
+   "kind": "cognition"
+  },
+  "src_2144f743d7": {
+   "url": "https://cognition.com/blog/windsurf",
+   "lastmod": "2026-08-12T18:18:55.316Z",
+   "sha": "ddb0d0403d7236b3",
+   "kind": "cognition"
+  },
+  "src_0d723e92fd": {
+   "url": "https://devin.ai",
+   "lastmod": "2026-10-07T00:22:30.097Z",
+   "sha": "0097abcb94d82888",
+   "kind": "cognition"
+  },
+  "src_db13b1e4f7": {
+   "url": "https://devin.ai/auto-triage",
+   "lastmod": "2026-10-07T00:22:29.255Z",
+   "sha": "fb417f10e2bdc14d",
+   "kind": "cognition"
+  },
+  "src_18b56a1702": {
+   "url": "https://devin.ai/blog/anduril-case-study",
+   "lastmod": "2026-08-15T18:18:08.334Z",
+   "sha": "02590f5aba079d94",
+   "kind": "cognition"
+  },
+  "src_52dfe9fecb": {
+   "url": "https://devin.ai/blog/athena-health-case-study",
+   "lastmod": "2026-08-15T18:18:08.310Z",
+   "sha": "a5d51b8a6373c4a9",
+   "kind": "cognition"
+  },
+  "src_dd280765d1": {
+   "url": "https://devin.ai/blog/clearwater-analytics-case-study",
+   "lastmod": "2026-08-15T18:18:13.238Z",
+   "sha": "276818164ca90968",
+   "kind": "cognition"
+  },
+  "src_7799673cc6": {
+   "url": "https://devin.ai/blog/codeium-command-improvement-case-study",
+   "lastmod": "2026-08-15T18:18:13.544Z",
+   "sha": "c2f05e69d7a3848c",
+   "kind": "cognition"
+  },
+  "src_92795d344d": {
+   "url": "https://devin.ai/blog/devin-for-mongodb-modernizations",
+   "lastmod": "2026-09-30T00:23:00.466Z",
+   "sha": "881dbdf9e3540b21",
+   "kind": "cognition"
+  },
+  "src_8ed35ddc2f": {
+   "url": "https://devin.ai/blog/drw-case-study",
+   "lastmod": "2026-08-15T18:18:15.159Z",
+   "sha": "a3ed390c04fa22b7",
+   "kind": "cognition"
+  },
+  "src_de759ce971": {
+   "url": "https://devin.ai/blog/fedramp-certification",
+   "lastmod": "2026-08-15T18:18:15.183Z",
+   "sha": "0c82b610cfcb5b3c",
+   "kind": "cognition"
+  },
+  "src_76f8604284": {
+   "url": "https://devin.ai/blog/governing-ai-agents-at-scale-with-blackrock",
+   "lastmod": "2026-09-09T18:18:51.407Z",
+   "sha": "01d6a9c57d51e4ab",
+   "kind": "cognition"
+  },
+  "src_836951861b": {
+   "url": "https://devin.ai/blog/hybrid-deployment",
+   "lastmod": "2026-08-15T18:18:16.343Z",
+   "sha": "b5e0b8bdd4c8be32",
+   "kind": "cognition"
+  },
+  "src_a80ac70fe2": {
+   "url": "https://devin.ai/blog/introducing-at-mentions",
+   "lastmod": "2026-08-15T18:18:16.499Z",
+   "sha": "00ab69e91a8694a7",
+   "kind": "cognition"
+  },
+  "src_9b21b979aa": {
+   "url": "https://devin.ai/blog/introducing-code-scans",
+   "lastmod": "2026-09-17T00:18:13.684Z",
+   "sha": "2f74100a896027b4",
+   "kind": "cognition"
+  },
+  "src_acbed4cd27": {
+   "url": "https://devin.ai/blog/introducing-devin-outposts",
+   "lastmod": "2026-08-24T18:19:05.055Z",
+   "sha": "0b5b6c032dfc321d",
+   "kind": "cognition"
+  },
+  "src_17df64e734": {
+   "url": "https://devin.ai/blog/introducing-pr-stacks",
+   "lastmod": "2026-08-24T18:19:05.188Z",
+   "sha": "d7e4ba1f9ea58bd8",
+   "kind": "cognition"
+  },
+  "src_71e4bc7ba5": {
+   "url": "https://devin.ai/blog/mercado-libre-case-study",
+   "lastmod": "2026-08-15T18:18:16.999Z",
+   "sha": "c45a81c84fff9dd4",
+   "kind": "cognition"
+  },
+  "src_43709869ca": {
+   "url": "https://devin.ai/blog/security-in-devin-review",
+   "lastmod": "2026-08-24T18:19:07.918Z",
+   "sha": "b5526de1e9f2f302",
+   "kind": "cognition"
+  },
+  "src_1183a08970": {
+   "url": "https://devin.ai/blog/windsurf-is-now-devin-desktop",
+   "lastmod": "2026-08-24T18:19:09.460Z",
+   "sha": "c3999313070774f6",
+   "kind": "cognition"
+  },
+  "src_d0cbd83730": {
+   "url": "https://devin.ai/blog/windsurf-rebrand-announcement",
+   "lastmod": "2026-08-15T18:18:20.426Z",
+   "sha": "86d0de6394763012",
+   "kind": "cognition"
+  },
+  "src_7f2c5b165d": {
+   "url": "https://devin.ai/blog/wwt-case-study",
+   "lastmod": "2026-08-15T18:18:21.680Z",
+   "sha": "5c51342ff18dc497",
+   "kind": "cognition"
+  },
+  "src_3d6e71e8b9": {
+   "url": "https://devin.ai/blog/zillow-codeium-case-study",
+   "lastmod": "2026-08-15T18:18:21.671Z",
+   "sha": "2a3b175fa228d513",
+   "kind": "cognition"
+  },
+  "src_ac0938112b": {
+   "url": "https://devin.ai/cli",
+   "lastmod": "2026-09-11T18:18:37.371Z",
+   "sha": "6b9dce5e04e23816",
+   "kind": "cognition"
+  },
+  "src_98772cecd6": {
+   "url": "https://devin.ai/cloud",
+   "lastmod": "2026-10-07T00:22:59.343Z",
+   "sha": "c1c1d818129bb6de",
+   "kind": "cognition"
+  },
+  "src_7a391ad89b": {
+   "url": "https://devin.ai/customers/ahead",
+   "lastmod": "2026-09-25T00:18:38.177Z",
+   "sha": "7b3a9e7791baa2cc",
+   "kind": "cognition"
+  },
+  "src_62a22b958f": {
+   "url": "https://devin.ai/customers/airbyte",
+   "lastmod": "2026-09-30T00:23:20.755Z",
+   "sha": "1b12c81bc4494457",
+   "kind": "cognition"
+  },
+  "src_8d2d40934c": {
+   "url": "https://devin.ai/customers/angellist",
+   "lastmod": "2026-08-15T18:18:22.008Z",
+   "sha": "ec71b0e17eb709ec",
+   "kind": "cognition"
+  },
+  "src_f674fd8346": {
+   "url": "https://devin.ai/customers/bilt",
+   "lastmod": "2026-09-18T00:18:33.022Z",
+   "sha": "22deb140ad8493f3",
+   "kind": "cognition"
+  },
+  "src_aa9b242979": {
+   "url": "https://devin.ai/customers/comarch",
+   "lastmod": "2026-09-17T06:18:34.066Z",
+   "sha": "52be329d497c4bbf",
+   "kind": "cognition"
+  },
+  "src_ae3960de16": {
+   "url": "https://devin.ai/customers/compiledhealth",
+   "lastmod": "2026-08-22T00:19:59.796Z",
+   "sha": "f50132e1c0d8a687",
+   "kind": "cognition"
+  },
+  "src_48669a22fb": {
+   "url": "https://devin.ai/customers/comun",
+   "lastmod": "2026-08-27T00:19:44.092Z",
+   "sha": "1bfbe7a4827f9f9e",
+   "kind": "cognition"
+  },
+  "src_6cdc810982": {
+   "url": "https://devin.ai/customers/crosby",
+   "lastmod": "2026-09-30T18:22:55.208Z",
+   "sha": "5fb2893ec35f207a",
+   "kind": "cognition"
+  },
+  "src_2d4aafea3a": {
+   "url": "https://devin.ai/customers/crossmint",
+   "lastmod": "2026-09-03T00:18:19.219Z",
+   "sha": "90fdc9edd7e438da",
+   "kind": "cognition"
+  },
+  "src_86ab76af95": {
+   "url": "https://devin.ai/customers/ebanx",
+   "lastmod": "2026-08-22T00:19:59.771Z",
+   "sha": "ee86a013c4319651",
+   "kind": "cognition"
+  },
+  "src_56da5b764d": {
+   "url": "https://devin.ai/customers/eight-sleep",
+   "lastmod": "2026-09-25T18:22:16.919Z",
+   "sha": "f021d1f0fcfb53dc",
+   "kind": "cognition"
+  },
+  "src_b37e63838c": {
+   "url": "https://devin.ai/customers/endava",
+   "lastmod": "2026-09-25T00:18:39.238Z",
+   "sha": "1cb2d27e89c05051",
+   "kind": "cognition"
+  },
+  "src_b417d7289b": {
+   "url": "https://devin.ai/customers/evinova",
+   "lastmod": "2026-08-15T18:18:22.184Z",
+   "sha": "5dd536ee13b4e7c4",
+   "kind": "cognition"
+  },
+  "src_721aedb23c": {
+   "url": "https://devin.ai/customers/exa",
+   "lastmod": "2026-09-25T18:22:17.230Z",
+   "sha": "b0c29bc410b76dcb",
+   "kind": "cognition"
+  },
+  "src_080a9af999": {
+   "url": "https://devin.ai/customers/fefundinfo",
+   "lastmod": "2026-08-15T18:18:22.202Z",
+   "sha": "b38e1065f746444f",
+   "kind": "cognition"
+  },
+  "src_32da745a29": {
+   "url": "https://devin.ai/customers/finch",
+   "lastmod": "2026-09-25T18:22:17.448Z",
+   "sha": "324814bd764a8d87",
+   "kind": "cognition"
+  },
+  "src_419a02000b": {
+   "url": "https://devin.ai/customers/geaerospace",
+   "lastmod": "2026-08-25T00:19:18.541Z",
+   "sha": "609b5149f62a4962",
+   "kind": "cognition"
+  },
+  "src_999fd4c2bd": {
+   "url": "https://devin.ai/customers/gumroad",
+   "lastmod": "2026-08-15T18:18:22.269Z",
+   "sha": "5184da366c012b1d",
+   "kind": "cognition"
+  },
+  "src_2d1b07eca7": {
+   "url": "https://devin.ai/customers/hamming",
+   "lastmod": "2026-08-15T18:18:22.298Z",
+   "sha": "4974e7fb13513a97",
+   "kind": "cognition"
+  },
+  "src_6a041bd1f8": {
+   "url": "https://devin.ai/customers/hippo",
+   "lastmod": "2026-08-15T18:18:22.282Z",
+   "sha": "fb122af7f5e8f331",
+   "kind": "cognition"
+  },
+  "src_5903e45c48": {
+   "url": "https://devin.ai/customers/itau",
+   "lastmod": "2026-08-15T18:18:22.326Z",
+   "sha": "97552ccac09d7054",
+   "kind": "cognition"
+  },
+  "src_027e4dbfaf": {
+   "url": "https://devin.ai/customers/linktree",
+   "lastmod": "2026-08-15T18:18:22.475Z",
+   "sha": "8ce9c14ae2ea3337",
+   "kind": "cognition"
+  },
+  "src_a49527cfb2": {
+   "url": "https://devin.ai/customers/litera",
+   "lastmod": "2026-08-15T18:18:22.514Z",
+   "sha": "d80d1ad0622beb5f",
+   "kind": "cognition"
+  },
+  "src_be81c9a18b": {
+   "url": "https://devin.ai/customers/melius",
+   "lastmod": "2026-09-25T18:22:18.293Z",
+   "sha": "020c85659c47b3c2",
+   "kind": "cognition"
+  },
+  "src_630ea8707e": {
+   "url": "https://devin.ai/customers/modal",
+   "lastmod": "2026-09-02T00:18:32.566Z",
+   "sha": "81f8cbcb754e2b35",
+   "kind": "cognition"
+  },
+  "src_c667764b4e": {
+   "url": "https://devin.ai/customers/nubank",
+   "lastmod": "2026-09-18T00:18:34.149Z",
+   "sha": "4940ed4a4f689cfd",
+   "kind": "cognition"
+  },
+  "src_d43f49e7a2": {
+   "url": "https://devin.ai/customers/ramp",
+   "lastmod": "2026-09-18T00:18:34.262Z",
+   "sha": "27e2f1541e118ae1",
+   "kind": "cognition"
+  },
+  "src_ac10a8d9bb": {
+   "url": "https://devin.ai/customers/ripple",
+   "lastmod": "2026-09-18T00:18:35.979Z",
+   "sha": "59a0c9dd2f50c026",
+   "kind": "cognition"
+  },
+  "src_f13eb43782": {
+   "url": "https://devin.ai/customers/rohlikgroup",
+   "lastmod": "2026-08-25T00:19:20.697Z",
+   "sha": "6a3599b10acd8da2",
+   "kind": "cognition"
+  },
+  "src_e28e8dd4d4": {
+   "url": "https://devin.ai/customers/rvtech",
+   "lastmod": "2026-08-15T18:18:22.625Z",
+   "sha": "6c1058577810ab27",
+   "kind": "cognition"
+  },
+  "src_0dbc30a56b": {
+   "url": "https://devin.ai/customers/tavrn",
+   "lastmod": "2026-09-02T00:18:32.234Z",
+   "sha": "42fc9c55f45ddb01",
+   "kind": "cognition"
+  },
+  "src_f3ecba455d": {
+   "url": "https://devin.ai/customers/thecitationgroup",
+   "lastmod": "2026-08-15T18:18:22.602Z",
+   "sha": "f26216fd3fe52f6e",
+   "kind": "cognition"
+  },
+  "src_e149c5d2aa": {
+   "url": "https://devin.ai/customers/wpp-enterprise-solutions",
+   "lastmod": "2026-09-25T00:18:41.309Z",
+   "sha": "0c71aad731965f06",
+   "kind": "cognition"
+  },
+  "src_11a0500fa2": {
+   "url": "https://devin.ai/desktop",
+   "lastmod": "2026-10-07T00:23:02.458Z",
+   "sha": "8c564863cd1434b9",
+   "kind": "cognition"
+  },
+  "src_af7c84983e": {
+   "url": "https://devin.ai/enterprise",
+   "lastmod": "2026-10-07T00:23:03.205Z",
+   "sha": "aa015238e2543dd7",
+   "kind": "cognition"
+  },
+  "src_84d58730f4": {
+   "url": "https://devin.ai/financial-services",
+   "lastmod": "2026-10-07T00:23:03.383Z",
+   "sha": "d309e1a599e157f4",
+   "kind": "cognition"
+  },
+  "src_c92ebeeb28": {
+   "url": "https://devin.ai/government",
+   "lastmod": "2026-10-07T00:23:03.949Z",
+   "sha": "971ff11897386ee4",
+   "kind": "cognition"
+  },
+  "src_d409987391": {
+   "url": "https://devin.ai/guarantee",
+   "lastmod": "2026-10-07T00:23:04.100Z",
+   "sha": "830233c035399c68",
+   "kind": "cognition"
+  },
+  "src_1811d48632": {
+   "url": "https://devin.ai/ja/blog/cognizant",
+   "lastmod": "2026-08-15T18:18:23.086Z",
+   "sha": "c26f581d9ae7f098",
+   "kind": "cognition"
+  },
+  "src_a4e5f824ce": {
+   "url": "https://devin.ai/ja/blog/infosys",
+   "lastmod": "2026-08-15T18:18:23.076Z",
+   "sha": "8dddccb1f0014018",
+   "kind": "cognition"
+  },
+  "src_9b3bd87de5": {
+   "url": "https://devin.ai/ja/customers/ai-inside",
+   "lastmod": "2026-08-18T00:19:05.100Z",
+   "sha": "3c373a3db5862528",
+   "kind": "cognition"
+  },
+  "src_28033ce50d": {
+   "url": "https://devin.ai/ja/customers/dena",
+   "lastmod": "2026-08-18T00:19:05.272Z",
+   "sha": "bf7d85b4d05137ad",
+   "kind": "cognition"
+  },
+  "src_abdab1b3ff": {
+   "url": "https://devin.ai/pricing",
+   "lastmod": "2026-09-29T18:22:13.426Z",
+   "sha": "b74255c9e93b6078",
+   "kind": "cognition"
+  },
+  "src_6f8ef64b77": {
+   "url": "https://devin.ai/security",
+   "lastmod": "2026-08-15T18:18:23.569Z",
+   "sha": "069ccc1ccaea1393",
+   "kind": "cognition"
+  },
+  "src_cebc2290a0": {
+   "url": "https://devin.ai/startups",
+   "lastmod": "2026-10-07T00:22:30.169Z",
+   "sha": "e522a30ce4f61905",
+   "kind": "cognition"
+  },
+  "src_9dfab27f2e": {
+   "url": "https://devin.ai/switch/cursor",
+   "lastmod": "2026-10-07T00:22:30.989Z",
+   "sha": "cd10f3a7f0c77358",
+   "kind": "cognition"
+  },
+  "src_5473ee3389": {
+   "url": "https://www.linkedin.com/posts/cognition-ai-labs_devin-is-changing-how-engineers-work-at-ahead-activity-7475218891552768000-Af4h",
+   "kind": "third_party"
+  },
+  "src_6da9c1f771": {
+   "url": "https://www.nasdaq.com/press-release/cognizant-and-cognition-put-autonomous-ai-engineering-production-odyssey-logistics-37",
+   "kind": "third_party"
+  },
+  "src_c5ed10b424": {
+   "url": "https://www.linkedin.com/posts/imjaredz_since-i-joined-cognition-ive-been-obsessed-activity-7473767438099075073-iOaq",
+   "kind": "third_party"
+  },
+  "src_afe14580dd": {
+   "url": "https://techedgeai.com/cognizant-and-cognition-put-devin-into-production/",
+   "kind": "third_party"
+  },
+  "src_ef753dadbf": {
+   "url": "https://fortune.com/2026/07/03/devin-kun-cognition-ai-japan-russell-kaplan/",
+   "kind": "third_party"
+  },
+  "src_eed90dfc08": {
+   "url": "https://www.unrollnow.com/status/2041361025929462064",
+   "kind": "third_party"
+  },
+  "src_8c83be82b1": {
+   "url": "https://ton-technotes.com/en/blog/2026-04-17-cognition-ai-devin-japan-launch/",
+   "kind": "third_party"
+  },
+  "src_f282a0de24": {
+   "url": "https://investors.cognizant.com/news-and-events/news/news-details/2026/Cognizant-and-Cognition-Partner-to-Scale-Autonomous-Software-Engineering-and-Deliver-Business-Value-Across-Enterprise-Operations/default.aspx",
+   "kind": "third_party"
+  }
+ }
+}

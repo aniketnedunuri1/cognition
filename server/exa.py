@@ -88,7 +88,8 @@ def _page_docs(response: dict, fetched_at: str) -> list[dict]:
 
 
 def fetch_page(url_or_source_id: str, offset: int = 0, force: bool = False) -> dict:
-    """Full text is cached (for verify_quote); the model gets a capped excerpt."""
+    """Full text is cached (for verify_quote); the model gets a capped excerpt.
+    force=True live-crawls: for pages that changed or whose cached content looks wrong."""
     if url_or_source_id.startswith("src_"):
         doc = get_doc(url_or_source_id)
         if not doc or not doc.get("url"):
@@ -98,8 +99,11 @@ def fetch_page(url_or_source_id: str, offset: int = 0, force: bool = False) -> d
         url = url_or_source_id
 
     body = {"urls": [url], "text": True}
+    # force: bypass our cache AND Exa's (live crawl). Cached under the plain request so
+    # the fresh copy replaces the stale one instead of sitting beside it.
+    live = {**body, "maxAgeHours": 0} if force else body
     try:
-        [doc], _ = cached_call("exa/contents", body, "lookup", lambda: _fetch_contents(body), _page_docs,
+        [doc], _ = cached_call("exa/contents", body, "lookup", lambda: _fetch_contents(live), _page_docs,
                                force=force)
     except ProviderError as e:
         return {"status": "not_fetched", "url": url, "reason": str(e)}

@@ -46,12 +46,14 @@ def search_web(query: str, since: str | None = None) -> list[dict]:
 
 
 @_tool
-def fetch_page(url_or_source_id: str, offset: int = 0) -> dict:
+def fetch_page(url_or_source_id: str, offset: int = 0, force: bool = False) -> dict:
     """Fetch a page's text (job descriptions, articles, company website).
     Pass a source_id from another tool, or a URL you got from a tool result or the rep.
     Returns an excerpt of up to 6000 chars; call again with next_offset for more.
-    status "not_fetched" means the page couldn't be read — treat it as Not found."""
-    return exa.fetch_page(url_or_source_id, offset)
+    status "not_fetched" means the page couldn't be read — treat it as Not found.
+    force=True live-crawls the page: use only when the content looks wrong for that URL
+    (e.g. a different company's story) or is clearly stale."""
+    return exa.fetch_page(url_or_source_id, offset, force)
 
 
 @_tool

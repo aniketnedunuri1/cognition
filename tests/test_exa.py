@@ -84,3 +84,16 @@ def test_fetch_failure_is_reported_and_not_cached(stub):
     assert exa.fetch_page("https://linkedin.com/jobs/view/1")["status"] == "not_fetched"
     exa.fetch_page("https://linkedin.com/jobs/view/1")
     assert len(calls) == 2  # failure wasn't cached
+
+
+def test_force_live_crawls_and_replaces_stale_copy(stub):
+    bodies = []
+    def fake(path, body):
+        bodies.append(body)
+        text = "fresh story" if body.get("maxAgeHours") == 0 else "stale story"
+        return {"results": [{"url": body["urls"][0], "text": text}], "statuses": [{"status": "success"}]}
+    stub("server.exa._post", fake)
+    assert exa.fetch_page("https://devin.ai/customers/x")["excerpt"] == "stale story"
+    assert exa.fetch_page("https://devin.ai/customers/x", force=True)["excerpt"] == "fresh story"
+    assert exa.fetch_page("https://devin.ai/customers/x")["excerpt"] == "fresh story"  # replaced, not shadowed
+    assert len(bodies) == 2

@@ -101,3 +101,13 @@ def test_refresh_refuses_replay(kb, monkeypatch):
     monkeypatch.setenv("CACHE_MODE", "replay")
     with pytest.raises(knowledge.ProviderError):
         knowledge.refresh_positioning()
+
+
+def test_customer_must_be_named_in_page_body(kb):
+    wrong = cache.upsert_doc(cache.make_doc(
+        identity="https://devin.ai/customers/hamming", kind="web", url="https://devin.ai/customers/hamming",
+        title="Customers | Hamming | Devin", text="Customers | Hamming | Devin " + STORY,
+        retrieved_at=cache.now_iso()))["source_id"]
+    r = knowledge.apply_knowledge_update([], "x", customers=[
+        {"name": "Hamming", "use_case": "m", "quote": "migrate 400 COBOL programs to Java", "source_id": wrong}])
+    assert r["customers_added"] == 0 and "not named in the page body" in r["rejected"][0]["reason"]

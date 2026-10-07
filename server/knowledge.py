@@ -25,7 +25,7 @@ from . import exa
 from .cache import ROOT, get_doc, mode, now_iso, site
 from .exa import ProviderError, _norm_company
 from .notify import notify
-from .verify import verify_quote
+from .verify import normalize, verify_quote
 
 EXCERPT_CHARS = 2500
 FIRST_RUN_LOOKBACK_DAYS = 365
@@ -105,7 +105,7 @@ def refresh_positioning(limit: int = 15) -> dict:
         if prev and prev.get("sha") == sha:  # site rebuild bumped lastmod; content same
             seen["urls"][url] = {**prev, "lastmod": lastmod}
             continue
-        seen["pending"][doc["source_id"]] = {"url": url, "lastmod": lastmod, "sha": sha, "kind": "cognition"}
+        seen["pending"][doc["source_id"]] = {"url": url, "lastmod": lastmod, "kind": "cognition"}
         items.append({"source": "cognition", "change": "changed" if prev else "new",
                       "source_id": doc["source_id"], "title": doc["title"], "site": site(url),
                       "path": urlsplit(url).path, "published_date": doc["published_date"],
@@ -136,6 +136,13 @@ def refresh_positioning(limit: int = 15) -> dict:
 
 
 # ---------- apply ----------
+
+def _named_in_body(doc: dict, name: str) -> bool:
+    """Name appears in the page body, not just its title. Catches a cached page whose
+    body is a different company's story under this company's title."""
+    body = (doc.get("text") or "").replace(doc.get("title") or "\0", " ")
+    return normalize(name) in normalize(body)
+
 
 def _proof(source_id: str, quote: str) -> tuple[dict | None, str | None]:
     check = verify_quote(source_id, quote)
@@ -180,6 +187,9 @@ def apply_knowledge_update(
     added_customers = 0
     for c in customers or []:
         proof, err = _proof(c.get("source_id", ""), c.get("quote", ""))
+        if not err and not _named_in_body(get_doc(c["source_id"]), c["name"]):
+            err = (f"{c['name']!r} not named in the page body — cached content may be the wrong page; "
+                   "re-fetch with fetch_page(force=True)")
         if err:
             rejected.append({"customer": c.get("name"), "reason": err})
             continue
@@ -230,7 +240,8 @@ def apply_knowledge_update(
     for sid in processed_source_ids:
         p = seen["pending"].pop(sid, None)
         if p and p["kind"] == "cognition":
-            seen["urls"][p["url"]] = {"lastmod": p["lastmod"], "sha": p["sha"], "source_id": sid, "processed": today}
+            seen["urls"][p["url"]] = {"lastmod": p["lastmod"], "sha": _sha((get_doc(sid) or {}).get("text")),
+                                      "source_id": sid, "processed": today}
         elif p:
             seen.setdefault("third_party", {})[p["url"]] = {"source_id": sid, "processed": today}
 
