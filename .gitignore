@@ -1,0 +1,18 @@
+# Secrets
+.env
+secrets/*
+!secrets/.gitkeep
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Cache: ignored by default. The demo account's cache is committed once with
+# `git add -f cache/`; tracked files stay tracked, later dev runs stay ignored.
+cache/*
+!cache/.gitkeep
+
+.DS_Store
+*.egg-info/

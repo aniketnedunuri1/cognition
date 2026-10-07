@@ -1,0 +1,23 @@
+[project]
+name = "account-research-agent"
+version = "0.1.0"
+description = "Account research agent for Devin SDRs: MCP server + playbook"
+requires-python = ">=3.10"
+dependencies = [
+    "fastmcp>=2.12",
+    "httpx>=0.27",
+    "pydantic>=2.7",
+    "python-dotenv>=1.0",
+    "claude-agent-sdk>=0.1",
+    "google-api-python-client>=2.140",
+    "google-auth>=2.30",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.setuptools]
+packages = ["server"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
