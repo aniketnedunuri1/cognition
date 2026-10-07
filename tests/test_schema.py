@@ -1,7 +1,7 @@
 from datetime import date
 
 from conftest import load
-from server import cache, exa
+from server import apollo, cache, exa
 from server.schema import validate_brief
 
 TODAY = date(2026, 10, 7)
@@ -117,3 +117,50 @@ def test_title_mismatch_with_profile_is_flagged(stub):
     _, report = run({"people": [{**person("Phil Burrows", ids["Phil Burrows"]),
                                  "title": "Head of Platform & Infra Engineering"}]})
     assert not any("title differs" in f["flag"] for f in report["flags"])
+
+
+ANNOUNCEMENT = "Brex today announced that Jane Newleader has joined as Chief Technology Officer."
+
+
+def test_single_official_company_source_lists_person():
+    own = web("https://www.brex.com/journal/press/new-cto", text=ANNOUNCEMENT)
+    brief, _ = run({"people": [person("Jane Newleader", own)]})
+    assert brief["people"][0]["current_basis"] == "official_source"
+    assert brief["people"][0]["verified"] is False
+
+
+def test_issuer_host_is_official_only_if_it_names_the_company():
+    wire = web("https://www.businesswire.com/news/brex-cto", text=ANNOUNCEMENT)
+    brief, _ = run({"people": [person("Jane Newleader", wire)]})
+    assert brief["people"][0]["current_basis"] == "official_source"
+    other = web("https://www.businesswire.com/news/acme", text="Acme announced Jane Newleader as CTO.")
+    brief, _ = run({"people": [person("Jane Newleader", other)]})
+    assert brief["people"] == []
+
+
+def test_single_third_party_press_still_dropped():
+    press = web("https://techcrunch.com/brex-cto", text=ANNOUNCEMENT)
+    brief, report = run({"people": [person("Jane Newleader", press)]})
+    assert brief["people"] == [] and "current role not confirmed" in report["dropped"][0]["reason"]
+
+
+def test_parent_company_roles_count_as_current(stub):
+    stub("server.apollo._get", lambda path, params: load("apollo_org_brex.json"))
+    apollo.get_company("brex.com")
+    resp = {"results": [{"url": "https://linkedin.com/in/cap1-ciso", "title": "Pat Approver", "entities": [
+        {"type": "person", "properties": {"name": "Pat Approver", "workHistory": [
+            {"title": "CISO", "company": {"name": "Capital One"}, "dates": {"from": "2023-01-01", "to": None}}]}}]}]}
+    stub("server.exa._post", lambda path, body: resp)
+    [pat] = exa.search_people("Capital One", ["CISO"])
+    brief, _ = run({"people": [{**person("Pat Approver", pat["source_id"]), "title": "CISO",
+                                "deal_role": "parent_org_approver"}]})
+    assert brief["people"][0]["current_basis"] == "profile"
+
+
+def test_undated_evidence_caps_strength_at_medium():
+    undated = web("https://brex.com/blog/undated", published=None)
+    brief, report = run({"signals": [{
+        "headline": "h", "type": "migration", "horizon": "tactical", "use_case": "Migrations",
+        "strength": "strong", "evidence": [{"source_id": undated, "quote": "migrating our monolith from Java 8"}]}]})
+    assert brief["signals"][0]["strength"] == "medium"
+    assert any("capped at medium" in f["flag"] for f in report["flags"])

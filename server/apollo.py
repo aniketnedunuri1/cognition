@@ -22,6 +22,12 @@ MAX_JOB_PAGES = 5  # 100 postings per page
 AI_CODING_TOOLS = re.compile(
     r"cursor|copilot|codeium|windsurf|tabnine|sourcegraph|\bcody\b|codewhisperer|amazon q|"
     r"replit|devin|cognition|codex|claude code|gitlab duo|jetbrains ai|augment code", re.I)
+# Apollo tech categories worth a rep's attention; the rest (ad pixels, CMS, CRM...) is noise.
+ENG_TECH_CATEGORIES = {
+    "Developer Tools", "Frameworks and Programming Languages", "Virtualization and Containers",
+    "Cloud Services", "Deployment Tools", "Database", "Data Engineering and Streaming",
+    "Web Performance Monitoring",
+}
 AI_PLATFORMS = re.compile(r"anthropic|claude|openai|chatgpt|gemini|mistral|cohere|bedrock|azure openai", re.I)
 
 
@@ -54,7 +60,12 @@ def _org_docs(domain: str):
         if not org:
             return []
         parent = org.get("owned_by_organization") or None
-        techs = sorted({t["name"] for t in org.get("current_technologies") or [] if t.get("name")})
+        all_tech = [t for t in org.get("current_technologies") or [] if t.get("name")]
+        techs = sorted({t["name"] for t in all_tech})
+        eng_stack: dict[str, list[str]] = defaultdict(list)
+        for t in all_tech:
+            if t.get("category") in ENG_TECH_CATEGORIES and t["name"] not in eng_stack[t["category"]]:
+                eng_stack[t["category"]].append(t["name"])
         data = {
             "name": org.get("name"),
             "apollo_org_id": org.get("id"),
@@ -90,7 +101,8 @@ def _org_docs(domain: str):
             ],
             "ai_coding_tools": [t for t in techs if AI_CODING_TOOLS.search(t)],
             "ai_platforms": [t for t in techs if AI_PLATFORMS.search(t) and not AI_CODING_TOOLS.search(t)],
-            "technologies": techs,
+            # A hint only: state as fact only when a job post / blog / profile confirms it.
+            "eng_tech_stack_hint": {k: sorted(v) for k, v in sorted(eng_stack.items())},
         }
         return [make_doc(identity=f"apollo:org:{domain}", kind="apollo_org", label="Apollo",
                          title=f"Apollo organization record: {data['name']}", data=data,

@@ -23,6 +23,10 @@ def test_company_is_one_attributed_document(stub):
     assert c["department_headcount"]["engineering"] == 356
     assert c["ai_coding_tools"] == ["Cursor"]
     assert "Anthropic Claude" in c["ai_platforms"]
+    stack = c["eng_tech_stack_hint"]
+    assert "Cursor" in stack["Developer Tools"] and "Kubernetes" in stack["Virtualization and Containers"]
+    assert not {"Analytics and Tracking", "CMS", "Advertising Networks"} & set(stack)
+    assert "technologies" not in c
     assert get_doc(c["source_id"])["label"] == "Apollo"
 
 

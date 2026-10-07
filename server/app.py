@@ -66,8 +66,10 @@ def search_people(company: str, roles: list[str]) -> list[dict]:
 @_tool
 def get_company(domain: str) -> dict:
     """Apollo firmographics: HQ, founded, industry, parent company, headcount + growth,
-    department headcount, revenue, funding, AI tools in the tech stack.
-    All values are Apollo's report: attribute them ("Apollo reports ...")."""
+    department headcount, revenue, funding, AI tools, engineering tech stack.
+    All values are Apollo's report: attribute them ("Apollo reports ...").
+    eng_tech_stack_hint is a hint: state a technology as fact only when a job post,
+    eng blog, or profile confirms it."""
     return apollo.get_company(domain)
 
 

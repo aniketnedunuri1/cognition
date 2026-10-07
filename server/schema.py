@@ -13,11 +13,16 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, ValidationError
 
-from .cache import get_doc
+from .apollo import normalize_domain
+from .cache import get_doc, site, source_id_for
 from .exa import employment_at
 from .verify import normalize, verify_quote
 
 SIGNAL_MAX_MONTHS = {"tactical": 6, "strategic": 12}
+
+# Hosts of company-issued documents (filings, press releases). Official only when
+# the document names the company; the company's own domain is always official.
+ISSUER_HOSTS = ("sec.gov", "businesswire.com", "prnewswire.com", "globenewswire.com")
 
 
 # ---------- primitives ----------
@@ -102,6 +107,7 @@ class Person(BaseModel):
     verified: bool | None = None
     label: Literal["likely_champion", "candidate"] | None = None
     profile_source_id: str | None = None
+    current_basis: Literal["profile", "official_source", "two_sources"] | None = None
 
 
 class TopContact(BaseModel):
@@ -138,13 +144,27 @@ def _doc_date(doc: dict) -> date | None:
         return None
 
 
+def _mentions(doc: dict, name: str) -> bool:
+    hay = " ".join([doc.get("title") or "", doc.get("text") or "", *doc.get("highlights", [])])
+    return normalize(name) in normalize(hay)
+
+
 def _months_between(d: date, today: date) -> float:
     return (today - d).days / 30.44
 
 
 class _Validator:
-    def __init__(self, company_name: str, today: date, use_cases: set[str] | None):
-        self.company = company_name
+    def __init__(self, company_name: str, domain: str, today: date, use_cases: set[str] | None):
+        # The account plus its parent (from the cached Apollo record, not model output):
+        # parent-org approvers are current at the parent, and its site is official too.
+        self.companies = [company_name]
+        self.domains = [normalize_domain(domain)] if domain else []
+        org = get_doc(source_id_for(f"apollo:org:{normalize_domain(domain)}")) if domain else None
+        parent = ((org or {}).get("data") or {}).get("parent_company") or {}
+        if parent.get("name"):
+            self.companies.append(parent["name"])
+        if parent.get("website"):
+            self.domains.append(normalize_domain(parent["website"]))
         self.today = today
         self.use_cases = {u.lower() for u in use_cases} if use_cases else None
         self.dropped: list[dict] = []
@@ -208,25 +228,34 @@ class _Validator:
             self.drop(path, "no valid evidence left")
             return None
 
-        name = normalize(p.name)
-        def mentions(doc):
-            hay = " ".join([doc.get("title") or "", doc.get("text") or "", *doc.get("highlights", [])])
-            return name in normalize(hay)
-        if not any(mentions(d) for d in docs):
+        named = [d for d in docs if _mentions(d, p.name)]
+        if not named:
             self.drop(path, f"name {p.name!r} not found in any cited source")
             return None
 
         distinct = {d["source_id"] for d in docs}
         profiles = [d for d in docs if d["kind"] == "person"]
-        roles = [employment_at(d["data"].get("person"), self.company) for d in profiles]
-        current = any(r["is_current"] is True for r in roles)
+        roles = [employment_at(d["data"].get("person"), c) for d in profiles for c in self.companies]
         profile_titles = {r["current_title"] for r in roles if r["is_current"] is True}
         if profile_titles and normalize(p.title) not in {normalize(t) for t in profile_titles}:
             self.flags.append({"path": f"{path}.title",
                                "flag": f"title differs from profile's current title {sorted(profile_titles)}"})
-        if not current and len(distinct) < 2:
-            self.drop(path, "current role not confirmed: profile doesn't list it as current and there's no second source")
+
+        # Current if: the profile says so; or the company itself names them (new
+        # leaders often haven't updated LinkedIn); or two independent sources do.
+        if profile_titles:
+            p.current_basis = "profile"
+        elif any(self._official(d) for d in named):
+            p.current_basis = "official_source"
+        elif len(distinct) >= 2:
+            p.current_basis = "two_sources"
+        else:
+            self.drop(path, "current role not confirmed: no current profile, no official company source, "
+                            "and no second source")
             return None
+        if profiles and not profile_titles:
+            self.flags.append({"path": path, "flag": f"profile doesn't list a current role here; "
+                                                    f"listed on {p.current_basis}"})
 
         p.champion_evidence = self.facts(p.champion_evidence, f"{path}.champion_evidence")
         p.hooks = self.facts(p.hooks, f"{path}.hooks")
@@ -237,12 +266,23 @@ class _Validator:
         p.profile_source_id = profiles[0]["source_id"] if profiles else None
         return p
 
+    def _official(self, doc: dict) -> bool:
+        host = site(doc.get("url")) or ""
+        if any(host == d or host.endswith("." + d) for d in self.domains):
+            return True
+        if any(host == h or host.endswith("." + h) for h in ISSUER_HOSTS):
+            return any(_mentions(doc, c) for c in self.companies if c)
+        return False
+
     def signal(self, s: Signal, path: str, people: set[str]) -> Signal | None:
         s.evidence = self.evidence(s.evidence, f"{path}.evidence", require_quote=True,
                                    max_months=SIGNAL_MAX_MONTHS[s.horizon])
         if not s.evidence:
             self.drop(path, "no valid evidence left")
             return None
+        if s.strength == "strong" and not any(_doc_date(get_doc(e.source_id)) for e in s.evidence):
+            s.strength = "medium"
+            self.flags.append({"path": f"{path}.strength", "flag": "capped at medium: no dated evidence"})
         if self.use_cases is not None and s.use_case.lower() not in self.use_cases:
             self.drop(path, f"use case {s.use_case!r} is not in knowledge/use_cases")
             return None
@@ -266,7 +306,7 @@ def _parse_list(raw: list, model, path: str, v: _Validator) -> list:
 def validate_brief(raw: dict, *, today: date | None = None,
                    use_cases: set[str] | None = None) -> tuple[dict, dict]:
     """Return (clean brief, report). Never raises on bad content: drops and reports."""
-    v = _Validator(raw.get("company_name") or "", today or date.today(), use_cases)
+    v = _Validator(raw.get("company_name") or "", raw.get("domain") or "", today or date.today(), use_cases)
     brief = Brief(domain=raw.get("domain", ""), company_name=raw.get("company_name", ""))
 
     for section, model in (("snapshot", Snapshot), ("engineering", Engineering)):
