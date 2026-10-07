@@ -1,0 +1,23 @@
+{
+  "cognition_domains": ["cognition.ai", "cognition.com", "devin.ai"],
+  "sitemaps": [
+    {
+      "url": "https://cognition.ai/sitemap.xml",
+      "include": ["^/$", "^/about$", "^/blog/.+"],
+      "exclude": ["product-update", "/blog/swe-", "kevin-32b", "factoring-rsa", "measuring-open-source",
+                  "frontier-code", "blockdiff", "making-fable", "sonnet-4-5", "/events/"]
+    },
+    {
+      "url": "https://devin.ai/sitemap.xml",
+      "include": ["^/$", "^/(enterprise|financial-services|government|security|cloud|cli|desktop|auto-triage|guarantee|pricing|startups|switch/cursor)$",
+                  "^/customers/.+", "^/ja/customers/.+", "^/ja/blog/.+",
+                  "^/blog/.*case-study", "^/blog/(devin-for-|governing-|introducing-|hybrid-deployment|fedramp|security-in-devin|windsurf-is-now-devin-desktop|windsurf-rebrand)"],
+      "exclude": ["/category/", "/page/"]
+    }
+  ],
+  "third_party_queries": [
+    "engineering team using Devin AI coding agent from Cognition",
+    "company adopted Devin by Cognition for code migration or modernization",
+    "Devin AI software engineer enterprise customer results"
+  ]
+}

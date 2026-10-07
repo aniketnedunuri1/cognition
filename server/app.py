@@ -17,7 +17,7 @@ from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
 from fastmcp.server.auth.providers.debug import DebugTokenVerifier
 
-from . import apollo, exa, verify
+from . import apollo, exa, knowledge, verify
 from .cache import ROOT, CacheMiss
 
 INSTRUCTIONS = """Account research data tools. Every result carries a source_id per document.
@@ -87,7 +87,46 @@ def verify_quote(source_id: str, quote: str) -> dict:
     return verify.verify_quote(source_id, quote)
 
 
-TOOLS = [search_web, fetch_page, search_people, get_company, get_jobs, verify_quote]
+@_tool
+def get_positioning() -> dict:
+    """Devin positioning, use cases (with proof quotes + source_ids), and the customers
+    that may be named in outreach (public_reference). Map every signal to a use case here."""
+    return knowledge.get_positioning()
+
+
+@_tool
+def match_customers(companies: list[str]) -> list[dict]:
+    """Which of these companies are Devin customers. Use for peer proof (account's peers)
+    and champion tracking (people's past employers). public_reference false = may inform
+    targeting, never named in a message."""
+    return knowledge.match_customers(companies)
+
+
+@_tool
+def refresh_positioning(limit: int = 15) -> dict:
+    """Find new/changed Cognition pages (sitemap diff vs. last run) and third-party Devin
+    mentions since the last refresh. Returns items to classify; decides nothing.
+    Record results with apply_knowledge_update, then call again until items is empty."""
+    return knowledge.refresh_positioning(limit)
+
+
+@_tool
+def apply_knowledge_update(processed_source_ids: list[str], summary: str,
+                           customers: list[dict] | None = None, use_cases: list[dict] | None = None,
+                           positioning_markdown: str | None = None) -> dict:
+    """Record classified refresh items. Pass every reviewed source_id in processed_source_ids,
+    including ones with nothing to add.
+    customers: [{name, use_case, quote, source_id, metric?}] — quote verbatim from the source.
+    use_cases: [{name, description, quote, source_id, customer?}] — reuse existing names.
+    positioning_markdown: full rewrite ONLY for a positioning shift (launch, rebrand, new
+    category claim); cite claims as [src_...] from Cognition-owned sources only.
+    Additive items never rewrite positioning. public_reference is computed, not set."""
+    return knowledge.apply_knowledge_update(processed_source_ids, summary, customers, use_cases,
+                                            positioning_markdown)
+
+
+TOOLS = [search_web, fetch_page, search_people, get_company, get_jobs, verify_quote,
+         get_positioning, match_customers, refresh_positioning, apply_knowledge_update]
 
 
 def build_server(auth_token: str | None = None) -> FastMCP:

@@ -82,19 +82,21 @@ def cached_call(
     ttl_class: str,
     fetch: Callable[[], dict],
     to_docs: Callable[[dict, str], list[dict]],
+    force: bool = False,
 ) -> tuple[list[dict], dict]:
     """Return (documents, raw response) for a request, fetching only if needed.
 
     fetch() makes the live call. to_docs(response, fetched_at) turns the raw
     response into document records; they're upserted on every call (idempotent)
     so the doc layer can always be rebuilt from the request layer.
+    force=True refetches regardless of TTL (a source reported a change), except in replay.
     """
     key = request_key(endpoint, request)
     path = cache_dir() / "requests" / f"{key}.json"
     entry = _read(path)
     m = mode()
 
-    if entry and (m == "replay" or (m == "default" and not _expired(entry))):
+    if entry and (m == "replay" or (m == "default" and not force and not _expired(entry))):
         response, fetched_at = entry["response"], entry["fetched_at"]
     elif m == "replay":
         raise CacheMiss(f"{endpoint} request not in cache (replay mode)")

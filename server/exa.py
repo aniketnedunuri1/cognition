@@ -87,7 +87,7 @@ def _page_docs(response: dict, fetched_at: str) -> list[dict]:
     ]
 
 
-def fetch_page(url_or_source_id: str, offset: int = 0) -> dict:
+def fetch_page(url_or_source_id: str, offset: int = 0, force: bool = False) -> dict:
     """Full text is cached (for verify_quote); the model gets a capped excerpt."""
     if url_or_source_id.startswith("src_"):
         doc = get_doc(url_or_source_id)
@@ -99,7 +99,8 @@ def fetch_page(url_or_source_id: str, offset: int = 0) -> dict:
 
     body = {"urls": [url], "text": True}
     try:
-        [doc], _ = cached_call("exa/contents", body, "lookup", lambda: _fetch_contents(body), _page_docs)
+        [doc], _ = cached_call("exa/contents", body, "lookup", lambda: _fetch_contents(body), _page_docs,
+                               force=force)
     except ProviderError as e:
         return {"status": "not_fetched", "url": url, "reason": str(e)}
 
