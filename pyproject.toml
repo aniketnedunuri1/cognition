@@ -11,6 +11,7 @@ dependencies = [
     "claude-agent-sdk>=0.1",
     "google-api-python-client>=2.140",
     "google-auth>=2.30",
+    "google-auth-oauthlib>=1.2",
     "markdown>=3.6",
 ]
 

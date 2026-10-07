@@ -9,7 +9,7 @@ Needs Python ≥ 3.10.
 ```bash
 python3 -m venv .venv            # or: uv venv
 .venv/bin/pip install -e '.[dev]'  # or: uv pip install -e '.[dev]'
-cp .env.example .env             # fill in EXA_API_KEY, APOLLO_API_KEY
+cp .env.example .env             # fill in ANTHROPIC_API_KEY, EXA_API_KEY, APOLLO_API_KEY
 .venv/bin/pytest                 # no API calls
 ```
 
@@ -25,9 +25,15 @@ cp .env.example .env             # fill in EXA_API_KEY, APOLLO_API_KEY
 .venv/bin/python agent.py research <demo-domain> --replay # reproduce the committed demo, no data API spend
 ```
 
-Auth for the runner: `ANTHROPIC_API_KEY`, or an existing Claude Code login. The agent gets **only** this MCP server's tools (no built-in web search, no other MCP servers), so every fact has to come through a cited tool call.
+**Auth for the runner:** set `ANTHROPIC_API_KEY` in `.env` (recommended for reviewers). Alternative: if you're logged in to Claude Code (`claude` CLI), the runner uses that login and no key is needed.
 
-**Google Doc output (optional):** create a service account, enable the Drive API, put the JSON key at `secrets/google-service-account.json`, and set `GOOGLE_DRIVE_FOLDER_ID` to a folder **in a Shared Drive** where the service account is a member. Service accounts have no Drive storage of their own, so a regular My Drive folder fails. Without this, briefs are still written as Markdown and the Slack summary says the Doc wasn't created.
+The agent gets **only** this MCP server's tools (no built-in web search, no other MCP servers), so every fact has to come through a cited tool call. The CLI prints the Slack summary exactly as the tool rendered it from the validated brief; the agent's own prose is shown only with `-v`, labeled unvalidated.
+
+**Google Doc output (optional, one-time setup, any Google account):**
+1. In Google Cloud Console: create a project → enable the **Google Drive API** → OAuth consent screen (External; add yourself as a test user) → Credentials → **Create OAuth client ID → Desktop app** → download the JSON to `secrets/google-oauth-client.json`.
+2. `.venv/bin/python -m server.gdocs auth` → approve in the browser. The token is saved to `secrets/google-token.json` (gitignored).
+
+Briefs then land in a Drive folder named "Account research briefs". The app uses the `drive.file` scope, so it can only see files it created. While the consent screen is in "Testing", Google expires refresh tokens after 7 days; re-run step 2, or publish the app (no verification needed for `drive.file`). Without this setup, briefs are still written as Markdown and the Slack summary says the Doc wasn't created.
 
 ## MCP server
 

@@ -87,7 +87,7 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 | `add_golden_example(persona, message)` | Store approved messages |
 | `lint_message(channel, text, source_ids, subject?)` | Length, banned phrases, public_reference, no layoffs, no "Windsurf", no placeholders; every number must appear in the cited sources |
 | `save_brief(domain, brief_json)` / `get_last_brief(domain)` | Persistence + diffing |
-| `create_brief_doc(domain)` | Google Doc (service account → Shared Drive folder) for the latest saved brief; re-runs update the same Doc; returns link + Slack summary |
+| `create_brief_doc(domain)` | Google Doc in the rep's own Drive (one-time user OAuth, `drive.file` scope, app-created folder) for the latest saved brief; re-runs update the same Doc; returns link + Slack summary |
 
 ---
 
@@ -276,7 +276,7 @@ Full brief: <Google Doc link>
 9. ABM themes (2–3 account-level angles for marketing)
 10. Sources
 
-**Source of truth:** `briefs/<domain>/<date>.json` + `.md`; Doc and Slack are renders of it.
+**Source of truth:** `briefs/<domain>/<date>.json` + `.md`; Doc and Slack are renders of it. The Slack reply is the tool-rendered `slack_summary`, posted verbatim; agent prose outside the brief/summary carries no facts (it isn't validated).
 
 ---
 
@@ -288,7 +288,7 @@ Full brief: <Google Doc link>
 - TTL per entry: discovery calls (all Exa searches, Apollo job list) = 1 day; lookups of known things (fetched pages, Apollo firmographics) = 7 days. Reruns reuse fresh entries, refetch expired ones. `--replay` = cache only (committed demo); `--fresh` = refetch everything.
 - `cache/` is gitignored; the demo account's cache is committed once with `git add -f`.
 - Demo account's cache committed so reviewers can reproduce without API spend.
-- `.env.example` lists keys: `ANTHROPIC_API_KEY` (runner only), `EXA_API_KEY`, `APOLLO_API_KEY` (Free plan is enough), Google service account JSON.
+- `.env.example` lists keys: `ANTHROPIC_API_KEY` (runner; or an existing Claude Code login), `EXA_API_KEY`, `APOLLO_API_KEY` (Free plan is enough). Google Docs: optional one-time OAuth (`python -m server.gdocs auth`).
 
 ---
 
@@ -310,6 +310,6 @@ Full brief: <Google Doc link>
 - [x] Devin: custom MCP supported (stdio / SSE / HTTP); Playbooks invokable via `!macro`
 - [x] Devin: custom MCP available in Slack-triggered sessions (per Devin). Needs a public HTTPS URL; added via Customize → MCPs → Add custom MCP, bearer header, org scope. Validate with MCP Inspector first; confirm with a real Slack run.
 - [ ] Claude in Slack: confirm custom connectors + skills work there
-- [ ] Google Docs: service account creation + sharing model
+- [x] Google Docs: one-time user OAuth into the rep's own Drive (`drive.file`); no Workspace needed. Doc comments as a feedback source: not built yet
 - [x] Exa: `startPublishedDate` supports incremental search (use only for bounded windows, per Exa guidance)
 - [ ] Demo account choice (not a Devin customer, strong public eng footprint)

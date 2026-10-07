@@ -15,24 +15,36 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import json
 import os
 import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
 
-from claude_agent_sdk import (AssistantMessage, ClaudeAgentOptions, ResultMessage, TextBlock, ToolUseBlock,
-                              query)
+from claude_agent_sdk import (AssistantMessage, ClaudeAgentOptions, ResultMessage, TextBlock, ToolResultBlock,
+                              ToolUseBlock, UserMessage, query)
 
 ROOT = Path(__file__).resolve().parent
 SERVER = "research"
 MODEL = "claude-opus-5-5"
 STAGES = ("company", "people", "signals", "draft")
+RENDERERS = ("save_brief", "create_brief_doc")  # tools whose result carries the rendered Slack summary
 
 
 def tool_names() -> list[str]:
     from server.app import TOOLS
     return [f"mcp__{SERVER}__{t.__name__}" for t in TOOLS]
+
+
+def _tool_json(block: ToolResultBlock) -> dict | None:
+    parts = block.content if isinstance(block.content, list) else [{"type": "text", "text": block.content or ""}]
+    for part in parts:
+        try:
+            return json.loads(part.get("text") or "")
+        except (json.JSONDecodeError, AttributeError):
+            continue
+    return None
 
 
 def server_config(args) -> dict:
@@ -50,8 +62,7 @@ def prompt_for(args) -> str:
             return (f"Account: {args.domain}. Run Stage 0, then only the `{args.stage}` stage of the playbook. "
                     f"Report the result to the rep; save_brief only if you produced a full brief.")
         return (f"Account: {args.domain}. Run Stages 0-4 of the playbook, then save_brief, fix what the "
-                f"validator dropped with real evidence, save again, and call create_brief_doc. "
-                f"End with the Slack summary exactly as the tool returned it.")
+                f"validator dropped with real evidence, save again, and call create_brief_doc.")
     if args.command == "feedback":
         return (f"Rep feedback on the {args.domain} brief:\n\n{args.text}\n\n"
                 f"Run Stage 6 of the playbook (get_last_brief and get_playbook first).")
@@ -72,20 +83,36 @@ async def run(args) -> int:
         max_turns=args.max_turns,
         cwd=str(ROOT),
     )
-    final = None
+    final, calls, summary, saved = None, {}, None, None
     async for msg in query(prompt=prompt_for(args), options=options):
         if isinstance(msg, AssistantMessage):
             for block in msg.content:
                 if isinstance(block, ToolUseBlock):
-                    print(f"  → {block.name.removeprefix(f'mcp__{SERVER}__')}", file=sys.stderr)
+                    calls[block.id] = block.name.removeprefix(f"mcp__{SERVER}__")
+                    print(f"  → {calls[block.id]}", file=sys.stderr)
                 elif isinstance(block, TextBlock) and args.verbose:
                     print(block.text, file=sys.stderr)
+        elif isinstance(msg, UserMessage) and isinstance(msg.content, list):
+            for block in msg.content:
+                if isinstance(block, ToolResultBlock) and calls.get(block.tool_use_id) in RENDERERS:
+                    data = _tool_json(block) or {}
+                    summary = data.get("slack_summary") or summary
+                    saved = data.get("saved") or saved
         elif isinstance(msg, ResultMessage):
             final = msg
     if final is None:
         print("No result returned.", file=sys.stderr)
         return 1
-    print(final.result or "")
+    if summary:
+        # The rendered summary, verbatim from the tool. The agent's own closing prose is
+        # unvalidated, so it's only shown on request (-v), labeled as such.
+        print(summary)
+        if saved:
+            print(f"\nBrief: {saved} (+ .md)")
+        if args.verbose and final.result:
+            print(f"\n--- agent notes (not validated) ---\n{final.result}", file=sys.stderr)
+    else:
+        print(final.result or "")
     cost = f", ${final.total_cost_usd:.2f}" if final.total_cost_usd is not None else ""
     print(f"\n[{final.num_turns} turns, {final.duration_ms / 1000:.0f}s{cost}]", file=sys.stderr)
     return 1 if final.is_error else 0

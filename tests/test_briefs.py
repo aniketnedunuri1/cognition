@@ -107,3 +107,49 @@ def test_feedback_rules_and_examples(tmp_path, monkeypatch):
     for i in range(5):
         feedback.add_golden_example("champion", "email", f"m{i}", subject="s")
     assert [e["message"] for e in feedback.get_playbook()["golden_examples"]["champion/email"]] == ["m4", "m3", "m2"]
+
+
+class FakeCreds:
+    def to_json(self):
+        return json.dumps({"refresh_token": "r"})
+
+
+class FakeDrive:
+    def __init__(self):
+        self.created, self.updated = [], []
+
+    def files(self):
+        return self
+
+    def create(self, body, fields, media_body=None):
+        self.created.append(body)
+        self._r = {"id": f"id{len(self.created)}", "webViewLink": f"https://docs.google.com/d/id{len(self.created)}"}
+        return self
+
+    def update(self, fileId, media_body, fields):
+        self.updated.append(fileId)
+        self._r = {"id": fileId, "webViewLink": f"https://docs.google.com/d/{fileId}"}
+        return self
+
+    def execute(self):
+        return self._r
+
+
+def test_brief_doc_oauth_flow(env, tmp_path, monkeypatch):
+    from server import gdocs
+    blog, phil = env
+    monkeypatch.setenv("GOOGLE_TOKEN_FILE", str(tmp_path / "token.json"))
+    briefs.save_brief("brex.com", brief(blog, phil))
+    out = gdocs.create_brief_doc("brex.com")
+    assert out["status"] == "not_configured" and "Google Doc not created yet" in out["slack_summary"]
+
+    (tmp_path / "token.json").write_text(json.dumps({"refresh_token": "r"}))
+    drive = FakeDrive()
+    monkeypatch.setattr(gdocs, "_drive", lambda: drive)
+    monkeypatch.setattr(gdocs, "_creds", lambda: FakeCreds())
+    out = gdocs.create_brief_doc("brex.com")
+    folder, doc = drive.created
+    assert folder["mimeType"].endswith("folder") and doc["parents"] == ["id1"]
+    assert out["url"] in out["slack_summary"]
+    gdocs.create_brief_doc("brex.com")  # same brief → same Doc, folder reused
+    assert len(drive.created) == 2 and drive.updated == ["id2"]
