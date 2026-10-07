@@ -14,7 +14,6 @@ import hashlib
 import json
 import os
 import re
-import subprocess
 from datetime import date, timedelta
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -25,6 +24,7 @@ from . import exa
 from .cache import ROOT, get_doc, mode, now_iso, site
 from .exa import ProviderError, _norm_company
 from .notify import notify
+from .vcs import commit
 from .verify import normalize, verify_quote
 
 EXCERPT_CHARS = 2500
@@ -153,18 +153,6 @@ def _proof(source_id: str, quote: str) -> tuple[dict | None, str | None]:
             "published_date": doc["published_date"], "cognition_owned": is_cognition_owned(doc["url"])}, None
 
 
-def _git_commit(message: str) -> bool:
-    d = kdir()
-    try:
-        subprocess.run(["git", "-C", str(d), "rev-parse", "--is-inside-work-tree"],
-                       check=True, capture_output=True)
-        subprocess.run(["git", "-C", str(d), "add", "."], check=True, capture_output=True)
-        r = subprocess.run(["git", "-C", str(d), "commit", "-m", message, "--", "."], capture_output=True)
-        return r.returncode == 0
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return False
-
-
 def apply_knowledge_update(
     processed_source_ids: list[str],
     summary: str,
@@ -255,7 +243,7 @@ def apply_knowledge_update(
     _save("seen.json", seen)
 
     notified = notify(f"Devin positioning changed: {summary}") if rewritten else None
-    committed = _git_commit(f"knowledge: {summary}")
+    committed = commit(kdir(), f"knowledge: {summary}")
     return {"customers_added": added_customers, "use_cases_added": added_use_cases,
             "positioning_rewritten": rewritten, "rejected": rejected,
             "slack": notified, "committed": committed}

@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field, ValidationError
 from .apollo import normalize_domain
 from .cache import get_doc, site, source_id_for
 from .exa import employment_at
+from .lint import lint_message
 from .verify import normalize, verify_quote
 
 SIGNAL_MAX_MONTHS = {"tactical": 6, "strategic": 12}
@@ -122,6 +123,22 @@ class Verdict(BaseModel):
     watch_for: str | None = None
 
 
+class Email(BaseModel):
+    subject: str
+    body: str
+
+
+class Draft(BaseModel):
+    name: str                          # must be in people
+    email: Email
+    linkedin_note: str
+    linkedin_followup: str
+    built_from: list[Evidence] = Field(min_length=1)
+    # Set by the validator: no hook, champion evidence, or signal attached to this person.
+    low_confidence: bool | None = None
+    lint: list[dict] = []
+
+
 class Brief(BaseModel):
     domain: str
     company_name: str
@@ -133,6 +150,7 @@ class Brief(BaseModel):
     people: list[Person] = []
     top_contacts: list[TopContact] = []
     abm_themes: list[Assessment] = []
+    drafts: list[Draft] = []
 
 
 # ---------- validator ----------
@@ -348,6 +366,44 @@ def validate_brief(raw: dict, *, today: date | None = None,
                 brief.verdict = verdict
         except ValidationError as e:
             v.drop("verdict", f"schema: {e.errors()[0]['msg']}")
+
+    attached = {n for s in brief.signals for n in s.who_cares}
+    anchored = {p.name for p in brief.people if p.hooks or p.champion_evidence or p.name in attached}
+
+    for i, d in _parse_list(raw.get("drafts"), Draft, "drafts", v):
+        path = f"drafts[{i}]"
+        if d.name not in names:
+            v.drop(path, f"{d.name!r} is not in the validated people list")
+            continue
+        d.built_from = v.evidence(d.built_from, f"{path}.built_from")
+        if not d.built_from:
+            v.drop(path, "draft cites no valid sources")
+            continue
+        ids = [e.source_id for e in d.built_from]
+        checks = {
+            "email": lint_message("email", d.email.body, ids, subject=d.email.subject),
+            "linkedin_note": lint_message("linkedin_note", d.linkedin_note, ids),
+            "linkedin_followup": lint_message("linkedin_followup", d.linkedin_followup, ids),
+        }
+        blocking = [f"{ch}: {x['issue']}" for ch, r in checks.items() for x in r["issues"] if x["severity"] == "block"]
+        if blocking:
+            v.drop(path, "; ".join(blocking))
+            continue
+        d.lint = [{"channel": ch, **x} for ch, r in checks.items() for x in r["issues"]]
+        d.low_confidence = d.name not in anchored
+        brief.drafts.append(d)
+
+    missing = [t.name for t in brief.top_contacts if t.name not in {d.name for d in brief.drafts}]
+    if missing:
+        v.flags.append({"path": "drafts", "flag": f"top contacts without a draft: {missing}"})
+
+    if brief.verdict and brief.verdict.verdict == "act_now":
+        strong = any(s.strength == "strong" for s in brief.signals)
+        reachable = any(p.current_basis for p in brief.people if p.name in anchored)
+        piloting = any(c.situation == "piloting_competitor" for c in brief.competitive_context)
+        if not piloting and not (strong and reachable):
+            v.flags.append({"path": "verdict", "flag": "act_now needs a strong signal + a reachable contact "
+                                                      "(verified current with a hook or signal), or a competitor pilot"})
 
     report = {"dropped_count": len(v.dropped), "dropped": v.dropped, "flags": v.flags}
     return brief.model_dump(), report

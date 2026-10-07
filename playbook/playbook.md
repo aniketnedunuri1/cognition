@@ -57,10 +57,10 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 | Technical evaluator | Staff/Principal Engineer, Architect |
 | Gatekeeper (named, not targeted) | CISO, Head of Security, Procurement |
 
-**Entry point by Apollo headcount:**
-- under 200: CTO or founder
-- 200–2,000: VP Engineering
-- over 2,000: CTO/CIO plus Platform or DevProd heads, multi-threaded
+**Entry point by Apollo total headcount.** Bands only set the *order* of the top 3; search every role at every size.
+- **Under 200:** CTO or founder (plus an eng lead if found). 1–2 threads max.
+- **200–2,000:** CTO and VP Eng as buyers; Directors/EMs as champions; Platform/DevProd heads if found. Multi-thread.
+- **Over 2,000:** enter via Heads of Platform / DevProd / DevEx / AI enablement and BU VPs/SVPs of Eng; CTO as exec sponsor. In non-tech enterprises (banks, insurance, retail) include the CIO as likely budget owner. Parent-company gatekeepers when applicable.
 
 **Steps**
 1. `search_people(<Apollo company name>, roles)`: 2–3 calls grouped by deal role.
@@ -78,7 +78,7 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 5. **Teams:** group people by team as their own profiles describe it. No org charts.
 6. **Subsidiaries:** `search_people(<parent>, ["CISO", "Procurement", "CTO"])` gives likely approvers, listed as gatekeepers.
 7. **Limits:** 15–25 people, verified ones first.
-8. **Top 3 to contact first.** Default order is champion first, then multi-thread up to the economic buyer (adjust using the entry-point rule). Give one line of why each, citing evidence.
+8. **Top 3 to contact first,** ordered by the entry-point band. One line of why each, citing evidence.
 
 ---
 
@@ -118,14 +118,18 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 
 | Situation | Treatment |
 |---|---|
-| Copilot / autocomplete / AI IDE rollout | Positive: the category is accepted, so pitch Devin as the next step (delegated, parallel, end-to-end) |
-| Piloting a direct competitor (autonomous coding agents) | Urgent: get in before the decision |
+| GitHub Copilot autocomplete only | Positive: the category is accepted, so pitch delegated, autonomous work as the next step |
+| Piloting a direct competitor | Urgent: get in before the decision |
 | Big direct-competitor deal signed < 6 months ago | **Not now**; revisit 9–12 months after signing |
 
+**Direct competitors:** AI IDEs and coding agents — Cursor, Claude Code, OpenAI Codex, GitHub Copilot coding agent, Factory, and similar. Cursor competes with Devin Desktop. A rollout of any of these is competitive context, never a positive.
+
 **Verdict** (an assessment, citing evidence)
-- **Act now:** at least one strong signal plus a reachable champion or economic buyer, or they're piloting a competitor.
+- **Act now:** at least one strong signal plus a reachable contact, or they're piloting a competitor.
 - **Warm:** medium signals only, or strong signals without a reachable contact.
 - **Not now:** no qualifying signals, or a recent big competitor deal. Always say what to watch for.
+
+**Reachable** = at least one person verified current (`current_basis` set by the validator) with a hook or signal attached.
 
 **Layoffs** can inform the verdict, but they never appear in a message.
 
@@ -133,7 +137,7 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 
 ## Stage 4: Drafts
 
-**Per contact** (the top 3 unless the rep picks others):
+**Per contact:** always the top 3 (or the rep's picks).
 - **Email:** subject of 4–6 words; plain-text body of 75–120 words; one ask.
 - **LinkedIn connection note:** at most 300 characters.
 - **LinkedIn follow-up DM:** 400–600 characters, and it doesn't repeat the email.
@@ -145,7 +149,7 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 
 **Structure:** about them → why it matters → proof → soft ask.
 
-**Anchor:** every draft rests on at least one verified signal or personal hook. If there's none, don't write a generic draft; tell the rep what's missing.
+**Anchor:** every draft rests on at least one verified signal or personal hook. If a contact has none, draft from company-level research (priorities plus peer proof) and label it **"Low-confidence draft: no personal signal or hook found."** Still no invented facts.
 
 **Proof:**
 1. **Peer proof comes first:** a peer that is a public Devin customer → "Teams at <peer> use Devin for <use case>", using that customer's proof quote and metric.
@@ -156,17 +160,17 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 - mention layoffs
 - name a customer whose `public_reference` is false
 - use a number that isn't in a cited source or proof
-- present Windsurf as a separate product (it's Devin Desktop)
+- say "Windsurf", even when a proof quote does. Older Cognition copy says "Devin and Windsurf"; proof quotes are evidence, not copy. The product is Devin (Devin Desktop)
 - frame Devin as replacing their engineers; the positioning is engineers working as architects and delegating execution
 - use hype words or filler: "hope this finds you well", "quick question", "revolutionize", "game-changer", "synergy", "circle back"
 
-**Checks:** run `lint_message(message, channel)` on every draft, then fix and re-lint until it passes.
+**Checks:** run `lint_message(channel, text, source_ids, subject?)` on every draft (`source_ids` = the draft's built-from sources; every number in the message must appear in one of them), then fix and re-lint until it passes.
 
 **Built from:** each draft lists the signals, hooks and proof `source_id`s it uses, so the rep can check them.
 
 **Golden examples** from `get_playbook()` are for tone and shape only; never copy their facts.
 
-**Never send.** Drafts go to the rep. A Gmail draft is created only on request.
+**Never send.** Drafts go to the rep for approval.
 
 ---
 
@@ -212,6 +216,7 @@ If `get_last_brief` returned a brief, report:
   top_contacts: [{name, why: Assessment}],          // max 3, must be in people
   abm_themes: [Assessment],                         // 2–3 account-level angles for marketing
   drafts: [{name, email: {subject, body}, linkedin_note, linkedin_followup, built_from: [Evidence]}]
+                                                    // low_confidence is set by the validator
 }
 Fact = {value, evidence: [Evidence]}   Evidence = {source_id, quote?}   Assessment = {text, based_on: [Evidence]}
 ```
@@ -224,7 +229,7 @@ Fact = {value, evidence: [Evidence]}   Evidence = {source_id, quote?}   Assessme
 <Company> — <Act now | Warm | Not now>
 Why now: <one line>
 Signals:
- • <headline> (<source link>)
+ • <headline> (<source link>)          ← top 3 by strength; the rest live in the doc
 Start with:
  1. <Name>, <Title> — <why>
  2. …

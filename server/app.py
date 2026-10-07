@@ -17,7 +17,7 @@ from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
 from fastmcp.server.auth.providers.debug import DebugTokenVerifier
 
-from . import apollo, exa, knowledge, verify
+from . import apollo, briefs, exa, feedback, gdocs, knowledge, lint, verify
 from .cache import ROOT, CacheMiss
 
 INSTRUCTIONS = """Account research data tools. Every result carries a source_id per document.
@@ -127,8 +127,63 @@ def apply_knowledge_update(processed_source_ids: list[str], summary: str,
                                             positioning_markdown)
 
 
+@_tool
+def lint_message(channel: str, text: str, source_ids: list[str] | None = None,
+                 subject: str | None = None) -> dict:
+    """Check a draft before showing it. channel: email (pass subject) | linkedin_note |
+    linkedin_followup. source_ids: the draft's built-from sources — every number in the
+    message must appear in one of them. Fix every issue and re-lint until ok is true."""
+    return lint.lint_message(channel, text, source_ids, subject)
+
+
+@_tool
+def save_brief(domain: str, brief: dict) -> dict:
+    """Validate and save the brief (shape: playbook Output contract). Returns the validator
+    report (what was dropped and why), the since-last-run diff, and the Slack summary.
+    Fix drops with real evidence — never by rewording — then save again."""
+    return briefs.save_brief(domain, brief)
+
+
+@_tool
+def get_last_brief(domain: str) -> dict:
+    """The most recently saved brief for this domain, for since-last-run comparison."""
+    return briefs.get_last_brief(domain)
+
+
+@_tool
+def create_brief_doc(domain: str) -> dict:
+    """Create or update the Google Doc for the latest saved brief. Returns the link and
+    the Slack summary with the link filled in. Post that summary as the thread reply."""
+    return gdocs.create_brief_doc(domain)
+
+
+@_tool
+def get_playbook() -> dict:
+    """Learned rules (apply all that match the stage and persona) and golden examples
+    (style references for drafting; never copy their facts)."""
+    return feedback.get_playbook()
+
+
+@_tool
+def add_playbook_rule(rule: str, scope: str, replaces: str | None = None) -> dict:
+    """Record a rule distilled from rep feedback. scope: "global" or "persona:<deal_role>".
+    Check get_playbook first: if it contradicts an existing rule, ask the rep, and pass
+    the superseded rule's text as `replaces` only if they say the new one wins.
+    Factual corrections are not rules — fix the brief instead."""
+    return feedback.add_playbook_rule(rule, scope, replaces)
+
+
+@_tool
+def add_golden_example(persona: str, channel: str, message: str, subject: str | None = None) -> dict:
+    """Store a rep-approved message as a style reference. persona: deal role;
+    channel: email | linkedin_note | linkedin_followup."""
+    return feedback.add_golden_example(persona, channel, message, subject)
+
+
 TOOLS = [search_web, fetch_page, search_people, get_company, get_jobs, verify_quote,
-         get_positioning, match_customers, refresh_positioning, apply_knowledge_update]
+         get_positioning, match_customers, refresh_positioning, apply_knowledge_update,
+         lint_message, save_brief, get_last_brief, create_brief_doc,
+         get_playbook, add_playbook_rule, add_golden_example]
 
 
 def build_server(auth_token: str | None = None) -> FastMCP:

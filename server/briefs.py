@@ -1,0 +1,246 @@
+"""Brief persistence, "since last run" diff, and renders (Markdown for the Doc, text for Slack).
+
+briefs/<domain>/<YYYY-MM-DD>.json is the source of truth; the Doc and Slack are
+renders of it. Every URL and date in a render comes from the cache, never the model.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+from datetime import date
+from pathlib import Path
+
+from .apollo import normalize_domain
+from .cache import ROOT, get_doc, now_iso
+from .knowledge import use_case_names
+from .schema import validate_brief
+from .verify import normalize
+
+VERDICT = {"act_now": "Act now", "warm": "Warm", "not_now": "Not now"}
+ROLE = {"economic_buyer": "Economic buyers", "champion": "Champions", "technical_evaluator": "Technical evaluators",
+        "gatekeeper": "Gatekeepers", "parent_org_approver": "Parent-company approvers"}
+LOW_CONFIDENCE = "Low-confidence draft: no personal signal or hook found."
+
+
+def bdir() -> Path:
+    return Path(os.environ.get("BRIEFS_DIR", ROOT / "briefs"))
+
+
+def _saved(domain: str) -> list[Path]:
+    return sorted((bdir() / normalize_domain(domain)).glob("*.json"))
+
+
+# ---------- diff ----------
+
+def diff_briefs(old: dict, new: dict) -> dict:
+    def sig_keys(b):
+        return {normalize(s["headline"]): {e["source_id"] for e in s["evidence"]} for s in b["signals"]}
+    old_sigs, new_sigs = sig_keys(old), sig_keys(new)
+    old_ev = set().union(*old_sigs.values()) if old_sigs else set()
+    new_signals = [s["headline"] for s in new["signals"]
+                   if normalize(s["headline"]) not in old_sigs
+                   and not ({e["source_id"] for e in s["evidence"]} & old_ev)]
+    old_people, new_people = {p["name"] for p in old["people"]}, {p["name"] for p in new["people"]}
+    ov, nv = (old.get("verdict") or {}).get("verdict"), (new.get("verdict") or {}).get("verdict")
+    out = {
+        "new_signals": new_signals,
+        "new_contacts": sorted(new_people - old_people),
+        "departed_contacts": sorted(old_people - new_people),
+        "verdict_change": f"{VERDICT.get(ov, 'none')} → {VERDICT.get(nv, 'none')}" if ov != nv else None,
+    }
+    out["nothing_new"] = not any(out.values())
+    return out
+
+
+# ---------- save / load ----------
+
+def save_brief(domain: str, brief: dict) -> dict:
+    """Validate, diff against the last run, and save. Returns the validator report,
+    the diff, and the Slack summary. Fix dropped items with real evidence, then save again."""
+    domain = normalize_domain(domain)
+    clean, report = validate_brief({**brief, "domain": domain}, use_cases=use_case_names())
+    today = date.today().isoformat()
+    previous = [p for p in _saved(domain) if p.stem != today]
+    prev = json.loads(previous[-1].read_text()) if previous else None
+    since = {"since": prev["date"], **diff_briefs(prev["brief"], clean)} if prev else None
+
+    record = {"domain": domain, "date": today, "saved_at": now_iso(), "brief": clean,
+              "report": report, "since_last_run": since, "doc_url": None}
+    out = bdir() / domain / f"{today}.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(record, indent=1, ensure_ascii=False))
+    out.with_suffix(".md").write_text(render_markdown(record))
+    return {"saved": str(out.relative_to(ROOT)) if out.is_relative_to(ROOT) else str(out),
+            "report": report, "since_last_run": since, "slack_summary": render_slack(record)}
+
+
+def get_last_brief(domain: str) -> dict:
+    files = _saved(domain)
+    if not files:
+        return {"found": False, "domain": normalize_domain(domain)}
+    rec = json.loads(files[-1].read_text())
+    return {"found": True, "date": rec["date"], "brief": rec["brief"], "doc_url": rec.get("doc_url")}
+
+
+def load_record(domain: str, day: str | None = None) -> tuple[Path, dict] | None:
+    files = [p for p in _saved(domain) if day is None or p.stem == day]
+    return (files[-1], json.loads(files[-1].read_text())) if files else None
+
+
+# ---------- renders ----------
+
+class _Sources:
+    """Numbers each cited document once; renders [n] markers and the source list."""
+
+    def __init__(self):
+        self.order: list[str] = []
+
+    def cite(self, evidence: list[dict]) -> str:
+        ns = []
+        for e in evidence:
+            if e["source_id"] not in self.order:
+                self.order.append(e["source_id"])
+            ns.append(self.order.index(e["source_id"]) + 1)
+        return "".join(f"[{n}]" for n in sorted(set(ns)))
+
+    def lines(self) -> list[str]:
+        out = []
+        for n, sid in enumerate(self.order, 1):
+            d = get_doc(sid) or {}
+            when = ", ".join(x for x in (
+                f"published {d['published_date'][:10]}" if d.get("published_date") else "",
+                f"retrieved {d['retrieved_at'][:10]}" if d.get("retrieved_at") else "") if x)
+            if d.get("url"):
+                out.append(f"{n}. [{d.get('title') or d['url']}]({d['url']}) — {when}")
+            else:
+                out.append(f"{n}. {d.get('label') or 'Source'} — {d.get('title') or ''} ({when})")
+        return out
+
+
+def _url(source_id: str) -> str | None:
+    return (get_doc(source_id) or {}).get("url")
+
+
+def _facts(src: _Sources, facts: list[dict]) -> str:
+    if not facts:
+        return "Not found"
+    out = "; ".join(f"{f['value']} {src.cite(f['evidence'])}" for f in facts)
+    return out + (" ⚠️ sources differ" if len({normalize(f["value"]) for f in facts}) > 1 else "")
+
+
+def _quotes(src: _Sources, evidence: list[dict]) -> list[str]:
+    return [f'  > "{e["quote"]}" {src.cite([e])}' for e in evidence if e.get("quote")]
+
+
+def render_markdown(rec: dict) -> str:
+    b, src = rec["brief"], _Sources()
+    L = [f"# {b['company_name']} — account brief", f"*{rec['date']} · {b['domain']}*", ""]
+
+    if rec.get("since_last_run"):
+        s = rec["since_last_run"]
+        L += [f"## Since last run ({s['since']})", ""]
+        if s["nothing_new"]:
+            L.append("Nothing new.")
+        else:
+            L += [f"- **New signal:** {h}" for h in s["new_signals"]]
+            L += [f"- **New contact:** {n}" for n in s["new_contacts"]]
+            L += [f"- **Departed:** {n}" for n in s["departed_contacts"]]
+            if s["verdict_change"]:
+                L.append(f"- **Verdict:** {s['verdict_change']}")
+        L.append("")
+
+    v = b.get("verdict")
+    L += ["## Verdict", ""]
+    if v:
+        L += [f"**{VERDICT[v['verdict']]}** *(assessment)* — {v['why_now']} {src.cite(v['based_on'])}".rstrip()]
+        if v.get("watch_for"):
+            L.append(f"\nWatch for: {v['watch_for']}")
+    else:
+        L.append("No supported verdict.")
+    L.append("")
+
+    labels = {"hq": "HQ", "founded": "Founded", "industry": "Industry", "ownership": "Ownership",
+              "parent_company": "Parent company", "headcount": "Headcount", "headcount_growth": "Headcount growth",
+              "revenue": "Revenue", "funding": "Funding", "sells_to": "Sells to", "products": "Key products"}
+    L += ["## Snapshot", "", "| | |", "|---|---|"]
+    L += [f"| {lab} | {_facts(src, b['snapshot'][k])} |" for k, lab in labels.items()]
+    L.append("")
+
+    labels = {"eng_headcount": "Engineering headcount", "open_eng_roles": "Open eng roles", "tech_stack": "Tech stack",
+              "ai_dev_tools": "AI dev tools", "eng_blog_and_github": "Eng blog / GitHub", "ai_posture": "AI posture",
+              "priorities": "What they care about", "peers": "Peers"}
+    L += ["## Engineering & priorities", ""]
+    L += [f"- **{lab}:** {_facts(src, b['engineering'][k])}" for k, lab in labels.items()]
+    L.append("")
+
+    L += ["## Intent signals", ""]
+    if not b["signals"]:
+        L.append("No signals met the bar.")
+    for s in sorted(b["signals"], key=lambda s: s["strength"] != "strong"):
+        who = f" · Who cares: {', '.join(s['who_cares'])}" if s["who_cares"] else ""
+        L += [f"**{s['headline']}** — {s['strength']} · {s['use_case']}{who}"] + _quotes(src, s["evidence"]) + [""]
+    if b["competitive_context"]:
+        L += ["**Competitive context**", ""]
+        L += [f"- {c['value']} ({c['situation'].replace('_', ' ')}) {src.cite(c['evidence'])}" for c in b["competitive_context"]]
+        L.append("")
+
+    L += ["## Buying centers", ""]
+    for role, title in ROLE.items():
+        people = [p for p in b["people"] if p["deal_role"] == role]
+        if not people:
+            continue
+        L += [f"### {title}", ""]
+        for p in sorted(people, key=lambda p: (p.get("team") or "", p["name"])):
+            tag = "**Likely champion** · " if p["label"] == "likely_champion" else ""
+            ver = "verified" if p["verified"] else "single source"
+            link = f" · [LinkedIn]({_url(p['profile_source_id'])})" if p.get("profile_source_id") else ""
+            team = f" · {p['team']}" if p.get("team") else ""
+            L.append(f"- {tag}**{p['name']}**, {p['title']}{team} — {p['why']} *({ver}){link}* {src.cite(p['evidence'])}")
+            L += [f"  - Champion evidence: {f['value']} {src.cite(f['evidence'])}" for f in p["champion_evidence"]]
+            L += [f"  - Hook: {f['value']} {src.cite(f['evidence'])}" for f in p["hooks"]]
+            if p.get("reporting_line"):
+                L.append(f"  - Reporting line (as stated): {p['reporting_line']['value']} {src.cite(p['reporting_line']['evidence'])}")
+        L.append("")
+
+    L += ["## Recommended entry: top 3", ""]
+    L += [f"{i}. **{t['name']}** — {t['why']['text']} {src.cite(t['why']['based_on'])}" for i, t in enumerate(b["top_contacts"], 1)]
+    L += ["" if b["top_contacts"] else "None supported.", ""]
+
+    L += ["## Drafted messages", "", "*Drafts for rep review. Never auto-sent.*", ""]
+    for d in b["drafts"]:
+        L += [f"### {d['name']}", ""]
+        if d["low_confidence"]:
+            L += [f"> ⚠️ {LOW_CONFIDENCE}", ""]
+        L += [f"**Email — {d['email']['subject']}**", "", d["email"]["body"], "",
+              f"**LinkedIn connection note**", "", d["linkedin_note"], "",
+              f"**LinkedIn follow-up**", "", d["linkedin_followup"], "",
+              f"*Built from:* {src.cite(d['built_from'])}"]
+        L += [f"*Lint ({x['channel']}):* {x['issue']}" for x in d["lint"]] + [""]
+
+    L += ["## ABM themes *(assessment)*", ""]
+    L += [f"- {a['text']} {src.cite(a['based_on'])}" for a in b["abm_themes"]] or ["None."]
+    L += ["", "## Sources", ""] + src.lines()
+
+    rep = rec["report"]
+    L += ["", f"*Validator: {rep['dropped_count']} unsupported item(s) dropped, {len(rep['flags'])} flag(s).*"]
+    return "\n".join(L) + "\n"
+
+
+def render_slack(rec: dict) -> str:
+    b = rec["brief"]
+    v = b.get("verdict")
+    L = [f"{b['company_name']} — {VERDICT[v['verdict']] if v else 'No supported verdict'}"]
+    if v:
+        L.append(f"Why now: {v['why_now']}")
+    top = sorted(b["signals"], key=lambda s: s["strength"] != "strong")[:3]
+    if top:
+        L.append("Signals:")
+        L += [f" • {s['headline']} ({_url(s['evidence'][0]['source_id']) or 'source in doc'})" for s in top]
+    if b["top_contacts"]:
+        titles = {p["name"]: p["title"] for p in b["people"]}
+        L.append("Start with:")
+        L += [f" {i}. {t['name']}, {titles.get(t['name'], '')} — {t['why']['text']}"
+              for i, t in enumerate(b["top_contacts"], 1)]
+    L.append(f"Full brief: {rec.get('doc_url') or '(Google Doc not created yet)'}")
+    return "\n".join(L)
