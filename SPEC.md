@@ -29,7 +29,7 @@ A wrong fact costs a rep more than a missing one. It burns credibility with the 
 5. Agent drafts email + LinkedIn per contact, posts in thread.
 6. Rep edits / comments / approves.
 7. Agent distills feedback into playbook rules, confirms what it learned.
-8. Optional: push approved messages to Gmail drafts. **Never auto-send.**
+**Never auto-send.** No Gmail or other sending integration.
 
 Each stage can also run on its own (`company`, `people`, `signals`, `draft`).
 
@@ -85,9 +85,9 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 | `match_customers(companies[])` | Match names against customers.json |
 | `get_playbook()` / `add_playbook_rule(rule, scope)` | Feedback memory |
 | `add_golden_example(persona, message)` | Store approved messages |
-| `lint_message(message, channel)` | Length, banned phrases, public_reference, no layoffs |
+| `lint_message(channel, text, source_ids, subject?)` | Length, banned phrases, public_reference, no layoffs, no "Windsurf", no placeholders; every number must appear in the cited sources |
 | `save_brief(domain, brief_json)` / `get_last_brief(domain)` | Persistence + diffing |
-| `create_brief_doc(markdown)` | Google Doc via service account, returns link |
+| `create_brief_doc(domain)` | Google Doc (service account → Shared Drive folder) for the latest saved brief; re-runs update the same Doc; returns link + Slack summary |
 
 ---
 
