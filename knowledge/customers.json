@@ -1,0 +1,968 @@
+{
+ "last_updated": "2026-10-07",
+ "customers": [
+  {
+   "name": "ActiveCampaign",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "The collaboration builds on strong momentum with Mercedes-Benz, Echo Global Logistics, ActiveCampaign",
+     "source_id": "src_bfc8c893c4",
+     "url": "https://cognition.com/blog/aws-sca",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "AHEAD",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "8x – 40x Time savings against manual baselines, measured across 8 production use cases",
+     "source_id": "src_7a391ad89b",
+     "url": "https://devin.ai/customers/ahead",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "8x-40x time savings"
+    }
+   ]
+  },
+  {
+   "name": "AI inside",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "80〜90% エンジニアリング作業がDevinを通して実施（導入当初はGitHub Copilotと半々だった）",
+     "source_id": "src_9b3bd87de5",
+     "url": "https://devin.ai/ja/customers/ai-inside",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "80-90% of eng work via Devin, up from 50/50 with Copilot"
+    }
+   ]
+  },
+  {
+   "name": "Airbyte",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "990 Engineering issues triaged by Devin in 90 days",
+     "source_id": "src_62a22b958f",
+     "url": "https://devin.ai/customers/airbyte",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Bug triage & incident response",
+     "metric": "990 issues triaged in 90 days"
+    },
+    {
+     "quote": "700+ Integrations whose docs are kept up-to-date by Devin",
+     "source_id": "src_62a22b958f",
+     "url": "https://devin.ai/customers/airbyte",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Documentation & codebase understanding",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Anduril",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Anduril on Windsurf",
+     "source_id": "src_18b56a1702",
+     "url": "https://devin.ai/blog/anduril-case-study",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "AI-assisted coding (Windsurf, now Devin Desktop)",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "AngelList",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "How AngelList Completed a Redshift-to-Snowflake Migration 5.2x Faster with Devin",
+     "source_id": "src_8d2d40934c",
+     "url": "https://devin.ai/customers/angellist/",
+     "published_date": "2026-07-02T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": "5.2x faster migration"
+    }
+   ]
+  },
+  {
+   "name": "athenahealth",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "athenahealth Advances Healthcare Innovation with Windsurf",
+     "source_id": "src_52dfe9fecb",
+     "url": "https://devin.ai/blog/athena-health-case-study",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "AI-assisted coding (Windsurf, now Devin Desktop)",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Bilt",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "10 Engineers-worth of work product every week",
+     "source_id": "src_f674fd8346",
+     "url": "https://devin.ai/customers/bilt",
+     "published_date": "2026-07-16T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "10 engineers' worth weekly"
+    },
+    {
+     "quote": "Devin is how we’re moving the rest of our search workloads onto MongoDB",
+     "source_id": "src_92795d344d",
+     "url": "https://devin.ai/blog/devin-for-mongodb-modernizations",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "BlackRock",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "We worked closely with BlackRock, whose engineering team had already been working on context management",
+     "source_id": "src_76f8604284",
+     "url": "https://devin.ai/blog/governing-ai-agents-at-scale-with-blackrock",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Cisco",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Devin and Windsurf now power category-defining customers including Goldman Sachs, Citi, Dell, Cisco, Ramp, Palantir, Nubank, and Mercado Libre",
+     "source_id": "src_07f1bfa671",
+     "url": "https://cognition.com/blog/funding-growth-and-the-next-frontier-of-ai-coding-agents",
+     "published_date": "2025-09-08T02:52:25.000Z",
+     "cognition_owned": true,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Citi",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Citi rolls out Devin to 40,000 developers for autonomous code, testing, and documentation",
+     "source_id": "src_84d58730f4",
+     "url": "https://devin.ai/financial-services",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Clearwater Analytics",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Clearwater Analytics on Codeium",
+     "source_id": "src_dd280765d1",
+     "url": "https://devin.ai/blog/clearwater-analytics-case-study",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "AI-assisted coding (Windsurf, now Devin Desktop)",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Cognizant",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "exploring Devin’s capabilities for autonomous, end-to-end execution across engineering workflows, including code migration",
+     "source_id": "src_6569ecf224",
+     "url": "https://cognition.com/blog/cognizant-cognition",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Comarch",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "3.3x Faster modernization for a 10-million-line ERP system, from 5 years to 18 months",
+     "source_id": "src_aa9b242979",
+     "url": "https://devin.ai/customers/comarch",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": "5 years to 18 months"
+    },
+    {
+     "quote": "1.7x Improvement in test coverage, from 60% to 100%",
+     "source_id": "src_aa9b242979",
+     "url": "https://devin.ai/customers/comarch",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Test generation & QA",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Compiled Health",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "~430 engineering hours Delivered by Devin in two weeks",
+     "source_id": "src_ae3960de16",
+     "url": "https://devin.ai/customers/compiledhealth",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "~430 eng hours in two weeks"
+    }
+   ]
+  },
+  {
+   "name": "Común",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "3x Engineering output, with weekly backend PRs rising from 50 to 170 in four weeks",
+     "source_id": "src_48669a22fb",
+     "url": "https://devin.ai/customers/comun",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "3x engineering output"
+    }
+   ]
+  },
+  {
+   "name": "Crosby",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "20–40/day Bugs and alerts getting a first pass from Devin",
+     "source_id": "src_6cdc810982",
+     "url": "https://devin.ai/customers/crosby",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Bug triage & incident response",
+     "metric": "20-40 bugs/alerts a day"
+    }
+   ]
+  },
+  {
+   "name": "Crossmint",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Despite having an active community of developers, the integration backlog was growing",
+     "source_id": "src_2d4aafea3a",
+     "url": "https://devin.ai/customers/crossmint",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Dagger",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "You can read more about how Dagger gets value from using Devin",
+     "source_id": "src_769ffb261d",
+     "url": "https://cognition.com/blog/cognition-open-source-initiative",
+     "published_date": "2024-12-12T16:57:29.000Z",
+     "cognition_owned": true,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Dell",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Devin and Windsurf now power category-defining customers including Goldman Sachs, Citi, Dell, Cisco, Ramp, Palantir, Nubank, and Mercado Libre",
+     "source_id": "src_07f1bfa671",
+     "url": "https://cognition.com/blog/funding-growth-and-the-next-frontier-of-ai-coding-agents",
+     "published_date": "2025-09-08T02:52:25.000Z",
+     "cognition_owned": true,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "DeNA",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "6x Perl → Go マイグレーション速度",
+     "source_id": "src_28033ce50d",
+     "url": "https://devin.ai/ja/customers/dena",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": "6x faster Perl to Go migration"
+    },
+    {
+     "quote": "has used Devin to more than double operational efficiency across multiple engineering functions",
+     "source_id": "src_ecaa4c23d2",
+     "url": "https://cognition.com/blog/launching-in-japan",
+     "published_date": "2026-04-09T04:15:47.000Z",
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "DRW",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "DRW on Codeium",
+     "source_id": "src_8ed35ddc2f",
+     "url": "https://devin.ai/blog/drw-case-study",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "AI-assisted coding (Windsurf, now Devin Desktop)",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "EBANX",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "92% Share of merged PRs authored by Devin",
+     "source_id": "src_86ab76af95",
+     "url": "https://devin.ai/customers/ebanx",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "92% of merged PRs"
+    }
+   ]
+  },
+  {
+   "name": "Echo Global Logistics",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "The collaboration builds on strong momentum with Mercedes-Benz, Echo Global Logistics, ActiveCampaign",
+     "source_id": "src_bfc8c893c4",
+     "url": "https://cognition.com/blog/aws-sca",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Eight Sleep",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "How Eight Sleep Ships 8x More Across the Whole Company with Devin",
+     "source_id": "src_56da5b764d",
+     "url": "https://devin.ai/customers/eight-sleep",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "8x more shipped"
+    }
+   ]
+  },
+  {
+   "name": "Endava",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "~30% Increase in delivery productivity and efficiency across selected workflows",
+     "source_id": "src_b37e63838c",
+     "url": "https://devin.ai/customers/endava",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "~30% productivity"
+    }
+   ]
+  },
+  {
+   "name": "Evinova",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "3x faster code migrations",
+     "source_id": "src_b417d7289b",
+     "url": "https://devin.ai/customers/evinova",
+     "published_date": "2026-07-02T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": "3x faster migrations"
+    },
+    {
+     "quote": "66% of clear-cut bugs fixed autonomously",
+     "source_id": "src_b417d7289b",
+     "url": "https://devin.ai/customers/evinova",
+     "published_date": "2026-07-02T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Bug triage & incident response",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Exa",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "one multi-week Devin session fully built a test-system contract and rolled it out service by service",
+     "source_id": "src_721aedb23c",
+     "url": "https://devin.ai/customers/exa",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Test generation & QA",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "FE fundinfo",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "10% immediate increase in engineering capacity from automated test generation, security fixes, and modernization work",
+     "source_id": "src_080a9af999",
+     "url": "https://devin.ai/customers/fefundinfo",
+     "published_date": "2026-05-31T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Test generation & QA",
+     "metric": "10% engineering capacity increase"
+    }
+   ]
+  },
+  {
+   "name": "Finch",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "With Devin, the team has merged around 3,000 PRs, roughly 20 months of engineering time",
+     "source_id": "src_32da745a29",
+     "url": "https://devin.ai/customers/finch",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Bug triage & incident response",
+     "metric": "3,000 PRs, ~20 months of eng time"
+    }
+   ]
+  },
+  {
+   "name": "GE Aerospace",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "2x User stories completed by a previously constrained team",
+     "source_id": "src_419a02000b",
+     "url": "https://devin.ai/customers/geaerospace",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "2x user stories"
+    }
+   ]
+  },
+  {
+   "name": "Goldman Sachs",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Goldman Sachs is piloting its first autonomous coder, Devin",
+     "source_id": "src_84d58730f4",
+     "url": "https://devin.ai/financial-services",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Gumroad",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "How Devin Became Gumroad's #1 Contributor with 1,500+ Merged PRs",
+     "source_id": "src_999fd4c2bd",
+     "url": "https://devin.ai/customers/gumroad",
+     "published_date": "2026-07-21T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "1,500+ merged PRs"
+    }
+   ]
+  },
+  {
+   "name": "Hamming",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Devin contributes 25% of total code volume at Hamming",
+     "source_id": "src_2d1b07eca7",
+     "url": "https://devin.ai/customers/hamming",
+     "published_date": "2026-06-10T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "25% of code volume"
+    }
+   ]
+  },
+  {
+   "name": "Hippo",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Hippo, a technology-native insurance group, has partnered with Cognition to deploy Devin",
+     "source_id": "src_6a041bd1f8",
+     "url": "https://devin.ai/customers/hippo",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Infosys",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Complex migrations, including COBOL and JCP servlet projects, have shifted from long, resource-heavy undertakings",
+     "source_id": "src_88cfcae61e",
+     "url": "https://cognition.com/blog/infosys-cognition",
+     "published_date": "2026-01-07T08:11:12.000Z",
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Itaú",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "6x faster .NET -> Java migration of 59 services",
+     "source_id": "src_5903e45c48",
+     "url": "https://devin.ai/customers/itau",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": "6x faster .NET to Java"
+    },
+    {
+     "quote": "70% of security vulnerabilities automatically remediated",
+     "source_id": "src_5903e45c48",
+     "url": "https://devin.ai/customers/itau",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Vulnerability remediation",
+     "metric": "70% of vulns auto-remediated"
+    },
+    {
+     "quote": "2x'ed test coverage, from ~50% to ~90+%",
+     "source_id": "src_5903e45c48",
+     "url": "https://devin.ai/customers/itau",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Test generation & QA",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Linktree",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Over the past month Devin has authored ~300 PRs and merged ~100. Most of these are fixing customer-reported bugs",
+     "source_id": "src_027e4dbfaf",
+     "url": "https://devin.ai/customers/linktree",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Bug triage & incident response",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Litera",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "40% Increased test coverage 93% Faster regression cycles",
+     "source_id": "src_a49527cfb2",
+     "url": "https://devin.ai/customers/litera",
+     "published_date": "2026-07-10T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Test generation & QA",
+     "metric": "93% faster regression cycles"
+    }
+   ]
+  },
+  {
+   "name": "LTM",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "clears a customer's vulnerability backlog by pairing Devin's autonomous engineering capacity",
+     "source_id": "src_c96d740826",
+     "url": "https://cognition.com/blog/ltm-cognition-partnership",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Vulnerability remediation",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Melius",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Melius ships on the order of 100 PRs a day with Devin",
+     "source_id": "src_be81c9a18b",
+     "url": "https://devin.ai/customers/melius",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "~100 PRs/day"
+    }
+   ]
+  },
+  {
+   "name": "Mercado Libre",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Mercado Libre, Latin America’s largest e-commerce and fintech platform, is using Windsurf to power its operations",
+     "source_id": "src_71e4bc7ba5",
+     "url": "https://devin.ai/blog/mercado-libre-case-study",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "AI-assisted coding (Windsurf, now Devin Desktop)",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Mercedes-Benz",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Devin analyzed over 200,000 lines of COBOL code and cut modernization time down from an estimated eight months to eight days",
+     "source_id": "src_d347984f66",
+     "url": "https://cognition.com/blog/mercedes-benz-cognition",
+     "published_date": "2026-04-27T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": "8 months to 8 days"
+    }
+   ]
+  },
+  {
+   "name": "Mizuho Securities",
+   "public_reference": false,
+   "proofs": [
+    {
+     "quote": "Mizuho Securities runs the first large-scale financial deployment",
+     "source_id": "src_8c83be82b1",
+     "url": "https://ton-technotes.com/en/blog/2026-04-17-cognition-ai-devin-japan-launch/",
+     "published_date": "2026-04-17T12:00:00.000Z",
+     "cognition_owned": false,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Modal",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "80% Incidents where Devin produces a useful early investigation",
+     "source_id": "src_630ea8707e",
+     "url": "https://devin.ai/customers/modal",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Bug triage & incident response",
+     "metric": "80% of incidents"
+    }
+   ]
+  },
+  {
+   "name": "Natura",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "consumer leaders like Natura",
+     "source_id": "src_510b8033bc",
+     "url": "https://cognition.com/blog/devin-comes-to-sao-paulo",
+     "published_date": "2026-09-22T17:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Nubank",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "8x engineering time efficiency gain 20x cost savings",
+     "source_id": "src_c667764b4e",
+     "url": "https://devin.ai/customers/nubank/",
+     "published_date": "2026-06-20T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": "8x efficiency, 20x cost savings"
+    }
+   ]
+  },
+  {
+   "name": "Odyssey Logistics",
+   "public_reference": false,
+   "proofs": [
+    {
+     "quote": "production results from autonomous AI engineering work at Odyssey Logistics",
+     "source_id": "src_6da9c1f771",
+     "url": "https://www.nasdaq.com/press-release/cognizant-and-cognition-put-autonomous-ai-engineering-production-odyssey-logistics-37",
+     "published_date": "2026-09-23T00:00:00.000Z",
+     "cognition_owned": false,
+     "use_case": "Code migration & modernization",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Palantir",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Devin and Windsurf now power category-defining customers including Goldman Sachs, Citi, Dell, Cisco, Ramp, Palantir, Nubank, and Mercado Libre",
+     "source_id": "src_07f1bfa671",
+     "url": "https://cognition.com/blog/funding-growth-and-the-next-frontier-of-ai-coding-agents",
+     "published_date": "2025-09-08T02:52:25.000Z",
+     "cognition_owned": true,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Ramp",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Devin fixes tens of thousands of hours of technical debt",
+     "source_id": "src_d43f49e7a2",
+     "url": "https://devin.ai/customers/ramp/",
+     "published_date": "2026-07-16T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Tech debt & maintenance",
+     "metric": "10,000+ hrs saved monthly"
+    }
+   ]
+  },
+  {
+   "name": "Ripple Treasury",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "75% Reduction in untriaged bug backlog 3x More bugs fixed per day",
+     "source_id": "src_ac10a8d9bb",
+     "url": "https://devin.ai/customers/ripple",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Bug triage & incident response",
+     "metric": "75% less untriaged backlog"
+    }
+   ]
+  },
+  {
+   "name": "Rohlik Group",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "2x Engineering throughput November through August",
+     "source_id": "src_f13eb43782",
+     "url": "https://devin.ai/customers/rohlikgroup",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Feature development capacity",
+     "metric": "2x throughput"
+    }
+   ]
+  },
+  {
+   "name": "RV Tech",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "10-15x increase in test generation velocity",
+     "source_id": "src_e28e8dd4d4",
+     "url": "https://devin.ai/customers/rvtech/",
+     "published_date": "2026-07-28T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Test generation & QA",
+     "metric": "10-15x test generation velocity"
+    }
+   ]
+  },
+  {
+   "name": "Santander",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "banks like Itaú, Nubank, and Santander",
+     "source_id": "src_510b8033bc",
+     "url": "https://cognition.com/blog/devin-comes-to-sao-paulo",
+     "published_date": "2026-09-22T17:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": null,
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Sapporo",
+   "public_reference": false,
+   "proofs": [
+    {
+     "quote": "Using Devin, Sapporo’s engineers completed it in roughly a quarter of that time",
+     "source_id": "src_ef753dadbf",
+     "url": "https://fortune.com/2026/07/03/devin-kun-cognition-ai-japan-russell-kaplan/",
+     "published_date": "2026-07-03T21:00:00.000Z",
+     "cognition_owned": false,
+     "use_case": "Code migration & modernization",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "Tavrn",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "35 seconds Median time from a production alert firing to an agent investigating it",
+     "source_id": "src_0dbc30a56b",
+     "url": "https://devin.ai/customers/tavrn",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Bug triage & incident response",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "The Citation Group",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "85% Reduction in legacy app refresh time",
+     "source_id": "src_f3ecba455d",
+     "url": "https://devin.ai/customers/thecitationgroup",
+     "published_date": "2026-07-10T00:00:00.000Z",
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": "85% faster legacy refresh"
+    }
+   ]
+  },
+  {
+   "name": "World Wide Technology",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "World Wide Technology on Codeium",
+     "source_id": "src_7f2c5b165d",
+     "url": "https://devin.ai/blog/wwt-case-study",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "AI-assisted coding (Windsurf, now Devin Desktop)",
+     "metric": null
+    }
+   ]
+  },
+  {
+   "name": "WPP Enterprise Solutions",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "10x Efficiency gain on a test-framework migration, reducing 80 days to 8",
+     "source_id": "src_e149c5d2aa",
+     "url": "https://devin.ai/customers/wpp-enterprise-solutions",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "Code migration & modernization",
+     "metric": "80 days to 8"
+    }
+   ]
+  },
+  {
+   "name": "Zillow",
+   "public_reference": true,
+   "proofs": [
+    {
+     "quote": "Zillow on Codeium",
+     "source_id": "src_3d6e71e8b9",
+     "url": "https://devin.ai/blog/zillow-codeium-case-study",
+     "published_date": null,
+     "cognition_owned": true,
+     "use_case": "AI-assisted coding (Windsurf, now Devin Desktop)",
+     "metric": null
+    }
+   ]
+  }
+ ]
+}

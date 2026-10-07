@@ -1,0 +1,229 @@
+{
+ "last_updated": "2026-10-07",
+ "use_cases": [
+  {
+   "name": "Code migration & modernization",
+   "description": "Migrations, refactors and legacy modernization (COBOL, .NET, Perl, ETL, CI pipelines, databases), fanned out across parallel agents.",
+   "proofs": [
+    {
+     "quote": "Accelerate all modernizations — COBOL, .NET, Talend, legacy ETL, and more.",
+     "source_id": "src_9dfab27f2e",
+     "url": "https://devin.ai/switch/cursor",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": null
+    },
+    {
+     "quote": "Enterprises can cut multi-year migration efforts down to a few months.",
+     "source_id": "src_d6ba377018",
+     "url": "https://cognition.com/blog/from-jenkins-to-github-actions",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": null
+    },
+    {
+     "quote": "8x engineering time efficiency gain 20x cost savings",
+     "source_id": "src_c667764b4e",
+     "url": "https://devin.ai/customers/nubank/",
+     "published_date": "2026-06-20T00:00:00.000Z",
+     "cognition_owned": true,
+     "customer": "Nubank"
+    },
+    {
+     "quote": "6x faster .NET -> Java migration of 59 services",
+     "source_id": "src_5903e45c48",
+     "url": "https://devin.ai/customers/itau",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": "Itaú"
+    },
+    {
+     "quote": "cut modernization time down from an estimated eight months to eight days",
+     "source_id": "src_d347984f66",
+     "url": "https://cognition.com/blog/mercedes-benz-cognition",
+     "published_date": "2026-04-27T00:00:00.000Z",
+     "cognition_owned": true,
+     "customer": "Mercedes-Benz"
+    }
+   ]
+  },
+  {
+   "name": "Vulnerability remediation",
+   "description": "Clearing scanner backlogs (fix PRs validated by CI) and continuous discovery of exploitable issues (Security Swarm).",
+   "proofs": [
+    {
+     "quote": "helps organizations clear their vulnerability backlog and set up continuous remediation",
+     "source_id": "src_5d18830aec",
+     "url": "https://cognition.com/blog/devin-security-vulnerability-remediation-program",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": null
+    },
+    {
+     "quote": "One large organization saved 5-10% of total developer time by using Devin for security fixes.",
+     "source_id": "src_0f8c427244",
+     "url": "https://cognition.com/blog/devin-annual-performance-review-2025",
+     "published_date": "2025-11-14T00:00:00.000Z",
+     "cognition_owned": true,
+     "customer": null
+    },
+    {
+     "quote": "70% of security vulnerabilities automatically remediated",
+     "source_id": "src_5903e45c48",
+     "url": "https://devin.ai/customers/itau",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": "Itaú"
+    }
+   ]
+  },
+  {
+   "name": "Bug triage & incident response",
+   "description": "Alerts, bug reports and incidents investigated as they land (Slack, Sentry, Datadog, Linear), often with a fix PR.",
+   "proofs": [
+    {
+     "quote": "Devin can now monitor incoming alerts, investigate them automatically, and come back with an investigation, next steps, and even a PR.",
+     "source_id": "src_2434e7a526",
+     "url": "https://cognition.com/blog/auto-triage",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": null
+    },
+    {
+     "quote": "80% Incidents where Devin produces a useful early investigation",
+     "source_id": "src_630ea8707e",
+     "url": "https://devin.ai/customers/modal",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": "Modal"
+    },
+    {
+     "quote": "75% Reduction in untriaged bug backlog",
+     "source_id": "src_ac10a8d9bb",
+     "url": "https://devin.ai/customers/ripple",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": "Ripple Treasury"
+    }
+   ]
+  },
+  {
+   "name": "Test generation & QA",
+   "description": "Unit/E2E test generation, coverage pushes, regression and QA automation.",
+   "proofs": [
+    {
+     "quote": "AI can shorten development -> validation -> release timelines, improve test quality and increase test coverage",
+     "source_id": "src_d21772fba1",
+     "url": "https://cognition.com/blog/how-to-automate-failure-triages-and-10x-test-generation-what-weve-learned-deploying-ai-across-hilsil-workflows",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": null
+    },
+    {
+     "quote": "Companies' test coverage typically rises from 50-60% to 80-90% when using Devin.",
+     "source_id": "src_0f8c427244",
+     "url": "https://cognition.com/blog/devin-annual-performance-review-2025",
+     "published_date": "2025-11-14T00:00:00.000Z",
+     "cognition_owned": true,
+     "customer": null
+    },
+    {
+     "quote": "93% Faster regression cycles",
+     "source_id": "src_a49527cfb2",
+     "url": "https://devin.ai/customers/litera",
+     "published_date": "2026-07-10T00:00:00.000Z",
+     "cognition_owned": true,
+     "customer": "Litera"
+    },
+    {
+     "quote": "10-15x increase in test generation velocity",
+     "source_id": "src_e28e8dd4d4",
+     "url": "https://devin.ai/customers/rvtech/",
+     "published_date": "2026-07-28T00:00:00.000Z",
+     "cognition_owned": true,
+     "customer": "RV Tech"
+    }
+   ]
+  },
+  {
+   "name": "Tech debt & maintenance",
+   "description": "Backlog and punch-list work: flaky tests, broken builds, dependency upgrades, on-call chores.",
+   "proofs": [
+    {
+     "quote": "Devin fixes tens of thousands of hours of technical debt",
+     "source_id": "src_d43f49e7a2",
+     "url": "https://devin.ai/customers/ramp/",
+     "published_date": "2026-07-16T00:00:00.000Z",
+     "cognition_owned": true,
+     "customer": "Ramp"
+    }
+   ]
+  },
+  {
+   "name": "Code review",
+   "description": "Devin Review: AI-assisted review of human- and agent-written PRs, including security findings.",
+   "proofs": [
+    {
+     "quote": "code review—not code generation—is now the bottleneck to shipping great products",
+     "source_id": "src_5d13c40e84",
+     "url": "https://cognition.com/blog/devin-review",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": null
+    }
+   ]
+  },
+  {
+   "name": "Documentation & codebase understanding",
+   "description": "DeepWiki: living docs and architecture maps, especially for legacy systems nobody fully understands.",
+   "proofs": [
+    {
+     "quote": "Auto-generate documentation and system diagrams for legacy codebases.",
+     "source_id": "src_9dfab27f2e",
+     "url": "https://devin.ai/switch/cursor",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": null
+    },
+    {
+     "quote": "300,000+ repos documented",
+     "source_id": "src_5903e45c48",
+     "url": "https://devin.ai/customers/itau",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": "Itaú"
+    }
+   ]
+  },
+  {
+   "name": "Feature development capacity",
+   "description": "Extra engineering capacity on the roadmap: features, prototypes, and parallel work streams.",
+   "proofs": [
+    {
+     "quote": "Devin builds from specs, launches the app, clicks through user flows, and confirms behavior before opening a PR",
+     "source_id": "src_98772cecd6",
+     "url": "https://devin.ai/cloud",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": null
+    },
+    {
+     "quote": "92% Share of merged PRs authored by Devin",
+     "source_id": "src_86ab76af95",
+     "url": "https://devin.ai/customers/ebanx",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": "EBANX"
+    },
+    {
+     "quote": "3x Engineering output, with weekly backend PRs rising from 50 to 170 in four weeks",
+     "source_id": "src_48669a22fb",
+     "url": "https://devin.ai/customers/comun",
+     "published_date": null,
+     "cognition_owned": true,
+     "customer": "Común"
+    }
+   ]
+  }
+ ]
+}
