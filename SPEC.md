@@ -16,7 +16,7 @@ A wrong fact costs a rep more than a missing one. It burns credibility with the 
 4. **Report what a source says, attributed.** "Apollo reports $700M," not "$700M." Third-party numbers are never restated as our own estimate.
 5. **Conflicts are shown, not resolved.** Two sources disagree → show both, flag it.
 6. **Judgment is separated from fact.** Verdict, "likely champion," recommended entry point, and ABM themes are labeled as the agent's assessment and cite the facts they rest on. Nothing inferred is presented as fact (e.g. no asserted reporting lines).
-7. **Enforced in code, not just the prompt.** Output schemas require a `source` on every fact; a validator drops anything without one and counts what was dropped; `verify_quote` checks every quote against the cached page; people must trace to a fetched profile or page.
+7. **Enforced in code, not just the prompt.** Every tool result carries a `source_id` per document; the model cites `source_id`s only, never URLs. The validator resolves each against the cache and drops (and counts) anything that doesn't resolve; `verify_quote` checks every quote against the cached full text of the cited source; people must be named in a source they cite. Real URLs + retrieved dates are filled in from the cache at render time.
 
 ---
 
@@ -74,9 +74,9 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 | Tool | Purpose |
 |---|---|
 | `search_web(query, since?)` | Exa `/search`, cached. Covers blogs, talks, news, earnings transcripts, filings, GitHub, Devin mentions |
-| `fetch_page(url)` | Exa `/contents`, cached. Used for job descriptions and any known URL |
+| `fetch_page(url_or_source_id, offset?)` | Exa `/contents`, cached. Full text cached; model gets a 6k-char excerpt (page with `offset`). Job descriptions and any known URL |
 | `search_people(company, roles)` | Exa `/search` with `category: "people"`: current title, history, start dates, team descriptions |
-| `verify_quote(url, quote)` | Deterministic check that a quote exists in the cached source |
+| `verify_quote(source_id, quote)` | Deterministic check that a quote exists in that source's cached full text (a quote cited to the wrong source fails) |
 | `get_company(domain)` | Apollo org enrichment (Free plan): firmographics, parent org, revenue, dept headcount, 6/12/24mo growth, funding, tech stack |
 | `get_jobs(domain)` | Apollo job postings (Free plan): title, URL, posted date. Deduped by title; descriptions fetched via `fetch_page` only for eng-relevant roles |
 | `get_positioning()` | Read knowledge/ files |
@@ -221,7 +221,7 @@ Contact-level signals from #2 attach to both the person and the account.
 **Incremental refresh** — never re-crawl:
 1. Read cognition.ai sitemap / blog RSS; only fetch URLs that are new or changed vs `seen.json`.
 2. Search third-party Devin mentions only since last refresh date (news, customer eng blogs, earnings calls, job posts mentioning Devin).
-3. Classify each new item: **additive** (case study, customer, use case, feature) → append. **Positioning shift** (launch, rebrand, new category claim) → rewrite `positioning.md` + post notice to Slack.
+3. Classify each new item: **additive** (case study, customer, use case, feature) → append. **Positioning shift** (launch, rebrand, new category claim) → rewrite `positioning.md` + post notice to Slack (optional `SLACK_WEBHOOK_URL`; log only if unset).
 4. Git commit with a diff summary. Rollback = revert.
 
 **Source rules:** core positioning only from cognition.ai. Third-party sources can add customers, never change the narrative. `public_reference: true` only if Cognition itself published it.
@@ -278,7 +278,11 @@ Full brief: <Google Doc link>
 
 ## Reproducibility
 
-- All fetched sources cached in `cache/` keyed by URL; reruns read from cache unless `--fresh`.
+- Two cache layers in `cache/`:
+  - **requests/**: raw provider response keyed by endpoint + request; maps to the doc IDs it returned.
+  - **docs/**: one file per citable document (`source_id`): web page, people profile, job post, Apollo org record (cited as "Apollo, retrieved <date>").
+- TTL per entry: discovery calls (all Exa searches, Apollo job list) = 1 day; lookups of known things (fetched pages, Apollo firmographics) = 7 days. Reruns reuse fresh entries, refetch expired ones. `--replay` = cache only (committed demo); `--fresh` = refetch everything.
+- `cache/` is gitignored; the demo account's cache is committed once with `git add -f`.
 - Demo account's cache committed so reviewers can reproduce without API spend.
 - `.env.example` lists keys: `ANTHROPIC_API_KEY` (runner only), `EXA_API_KEY`, `APOLLO_API_KEY` (Free plan is enough), Google service account JSON.
 
