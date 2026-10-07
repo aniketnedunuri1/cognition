@@ -116,7 +116,7 @@ def refresh_positioning(limit: int = 15) -> dict:
     if len(items) < limit and remaining == 0:
         since = (seen["last_refresh"] or
                  (date.today() - timedelta(days=FIRST_RUN_LOOKBACK_DAYS)).isoformat())[:10]
-        done = set(seen["urls"]) | {p["url"] for p in seen["pending"].values()}
+        done = set(seen["urls"]) | set(seen.get("third_party", {})) | {p["url"] for p in seen["pending"].values()}
         for q in cfg.get("third_party_queries", []):
             for r in exa.search_web(q, since=since):
                 doc = get_doc(r["source_id"])

@@ -77,10 +77,11 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 | `fetch_page(url_or_source_id, offset?)` | Exa `/contents`, cached. Full text cached; model gets a 6k-char excerpt (page with `offset`). Job descriptions and any known URL |
 | `search_people(company, roles)` | Exa `/search` with `category: "people"`: current title, history, start dates, team descriptions |
 | `verify_quote(source_id, quote)` | Deterministic check that a quote exists in that source's cached full text (a quote cited to the wrong source fails) |
-| `get_company(domain)` | Apollo org enrichment (Free plan): firmographics, parent org, revenue, dept headcount, 6/12/24mo growth, funding, tech stack |
+| `get_company(domain)` | Apollo org enrichment (Free plan): firmographics, parent org, revenue, dept headcount, 6/12/24mo growth, funding, AI tools, engineering tech stack (eng categories only; a hint until a job post / blog / profile confirms it) |
 | `get_jobs(domain)` | Apollo job postings (Free plan): title, URL, posted date. Deduped by title; descriptions fetched via `fetch_page` only for eng-relevant roles |
 | `get_positioning()` | Read knowledge/ files |
-| `refresh_positioning()` | Incremental refresh (see 4c) |
+| `refresh_positioning(limit?)` | Incremental refresh (see 4c): returns new/changed items, decides nothing |
+| `apply_knowledge_update(...)` | Records classified items; enforces source rules in code (see 4c) |
 | `match_customers(companies[])` | Match names against customers.json |
 | `get_playbook()` / `add_playbook_rule(rule, scope)` | Feedback memory |
 | `add_golden_example(persona, message)` | Store approved messages |
@@ -148,6 +149,8 @@ Labels: **Likely champion** (≥1 evidence item, linked) vs. **Candidate** (titl
 
 **Per person:** name, title, deal role, one-line why, LinkedIn URL, verified (second source) vs. profile-only, hooks.
 
+**Listed as current only if** (enforced by the validator): the profile shows a current role at the account or its parent; or a single **official company source** names them (the account's or parent's own domain; or an SEC filing / press-wire release that names the company) — new leaders often haven't updated LinkedIn; or two independent sources do. A single third-party article alone is dropped. The person's name must appear in a source they cite.
+
 **Guardrails:** ~15–25 people max. Prefer verified (profiles can be stale). Never invent a person.
 
 **Ends with:** top 3 to contact first + why. Default: champion first, multi-thread up to economic buyer.
@@ -188,7 +191,7 @@ Contact-level signals from #2 attach to both the person and the account.
 | Piloting a direct competitor | Urgent — get in before the decision |
 | Big direct-competitor deal signed <6mo | **Not now**; note to revisit ~9–12mo after signing |
 
-**Per signal:** headline (one line a rep could say), evidence (quotes + links), Devin use case, who cares (→ contacts), strength (strong / medium; weak is dropped).
+**Per signal:** headline (one line a rep could say), evidence (quotes + links), Devin use case (exact name from `use_cases.json`), who cares (→ contacts), strength (strong / medium; weak is dropped). **Undated evidence can never be strong** (validator caps it at medium).
 
 **Account verdict:** **Act now** / **Warm** / **Not now** (with what to watch for).
 
@@ -214,17 +217,18 @@ Contact-level signals from #2 attach to both the person and the account.
 
 **c. Positioning knowledge** (`knowledge/`, git-tracked, each with `last_updated`)
 - `positioning.md` — core narrative, differentiation
-- `use_cases.md` — use case → proof points
-- `customers.json` — name, use case, metric, source URL, `public_reference`
+- `use_cases.json` — use case → description + proof quotes (JSON so the validator can check signal → use case names exactly)
+- `customers.json` — name, proofs (use case, verbatim quote, metric, source_id, URL), `public_reference`
+- `sources.json` — sitemaps + include/exclude path rules + third-party queries
 - `seen.json` — URLs + lastmod already processed
 
 **Incremental refresh** — never re-crawl:
-1. Read cognition.ai sitemap / blog RSS; only fetch URLs that are new or changed vs `seen.json`.
+1. Read the cognition.ai (→ cognition.com) and devin.ai sitemaps; only fetch URLs that are new or whose `lastmod` changed vs `seen.json`. `lastmod` is often a site-rebuild date, so a changed page is only reprocessed if its **content hash** changed. Changed pages are live-crawled (Exa's cache can serve stale or wrong pages).
 2. Search third-party Devin mentions only since last refresh date (news, customer eng blogs, earnings calls, job posts mentioning Devin).
 3. Classify each new item: **additive** (case study, customer, use case, feature) → append. **Positioning shift** (launch, rebrand, new category claim) → rewrite `positioning.md` + post notice to Slack (optional `SLACK_WEBHOOK_URL`; log only if unset).
 4. Git commit with a diff summary. Rollback = revert.
 
-**Source rules:** core positioning only from cognition.ai. Third-party sources can add customers, never change the narrative. `public_reference: true` only if Cognition itself published it.
+**Source rules** (enforced in `apply_knowledge_update`): core positioning only from Cognition-owned domains (cognition.ai, cognition.com, devin.ai) — a rewrite citing anything else is rejected. Third-party sources can add customers, never change the narrative or add use cases. `public_reference` is computed from the source domain, never set by the model. Every proof quote must verify, and the customer must be named in the page body (not just the title).
 
 **d. Learning from feedback**
 - Capture: rep edits (draft vs. sent diff), comments (Slack thread / Google Doc), approve/reject.

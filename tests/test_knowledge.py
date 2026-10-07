@@ -111,3 +111,18 @@ def test_customer_must_be_named_in_page_body(kb):
     r = knowledge.apply_knowledge_update([], "x", customers=[
         {"name": "Hamming", "use_case": "m", "quote": "migrate 400 COBOL programs to Java", "source_id": wrong}])
     assert r["customers_added"] == 0 and "not named in the page body" in r["rejected"][0]["reason"]
+
+
+def test_processed_third_party_items_are_not_resurfaced(kb, stub):
+    d, state, _ = kb
+    def fake(path, body):
+        if path == "/contents":
+            return {"results": [{"url": body["urls"][0], "title": "COBOL", "text": state["text"]}],
+                    "statuses": [{"status": "success"}]}
+        return {"results": [{"url": "https://news.example.com/devin", "title": "Devin at Globex",
+                             "highlights": ["Globex uses Devin"]}]}
+    stub("server.exa._post", fake)
+    first = knowledge.refresh_positioning()
+    assert [i["source"] for i in first["items"]] == ["cognition", "third_party"]
+    knowledge.apply_knowledge_update([i["source_id"] for i in first["items"]], "init")
+    assert knowledge.refresh_positioning()["items"] == []
