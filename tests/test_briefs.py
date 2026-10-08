@@ -112,19 +112,47 @@ def test_feedback_rules_and_examples(tmp_path, monkeypatch):
 
 
 
-def test_doc_link_from_harness_connector(env):
+def _docx_text(path):
+    from docx import Document
+    doc = Document(path)
+    chunks = [p.text for p in doc.paragraphs]
+    def cells(table):
+        for row in table.rows:
+            for cell in row.cells:
+                chunks.extend(p.text for p in cell.paragraphs)
+                for nested in cell.tables:
+                    cells(nested)
+    for table in doc.tables:
+        cells(table)
+    return "\n".join(chunks)
+
+
+def test_docx_and_download_link(env, monkeypatch):
+    from starlette.testclient import TestClient
+    from server.app import build_server
     blog, phil = env
     out = briefs.save_brief("brex.com", brief(blog, phil))
-    assert out["brief_markdown"].startswith("# Brex — account brief")
-    assert out["slack_summary"].endswith(f"Full brief: {out['saved'].removesuffix('.json')}.md")
-    assert not briefs.set_brief_link("brex.com", "https://evil.example.com/x")["ok"]
-    r = briefs.set_brief_link("brex.com", "https://docs.google.com/document/d/abc/edit")
-    assert r["slack_summary"].endswith("Full brief: https://docs.google.com/document/d/abc/edit")
-    assert briefs.get_last_brief("brex.com")["doc_url"] == "https://docs.google.com/document/d/abc/edit"
+    stem = out["saved"].removesuffix(".json")
+    assert out["slack_summary"].endswith(f"Full brief: {stem}.docx")  # CLI: local path
+    text = _docx_text(f"{stem}.docx")
+    assert "Brex — account brief" in text and "Claims to check" in text and "Your Java 17 migration" in text
+    assert "Who to work" in text
+
+    monkeypatch.setattr(briefs, "BASE_URL", "https://tunnel.example")
+    link = briefs.brief_link(briefs.load_record("brex.com")[1])
+    assert link.startswith("https://tunnel.example/briefs/") and link.endswith("/brex.com-" + stem[-10:] + ".docx")
+    briefs.save_brief("brex.com", brief(blog, phil))  # a re-save keeps the link
+    assert briefs.brief_link(briefs.load_record("brex.com")[1]) == link
+
+    with TestClient(build_server("secret").http_app()) as client:
+        r = client.get(link.removeprefix("https://tunnel.example"))
+        assert r.status_code == 200 and r.content[:2] == b"PK"  # a .docx, no bearer token needed
+        assert client.get("/briefs/not-a-token/brex.com.docx").status_code == 404
+        assert client.post("/mcp", json={}).status_code == 401  # the MCP endpoint still needs the token
 
 
 def test_render_fixes():
-    from server.briefs import _local_day, _one_line, _plain, conflicting
+    from server.briefs import _local_day, _named_amounts, _one_line, _plain, conflicting
     assert conflicting([{"value": "Apollo reports ~1,800 employees"}, {"value": "Tracxn reports 5,158 employees"}])
     assert not conflicting([{"value": "Apollo reports ~1,800 employees"}, {"value": "Revelio reports ~1,757 employees"}])
     assert conflicting([{"value": "Apollo reports $700M"}, {"value": "RocketReach reports $279M"}])
@@ -132,6 +160,10 @@ def test_render_fixes():
     assert _one_line("Building agents\n\nBy Graham Fuller") == "Building agents By Graham Fuller"
     assert _plain("Assessment: CTO first") == "CTO first" and _plain("CTO first") == "CTO first"
     assert _local_day("2026-10-08T00:30:00+00:00") in ("2026-10-07", "2026-10-08")  # depends on the machine's zone
+    assert _named_amounts("Litmus reports the Capital One deal closed April 7 for $5.15B; PitchBook lists $4.52B") == [
+        "Litmus $5.15B", "PitchBook $4.52B"]
+    assert _named_amounts("Tracxn reports 5,158 employees as of Aug 31, 2026, and TipRanks reports 5,389.") == [
+        "Tracxn 5,158", "TipRanks 5,389"]
 
 
 def test_rendered_draft_shows_claims_and_no_false_conflicts(env):
@@ -142,3 +174,39 @@ def test_rendered_draft_shows_claims_and_no_false_conflicts(env):
     md = briefs.save_brief("brex.com", b)["brief_markdown"]
     assert "**Claims to check**" in md and '> "migrating our monolith from Java 8 to Java 17"' in md
     assert "sources differ" not in md
+    assert "## Who to work" in md and "## Buying centers" not in md
+
+
+def test_working_number_render(env):
+    blog, phil = env
+    b = brief(blog, phil)
+    b["snapshot"] = {"headcount": [
+        {"value": "Apollo reports ~1,800 employees", "evidence": [{"source_id": blog}]},
+        {"value": "Revelio Labs reports ~1,757 employees", "evidence": [{"source_id": blog}]},
+        {"value": "Tracxn reports 5,158 employees", "evidence": [{"source_id": blog}]},
+    ], "revenue": [
+        {"value": "Apollo reports $700M", "evidence": [{"source_id": blog}]},
+        {"value": "RocketReach reports $279M", "evidence": [{"source_id": blog}]},
+    ]}
+    md = briefs.save_brief("brex.com", b)["brief_markdown"]
+    head = next(l for l in md.splitlines() if l.startswith("| Headcount |"))
+    assert "Apollo reports ~1,800 employees" in head
+    assert "5,158" not in head and "1,757" not in head
+    assert "sources differ" not in head
+    assert "Other sources: Tracxn 5,158" in md
+    assert "1,757" not in md
+    rev = next(l for l in md.splitlines() if l.startswith("| Revenue |"))
+    assert "$700M" in rev and "$279M" not in rev
+    assert "RocketReach $279M" in md
+
+
+def test_draft_notes_and_skeleton_flag(env):
+    blog, phil = env
+    b = brief(blog, phil)
+    b["drafts"][0]["notes"] = "- Email only.\n- Do not pitch a product tour."
+    md = briefs.save_brief("brex.com", b)["brief_markdown"]
+    assert "**Send notes**" in md and "Email only." in md
+    b["drafts"].append(dict(b["drafts"][0]))
+    out = briefs.save_brief("brex.com", b)
+    assert out["report"]["dropped_count"] == 0, out["report"]
+    assert any("same opening" in f["flag"] for f in out["report"]["flags"])

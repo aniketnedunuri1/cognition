@@ -81,7 +81,7 @@ def test_people_rules(stub):
     assert names == ["Phil Burrows", "Phil Burrows"]
     first, second = brief["people"]
     assert first["verified"] is False and first["label"] == "candidate"
-    assert second["verified"] is True and second["label"] == "likely_champion"
+    assert second["verified"] is True and second["label"] == "candidate"  # public_pain is not Devin-usage
     assert first["profile_source_id"] == ids["Phil Burrows"]
     reasons = " ".join(d["reason"] for d in report["dropped"])
     assert "current role not confirmed" in reasons and "not found in any cited source" in reasons
@@ -185,12 +185,20 @@ def test_champion_label_needs_strong_evidence(stub):
     phil = lambda *ev: person("Phil Burrows", ids["Phil Burrows"], champion_evidence=list(ev))
     label = lambda raw: run(raw)[0]["people"][0]["label"]
     assert label({"people": [phil(champ("new_in_role", blog), champ("ai_appetite", blog))]}) == "candidate"
-    assert label({"people": [phil(champ("hiring_manager", blog))]}) == "likely_champion"
-    brief, report = run({"people": [phil(champ("leads_signal_team", blog))]})
+    assert label({"people": [phil(champ("hiring_manager", blog))]}) == "candidate"
+    # works_on_signal: needs a strong signal naming them AND a senior profile title; else it's a hook.
+    # Even when kept, it does not earn likely_champion — only confirmed ex_devin_customer does.
+    brief, report = run({"people": [phil(champ("works_on_signal", blog))]})
+    p = brief["people"][0]
+    assert p["label"] == "candidate" and p["champion_evidence"] == [] and p["hooks"][0]["value"] == "works_on_signal"
+    assert any("not in a strong signal" in f["flag"] for f in report["flags"])
+    kept = run({"people": [phil(champ("works_on_signal", blog))],
+                "signals": [strong_signal(blog, ["Phil Burrows"])]})[0]["people"][0]
+    assert kept["label"] == "candidate" and kept["champion_evidence"][0]["kind"] == "works_on_signal"
+    no_profile = person("Phil Burrows", blog, champion_evidence=[champ("works_on_signal", blog)])  # official source only
+    brief, report = run({"people": [no_profile], "signals": [strong_signal(blog, ["Phil Burrows"])]})
     assert brief["people"][0]["label"] == "candidate"
-    assert any("supporting only" in f["flag"] for f in report["flags"])
-    assert label({"people": [phil(champ("leads_signal_team", blog))],
-                  "signals": [strong_signal(blog, ["Phil Burrows"])]}) == "likely_champion"
+    assert any("isn't senior" in f["flag"] for f in report["flags"])
 
 
 def test_ex_devin_customer_must_match_profile_history(stub, tmp_path, monkeypatch):
@@ -242,3 +250,54 @@ def test_competitor_in_production_defaults_to_warm():
     _, report = run({"verdict": {"verdict": "act_now", "why_now": "x", "based_on": ev},
                      "competitive_context": [{"situation": "competitor_in_production", "value": "Cursor in prod", "evidence": ev}]})
     assert any("defaults to Warm" in f["flag"] or "act_now needs" in f["flag"] for f in report["flags"])
+
+
+def test_claim_terms_must_be_in_its_quote():
+    from server.schema import unsupported_terms
+    ig = {"brex", "devin", "sridhar", "mocherla"}
+    q = "We built a pipeline of custom self-hosted AI agents in Cursor that are capable of writing code."
+    assert unsupported_terms("Brex's Micronaut 4 agents run in a Bazel monorepo", q, ig) == ["Micronaut", "4", "Bazel"]
+    assert unsupported_terms("Agents open PRs overnight", "Overnight, the pipeline completes integration tests.", ig) == ["PRs"]
+    assert unsupported_terms("The pipeline is built on Cursor agents", q, ig) == []         # sentence-initial "The"
+    assert unsupported_terms("Sridhar's team built AI agents in Cursor", q, ig) == []        # contact's own name
+    assert unsupported_terms("Agents open PRs", "agents open pull requests nightly", ig) == []  # abbreviation map
+    assert unsupported_terms("Their CI runs", "continuous integration runs", ig) == []
+    assert unsupported_terms("They moved 1,800 services", "moved 1800 services", ig) == []
+    assert unsupported_terms("They wrote eleven skills", "we wrote 11 skills", ig) == []
+    assert unsupported_terms("They wrote twelve skills", "we wrote eleven skills", ig) == ["twelve"]
+    assert unsupported_terms("BazelCon talk on Gradle", "Gradle-Backed Dependency Resolution", ig) == ["BazelCon"]
+
+
+def test_people_cap_keeps_top_contacts_and_drops_rest(stub):
+    ids = profiles(stub)
+    team = web("https://www.brex.com/journal/press/team",
+               text="Brex today announced that Jane One, Jane Two and Jane Three have joined.")
+    why = lambda sid: {"text": "entry", "based_on": [{"source_id": sid}]}
+    people = [
+        person("Jane One", team), person("Jane Two", team), person("Jane Three", team),
+        person("Feng Zhao", ids["Feng Zhao"]), person("Sonny Gupta", ids["Sonny Gupta"]),
+        person("Phil Burrows", ids["Phil Burrows"]), person("James Reggio", ids["James Reggio"]),
+    ]
+    brief, report = run({
+        "people": people,
+        "top_contacts": [{"name": "James Reggio", "why": why(ids["James Reggio"])},
+                         {"name": "Phil Burrows", "why": why(ids["Phil Burrows"])}],
+    })
+    names = [p["name"] for p in brief["people"]]
+    assert len(names) == 5
+    assert "James Reggio" in names and "Phil Burrows" in names
+    assert any("people cap" in d["reason"] for d in report["dropped"])
+    dropped_names = " ".join(d["reason"] for d in report["dropped"] if "people cap" in d["reason"])
+    assert "Feng Zhao" in dropped_names or "Sonny Gupta" in dropped_names or "Jane" in dropped_names
+
+
+def test_claim_not_supported_by_its_quote_blocks_draft(stub):
+    from tests.test_briefs import EMAIL, NOTE, FOLLOW
+    ids = profiles(stub)
+    blog = web("https://brex.com/blog/fresh")
+    draft = {"name": "Phil Burrows", "email": {"subject": "Your Java 17 migration", "body": EMAIL},
+             "linkedin_note": NOTE, "linkedin_followup": FOLLOW, "built_from": [{"source_id": blog}],
+             "claims": [{"text": "Brex is moving its monolith to Kotlin", "source_id": blog,
+                         "quote": "migrating our monolith from Java 8 to Java 17"}]}
+    brief, report = run({"people": [person("Phil Burrows", ids["Phil Burrows"])], "drafts": [draft]})
+    assert brief["drafts"] == [] and "doesn't contain ['Kotlin']" in report["dropped"][0]["reason"]
