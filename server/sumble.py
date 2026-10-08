@@ -23,7 +23,8 @@ from .exa import ProviderError
 API = "https://api.sumble.com/v9"
 MAX_DMS = 5
 MAX_PER_ACCOUNT = 25
-MAX_REPORTS_PER_DM = 8
+MAX_REPORTS_PER_DM = 5
+MAX_ANCHORS = 5
 MIN_CONFIDENCE = 0.4
 LEADERS_LIMIT = 40
 
@@ -196,14 +197,81 @@ def person_name(row: dict) -> str | None:
     return (row.get("attributes") or {}).get("name")
 
 
-def build_chart(domain: str) -> dict:
+def _norm_linkedin(url: str | None) -> str | None:
+    """linkedin.com/in/<slug> lowercase, no scheme/www/trailing slash — the join key."""
+    if not url:
+        return None
+    u = url.strip().lower().split("?")[0].rstrip("/")
+    u = re.sub(r"^https?://(www\.)?", "", u)
+    return u if "linkedin.com/" in u else None
+
+
+def _norm_name(name: str | None) -> str:
+    return re.sub(r"[^a-z ]", "", (name or "").lower()).strip()
+
+
+def match_anchors(leaders: list[dict], people: list[dict]) -> tuple[list[dict], list[str]]:
+    """Join sourced people onto Sumble leaders: LinkedIn URL first, then a unique
+    exact-name match (a generic name only joins when it maps to one leader).
+    Returns (leader rows in `people` order with `matched` set, unmatched names)."""
+    by_li = {}
+    by_name: dict[str, list[dict]] = {}
+    for row in leaders:
+        a = row.get("attributes") or {}
+        if li := _norm_linkedin(a.get("linkedin_url")):
+            by_li.setdefault(li, row)
+        if n := _norm_name(a.get("name")):
+            by_name.setdefault(n, []).append(row)
+    anchors, unmatched = [], []
+    for p in people:
+        row = None
+        if li := _norm_linkedin(p.get("linkedin_url") or p.get("linkedin")):
+            row = by_li.get(li)
+        if row is None:
+            cands = by_name.get(_norm_name(p.get("name"))) or []
+            if len(cands) == 1:
+                row = cands[0]
+        if row is None:
+            unmatched.append(p.get("name") or "?")
+            continue
+        if any(a["person_id"] == row["person_id"] for a in anchors):
+            continue
+        anchors.append(row)
+    return anchors, unmatched
+
+
+def _anchor(row: dict) -> dict:
+    """A Sumble leader row normalized to the chart's DM shape."""
+    a = row.get("attributes") or {}
+    title = a.get("job_title") or ""
+    return {
+        "person_id": row["person_id"],
+        "name": a.get("name"),
+        "title": title,
+        "level": a.get("job_level"),
+        "linkedin": a.get("linkedin_url"),
+        "location": a.get("location"),
+        "role": deal_role(title),
+        "rank": LEVEL_RANK.get(a.get("job_level") or "", 0),
+        "matched": True,
+    }
+
+
+def build_chart(domain: str, people: list[dict] | None = None) -> dict:
     org = resolve_org(domain)
     if not org or not (org.get("attributes") or {}).get("id"):
         return {"domain": domain, "error": "organization not found in Sumble"}
     oa = org["attributes"]
     leaders, total = senior_leaders(oa["id"])
-    small_org = bool(oa.get("employee_count")) and oa["employee_count"] < SMALL_ORG
-    dms = pick_decision_makers(leaders, small_org=small_org)
+    dms, unmatched = [], []
+    if people:
+        rows, unmatched = match_anchors(leaders, people)
+        dms = [_anchor(r) for r in rows[:MAX_ANCHORS]]
+    if not dms:
+        small_org = bool(oa.get("employee_count")) and oa["employee_count"] < SMALL_ORG
+        dms = pick_decision_makers(leaders, small_org=small_org)
+        for d in dms:
+            d["matched"] = False
     seen_reports: set[str] = set()
     for dm, row in zip(dms, related([d["person_id"] for d in dms])):
         rel = row.get("related_people") or {}
@@ -246,13 +314,14 @@ def build_chart(domain: str) -> dict:
         "industry": oa.get("industry"),
         "leaders_found": total,
         "leaders_considered": min(total, LEADERS_LIMIT),
+        "unmatched_people": unmatched,
         "decision_makers": dms,
     }
 
 
-def get_org_chart(domain: str) -> dict:
+def get_org_chart(domain: str, people: list[dict] | None = None) -> dict:
     domain = normalize_domain(domain)
-    chart = build_chart(domain)
+    chart = build_chart(domain, people)
     # One citable doc per account: the brief cites this source_id and the render
     # reads the chart back from the cache — never from model output.
     doc = upsert_doc(make_doc(

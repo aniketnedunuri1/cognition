@@ -103,14 +103,18 @@ def get_jobs(domain: str, eng_only: bool = True) -> dict:
 
 
 @_tool
-def get_org_chart(domain: str) -> dict:
-    """Sumble org chart: 3-5 engineering decision-makers (deal_role, reports-to,
-    LinkedIn) plus their inferred direct reports (confidence 0-1, ≥0.4 shown).
-    Reporting lines are Sumble's inference — never confirmed; attribute to Sumble
-    and label inferred everywhere they appear. Costs ~50-100 Sumble credits per
-    account: call once, after get_company confirms the account is worth it.
-    To render it in the brief, pass the returned source_id as brief.org_chart."""
-    return sumble.get_org_chart(domain)
+def get_org_chart(domain: str, people: list[dict] | None = None) -> dict:
+    """Sumble org chart anchored on the sourced people list. Pass people as
+    [{name, linkedin_url}] (from search_people profiles): each is matched to a
+    Sumble person by LinkedIn URL (unique exact name as fallback) and gets their
+    inferred manager + up to 5 direct reports (confidence ≥0.4 shown).
+    decision_makers[].matched = false means Sumble picked them, not your pipeline —
+    label them "Sumble only, not yet sourced". unmatched_people lists passed names
+    with no Sumble match. Reporting lines are Sumble's inference — never confirmed;
+    attribute to Sumble and label inferred everywhere they appear.
+    Costs ~50-100 Sumble credits per account: call once, after get_company
+    confirms the account is worth it. To render, pass source_id as brief.org_chart."""
+    return sumble.get_org_chart(domain, people)
 
 
 @_tool

@@ -640,6 +640,8 @@ def _org_chart(doc: Document, b: dict) -> None:
         _run(head, f"  —  {dm['title']}", size=10)
         _run(head, f"   [{dm['role'].replace('_', ' ')}]", size=8, bold=True,
              color=ROLE_INK.get(dm["role"], "1E40AF"))
+        if not dm.get("matched"):
+            _run(head, "   Sumble only — not yet sourced", size=8, italic=True, color=MUTED)
         line = doc.add_paragraph()
         line.paragraph_format.space_after = Pt(1)
         line.paragraph_format.keep_with_next = True
@@ -671,6 +673,11 @@ def _org_chart(doc: Document, b: dict) -> None:
             if r.get("linkedin"):
                 _run(rp, "  ", size=9)
                 _link(rp, "LinkedIn", r["linkedin"])
+    if oc.get("unmatched_people"):
+        p = doc.add_paragraph()
+        p.paragraph_format.space_before = Pt(6)
+        _run(p, f"No Sumble match for: {', '.join(oc['unmatched_people'])} "
+                "(no inferred reports available).", size=8, italic=True, color=MUTED)
 
 
 def _sources(doc: Document, src: _Sources, rec: dict) -> None:
