@@ -406,6 +406,8 @@ def render_markdown(rec: dict) -> str:
             role = dm["role"].replace("_", " ")
             mgr = ((dm.get("manager") or {}).get("attributes") or {})
             line = f"- **{dm['name']}**, {dm['title']} *({role})*"
+            if not dm.get("matched"):
+                line += " *(Sumble only — not yet sourced)*"
             if mgr.get("name"):
                 line += f" — reports to {mgr['name']}"
             if dm.get("linkedin"):
@@ -415,6 +417,9 @@ def render_markdown(rec: dict) -> str:
                 conf = f" ({r['confidence']:.1f})" if r.get("confidence") else ""
                 li = f" · [LinkedIn]({r['linkedin']})" if r.get("linkedin") else ""
                 L.append(f"  - {r['name']} — {r['title']}{conf}{li}")
+        if oc.get("unmatched_people"):
+            L.append(f"\n*No Sumble match for: {', '.join(oc['unmatched_people'])} "
+                     "(no inferred reports available).*")
     L += ["", "## Sources", ""] + src.lines()
 
     rep = rec["report"]
