@@ -4,25 +4,21 @@ One account, deep. Give it a company domain; get sourced company research, buyin
 
 ## Setup
 
-Needs Python ≥ 3.10.
+Needs [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 for you).
 
 ```bash
-python3 -m venv .venv            # or: uv venv
-.venv/bin/pip install -e '.[dev]'  # or: uv pip install -e '.[dev]'
-cp .env.example .env             # fill in ANTHROPIC_API_KEY, EXA_API_KEY, APOLLO_API_KEY
-.venv/bin/pytest                 # no API calls
+uv sync                    # creates .venv with Python 3.12 + deps (incl. pytest)
+cp .env.example .env       # fill in ANTHROPIC_API_KEY, EXA_API_KEY, APOLLO_API_KEY
+uv run pytest              # no API calls
 ```
-
-> **macOS + conda:** an x86_64 conda Python on Apple Silicon can't install `cryptography` (no matching wheel, so pip falls back to a Rust build).
-> Create the venv from a native arm64 Python instead (python.org installer, Homebrew, or `uv venv --python 3.12`).
 
 ## Run it
 
 ```bash
-.venv/bin/python agent.py research acme.com              # brief → briefs/acme.com/<date>.{json,md}, Doc, Slack summary
-.venv/bin/python agent.py research acme.com --stage people
-.venv/bin/python agent.py feedback acme.com "CTO email too long; lead with the peer metric"
-.venv/bin/python agent.py research <demo-domain> --replay # reproduce the committed demo, no data API spend
+uv run python agent.py research acme.com              # brief → briefs/acme.com/<date>.{json,md}, Doc, Slack summary
+uv run python agent.py research acme.com --stage people
+uv run python agent.py feedback acme.com "CTO email too long; lead with the peer metric"
+uv run python agent.py research <demo-domain> --replay # reproduce the committed demo, no data API spend
 ```
 
 **Auth for the runner:** set `ANTHROPIC_API_KEY` in `.env` (recommended for reviewers). Alternative: if you're logged in to Claude Code (`claude` CLI), the runner uses that login and no key is needed.
@@ -34,9 +30,9 @@ The agent gets **only** this MCP server's tools (no built-in web search, no othe
 ## MCP server
 
 ```bash
-.venv/bin/python -m server.app              # stdio (local runner, Claude Code)
-.venv/bin/python -m server.app --http       # Streamable HTTP on :8765/mcp, needs MCP_AUTH_TOKEN
-.venv/bin/python -m server.app --replay     # cache only: reproduces the committed demo with no API spend
+uv run python -m server.app              # stdio (local runner, Claude Code)
+uv run python -m server.app --http       # Streamable HTTP on :8765/mcp, needs MCP_AUTH_TOKEN
+uv run python -m server.app --replay     # cache only: reproduces the committed demo with no API spend
 ```
 
 | Tool | Source |
