@@ -16,7 +16,7 @@ import time
 
 import httpx
 
-from .apollo import normalize_domain
+from .apollo import AI_CODING_TOOLS, normalize_domain
 from .cache import cached_call, make_doc, now_iso, upsert_doc
 from .exa import ProviderError
 
@@ -68,6 +68,16 @@ def _post(path: str, body: dict) -> dict:
         raise ProviderError("SUMBLE_API_KEY is not set")
     r = httpx.post(API + path, json=body, timeout=60,
                    headers={"Authorization": f"Bearer {key}"})
+    if r.status_code >= 400:
+        raise ProviderError(f"Sumble {path} returned {r.status_code}: {r.text[:300]}")
+    return r.json()
+
+
+def _get(path: str) -> dict:
+    key = os.environ.get("SUMBLE_API_KEY")
+    if not key:
+        raise ProviderError("SUMBLE_API_KEY is not set")
+    r = httpx.get(API + path, timeout=60, headers={"Authorization": f"Bearer {key}"})
     if r.status_code >= 400:
         raise ProviderError(f"Sumble {path} returned {r.status_code}: {r.text[:300]}")
     return r.json()
@@ -329,3 +339,46 @@ def get_org_chart(domain: str, people: list[dict] | None = None) -> dict:
         title=f"Sumble org chart (inferred): {chart.get('name') or domain}",
         data=chart, retrieved_at=now_iso()))
     return {"attribution": "Sumble (inferred reporting lines)", "source_id": doc["source_id"], **chart}
+
+
+# ---------- tech stack ----------
+
+def get_tech_stack(domain: str) -> dict:
+    """Confirmed-used tech stack: technologies Sumble has verified are in use via
+    job posts (job_post_used_count = confirming posts, not mentions). Different
+    from Apollo's website-detected tags and from any-mention search matches."""
+    domain = normalize_domain(domain)
+    org = resolve_org(domain)
+    if not org or not (org.get("attributes") or {}).get("id"):
+        return {"domain": domain, "found": False, "error": "organization not found in Sumble"}
+    org_id = org["attributes"]["id"]
+    req = {"organization_id": org_id}
+    res = _call(f"sumble/organizations/{org_id}/techs", req,
+                lambda: _get(f"/organizations/{org_id}/techs"))
+
+    functions = []
+    names = []
+    for fn in res.get("business_functions") or []:
+        cats = []
+        for cat in fn.get("categories") or []:
+            techs = [{"name": t["name"], "slug": t.get("slug"),
+                      "confirming_job_posts": t.get("job_post_used_count")}
+                     for t in cat.get("technologies") or [] if t.get("name")]
+            if not techs:
+                continue
+            names += [t["name"] for t in techs]
+            cats.append({"category": cat.get("category_name"), "technologies": techs,
+                         "also_confirmed": [e["name"] for e in cat.get("evidence") or []
+                                            if e.get("name") and e["name"] not in {t["name"] for t in techs}]})
+        if cats:
+            functions.append({"business_function": fn.get("business_function"), "categories": cats})
+
+    data = {"domain": domain, "name": (org["attributes"].get("name")) or domain,
+            "business_functions": functions,
+            "ai_coding_tools": sorted({n for n in names if AI_CODING_TOOLS.search(n)})}
+    doc = upsert_doc(make_doc(
+        identity=f"sumble:techs:{domain}", kind="sumble", label="Sumble",
+        title=f"Sumble confirmed tech stack: {data['name']}", data=data,
+        retrieved_at=now_iso()))
+    return {"found": True, "attribution": "Sumble (confirmed-used via job posts)",
+            "source_id": doc["source_id"], **data}

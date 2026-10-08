@@ -90,8 +90,9 @@ def get_company(domain: str) -> dict:
     """Apollo firmographics: HQ, founded, industry, parent company, headcount + growth,
     department headcount, revenue, funding, AI tools, engineering tech stack.
     All values are Apollo's report: attribute them ("Apollo reports ...").
-    eng_tech_stack_hint is a hint: state a technology as fact only when a job post,
-    eng blog, or profile confirms it."""
+    eng_tech_stack_hint is website tags — a fallback/hint for when get_tech_stack
+    finds nothing; state a technology as fact only when a job post, eng blog,
+    or profile confirms it."""
     return apollo.get_company(domain)
 
 
@@ -115,6 +116,16 @@ def get_org_chart(domain: str, people: list[dict] | None = None) -> dict:
     Costs ~50-100 Sumble credits per account: call once, after get_company
     confirms the account is worth it. To render, pass source_id as brief.org_chart."""
     return sumble.get_org_chart(domain, people)
+
+
+@_tool
+def get_tech_stack(domain: str) -> dict:
+    """Sumble confirmed-used tech stack (GET /organizations/{id}/techs): technologies
+    verified in use via the org's job posts — confirming_job_posts is the count of
+    posts confirming use, not mentions. Grouped by business function and category,
+    plus ai_coding_tools. Prefer this over Apollo's eng_tech_stack_hint (website
+    tags): attribute as "Sumble reports ...". ~1 credit per primary technology."""
+    return sumble.get_tech_stack(domain)
 
 
 @_tool
@@ -211,7 +222,7 @@ def add_golden_example(persona: str, channel: str, message: str, subject: str | 
 
 
 TOOLS = [search_web, fetch_page, search_people, search_company_linkedin, get_company, get_jobs,
-         get_org_chart, verify_quotes,
+         get_org_chart, get_tech_stack, verify_quotes,
          get_positioning, match_customers, refresh_positioning, apply_knowledge_update,
          lint_message, save_brief, get_last_brief,
          get_playbook, add_playbook_rule, add_golden_example]

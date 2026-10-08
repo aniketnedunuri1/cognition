@@ -74,3 +74,41 @@ def test_org_chart_cites_cached_doc(stub):
         {"domain": "acme.com", "company_name": "Acme", "org_chart": "src_0000000000"})
     assert clean["org_chart"] is None
     assert any(d["path"] == "org_chart" for d in report["dropped"])
+
+
+TECHS = {"business_functions": [
+    {"business_function": "Engineering", "categories": [
+        {"category_slug": "languages", "category_name": "Languages",
+         "category_name_full": "Programming Languages",
+         "technologies": [{"name": "Kotlin", "slug": "kotlin",
+                            "job_post_used_count": 12, "domain": "kotlinlang.org"},
+                           {"name": "Cursor", "slug": "cursor",
+                            "job_post_used_count": 3, "domain": "cursor.com"}],
+         "evidence": [{"name": "Kotlin", "job_post_used_count": 12},
+                       {"name": "Cursor", "job_post_used_count": 3},
+                       {"name": "Bazel", "job_post_used_count": 2}]},
+        {"category_slug": "empty", "category_name": "Empty",
+         "category_name_full": "Empty", "technologies": [], "evidence": []},
+    ]},
+    {"business_function": "Marketing", "categories": []},
+]}
+
+
+def test_tech_stack(stub):
+    stub("server.sumble._post", lambda path, body: ORG)
+    stub("server.sumble._get", lambda path: TECHS)
+    out = sumble.get_tech_stack("acme.com")
+    assert out["found"] and out["source_id"].startswith("src_")
+    eng = out["business_functions"][0]
+    assert eng["business_function"] == "Engineering"
+    assert eng["categories"][0]["technologies"][0]["confirming_job_posts"] == 12
+    assert eng["categories"][0]["also_confirmed"] == ["Bazel"]  # evidence-only
+    assert len(eng["categories"]) == 1  # empty category dropped
+    assert len(out["business_functions"]) == 1  # empty function dropped
+    assert out["ai_coding_tools"] == ["Cursor"]
+
+
+def test_tech_stack_org_not_found(stub):
+    stub("server.sumble._post", lambda path, body: {"organizations": []})
+    out = sumble.get_tech_stack("nope.com")
+    assert out["found"] is False

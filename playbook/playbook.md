@@ -41,8 +41,8 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 | Headcount + growth, revenue, funding | Apollo, attributed. **Cross-check** headcount and revenue with one `search_web` (filings for public companies, else press). Keep every attributed fact in the JSON. Sources differ by more than ~25% → the render shows one working number and a footnote; do not dump every variant in the field |
 | Who they sell to, key products | `fetch_page("https://<domain>")`; one or two sentences grounded in the page |
 | Eng headcount, open eng roles | Apollo department headcount; `get_jobs(domain)` engineering titles |
-| Tech stack | `eng_tech_stack_hint` is a hint only. State a technology as fact only when a job description, eng blog or profile confirms it |
-| AI dev tools | Apollo `ai_coding_tools` plus job posts and news. Feeds competitive context (Stage 3) |
+| Tech stack | `get_tech_stack(domain)` — Sumble's confirmed-used stack (verified via job posts); the primary source. Only when Sumble returns not found/empty: Apollo's `eng_tech_stack_hint` (website tags) as a hint, never stated as fact without a job post, eng blog or profile |
+| AI dev tools | Sumble and Apollo `ai_coding_tools` plus job posts and news. Feeds competitive context (Stage 3) |
 | Eng blog, GitHub | `search_web("<company> engineering blog")`, `search_web("<company> GitHub")` |
 | AI posture, what they care about | Exec statements, earnings calls and CEO letters from the last 12 months (`since`). 2–3 verified quotes |
 | Peers | 3–5 named in sources (press, filings, analyst coverage). Then `match_customers(peers)`: public Devin customers among peers become peer proof |
