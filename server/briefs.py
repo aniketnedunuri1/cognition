@@ -330,6 +330,16 @@ def render_markdown(rec: dict) -> str:
         L += [f"- {c['value']} ({c['situation'].replace('_', ' ')}) {src.cite(c['evidence'])}" for c in b["competitive_context"]]
         L.append("")
 
+    L += ["## Company LinkedIn", ""]
+    if not b.get("company_linkedin"):
+        L.append("Not found")
+    for c in b["company_linkedin"]:
+        kind = {"original": "company post", "possible_repost": "possible repost"}.get(c["kind"], "post")
+        tags = f" · tags: {', '.join(c['tags'])}" if c["tags"] else ""
+        L += [f"- {c['value']} *({kind}{tags})* {src.cite(c['evidence'])}"]
+        L += _quotes(src, c["evidence"])
+    L.append("")
+
     L += ["## Who to work", ""]
     cards = card_people(b["people"])
     if not cards:

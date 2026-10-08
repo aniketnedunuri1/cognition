@@ -73,6 +73,19 @@ def search_people(company: str, roles: list[str]) -> dict:
 
 
 @_tool
+def search_company_linkedin(company: str, domain: str | None = None,
+                            linkedin_slug: str | None = None, since: str | None = None) -> dict:
+    """Company LinkedIn activity via Exa search only (no scraping). Returns whatever Exa
+    indexed: original posts labeled "original" when the company slug is known (from
+    linkedin_slug, else the cached Apollo org's linkedin_url for domain), repost-like hits
+    labeled "possible_repost" from snippet language only, the rest "unknown".
+    possible_tags are /in/ links and @names that literally appear in the snippet — not a
+    mentions graph. No slug is ever invented; without one the searches fall back to the
+    whole linkedin.com domain. Empty results and per-query not_fetched are normal."""
+    return exa.search_company_linkedin(company, domain, linkedin_slug, since)
+
+
+@_tool
 def get_company(domain: str) -> dict:
     """Apollo firmographics: HQ, founded, industry, parent company, headcount + growth,
     department headcount, revenue, funding, AI tools, engineering tech stack.
@@ -192,7 +205,8 @@ def add_golden_example(persona: str, channel: str, message: str, subject: str | 
     return feedback.add_golden_example(persona, channel, message, subject)
 
 
-TOOLS = [search_web, fetch_page, search_people, get_company, get_jobs, get_org_chart, verify_quote,
+TOOLS = [search_web, fetch_page, search_people, search_company_linkedin, get_company, get_jobs,
+         get_org_chart, verify_quote,
          get_positioning, match_customers, refresh_positioning, apply_knowledge_update,
          lint_message, save_brief, get_last_brief,
          get_playbook, add_playbook_rule, add_golden_example]

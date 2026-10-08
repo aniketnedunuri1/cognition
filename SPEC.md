@@ -76,6 +76,7 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 | `search_web(query, since?, include_domains?)` | Exa `/search`, cached. Covers blogs, talks, news, earnings transcripts, filings, GitHub, Devin mentions. `include_domains=["linkedin.com"]` for posts/talks/interviews |
 | `fetch_page(url_or_source_id, offset?)` | Exa `/contents`, cached. Full text cached; model gets a 6k-char excerpt (page with `offset`). Job descriptions and any known URL |
 | `search_people(company, roles)` | Exa `/search` with `category: "people"`: current title, history, start dates, team descriptions |
+| `search_company_linkedin(company, domain?, linkedin_slug?, since?)` | Exa `/search` against `linkedin.com/posts/<slug>` + `linkedin.com/company/<slug>` path prefixes (slug from the arg or the cached Apollo org's linkedin_url; never invented). Three cached searches: posts, mentions, reposts. Rows carry `kind` (original / possible_repost / unknown, from URL + snippet language only) and `possible_tags` (names / `/in/` links literally in the snippet). Not a feed: only what Exa indexed; per-query `not_fetched` on failure |
 | `verify_quote(source_id, quote)` | Deterministic check that a quote exists in that source's cached full text (a quote cited to the wrong source fails) |
 | `get_company(domain)` | Apollo org enrichment (Free plan): firmographics, parent org, revenue, dept headcount, 6/12/24mo growth, funding, AI tools, engineering tech stack (eng categories only; a hint until a job post / blog / profile confirms it) |
 | `get_jobs(domain)` | Apollo job postings (Free plan): title, URL, posted date. Deduped by title; descriptions fetched via `fetch_page` only for eng-relevant roles |
@@ -135,7 +136,8 @@ HTTP mode also serves `GET /briefs/<token>/<domain>-<date>.docx`: outside MCP au
 
 **Finding people**
 1. Exa people search by role → candidate pool (profiles include "(Current)" flags, dates, past roles, team descriptions).
-2. Web pass per candidate for verification + hooks. Per top person: `search_web(..., include_domains=["linkedin.com"])` for posts, talks, interviews (tested: returns real posts/talks/podcasts). Company news and mentions also via Exa (`search_web` on the company, including a LinkedIn-restricted pass). A profile without a "(Current)" marker for this company needs a second source before it's listed as current.
+2. Web pass per candidate for verification + hooks. Per top person: `search_web(..., include_domains=["linkedin.com"])` for posts, talks, interviews (tested: returns real posts/talks/podcasts). A profile without a "(Current)" marker for this company needs a second source before it's listed as current.
+3. **Company LinkedIn activity** via `search_company_linkedin` (Exa only — no LinkedIn scraping, no session, no unofficial API): recent company posts when Exa indexed them, best-effort tagged names and reposts from snippet language. Rendered as a "Company LinkedIn" section. A tag becomes a person's hook only when the quote verifies and the person is listed under the normal current-role rules; a tag or repost alone is never a signal. Nothing indexed → "Not found", no placeholder.
 
 **Finding champions** (evidence, not titles)
 **Likely champion** if any of:

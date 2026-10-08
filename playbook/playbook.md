@@ -81,6 +81,10 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 5. **Hooks.**
    - Per person you will put on a **Who to work** card: `search_web("<name> <company> (post OR talk OR interview OR podcast)", include_domains=["linkedin.com"])`. That restriction returns indexed LinkedIn posts, talks and podcasts — use a hit as a hook only when the quote verifies.
    - Company news and mentions via Exa: `search_web("<company> LinkedIn news OR announcement", include_domains=["linkedin.com"])` plus the Stage 1 / Stage 3 news searches (no domain filter) for press mentions.
+   - **Company LinkedIn activity:** `search_company_linkedin(<company>, domain)` once per account — and once for the parent too when `parent_company` is set. It runs Exa searches only (no scraping) and returns what Exa indexed: posts on the company's own page labeled `original` when the slug is known, `possible_repost` when the snippet says "reposted"/"shared a post", and `possible_tags` (names / `/in/` links that literally appear in the snippet). It is never a complete feed; `not_fetched` queries and empty results are normal.
+     - A tagged name becomes a hook only if (a) the quote verifies and (b) that person is already in `people` or is added under the same current-role rules as everyone else — a tag is not proof they still work there. Never add a person who isn't in the snippet.
+     - A company post can become signal **evidence** when it passes the same five-part bar as everything else. A tag or a repost alone is not a signal.
+     - Nothing indexed → `company_linkedin: []`; the section renders as "Not found". No placeholder.
 6. **Teams:** as their own profiles describe it. For the org chart, call `get_org_chart(domain)` once (it costs ~50–100 Sumble credits — after `get_company` confirms the account is worth it) and pass its `source_id` as `brief.org_chart`. It renders a separate decision-makers + inferred-direct-reports section — labeled as Sumble inference, not confirmed. Sumble people are *not* added to `people`/`top_contacts` on the org chart's say-so alone; the sourced pipeline (search_people + evidence) still decides who to work.
 7. **Subsidiaries:** `search_people(<parent>, ["CISO", "Procurement", "CTO"])` gives likely approvers, listed as gatekeepers.
 8. **Limits.** Search wide; list every **verified** person you found in `brief.people` (with `team` as the profile describes it). **3–5 Who to work cards** (page one): keep `top_contacts` first (max 3), then likely champions, incumbent owners, people with a hook, or a signal `who_cares` hit. **Drop title-only names from the cards.** The validator caps **cards** at 5 (`featured`); everyone else stays in `people` for the wider table. Prefer verified.
@@ -228,6 +232,9 @@ If `get_last_brief` returned a brief, report:
   signals: [{headline, type, horizon: tactical|strategic, evidence: [Evidence with quote],
              use_case, who_cares: [names], strength: strong|medium}],
   competitive_context: [{situation, value, evidence}],
+  company_linkedin: [{value, kind: original|possible_repost|unknown, tags: [names], evidence}],
+                                                    // posts that survived validation; a tag not in the
+                                                    // cited source text is dropped
   people: [{name, title, deal_role, team, why, evidence, champion_evidence: [Fact + kind], hooks: [Fact],
             reporting_line: Fact|null, incumbent_owner: bool}],   // all verified people; validator sets featured on 3–5 cards
   top_contacts: [{name, why: Assessment}],          // max 3, must be in people
