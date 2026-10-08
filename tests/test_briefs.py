@@ -202,6 +202,22 @@ def test_working_number_render(env):
     assert "RocketReach $279M" in md
 
 
+def test_company_linkedin_rendered_in_md_and_docx(env):
+    blog, phil = env
+    b = brief(blog, phil)
+    b["company_linkedin"] = [
+        {"value": "Announced the Java 17 migration", "kind": "original", "tags": ["Phil Burrows"],
+         "evidence": [{"source_id": blog, "quote": "migrating our monolith from Java 8 to Java 17"}]},
+        {"value": "A reshare", "kind": "possible_repost", "evidence": [{"source_id": blog}]},
+    ]
+    out = briefs.save_brief("brex.com", b)
+    md = out["brief_markdown"]
+    assert "## Company LinkedIn" in md
+    assert "Announced the Java 17 migration" in md and "(company post · tags: Phil Burrows)" in md
+    assert "possible repost" in md
+    assert "Company LinkedIn" in _docx_text(out["saved"].removesuffix(".json") + ".docx")
+
+
 def test_draft_notes_and_skeleton_flag(env):
     blog, phil = env
     b = brief(blog, phil)
