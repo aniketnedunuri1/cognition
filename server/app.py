@@ -59,10 +59,11 @@ def fetch_page(url_or_source_id: str, offset: int = 0, force: bool = False) -> d
 @_tool
 def search_people(company: str, roles: list[str]) -> dict:
     """Find people by role at a company (one search per role, merged by profile; 3-5 roles
-    per call). people: is_current (true / "unknown"), current_title, start_date,
-    months_in_role, recent_roles, past_companies (for match_customers), a short highlight.
-    former_employees: never list them as current. "unknown": list only with a second source
-    or an official company source."""
+    per call). people: current_title, is_current (true / "unknown"), start_date,
+    months_in_role, previous_role, ex_devin_customers (past employers that are Devin
+    customers; name one only if public_reference is true), a short highlight.
+    is_current "unknown": list only with a second source or an official company source.
+    Former employees are only counted: never list them as current."""
     return exa.search_people(company, roles)
 
 

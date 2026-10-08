@@ -15,8 +15,9 @@ def web(url, text=POST, published="2026-08-01T00:00:00Z"):
 
 def profiles(stub):
     stub("server.exa._post", lambda path, body: load("exa_people_brex.json"))
-    out = exa.search_people("Brex", ["platform"])
-    return {p["name"]: p["source_id"] for p in out["people"] + out["former_employees"]}
+    exa.search_people("Brex", ["platform"])  # fills the cache, incl. former employees' profiles
+    from server.cache import source_id_for
+    return {r["title"]: source_id_for(r["url"]) for r in load("exa_people_brex.json")["results"]}
 
 
 def person(name, *ids, **kw):

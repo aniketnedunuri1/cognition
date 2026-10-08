@@ -61,15 +61,27 @@ def test_search_people_merges_roles_and_stays_compact(stub):
     calls = stub("server.exa._post", lambda path, body: load("exa_people_ramp.json"))
     out = exa.search_people("Ramp", ["VP of Engineering", "CTO"])
     assert len(calls) == 2
-    people, former = out["people"], out["former_employees"]
-    assert len(people) + len(former) + out["not_at_company_count"] == 10  # merged across roles, none lost
+    people = out["people"]
+    assert len(people) + out["former_employee_count"] + out["not_at_company_count"] == 10  # merged, none lost
     assert all(get_doc(p["source_id"])["kind"] == "person" for p in people)
     assert all(p["is_current"] in (True, "unknown") for p in people)
     assert "Claudio Buzzoni" in {p["name"].split(" -")[0] for p in people}  # no structure -> unknown, kept
-    assert "url" not in people[0] and len(people[0]["highlight"]) <= exa.HIGHLIGHT_CHARS
-    assert all(len(p["recent_roles"]) <= exa.RECENT_ROLES for p in people)
-    assert people[0]["matched_roles"] == ["CTO", "VP of Engineering"]
-    assert len(str(out)) < 20_000
+    assert set(people[0]) == {"source_id", "name", "current_title", "is_current", "start_date",
+                              "months_in_role", "previous_role", "ex_devin_customers", "highlight"}
+    assert all(len(p["highlight"]) <= exa.HIGHLIGHT_CHARS for p in people)
+
+
+def test_ex_devin_customers_matched_in_code(stub, tmp_path, monkeypatch):
+    import json
+    kd = tmp_path / "k"; kd.mkdir()
+    (kd / "customers.json").write_text(json.dumps({"customers": [
+        {"name": "Meta", "public_reference": False, "proofs": []},
+        {"name": "Vitally Inc", "public_reference": True, "proofs": []}]}))
+    monkeypatch.setenv("KNOWLEDGE_DIR", str(kd))
+    stub("server.exa._post", lambda path, body: load("exa_people_brex.json"))
+    phil = next(p for p in exa.search_people("Brex", ["platform"])["people"] if p["name"] == "Phil Burrows")
+    assert phil["ex_devin_customers"] == [{"customer": "Meta", "public_reference": False}]
+    assert phil["previous_role"] == "Engineering Leader at Meta"
 
 
 def test_fetch_page_caches_full_text_returns_excerpt(stub):

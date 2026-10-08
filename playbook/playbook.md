@@ -74,7 +74,7 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
    - has talked publicly about the pain: migrations, tech debt, test coverage, DX
    - shows AI appetite (posts about Copilot/Cursor, an AI-enablement title)
    - new in role: `months_in_role` ≤ 6
-   - ex-employee of a Devin customer: `match_customers(<their past employers>)`. Name the customer to the rep only if `public_reference` is true.
+   - ex-employee of a Devin customer: read `ex_devin_customers` from `search_people` (matched in code). Name the customer to the rep only if `public_reference` is true.
 4. **Hooks:** for the top ~8 people only, run `search_web("<name> <company>")` for talks, posts, podcasts and press quotes.
 5. **Teams:** group people by team as their own profiles describe it. No org charts.
 6. **Subsidiaries:** `search_people(<parent>, ["CISO", "Procurement", "CTO"])` gives likely approvers, listed as gatekeepers.

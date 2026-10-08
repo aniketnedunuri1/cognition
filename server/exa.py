@@ -199,7 +199,6 @@ def _people_docs(response: dict, fetched_at: str) -> list[dict]:
     return docs
 
 
-RECENT_ROLES = 6
 HIGHLIGHT_CHARS = 600
 
 
@@ -212,12 +211,12 @@ def _history(props: dict | None) -> list[dict]:
 
 
 def search_people(company: str, roles: list[str]) -> dict:
-    """One people search per role, merged by profile. Compact by design (results must fit
-    inline for the model); full profiles stay in the cache for verification.
+    """One people search per role, merged by profile. Returns only what the agent decides
+    with (results must fit inline); full profiles stay in the cache for verification.
 
-    people: current or unknown at the company, with recent roles, every past employer
-    (for champion tracking), and one capped highlight. former_employees: name + where
-    they are now. Profiles that don't list the company at all are only counted."""
+    people: current or unknown at the company, with previous role, ex-Devin-customer
+    employers (champion tracking), and one capped highlight. Former employees and profiles
+    that don't list the company are only counted."""
     seen: dict[str, dict] = {}
     for role in roles:
         body = {"query": f"{role} at {company}", "type": "auto", "category": "people",
@@ -230,29 +229,30 @@ def search_people(company: str, roles: list[str]) -> dict:
             props = (d["data"] or {}).get("person")
             seen[d["source_id"]] = {"doc": d, "props": props, "roles": {role}, **employment_at(props, company)}
 
-    people, former, not_listed = [], [], 0
+    from .knowledge import match_customers  # runtime import: knowledge imports this module
+
+    people, former, not_listed = [], 0, 0
     for sid, e in seen.items():
-        history = _history(e["props"])
-        if e["is_current"] is False and "past employer" not in e["reason"]:
-            not_listed += 1
-            continue
         if e["is_current"] is False:
-            now = next((h for h in history if h["to"] is None), None)
-            former.append({"source_id": sid, "name": e["doc"]["title"], "reason": e["reason"],
-                           "now": f"{now['title']} at {now['company']}" if now else "unknown"})
+            if "past employer" in e["reason"]:
+                former += 1
+            else:
+                not_listed += 1
             continue
+        history = _history(e["props"])
+        previous = next((h for h in history if h["to"] is not None), None)
+        past = sorted({h["company"] for h in history if h["company"]} - {company})
         people.append({
             "source_id": sid,
             "name": e["doc"]["title"],
-            "is_current": e["is_current"],
             "current_title": e["current_title"],
+            "is_current": e["is_current"],
             "start_date": e["start_date"],
             "months_in_role": e["months_in_role"],
-            "reason": e["reason"],
-            "location": (e["props"] or {}).get("location"),
-            "recent_roles": history[:RECENT_ROLES],
-            "past_companies": sorted({h["company"] for h in history if h["company"]} - {company}),
+            "previous_role": f"{previous['title']} at {previous['company']}" if previous else None,
+            # Champion tracking, matched in code (normalized exact name, no fuzzy matching).
+            "ex_devin_customers": [{"customer": m["customer"], "public_reference": m["public_reference"]}
+                                   for m in match_customers(past)],
             "highlight": ((e["doc"]["highlights"] or [""])[0] or "")[:HIGHLIGHT_CHARS],
-            "matched_roles": sorted(e["roles"]),
         })
-    return {"people": people, "former_employees": former, "not_at_company_count": not_listed}
+    return {"people": people, "former_employee_count": former, "not_at_company_count": not_listed}
