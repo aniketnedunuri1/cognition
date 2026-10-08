@@ -43,7 +43,7 @@ uv run python -m server.app --replay     # cache only: reproduces the committed 
 | `fetch_page(url_or_source_id)` | Exa contents |
 | `search_people(company, roles)` | Exa people search |
 | `search_company_linkedin(company, domain?, linkedin_slug?, since?)` | Exa search on `linkedin.com/posts|company/<slug>` path prefixes: indexed company posts, best-effort tags/reposts from snippets (no scraping, no feed guarantee) |
-| `verify_quote(source_id, quote)` | Cached page text |
+| `verify_quotes(quotes)` | Cached page text — batch, one call for all quotes |
 | `get_positioning()`, `match_customers(companies)` | `knowledge/` (built from cognition.com + devin.ai) |
 | `refresh_positioning()`, `apply_knowledge_update(...)` | Incremental knowledge refresh with source rules enforced in code |
 | `lint_message(...)`, `save_brief(...)`, `get_last_brief(...)` | Draft checks, validated briefs rendered to Markdown + .docx, since-last-run diff |

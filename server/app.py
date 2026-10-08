@@ -118,10 +118,11 @@ def get_org_chart(domain: str, people: list[dict] | None = None) -> dict:
 
 
 @_tool
-def verify_quote(source_id: str, quote: str) -> dict:
-    """Check that `quote` appears verbatim in the cached source `source_id`.
-    Use "..." to join parts that appear in order. A quote cited to the wrong source fails."""
-    return verify.verify_quote(source_id, quote)
+def verify_quotes(quotes: list[dict]) -> list[dict]:
+    """Check quotes appear verbatim in the cached sources they cite. Pass every quote
+    in one call: [{source_id, quote}, ...]. Use "..." to join parts that appear in
+    order. A quote cited to the wrong source fails."""
+    return verify.verify_quotes(quotes)
 
 
 @_tool
@@ -210,7 +211,7 @@ def add_golden_example(persona: str, channel: str, message: str, subject: str | 
 
 
 TOOLS = [search_web, fetch_page, search_people, search_company_linkedin, get_company, get_jobs,
-         get_org_chart, verify_quote,
+         get_org_chart, verify_quotes,
          get_positioning, match_customers, refresh_positioning, apply_knowledge_update,
          lint_message, save_brief, get_last_brief,
          get_playbook, add_playbook_rule, add_golden_example]

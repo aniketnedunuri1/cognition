@@ -70,3 +70,12 @@ def verify_quote(source_id: str, quote: str) -> dict:
     if doc["kind"] == "job" and _contains_in_order(title, parts):
         return {**result, "verified": True, "matched_in": "job title"}
     return {**result, "reason": "quote not found (page text unavailable; checked cached highlights)"}
+
+
+def verify_quotes(quotes: list[dict]) -> list[dict]:
+    """Batch verify_quote: each item is {"source_id": ..., "quote": ...}.
+
+    Same checks, same per-item result shape (plus the item's quote echoed back);
+    one call instead of one turn per quote."""
+    return [{**verify_quote(q.get("source_id", ""), q.get("quote", "")),
+             "quote": q.get("quote", "")} for q in quotes]
