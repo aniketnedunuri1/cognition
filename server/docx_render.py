@@ -283,6 +283,7 @@ def brief_to_docx(rec: dict, path: Path) -> Path:
     _snapshot(doc, b, src)
     _people(doc, b, src)
     _signals(doc, b, src)
+    _company_linkedin(doc, b, src)
     _drafts(doc, b, src)
     _abm(doc, b, src)
     _wider_buying_center(doc, b)
@@ -479,6 +480,26 @@ def _signals(doc: Document, b: dict, src: _Sources) -> None:
             _run(p, c["value"], size=10)
             _run(p, f"  ({c['situation'].replace('_', ' ')})", size=9, color=MUTED)
             _cite(p, src.cite(c["evidence"]))
+
+
+def _company_linkedin(doc: Document, b: dict, src: _Sources) -> None:
+    posts = b.get("company_linkedin") or []
+    if not posts:
+        return
+    _heading(doc, "Company LinkedIn")
+    for c in posts:
+        kind = {"original": "company post", "possible_repost": "possible repost"}.get(c["kind"], "post")
+        p = doc.add_paragraph()
+        p.paragraph_format.space_after = Pt(4)
+        _run(p, c["value"], size=10)
+        _run(p, f"  ({kind}{'; tags: ' + ', '.join(c['tags']) if c['tags'] else ''})", size=9, color=MUTED)
+        _cite(p, src.cite(c["evidence"]))
+        for e in c["evidence"]:
+            if e.get("quote"):
+                q = doc.add_paragraph()
+                q.paragraph_format.space_after = Pt(4)
+                _run(q, f'"{_one_line(e["quote"])}"', size=9, italic=True, color=MUTED)
+                _cite(q, src.cite([e]))
 
 
 def _drafts(doc: Document, b: dict, src: _Sources) -> None:

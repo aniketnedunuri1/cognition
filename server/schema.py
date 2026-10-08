@@ -137,6 +137,13 @@ class Person(BaseModel):
     current_basis: Literal["profile", "official_source", "two_sources"] | None = None
 
 
+class CompanyPost(Fact):
+    """One company LinkedIn post. kind comes from the URL + snippet language only;
+    tags are names/handles that literally appear in the cited source text."""
+    kind: Literal["original", "possible_repost", "unknown"] = "unknown"
+    tags: list[str] = []
+
+
 class TopContact(BaseModel):
     name: str
     why: Assessment
@@ -182,6 +189,7 @@ class Brief(BaseModel):
     engineering: Engineering = Engineering()
     signals: list[Signal] = []
     competitive_context: list[CompetitiveItem] = []
+    company_linkedin: list[CompanyPost] = []
     people: list[Person] = []
     top_contacts: list[TopContact] = []
     abm_themes: list[Assessment] = []
@@ -428,6 +436,16 @@ class _Validator:
         senior = self._senior(p)
         p.label = "likely_champion" if ex or (senior and pain) or (senior and hiring) else "candidate"
 
+    def company_post(self, c: CompanyPost, path: str) -> CompanyPost | None:
+        if not (c := self.fact(c, path)):
+            return None
+        docs = [get_doc(e.source_id) for e in c.evidence]
+        kept = [t for t in c.tags if any(_mentions(d, t) for d in docs if d)]
+        for t in set(c.tags) - set(kept):
+            self.drop(f"{path}.tags", f"tag {t!r} does not appear in the cited source")
+        c.tags = kept
+        return c
+
     def _official(self, doc: dict) -> bool:
         host = site(doc.get("url")) or ""
         if any(host == d or host.endswith("." + d) for d in self.domains):
@@ -526,6 +544,9 @@ def validate_brief(raw: dict, *, today: date | None = None,
     brief.competitive_context = [c for i, x in _parse_list(raw.get("competitive_context"), CompetitiveItem,
                                                            "competitive_context", v)
                                  if (c := v.fact(x, f"competitive_context[{i}]"))]
+    brief.company_linkedin = [c for i, x in _parse_list(raw.get("company_linkedin"), CompanyPost,
+                                                      "company_linkedin", v)
+                              if (c := v.company_post(x, f"company_linkedin[{i}]"))]
 
     for i, t in _parse_list(raw.get("top_contacts"), TopContact, "top_contacts", v):
         path = f"top_contacts[{i}]"
