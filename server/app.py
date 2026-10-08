@@ -17,7 +17,7 @@ from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
 from fastmcp.server.auth.providers.debug import DebugTokenVerifier
 
-from . import apollo, briefs, exa, feedback, gdocs, knowledge, lint, verify
+from . import apollo, briefs, exa, feedback, knowledge, lint, verify
 from .cache import ROOT, CacheMiss
 
 INSTRUCTIONS = """Account research data tools. Every result carries a source_id per document.
@@ -139,8 +139,8 @@ def lint_message(channel: str, text: str, source_ids: list[str] | None = None,
 @_tool
 def save_brief(domain: str, brief: dict) -> dict:
     """Validate and save the brief (shape: playbook Output contract). Returns the validator
-    report (what was dropped and why), the since-last-run diff, and the Slack summary.
-    Fix drops with real evidence — never by rewording — then save again."""
+    report (what was dropped and why), the since-last-run diff, the rendered brief_markdown,
+    and the Slack summary. Fix drops with real evidence — never by rewording — then save again."""
     return briefs.save_brief(domain, brief)
 
 
@@ -151,10 +151,10 @@ def get_last_brief(domain: str) -> dict:
 
 
 @_tool
-def create_brief_doc(domain: str) -> dict:
-    """Create or update the Google Doc for the latest saved brief. Returns the link and
-    the Slack summary with the link filled in. Post that summary as the thread reply."""
-    return gdocs.create_brief_doc(domain)
+def set_brief_link(domain: str, url: str) -> dict:
+    """After creating a Google Doc from brief_markdown with your Google Docs/Drive tool,
+    pass its link here. Returns the Slack summary with the link filled in: post it verbatim."""
+    return briefs.set_brief_link(domain, url)
 
 
 @_tool
@@ -182,7 +182,7 @@ def add_golden_example(persona: str, channel: str, message: str, subject: str | 
 
 TOOLS = [search_web, fetch_page, search_people, get_company, get_jobs, verify_quote,
          get_positioning, match_customers, refresh_positioning, apply_knowledge_update,
-         lint_message, save_brief, get_last_brief, create_brief_doc,
+         lint_message, save_brief, get_last_brief, set_brief_link,
          get_playbook, add_playbook_rule, add_golden_example]
 
 

@@ -29,11 +29,7 @@ cp .env.example .env             # fill in ANTHROPIC_API_KEY, EXA_API_KEY, APOLL
 
 The agent gets **only** this MCP server's tools (no built-in web search, no other MCP servers), so every fact has to come through a cited tool call. The CLI prints the Slack summary exactly as the tool rendered it from the validated brief; the agent's own prose is shown only with `-v`, labeled unvalidated.
 
-**Google Doc output (optional, one-time setup, any Google account):**
-1. In Google Cloud Console: create a project → enable the **Google Drive API** → OAuth consent screen (External; add yourself as a test user) → Credentials → **Create OAuth client ID → Desktop app** → download the JSON to `secrets/google-oauth-client.json`.
-2. `.venv/bin/python -m server.gdocs auth` → approve in the browser. The token is saved to `secrets/google-token.json` (gitignored).
-
-Briefs then land in a Drive folder named "Account research briefs". The app uses the `drive.file` scope, so it can only see files it created. While the consent screen is in "Testing", Google expires refresh tokens after 7 days; re-run step 2, or publish the app (no verification needed for `drive.file`). Without this setup, briefs are still written as Markdown and the Slack summary says the Doc wasn't created.
+**Output:** the validated brief is written to `briefs/<domain>/<date>.md` (+ `.json`) and the CLI prints the Slack summary. That Markdown is the canonical record. In Slack, Devin or Claude uses its own Google Docs/Drive connector (the rep signs in once in that product) to copy the brief into a Doc and link it from the summary. The CLI runs with strict MCP config, so it produces Markdown only.
 
 ## MCP server
 
@@ -53,7 +49,7 @@ Briefs then land in a Drive folder named "Account research briefs". The app uses
 | `verify_quote(source_id, quote)` | Cached page text |
 | `get_positioning()`, `match_customers(companies)` | `knowledge/` (built from cognition.com + devin.ai) |
 | `refresh_positioning()`, `apply_knowledge_update(...)` | Incremental knowledge refresh with source rules enforced in code |
-| `lint_message(...)`, `save_brief(...)`, `get_last_brief(...)`, `create_brief_doc(...)` | Draft checks, validated briefs, since-last-run diff, Google Doc |
+| `lint_message(...)`, `save_brief(...)`, `get_last_brief(...)`, `set_brief_link(...)` | Draft checks, validated briefs + rendered Markdown, since-last-run diff, Doc link from the harness's Google connector |
 | `get_playbook()`, `add_playbook_rule(...)`, `add_golden_example(...)` | Feedback memory in `playbook/` (git-committed on change) |
 
 Every result carries a `source_id` per document. The model cites `source_id`s only; the validator (`server/schema.py`) drops anything that doesn't resolve or whose quote doesn't verify, and URLs are filled in from the cache at render time.

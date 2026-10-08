@@ -23,8 +23,8 @@ A wrong fact costs a rep more than a missing one. It burns credibility with the 
 ## User loop
 
 1. Rep: `@Devin research acme.com` in Slack (or `python agent.py research acme.com` locally).
-2. Agent runs company → people → signals, writes the brief to a Google Doc.
-3. Agent replies in thread with a short summary + doc link.
+2. Agent runs company → people → signals and saves the validated brief (Markdown); if the harness has a Google Docs/Drive connector, it copies the brief into a Doc verbatim.
+3. Agent replies in thread with the tool-rendered summary + doc link.
 4. Rep picks contacts (or accepts the suggested top 3).
 5. Agent drafts email + LinkedIn per contact, posts in thread.
 6. Rep edits / comments / approves.
@@ -86,8 +86,8 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 | `get_playbook()` / `add_playbook_rule(rule, scope)` | Feedback memory |
 | `add_golden_example(persona, message)` | Store approved messages |
 | `lint_message(channel, text, source_ids, subject?)` | Length, banned phrases, public_reference, no layoffs, no "Windsurf", no placeholders; every number must appear in the cited sources |
-| `save_brief(domain, brief_json)` / `get_last_brief(domain)` | Persistence + diffing |
-| `create_brief_doc(domain)` | Google Doc in the rep's own Drive (one-time user OAuth, `drive.file` scope, app-created folder) for the latest saved brief; re-runs update the same Doc; returns link + Slack summary |
+| `save_brief(domain, brief_json)` / `get_last_brief(domain)` | Validate, persist, diff; returns report + rendered `brief_markdown` + Slack summary |
+| `set_brief_link(domain, url)` | Records the link of the Doc the harness's own Google connector created from `brief_markdown`; returns the Slack summary with the link (Google Docs/Drive URLs only) |
 
 ---
 
@@ -264,7 +264,7 @@ Start with:
 Full brief: <Google Doc link>
 ```
 
-**Google Doc brief** (AE + marketing; comments feed back into learning)
+**Brief** (AE + marketing): validated Markdown in `briefs/`; copied verbatim into a Google Doc by the harness connector when one is available (Devin MCP Marketplace / Claude Google Drive connector — the rep signs in once in that product; no Google setup in this repo). The CLI (strict MCP) outputs Markdown only.
 1. Since last run (if applicable)
 2. Verdict + why now
 3. Snapshot
@@ -288,9 +288,14 @@ Full brief: <Google Doc link>
 - TTL per entry: discovery calls (all Exa searches, Apollo job list) = 1 day; lookups of known things (fetched pages, Apollo firmographics) = 7 days. Reruns reuse fresh entries, refetch expired ones. `--replay` = cache only (committed demo); `--fresh` = refetch everything.
 - `cache/` is gitignored; the demo account's cache is committed once with `git add -f`.
 - Demo account's cache committed so reviewers can reproduce without API spend.
-- `.env.example` lists keys: `ANTHROPIC_API_KEY` (runner; or an existing Claude Code login), `EXA_API_KEY`, `APOLLO_API_KEY` (Free plan is enough). Google Docs: optional one-time OAuth (`python -m server.gdocs auth`).
+- `.env.example` lists keys: `ANTHROPIC_API_KEY` (runner; or an existing Claude Code login), `EXA_API_KEY`, `APOLLO_API_KEY` (Free plan is enough). No Google credentials: the Doc comes from the harness connector.
 
 ---
+
+## Write-up notes
+
+- The validated Markdown in `briefs/` is the canonical record; the Google Doc is a copy made by the harness connector. Slack and the Doc are renders, never sources.
+- Only the brief is validated. Agent prose outside it is unchecked, so the playbook forbids facts there and the Slack reply is the tool-rendered summary posted verbatim (in Devin this relies on the agent following the playbook; the CLI enforces it in code).
 
 ## Production notes (for write-up / Loom)
 
@@ -310,6 +315,6 @@ Full brief: <Google Doc link>
 - [x] Devin: custom MCP supported (stdio / SSE / HTTP); Playbooks invokable via `!macro`
 - [x] Devin: custom MCP available in Slack-triggered sessions (per Devin). Needs a public HTTPS URL; added via Customize → MCPs → Add custom MCP, bearer header, org scope. Validate with MCP Inspector first; confirm with a real Slack run.
 - [ ] Claude in Slack: confirm custom connectors + skills work there
-- [x] Google Docs: one-time user OAuth into the rep's own Drive (`drive.file`); no Workspace needed. Doc comments as a feedback source: not built yet
+- [x] Google Docs: handled by the harness's own Google connector (Devin / Claude), not this repo. Doc comments as a feedback source: via that connector, not built here
 - [x] Exa: `startPublishedDate` supports incremental search (use only for bounded windows, per Exa guidance)
 - [ ] Demo account choice (not a Devin customer, strong public eng footprint)

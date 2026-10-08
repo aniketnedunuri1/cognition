@@ -222,9 +222,11 @@ If `get_last_brief` returned a brief, report:
 Fact = {value, evidence: [Evidence]}   Evidence = {source_id, quote?}   Assessment = {text, based_on: [Evidence]}
 ```
 
-`save_brief` returns the validator report. Read it, fix what you can with real evidence, and save again. Then `create_brief_doc` returns the Google Doc link.
+`save_brief` returns the validator report. Read it, fix what you can with real evidence, and save again. It also returns `brief_markdown` (the rendered, validated brief) and the Slack summary.
 
-**2. Slack reply.** Post the `slack_summary` returned by `create_brief_doc` verbatim as the thread reply (or the one from `save_brief` if the Doc isn't available). Don't add a summary, commentary, numbers or claims of your own, and don't reword it. If something failed, say what failed in one line with no account facts. The summary is rendered from the validated brief in this format:
+**Google Doc.** If this environment gives you a Google Docs/Drive tool, create a Doc from `brief_markdown` **verbatim**: no edits, additions or reformatting. Then pass its link to `set_brief_link(domain, url)`, which returns the Slack summary with the link in it. If there's no such tool, skip this: the Markdown brief in `briefs/` is the output. The Markdown in `briefs/` is always the canonical record; the Doc is a copy.
+
+**2. Slack reply.** Post the latest `slack_summary` verbatim as the thread reply: the one from `set_brief_link` if you made a Doc, otherwise the one from `save_brief`. Don't add a summary, commentary, numbers or claims of your own, and don't reword it. If something failed, say what failed in one line with no account facts. The summary is rendered from the validated brief in this format:
 
 ```
 <Company> — <Act now | Warm | Not now>
@@ -235,7 +237,7 @@ Start with:
  1. <Name>, <Title> — <why>
  2. …
  3. …
-Full brief: <Google Doc link>
+Full brief: <Google Doc link, or the brief's path if no Doc>
 ```
 
 ---

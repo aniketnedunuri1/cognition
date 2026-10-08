@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent
 SERVER = "research"
 MODEL = "claude-opus-5-5"
 STAGES = ("company", "people", "signals", "draft")
-RENDERERS = ("save_brief", "create_brief_doc")  # tools whose result carries the rendered Slack summary
+RENDERERS = ("save_brief", "set_brief_link")  # tools whose result carries the rendered Slack summary
 
 
 def tool_names() -> list[str]:
@@ -62,7 +62,7 @@ def prompt_for(args) -> str:
             return (f"Account: {args.domain}. Run Stage 0, then only the `{args.stage}` stage of the playbook. "
                     f"Report the result to the rep; save_brief only if you produced a full brief.")
         return (f"Account: {args.domain}. Run Stages 0-4 of the playbook, then save_brief, fix what the "
-                f"validator dropped with real evidence, save again, and call create_brief_doc.")
+                f"validator dropped with real evidence, and save again.")
     if args.command == "feedback":
         return (f"Rep feedback on the {args.domain} brief:\n\n{args.text}\n\n"
                 f"Run Stage 6 of the playbook (get_last_brief and get_playbook first).")

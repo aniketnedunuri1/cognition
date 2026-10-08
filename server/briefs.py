@@ -71,8 +71,29 @@ def save_brief(domain: str, brief: dict) -> dict:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(record, indent=1, ensure_ascii=False))
     out.with_suffix(".md").write_text(render_markdown(record))
-    return {"saved": str(out.relative_to(ROOT)) if out.is_relative_to(ROOT) else str(out),
-            "report": report, "since_last_run": since, "slack_summary": render_slack(record)}
+    return {"saved": _rel(out), "report": report, "since_last_run": since,
+            "brief_markdown": out.with_suffix(".md").read_text(), "slack_summary": render_slack(record)}
+
+
+DOC_HOSTS = ("https://docs.google.com/", "https://drive.google.com/")
+
+
+def set_brief_link(domain: str, url: str) -> dict:
+    """Record the link to the Doc the harness connector created from brief_markdown;
+    returns the Slack summary with the link in it."""
+    if not url.startswith(DOC_HOSTS):
+        return {"ok": False, "reason": f"expected a Google Docs/Drive link starting with {DOC_HOSTS}"}
+    found = load_record(domain)
+    if not found:
+        return {"ok": False, "reason": "save_brief first"}
+    path, rec = found
+    rec["doc_url"] = url
+    path.write_text(json.dumps(rec, indent=1, ensure_ascii=False))
+    return {"ok": True, "slack_summary": render_slack(rec)}
+
+
+def _rel(path: Path) -> str:
+    return str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
 
 
 def get_last_brief(domain: str) -> dict:
@@ -242,5 +263,6 @@ def render_slack(rec: dict) -> str:
         L.append("Start with:")
         L += [f" {i}. {t['name']}, {titles.get(t['name'], '')} — {t['why']['text']}"
               for i, t in enumerate(b["top_contacts"], 1)]
-    L.append(f"Full brief: {rec.get('doc_url') or '(Google Doc not created yet)'}")
+    md = _rel(bdir() / rec["domain"] / f"{rec['date']}.md")
+    L.append(f"Full brief: {rec.get('doc_url') or md}")
     return "\n".join(L)
