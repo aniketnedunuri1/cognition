@@ -15,7 +15,7 @@ uv run pytest              # no API calls
 ## Run it
 
 ```bash
-uv run python agent.py research acme.com              # brief → briefs/acme.com/<date>.{json,md}, Doc, Slack summary
+uv run python agent.py research acme.com              # brief → briefs/acme.com/<date>.{json,md} + Slack summary
 uv run python agent.py research acme.com --stage people
 uv run python agent.py feedback acme.com "CTO email too long; lead with the peer metric"
 uv run python agent.py research <demo-domain> --replay # reproduce the committed demo, no data API spend

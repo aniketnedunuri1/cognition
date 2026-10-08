@@ -15,7 +15,8 @@ def web(url, text=POST, published="2026-08-01T00:00:00Z"):
 
 def profiles(stub):
     stub("server.exa._post", lambda path, body: load("exa_people_brex.json"))
-    return {p["name"]: p["source_id"] for p in exa.search_people("Brex", ["platform"])}
+    out = exa.search_people("Brex", ["platform"])
+    return {p["name"]: p["source_id"] for p in out["people"] + out["former_employees"]}
 
 
 def person(name, *ids, **kw):
@@ -151,7 +152,7 @@ def test_parent_company_roles_count_as_current(stub):
         {"type": "person", "properties": {"name": "Pat Approver", "workHistory": [
             {"title": "CISO", "company": {"name": "Capital One"}, "dates": {"from": "2023-01-01", "to": None}}]}}]}]}
     stub("server.exa._post", lambda path, body: resp)
-    [pat] = exa.search_people("Capital One", ["CISO"])
+    [pat] = exa.search_people("Capital One", ["CISO"])["people"]
     brief, _ = run({"people": [{**person("Pat Approver", pat["source_id"]), "title": "CISO",
                                 "deal_role": "parent_org_approver"}]})
     assert brief["people"][0]["current_basis"] == "profile"

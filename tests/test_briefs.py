@@ -22,7 +22,7 @@ def env(tmp_path, monkeypatch, stub):
                                            published_date=f"{date.today()}T00:00:00Z",
                                            retrieved_at=cache.now_iso()))["source_id"]
     stub("server.exa._post", lambda path, body: load("exa_people_brex.json"))
-    phil = next(p["source_id"] for p in exa.search_people("Brex", ["platform"]) if p["name"] == "Phil Burrows")
+    phil = next(p["source_id"] for p in exa.search_people("Brex", ["platform"])["people"] if p["name"] == "Phil Burrows")
     return blog, phil
 
 

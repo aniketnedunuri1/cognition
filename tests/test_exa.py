@@ -57,14 +57,19 @@ def test_unparseable_start_date_is_unknown():
     assert e["is_current"] is True and e["start_date"] == "unknown" and e["months_in_role"] == "unknown"
 
 
-def test_search_people_merges_roles_and_returns_source_ids(stub):
+def test_search_people_merges_roles_and_stays_compact(stub):
     calls = stub("server.exa._post", lambda path, body: load("exa_people_ramp.json"))
-    people = exa.search_people("Ramp", ["VP of Engineering", "CTO"])
+    out = exa.search_people("Ramp", ["VP of Engineering", "CTO"])
     assert len(calls) == 2
-    assert len(people) == 10  # same profiles from both searches, merged
-    assert all(p["source_id"].startswith("src_") for p in people)
+    people, former = out["people"], out["former_employees"]
+    assert len(people) + len(former) + out["not_at_company_count"] == 10  # merged across roles, none lost
     assert all(get_doc(p["source_id"])["kind"] == "person" for p in people)
-    assert "url" not in people[0]  # model cites source_id; URLs come from the cache
+    assert all(p["is_current"] in (True, "unknown") for p in people)
+    assert "Claudio Buzzoni" in {p["name"].split(" -")[0] for p in people}  # no structure -> unknown, kept
+    assert "url" not in people[0] and len(people[0]["highlight"]) <= exa.HIGHLIGHT_CHARS
+    assert all(len(p["recent_roles"]) <= exa.RECENT_ROLES for p in people)
+    assert people[0]["matched_roles"] == ["CTO", "VP of Engineering"]
+    assert len(str(out)) < 20_000
 
 
 def test_fetch_page_caches_full_text_returns_excerpt(stub):

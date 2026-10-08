@@ -199,30 +199,60 @@ def _people_docs(response: dict, fetched_at: str) -> list[dict]:
     return docs
 
 
-def search_people(company: str, roles: list[str]) -> list[dict]:
-    """One people search per role, merged by profile."""
-    by_id: dict[str, dict] = {}
+RECENT_ROLES = 6
+HIGHLIGHT_CHARS = 600
+
+
+def _history(props: dict | None) -> list[dict]:
+    return [
+        {"company": (h.get("company") or {}).get("name"), "title": h.get("title"),
+         "from": (h.get("dates") or {}).get("from"), "to": (h.get("dates") or {}).get("to")}
+        for h in (props or {}).get("workHistory") or []
+    ]
+
+
+def search_people(company: str, roles: list[str]) -> dict:
+    """One people search per role, merged by profile. Compact by design (results must fit
+    inline for the model); full profiles stay in the cache for verification.
+
+    people: current or unknown at the company, with recent roles, every past employer
+    (for champion tracking), and one capped highlight. former_employees: name + where
+    they are now. Profiles that don't list the company at all are only counted."""
+    seen: dict[str, dict] = {}
     for role in roles:
         body = {"query": f"{role} at {company}", "type": "auto", "category": "people",
                 "contents": {"highlights": True}}
         docs, _ = cached_call("exa/search", body, "discovery", lambda b=body: _post("/search", b), _people_docs)
         for d in docs:
-            if d["source_id"] in by_id:
-                by_id[d["source_id"]]["matched_roles"].append(role)
+            if d["source_id"] in seen:
+                seen[d["source_id"]]["roles"].add(role)
                 continue
             props = (d["data"] or {}).get("person")
-            history = [
-                {"company": (h.get("company") or {}).get("name"), "title": h.get("title"),
-                 "from": (h.get("dates") or {}).get("from"), "to": (h.get("dates") or {}).get("to")}
-                for h in (props or {}).get("workHistory") or []
-            ]
-            by_id[d["source_id"]] = {
-                "source_id": d["source_id"],
-                "name": d["title"],
-                **employment_at(props, company),
-                "location": (props or {}).get("location"),
-                "work_history": history,
-                "highlights": d["highlights"],
-                "matched_roles": [role],
-            }
-    return list(by_id.values())
+            seen[d["source_id"]] = {"doc": d, "props": props, "roles": {role}, **employment_at(props, company)}
+
+    people, former, not_listed = [], [], 0
+    for sid, e in seen.items():
+        history = _history(e["props"])
+        if e["is_current"] is False and "past employer" not in e["reason"]:
+            not_listed += 1
+            continue
+        if e["is_current"] is False:
+            now = next((h for h in history if h["to"] is None), None)
+            former.append({"source_id": sid, "name": e["doc"]["title"], "reason": e["reason"],
+                           "now": f"{now['title']} at {now['company']}" if now else "unknown"})
+            continue
+        people.append({
+            "source_id": sid,
+            "name": e["doc"]["title"],
+            "is_current": e["is_current"],
+            "current_title": e["current_title"],
+            "start_date": e["start_date"],
+            "months_in_role": e["months_in_role"],
+            "reason": e["reason"],
+            "location": (e["props"] or {}).get("location"),
+            "recent_roles": history[:RECENT_ROLES],
+            "past_companies": sorted({h["company"] for h in history if h["company"]} - {company}),
+            "highlight": ((e["doc"]["highlights"] or [""])[0] or "")[:HIGHLIGHT_CHARS],
+            "matched_roles": sorted(e["roles"]),
+        })
+    return {"people": people, "former_employees": former, "not_at_company_count": not_listed}
