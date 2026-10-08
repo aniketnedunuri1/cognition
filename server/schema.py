@@ -99,16 +99,17 @@ class CompetitiveItem(Fact):
 
 ChampionKind = Literal["hiring_manager", "public_pain", "ex_devin_customer", "works_on_signal",
                        "new_in_role", "ai_appetite"]
-# The only checkable Devin-usage proxy: profile history × customers.json.
-# hiring_manager / public_pain / works_on_signal stay as facts; they do not earn the badge.
+# Badge paths: confirmed ex_devin_customer, or senior + public_pain quote, or senior + hiring_manager.
+# works_on_signal / new_in_role / ai_appetite are supporting or hooks only.
 DEVIN_USAGE = "ex_devin_customer"
-# works_on_signal is kept as evidence only for someone senior enough to carry it internally.
-SENIOR_TITLE = re.compile(r"\b(manager|lead|staff|principal|director|head)\b", re.I)
-PEOPLE_MAX = 5
+# Manager+ (incl. VP/C-level) and Staff/Principal ICs. "Lead" alone is not enough.
+SENIOR_TITLE = re.compile(
+    r"\b(manager|staff|principal|director|head|vp|svp|evp|cto|cio|ciso|chief|president|founder)\b", re.I)
+CARDS_MAX = 5
 
 
 class ChampionEvidence(Fact):
-    """Likely champion is only confirmed ex_devin_customer. Other kinds explain why they're listed."""
+    """Badge kinds plus supporting kinds (works_on_signal / new_in_role / ai_appetite)."""
     kind: ChampionKind
 
 
@@ -131,6 +132,7 @@ class Person(BaseModel):
     # Set by the validator, never by the model:
     verified: bool | None = None
     label: Literal["likely_champion", "candidate"] | None = None
+    featured: bool | None = None  # Who-to-work card (cap applies here only)
     profile_source_id: str | None = None
     current_basis: Literal["profile", "official_source", "two_sources"] | None = None
 
@@ -401,25 +403,30 @@ class _Validator:
                 if h["company"] and normalize(h["company"]) not in own}
         return match_customers(sorted(past))
 
+    def _senior(self, p: Person) -> bool:
+        titles = self.profile_titles.get(p.name) or set()
+        if titles:
+            return any(SENIOR_TITLE.search(t) for t in titles)
+        return bool(SENIOR_TITLE.search(p.title or ""))
+
     def label(self, p: Person, path: str, strong_signal_people: set[str]) -> None:
-        """Likely champion = confirmed ex_devin_customer only. We cannot prove they ran Devin,
-        only that they worked at a Devin customer. An AI title is not a champion.
-        works_on_signal stays as evidence only for someone in a strong signal's who_cares whose
-        profile title is senior; otherwise it becomes a hook. It never earns the badge."""
+        """Likely champion = ex-Devin-customer, or senior + verified public_pain quote,
+        or senior + named hiring manager. works_on_signal / new_in_role / ai_appetite
+        never earn the badge. works_on_signal not in a strong signal's who_cares → hook."""
         for i, c in enumerate(list(p.champion_evidence)):
             if c.kind != "works_on_signal":
                 continue
-            if p.name not in strong_signal_people:
-                why = "not in a strong signal's who_cares"
-            elif not any(SENIOR_TITLE.search(t) for t in self.profile_titles.get(p.name, ())):
-                why = f"profile title {sorted(self.profile_titles.get(p.name, ())) or 'unknown'} isn't senior"
-            else:
+            if p.name in strong_signal_people:
                 continue
             self.flags.append({"path": f"{path}.champion_evidence[{i}]",
-                               "flag": f"works_on_signal kept as a hook: {why}"})
+                               "flag": "works_on_signal kept as a hook: not in a strong signal's who_cares"})
             p.champion_evidence.remove(c)
             p.hooks.append(Fact(value=c.value, evidence=c.evidence))
-        p.label = "likely_champion" if any(c.kind == DEVIN_USAGE for c in p.champion_evidence) else "candidate"
+        ex = any(c.kind == DEVIN_USAGE for c in p.champion_evidence)
+        pain = any(c.kind == "public_pain" and any(e.quote for e in c.evidence) for c in p.champion_evidence)
+        hiring = any(c.kind == "hiring_manager" for c in p.champion_evidence)
+        senior = self._senior(p)
+        p.label = "likely_champion" if ex or (senior and pain) or (senior and hiring) else "candidate"
 
     def _official(self, doc: dict) -> bool:
         host = site(doc.get("url")) or ""
@@ -457,13 +464,16 @@ def _top_names(raw: dict) -> list[str]:
 
 
 def _person_rank(p: Person, top: list[str], who: set[str], index: int) -> tuple:
+    """Lower is better. Cards: top_contacts, then likely champions, then hooks/signals.
+    Prefer verified within a tier. Cap applies to cards only — extras stay in people."""
+    verified = 0 if p.verified else 1
     if p.name in top:
-        return (0, top.index(p.name))
-    if any(c.kind == DEVIN_USAGE for c in p.champion_evidence):
-        return (1, index)
+        return (0, top.index(p.name), verified, index)
+    if p.label == "likely_champion":
+        return (1, 0, verified, index)
     if p.incumbent_owner or p.hooks or p.champion_evidence or p.name in who:
-        return (2, index)
-    return (3, index)
+        return (2, 0, verified, index)
+    return (3, 0, verified, index)
 
 
 _GREETING = re.compile(r"^(?:hi|hey|hello|dear)?\s*[\w.'’-]+(?:\s[\w.'’-]+)?,?\s*", re.I)
@@ -510,14 +520,9 @@ def validate_brief(raw: dict, *, today: date | None = None,
     who = {n for s in brief.signals for n in s.who_cares}
     top = _top_names(raw)
     ranked = sorted(enumerate(brief.people), key=lambda ip: _person_rank(ip[1], top, who, ip[0]))
-    keep = {i for i, _ in ranked[:PEOPLE_MAX]}
+    featured = {i for i, _ in ranked[:CARDS_MAX]}
     for i, p in enumerate(brief.people):
-        if i not in keep:
-            v.drop(f"people[{i}]", f"people cap: kept {PEOPLE_MAX}, dropped {p.name}")
-    brief.people = [p for i, p in enumerate(brief.people) if i in keep]
-    names = {p.name for p in brief.people}
-    for s in brief.signals:
-        s.who_cares = [n for n in s.who_cares if n in names]
+        p.featured = i in featured
     brief.competitive_context = [c for i, x in _parse_list(raw.get("competitive_context"), CompetitiveItem,
                                                            "competitive_context", v)
                                  if (c := v.fact(x, f"competitive_context[{i}]"))]

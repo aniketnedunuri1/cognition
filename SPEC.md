@@ -73,7 +73,7 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 
 | Tool | Purpose |
 |---|---|
-| `search_web(query, since?)` | Exa `/search`, cached. Covers blogs, talks, news, earnings transcripts, filings, GitHub, Devin mentions |
+| `search_web(query, since?, include_domains?)` | Exa `/search`, cached. Covers blogs, talks, news, earnings transcripts, filings, GitHub, Devin mentions. `include_domains=["linkedin.com"]` for posts/talks/interviews |
 | `fetch_page(url_or_source_id, offset?)` | Exa `/contents`, cached. Full text cached; model gets a 6k-char excerpt (page with `offset`). Job descriptions and any known URL |
 | `search_people(company, roles)` | Exa `/search` with `category: "people"`: current title, history, start dates, team descriptions |
 | `verify_quote(source_id, quote)` | Deterministic check that a quote exists in that source's cached full text (a quote cited to the wrong source fails) |
@@ -135,16 +135,20 @@ HTTP mode also serves `GET /briefs/<token>/<domain>-<date>.docx`: outside MCP au
 
 **Finding people**
 1. Exa people search by role → candidate pool (profiles include "(Current)" flags, dates, past roles, team descriptions).
-2. Web pass per candidate for verification + hooks (blog posts, talks, podcasts, press quotes, GitHub, indexed LinkedIn posts). A profile without a "(Current)" marker for this company needs a second source before it's listed as current.
+2. Web pass per candidate for verification + hooks. Per top person: `search_web(..., include_domains=["linkedin.com"])` for posts, talks, interviews (tested: returns real posts/talks/podcasts). Company news and mentions also via Exa (`search_web` on the company, including a LinkedIn-restricted pass). A profile without a "(Current)" marker for this company needs a second source before it's listed as current.
 
 **Finding champions** (evidence, not titles)
-1. Named as hiring manager / team lead in relevant job posts — a reason to list them, not a champion badge
-2. Has publicly discussed the pain (migrations, tech debt, test coverage, DX) — a hook, not a badge
-3. AI appetite (posts about Copilot/Cursor, AI enablement title) — supporting only
-4. New in role (<6 months, from profile start date) — supporting only
-5. **Ex-employee of a Devin customer** (profile history × customers.json) — the only **Likely champion** badge. We cannot prove they personally ran Devin, only that they worked at a Devin customer. Do not invent "used Devin" from an AI title.
+**Likely champion** if any of:
+1. **Ex-employee of a Devin customer** (profile history × customers.json). We cannot prove they personally ran Devin, only that they worked at a Devin customer. Do not invent "used Devin" from an AI title.
+2. **Senior title** (Manager+/Staff/Principal/Director/Head, including VP/C-level) **and** a verified public quote about the exact pain (migrations, tech debt, test coverage, DX)
+3. **Senior title** **and** named hiring manager on a relevant job post
 
-Labels: **Likely champion** (confirmed `ex_devin_customer` only) vs. **Candidate**. Never "this is your champion."
+Supporting or hook only (never the badge):
+- `works_on_signal` — on the team behind a strong signal (`who_cares`)
+- New in role (<6 months, from profile start date)
+- AI appetite (posts about Copilot/Cursor, AI enablement title)
+
+Labels: **Likely champion** vs. **Candidate**. Never "this is your champion."
 
 **Incumbent owner:** someone rolling out or expanding Cursor, Claude Code, Copilot coding agent, or an in-house agent platform. That is a displace/expand risk, not a champion. They can hold both badges (ex-Devin-customer *and* incumbent owner). Copy must not pitch "have you tried agents?"
 
@@ -154,9 +158,11 @@ Labels: **Likely champion** (confirmed `ex_devin_customer` only) vs. **Candidate
 
 **Listed as current only if** (enforced by the validator): the profile shows a current role at the account or its parent; or a single **official company source** names them (the account's or parent's own domain; or an SEC filing / press-wire release that names the company) — new leaders often haven't updated LinkedIn; or two independent sources do. A single third-party article alone is dropped. The person's name must appear in a source they cite.
 
-**Guardrails:** **3–5 people** after validate (fewer is fine; empty is "Not found"). Search can still be wide. Keep the top 3 entry points first, then anyone with Devin-usage champion evidence, an incumbent-owner flag, a hook, or a signal `who_cares` hit. Drop title-only names — everyone else is a ZoomInfo export. The validator caps at 5. Prefer verified (profiles can be stale). Never invent a person.
+**Guardrails:** **3–5 "Who to work" cards** on page one (fewer is fine; empty is "Not found"). Search can still be wide. Keep the top 3 entry points first, then likely champions, incumbent owners, people with a hook, or a signal `who_cares` hit. Drop title-only names from the cards — everyone else is a ZoomInfo export. The validator **caps cards at 5**; extras stay in `people` for the wider table. Prefer verified (profiles can be stale). Never invent a person.
 
-**Ends with:** top 3 to contact first + why. Default: champion first, multi-thread up to economic buyer. Render them as a single **Who to work** section (cards with deal-role + badges), not four directory heading groups.
+**Page one:** top 3 to contact first + why, rendered as a single **Who to work** section (3–5 cards with deal-role + badges), not four directory heading groups. Default: champion first, multi-thread up to economic buyer.
+
+**Final page — Wider buying center:** a compact table of **every verified person**, one line each (name, title, team, deal role, LinkedIn), grouped by team. Cards are a subset; the table is the net.
 
 ---
 
@@ -278,7 +284,8 @@ Full brief: <.docx download link>
 7. Recommended entry: top 3
 8. Drafted messages (email + LinkedIn + send notes per contact, with "built from")
 9. ABM themes (2–3 account-level angles for marketing)
-10. Sources (receding; not page one)
+10. **Wider buying center** (final page: compact table of every verified person, grouped by team)
+11. Sources (receding; not page one)
 
 **Source of truth:** `briefs/<domain>/<date>.json`; the `.md`, `.docx` and Slack summary are renders of it. The Slack reply is the tool-rendered `slack_summary`, posted verbatim; agent prose outside the brief/summary carries no facts (it isn't validated).
 
@@ -300,7 +307,7 @@ Full brief: <.docx download link>
 
 - The validated JSON in `briefs/` is the canonical record; Markdown, .docx and Slack are renders in code, never sources.
 - Draft claims: every prospect-specific claim in a draft must be listed with a verbatim quote, and each is verified (one failure blocks the draft); numbers, digits or words, must appear in the cited sources. A real quote can still fail to support its claim (run 3: "runs in a Bazel monorepo" cited to a quote about Cursor agents), so every capitalized term and number in a claim must also appear in its own quote (deterministic; exempt: prospect, contact, Devin, sentence-initial words; a small abbreviation map, PR ↔ pull request). Deliberately over-blocks. Residual limits: lowercase terms aren't checked ("monorepo"), and we can't prove every claim in the prose was listed. The rep sees each claim with its quote under the draft. **Production next step: an LLM judge (claim entailed by quote?) as a separate review pass, kept out of the deterministic validator.**
-- Champion evidence `works_on_signal` is checkable (the person is in a strong signal's `who_cares`) but "leads" isn't, so it is kept as evidence only with a senior profile title (Manager / Lead / Staff / Principal / Director / Head); otherwise the validator turns it into a hook. It never earns **Likely champion**. That badge is only confirmed `ex_devin_customer` (profile history × `customers.json`). Honest limit: we cannot prove they personally ran Devin.
+- **Likely champion** is checkable: confirmed `ex_devin_customer` (profile history × `customers.json`); or a senior profile title (Manager+/Staff/Principal/Director/Head, including VP/C-level) plus a verified `public_pain` quote; or senior plus `hiring_manager`. `works_on_signal` is checkable (the person is in a strong signal's `who_cares`) but never earns the badge — supporting or hook only, same as `new_in_role` and `ai_appetite`. Honest limit on ex-customer: we cannot prove they personally ran Devin.
 - Only the brief is validated. Agent prose outside it is unchecked, so the playbook forbids facts there and the Slack reply is the tool-rendered summary posted verbatim (in Devin this relies on the agent following the playbook; the CLI enforces it in code).
 
 ## Production notes (for write-up / Loom)

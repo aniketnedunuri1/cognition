@@ -27,7 +27,7 @@ ROLE = {"economic_buyer": "Economic buyer", "champion": "Champion",
         "parent_org_approver": "Parent-company approver"}
 LOW_CONFIDENCE = "Low-confidence draft: no personal signal or hook found."
 KIND = {"hiring_manager": "hiring manager", "public_pain": "public talk about the pain",
-        "ex_devin_customer": "ex-Devin customer", "works_on_signal": "works on a strong signal",
+        "ex_devin_customer": "ex-Devin customer", "works_on_signal": "works on a strong signal (supporting)",
         "new_in_role": "new in role (supporting)", "ai_appetite": "AI appetite (supporting)"}
 # Single-valued quantities where disagreeing sources get flagged (the playbook's 25% threshold).
 QUANTITATIVE = ("headcount", "revenue", "funding")
@@ -255,6 +255,19 @@ def _quotes(src: _Sources, evidence: list[dict], dates: bool = False) -> list[st
             for e in evidence if e.get("quote")]
 
 
+def card_people(people: list[dict]) -> list[dict]:
+    """Who-to-work cards (≤5). Legacy briefs without `featured` show everyone."""
+    if any(p.get("featured") is not None for p in people):
+        return [p for p in people if p.get("featured")]
+    return people
+
+
+def wider_people(people: list[dict]) -> list[dict]:
+    """Verified people for the compact table: team, then name."""
+    verified = [p for p in people if p.get("verified")]
+    return sorted(verified, key=lambda p: ((p.get("team") or "\uffff").lower(), p["name"].lower()))
+
+
 def render_markdown(rec: dict) -> str:
     b, src = rec["brief"], _Sources()
     L = [f"# {b['company_name']} — account brief", f"*{rec['date']} · {b['domain']}*", ""]
@@ -318,9 +331,10 @@ def render_markdown(rec: dict) -> str:
         L.append("")
 
     L += ["## Who to work", ""]
-    if not b["people"]:
+    cards = card_people(b["people"])
+    if not cards:
         L += ["Not found", ""]
-    for p in b["people"]:
+    for p in cards:
         badges = []
         if p["label"] == "likely_champion":
             badges.append("**Likely champion**")
@@ -336,7 +350,7 @@ def render_markdown(rec: dict) -> str:
         L += [f"  - Hook: {f['value']} {src.cite(f['evidence'])}" for f in p["hooks"]]
         if p.get("reporting_line"):
             L.append(f"  - Reporting line (as stated): {p['reporting_line']['value']} {src.cite(p['reporting_line']['evidence'])}")
-    if b["people"]:
+    if cards:
         L.append("")
 
     L += ["## Recommended entry: top 3", ""]
@@ -361,6 +375,15 @@ def render_markdown(rec: dict) -> str:
 
     L += ["## ABM themes *(assessment)*", ""]
     L += [f"- {_plain(a['text'])} {src.cite(a['based_on'])}" for a in b["abm_themes"]] or ["None."]
+    L += ["", "## Wider buying center", ""]
+    wider = wider_people(b["people"])
+    if not wider:
+        L.append("Not found")
+    else:
+        L += ["| Name | Title | Team | Deal role | LinkedIn |", "|---|---|---|---|---|"]
+        for p in wider:
+            li = f"[LinkedIn]({_url(p['profile_source_id'])})" if p.get("profile_source_id") and _url(p["profile_source_id"]) else "—"
+            L.append(f"| {p['name']} | {p['title']} | {p.get('team') or '—'} | {ROLE.get(p['deal_role'], p['deal_role'])} | {li} |")
     L += ["", "## Sources", ""] + src.lines()
 
     rep = rec["report"]

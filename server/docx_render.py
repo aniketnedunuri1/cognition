@@ -16,7 +16,7 @@ from docx.text.paragraph import Paragraph
 
 from .briefs import (
     LOW_CONFIDENCE, ROLE, VERDICT, _Sources, _dated, _facts,
-    _one_line, _plain, _url, working_cell, working_fact,
+    _one_line, _plain, _url, card_people, wider_people, working_cell, working_fact,
 )
 from .cache import get_doc
 
@@ -285,6 +285,7 @@ def brief_to_docx(rec: dict, path: Path) -> Path:
     _signals(doc, b, src)
     _drafts(doc, b, src)
     _abm(doc, b, src)
+    _wider_buying_center(doc, b)
     _sources(doc, src, rec)
 
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -390,7 +391,7 @@ def _bottom_only(cell: _Cell, color: str) -> None:
 
 def _people(doc: Document, b: dict, src: _Sources) -> None:
     _heading(doc, "Who to work")
-    people = b["people"]
+    people = card_people(b["people"])
     if not people:
         p = doc.add_paragraph()
         _run(p, "Not found", italic=True, color=MUTED)
@@ -551,6 +552,47 @@ def _abm(doc: Document, b: dict, src: _Sources) -> None:
         p.paragraph_format.space_after = Pt(6)
         _run(p, _plain(a["text"]), size=10)
         _cite(p, src.cite(a["based_on"]))
+
+
+def _wider_buying_center(doc: Document, b: dict) -> None:
+    _heading(doc, "Wider buying center", page_break=True)
+    people = wider_people(b["people"])
+    if not people:
+        p = doc.add_paragraph()
+        _run(p, "Not found", italic=True, color=MUTED)
+        return
+    cols = [2000, 2600, 2000, 1880, 1600]  # name, title, team, role, LinkedIn
+    pad = (30, 60, 30, 60)
+    headers = ("Name", "Title", "Team", "Deal role", "LinkedIn")
+    table = doc.add_table(rows=1 + len(people), cols=5)
+    _tbl_width(table, CONTENT, cols)
+    for i, lab in enumerate(headers):
+        cell = table.cell(0, i)
+        _cell_width(cell, cols[i], pad)
+        _shade(cell, CARD)
+        _bottom_only(cell, LINE)
+        cell.paragraphs[0].text = ""
+        _run(cell.paragraphs[0], lab, size=8, bold=True, color=MUTED)
+    last_team = object()
+    for r, p in enumerate(people, 1):
+        team = p.get("team") or "—"
+        li_url = _url(p.get("profile_source_id") or "") if p.get("profile_source_id") else None
+        values = (p["name"], p["title"], team, ROLE.get(p["deal_role"], p["deal_role"]),
+                  "LinkedIn" if li_url else "—")
+        group = team != last_team
+        last_team = team
+        for i, val in enumerate(values):
+            cell = table.cell(r, i)
+            _cell_width(cell, cols[i], pad)
+            _shade(cell, PAPER)
+            _bottom_only(cell, LINE)
+            cell.paragraphs[0].text = ""
+            if i == 0:
+                _run(cell.paragraphs[0], val, size=8, bold=group)
+            elif i == 4 and li_url:
+                _link(cell.paragraphs[0], val, li_url)
+            else:
+                _run(cell.paragraphs[0], val, size=8, color=MUTED if i else INK)
 
 
 def _sources(doc: Document, src: _Sources, rec: dict) -> None:
