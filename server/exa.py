@@ -45,11 +45,14 @@ def _web_docs(response: dict, fetched_at: str) -> list[dict]:
     ]
 
 
-def search_web(query: str, since: str | None = None) -> list[dict]:
+def search_web(query: str, since: str | None = None,
+               include_domains: list[str] | None = None) -> list[dict]:
     body: dict = {"query": query, "type": "auto", "contents": {"highlights": True}}
     if since:
         # Hard publication cutoff: only for the signal bar's 6/12-month windows.
         body["startPublishedDate"] = date.fromisoformat(since).isoformat()
+    if include_domains:
+        body["includeDomains"] = include_domains
     docs, _ = cached_call("exa/search", body, "discovery", lambda: _post("/search", body), _web_docs)
     return [
         {

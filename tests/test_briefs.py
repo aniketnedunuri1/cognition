@@ -137,6 +137,7 @@ def test_docx_and_download_link(env, monkeypatch):
     text = _docx_text(f"{stem}.docx")
     assert "Brex — account brief" in text and "Claims to check" in text and "Your Java 17 migration" in text
     assert "Who to work" in text
+    assert "Wider buying center" in text
 
     monkeypatch.setattr(briefs, "BASE_URL", "https://tunnel.example")
     link = briefs.brief_link(briefs.load_record("brex.com")[1])
@@ -175,6 +176,7 @@ def test_rendered_draft_shows_claims_and_no_false_conflicts(env):
     assert "**Claims to check**" in md and '> "migrating our monolith from Java 8 to Java 17"' in md
     assert "sources differ" not in md
     assert "## Who to work" in md and "## Buying centers" not in md
+    assert "## Wider buying center" in md
 
 
 def test_working_number_render(env):

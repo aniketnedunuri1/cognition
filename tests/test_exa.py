@@ -114,3 +114,15 @@ def test_force_live_crawls_and_replaces_stale_copy(stub):
     assert exa.fetch_page("https://devin.ai/customers/x", force=True)["excerpt"] == "fresh story"
     assert exa.fetch_page("https://devin.ai/customers/x")["excerpt"] == "fresh story"  # replaced, not shadowed
     assert len(bodies) == 2
+
+
+def test_search_web_include_domains_is_sent(stub):
+    bodies = []
+    stub("server.exa._post", lambda path, body: (bodies.append(body) or {
+        "results": [{"url": "https://www.linkedin.com/posts/x", "title": "A talk",
+                     "publishedDate": "2026-09-01T00:00:00Z", "highlights": ["podcast"]}]}))
+    rows = exa.search_web("Phil Burrows Brex talk OR interview", include_domains=["linkedin.com"])
+    assert bodies[0]["includeDomains"] == ["linkedin.com"]
+    assert rows[0]["site"] == "linkedin.com"
+    exa.search_web("Brex news")
+    assert "includeDomains" not in bodies[1]

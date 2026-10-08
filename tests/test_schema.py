@@ -81,7 +81,8 @@ def test_people_rules(stub):
     assert names == ["Phil Burrows", "Phil Burrows"]
     first, second = brief["people"]
     assert first["verified"] is False and first["label"] == "candidate"
-    assert second["verified"] is True and second["label"] == "candidate"  # public_pain is not Devin-usage
+    assert second["verified"] is True and second["label"] == "likely_champion"  # senior Head + public_pain quote
+    assert first["featured"] is True and second["featured"] is True
     assert first["profile_source_id"] == ids["Phil Burrows"]
     reasons = " ".join(d["reason"] for d in report["dropped"])
     assert "current role not confirmed" in reasons and "not found in any cited source" in reasons
@@ -185,9 +186,13 @@ def test_champion_label_needs_strong_evidence(stub):
     phil = lambda *ev: person("Phil Burrows", ids["Phil Burrows"], champion_evidence=list(ev))
     label = lambda raw: run(raw)[0]["people"][0]["label"]
     assert label({"people": [phil(champ("new_in_role", blog), champ("ai_appetite", blog))]}) == "candidate"
-    assert label({"people": [phil(champ("hiring_manager", blog))]}) == "candidate"
-    # works_on_signal: needs a strong signal naming them AND a senior profile title; else it's a hook.
-    # Even when kept, it does not earn likely_champion — only confirmed ex_devin_customer does.
+    # Senior Head of Platform + hiring_manager or public_pain quote → likely champion.
+    assert label({"people": [phil(champ("hiring_manager", blog))]}) == "likely_champion"
+    assert label({"people": [phil(champ("public_pain", blog))]}) == "likely_champion"
+    # No quote on public_pain: not the badge path, even if senior.
+    assert label({"people": [phil({"kind": "public_pain", "value": "talked DX",
+                                   "evidence": [{"source_id": blog}]})]}) == "candidate"
+    # works_on_signal: supporting only. Not in who_cares → hook. Never the badge.
     brief, report = run({"people": [phil(champ("works_on_signal", blog))]})
     p = brief["people"][0]
     assert p["label"] == "candidate" and p["champion_evidence"] == [] and p["hooks"][0]["value"] == "works_on_signal"
@@ -195,10 +200,13 @@ def test_champion_label_needs_strong_evidence(stub):
     kept = run({"people": [phil(champ("works_on_signal", blog))],
                 "signals": [strong_signal(blog, ["Phil Burrows"])]})[0]["people"][0]
     assert kept["label"] == "candidate" and kept["champion_evidence"][0]["kind"] == "works_on_signal"
-    no_profile = person("Phil Burrows", blog, champion_evidence=[champ("works_on_signal", blog)])  # official source only
-    brief, report = run({"people": [no_profile], "signals": [strong_signal(blog, ["Phil Burrows"])]})
-    assert brief["people"][0]["label"] == "candidate"
-    assert any("isn't senior" in f["flag"] for f in report["flags"])
+    # Official-source IC (title isn't senior): hiring_manager does not badge.
+    junior_page = web("https://www.brex.com/journal/press/junior",
+                      text="Brex today announced that Pat Junior has joined as Software Engineer. "
+                           "Pat Junior is the hiring manager for the backend role.")
+    junior = {**person("Pat Junior", junior_page), "title": "Software Engineer",
+              "champion_evidence": [champ("hiring_manager", junior_page, quote="Pat Junior is the hiring manager")]}
+    assert run({"people": [junior]})[0]["people"][0]["label"] == "candidate"
 
 
 def test_ex_devin_customer_must_match_profile_history(stub, tmp_path, monkeypatch):
@@ -268,7 +276,7 @@ def test_claim_terms_must_be_in_its_quote():
     assert unsupported_terms("BazelCon talk on Gradle", "Gradle-Backed Dependency Resolution", ig) == ["BazelCon"]
 
 
-def test_people_cap_keeps_top_contacts_and_drops_rest(stub):
+def test_people_cap_applies_to_cards_only(stub):
     ids = profiles(stub)
     team = web("https://www.brex.com/journal/press/team",
                text="Brex today announced that Jane One, Jane Two and Jane Three have joined.")
@@ -284,11 +292,33 @@ def test_people_cap_keeps_top_contacts_and_drops_rest(stub):
                          {"name": "Phil Burrows", "why": why(ids["Phil Burrows"])}],
     })
     names = [p["name"] for p in brief["people"]]
-    assert len(names) == 5
-    assert "James Reggio" in names and "Phil Burrows" in names
-    assert any("people cap" in d["reason"] for d in report["dropped"])
-    dropped_names = " ".join(d["reason"] for d in report["dropped"] if "people cap" in d["reason"])
-    assert "Feng Zhao" in dropped_names or "Sonny Gupta" in dropped_names or "Jane" in dropped_names
+    assert len(names) == 7  # cap does not drop people
+    assert not any("people cap" in d["reason"] for d in report["dropped"])
+    featured = [p["name"] for p in brief["people"] if p["featured"]]
+    assert len(featured) == 5
+    assert "James Reggio" in featured and "Phil Burrows" in featured
+
+
+def test_wider_table_is_verified_people_grouped_by_team(stub):
+    from server.briefs import card_people, render_markdown, wider_people
+    ids = profiles(stub)
+    blog = web("https://brex.com/blog/fresh")
+    press = web("https://www.brex.com/journal/press/team",
+                text="Brex today announced that Jane One, Jane Two and Jane Three have joined.")
+    brief, _ = run({"people": [
+        {**person("Phil Burrows", ids["Phil Burrows"], blog), "team": "Platform"},
+        {**person("James Reggio", ids["James Reggio"], blog, press), "team": "Engineering leadership"},
+        {**person("Jane One", press), "team": "Platform"},
+    ]})
+    assert [p["name"] for p in wider_people(brief["people"])] == ["James Reggio", "Phil Burrows"]
+    md = render_markdown({"brief": brief, "date": "2026-10-07", "domain": "brex.com",
+                          "report": {"dropped_count": 0, "flags": []}})
+    who, _, rest = md.partition("## Wider buying center")
+    assert "**Phil Burrows**" in who and "Jane One" in who  # Jane can still be a card
+    assert "Phil Burrows" in rest and "James Reggio" in rest
+    assert "Jane One" not in rest.split("## Sources")[0]  # not verified
+    assert "| Platform |" in rest
+    assert len(card_people(brief["people"])) == 3
 
 
 def test_claim_not_supported_by_its_quote_blocks_draft(stub):

@@ -69,21 +69,21 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
    - `is_current: true` → keep.
    - `false` or `"unknown"` → list only with an official company source (their site, a filing, a press release) or a second independent source.
    - A former employee is never listed as current.
-3. **Champion evidence.** Each item has a `kind`. The validator sets the label: *Likely champion* only for confirmed `ex_devin_customer` (profile history × `customers.json`). We cannot prove they personally ran Devin — only that they worked at a Devin customer. An AI title is not a champion.
-   - Badge (Devin-usage proxy):
-     - `ex_devin_customer`: from `ex_devin_customers` in `search_people` (matched in code; the validator re-checks the profile history). Name the customer to the rep only if `public_reference` is true.
-   - List them, but do **not** earn the badge:
-     - `hiring_manager`: named hiring manager or team lead on an engineering job post (`fetch_page` on the post)
-     - `public_pain`: has talked publicly about the pain (migrations, tech debt, test coverage, DX)
-     - `works_on_signal`: works on the team behind a **strong** signal and is listed in its `who_cares`. Kept as evidence only if their profile title includes Manager, Lead, Staff, Principal, Director or Head. Otherwise the validator keeps it as a hook: list an individual contributor as a technical evaluator, with their work as the hook.
-   - Supporting only (never enough on their own, never a badge):
+3. **Champion evidence.** Each item has a `kind`. The validator sets the label *Likely champion* when any of these hold:
+   - `ex_devin_customer`: from `ex_devin_customers` in `search_people` (matched in code; the validator re-checks the profile history). We cannot prove they personally ran Devin — only that they worked at a Devin customer. Name the customer to the rep only if `public_reference` is true.
+   - Senior title **and** `public_pain`: profile title is Manager+/Staff/Principal/Director/Head (or VP/C-level), plus a **verified quote** about the exact pain (migrations, tech debt, test coverage, DX). No quote → not this path.
+   - Senior title **and** `hiring_manager`: named hiring manager on a relevant engineering job post (`fetch_page` on the post).
+   - Supporting or hook only (never the badge):
+     - `works_on_signal`: on the team behind a **strong** signal and listed in its `who_cares`. If they aren't, the validator keeps it as a hook.
      - `new_in_role`: `months_in_role` ≤ 6
-     - `ai_appetite`: posts about AI coding tools, an AI-enablement title
+     - `ai_appetite`: posts about AI coding tools, or an AI-enablement title. An AI title is not a champion.
 4. **Incumbent owner.** If they are rolling out or expanding Cursor, Claude Code, Copilot coding agent, or an in-house agent platform, set `incumbent_owner: true` and say so in `why` / a hook. That is a blocker risk, not a likely champion. They can be both (ex-Devin-customer *and* incumbent). Do not pitch "have you tried agents?"
-5. **Hooks:** for the people you will actually list, run `search_web("<name> <company>")` for talks, posts, podcasts and press quotes.
+5. **Hooks.**
+   - Per person you will put on a **Who to work** card: `search_web("<name> <company> (post OR talk OR interview OR podcast)", include_domains=["linkedin.com"])`. That restriction returns indexed LinkedIn posts, talks and podcasts — use a hit as a hook only when the quote verifies.
+   - Company news and mentions via Exa: `search_web("<company> LinkedIn news OR announcement", include_domains=["linkedin.com"])` plus the Stage 1 / Stage 3 news searches (no domain filter) for press mentions.
 6. **Teams:** as their own profiles describe it. No org charts.
 7. **Subsidiaries:** `search_people(<parent>, ["CISO", "Procurement", "CTO"])` gives likely approvers, listed as gatekeepers.
-8. **Limits:** **3–5 people** in `brief.people`. Inclusion bar: a reason to email this week. Keep `top_contacts` first (max 3), then Devin-usage champions, incumbent owners, people with a hook, or a signal `who_cares` hit. **Drop title-only names.** Search can still be wide; do not dump 15–25 into the brief. The validator drops extras past 5.
+8. **Limits.** Search wide; list every **verified** person you found in `brief.people` (with `team` as the profile describes it). **3–5 Who to work cards** (page one): keep `top_contacts` first (max 3), then likely champions, incumbent owners, people with a hook, or a signal `who_cares` hit. **Drop title-only names from the cards.** The validator caps **cards** at 5 (`featured`); everyone else stays in `people` for the wider table. Prefer verified.
 9. **Top 3 to contact first,** ordered by the entry-point band. One line of why each, citing evidence.
 
 ---
@@ -215,7 +215,7 @@ If `get_last_brief` returned a brief, report:
 
 ## Output contract
 
-**1. Brief:** call `save_brief(domain, brief)` with this shape. Everything cites `source_id`s; the validator fills in `verified`, `label`, `current_basis` and `profile_source_id` itself.
+**1. Brief:** call `save_brief(domain, brief)` with this shape. Everything cites `source_id`s; the validator fills in `verified`, `label`, `featured`, `current_basis` and `profile_source_id` itself.
 
 ```
 {
@@ -229,7 +229,7 @@ If `get_last_brief` returned a brief, report:
              use_case, who_cares: [names], strength: strong|medium}],
   competitive_context: [{situation, value, evidence}],
   people: [{name, title, deal_role, team, why, evidence, champion_evidence: [Fact + kind], hooks: [Fact],
-            reporting_line: Fact|null, incumbent_owner: bool}],   // 3–5 people
+            reporting_line: Fact|null, incumbent_owner: bool}],   // all verified people; validator sets featured on 3–5 cards
   top_contacts: [{name, why: Assessment}],          // max 3, must be in people
   abm_themes: [Assessment],                         // 2–3 account-level angles for marketing
   drafts: [{name, email: {subject, body}, linkedin_note, linkedin_followup, notes, built_from: [Evidence],

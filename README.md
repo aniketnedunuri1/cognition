@@ -39,7 +39,7 @@ uv run python -m server.app --replay     # cache only: reproduces the committed 
 |---|---|
 | `get_company(domain)` | Apollo org enrichment (Free plan) |
 | `get_jobs(domain)` | Apollo job postings, deduped by title |
-| `search_web(query, since?)` | Exa search |
+| `search_web(query, since?, include_domains?)` | Exa search (`include_domains=["linkedin.com"]` for posts/talks) |
 | `fetch_page(url_or_source_id)` | Exa contents |
 | `search_people(company, roles)` | Exa people search |
 | `verify_quote(source_id, quote)` | Cached page text |

@@ -39,12 +39,14 @@ def _tool(fn):
 
 
 @_tool
-def search_web(query: str, since: str | None = None) -> list[dict]:
+def search_web(query: str, since: str | None = None,
+               include_domains: list[str] | None = None) -> list[dict]:
     """Search the web (blogs, talks, news, earnings transcripts, filings, GitHub).
     Returns per result: source_id, title, site, published_date, highlights.
     since: optional YYYY-MM-DD hard cutoff on publication date — use only for the
-    signal recency windows (6 / 12 months); for "recent" just say so in the query."""
-    return exa.search_web(query, since)
+    signal recency windows (6 / 12 months); for "recent" just say so in the query.
+    include_domains: hard allowlist (e.g. ["linkedin.com"] for posts, talks, interviews)."""
+    return exa.search_web(query, since, include_domains)
 
 
 @_tool
