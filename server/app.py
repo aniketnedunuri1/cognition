@@ -20,7 +20,7 @@ from fastmcp.server.auth.providers.debug import DebugTokenVerifier
 from starlette.requests import Request
 from starlette.responses import FileResponse, PlainTextResponse, Response
 
-from . import apollo, briefs, exa, feedback, knowledge, lint, verify
+from . import apollo, briefs, exa, feedback, knowledge, lint, sumble, verify
 from .cache import ROOT, CacheMiss
 
 INSTRUCTIONS = """Account research data tools. Every result carries a source_id per document.
@@ -87,6 +87,17 @@ def get_jobs(domain: str, eng_only: bool = True) -> dict:
     """Apollo job postings, deduped by title (each posting has its own source_id).
     No descriptions: fetch_page(source_id) the engineering-relevant ones you need."""
     return apollo.get_jobs(domain, eng_only)
+
+
+@_tool
+def get_org_chart(domain: str) -> dict:
+    """Sumble org chart: 3-5 engineering decision-makers (deal_role, reports-to,
+    LinkedIn) plus their inferred direct reports (confidence 0-1, ≥0.4 shown).
+    Reporting lines are Sumble's inference — never confirmed; attribute to Sumble
+    and label inferred everywhere they appear. Costs ~50-100 Sumble credits per
+    account: call once, after get_company confirms the account is worth it.
+    To render it in the brief, pass the returned source_id as brief.org_chart."""
+    return sumble.get_org_chart(domain)
 
 
 @_tool
@@ -181,7 +192,7 @@ def add_golden_example(persona: str, channel: str, message: str, subject: str | 
     return feedback.add_golden_example(persona, channel, message, subject)
 
 
-TOOLS = [search_web, fetch_page, search_people, get_company, get_jobs, verify_quote,
+TOOLS = [search_web, fetch_page, search_people, get_company, get_jobs, get_org_chart, verify_quote,
          get_positioning, match_customers, refresh_positioning, apply_knowledge_update,
          lint_message, save_brief, get_last_brief,
          get_playbook, add_playbook_rule, add_golden_example]
