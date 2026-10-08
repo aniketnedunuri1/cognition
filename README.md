@@ -51,3 +51,47 @@ uv run python -m server.app --replay     # cache only: reproduces the committed 
 Every result carries a `source_id` per document. The model cites `source_id`s only; the validator (`server/schema.py`) drops anything that doesn't resolve or whose quote doesn't verify, and URLs are filled in from the cache at render time.
 
 HTTP mode also serves `GET /briefs/<token>/<file>.docx` (no bearer token: the random per-brief token is the access control); the MCP endpoint itself requires `MCP_AUTH_TOKEN`.
+
+## Devin setup
+
+Devin talks to this server over Streamable HTTP (not stdio). A stdio server would run on Devin's ephemeral VM and lose briefs and learned rules when the session ends.
+
+### 1. Start the public MCP URL
+
+```bash
+./scripts/devin-http.sh
+```
+
+This starts `python -m server.app --http` on `:8765` and a cloudflared tunnel in front of it. If `cloudflared` is missing: `brew install cloudflared`. If `MCP_AUTH_TOKEN` is unset, the script generates one for the session and prints it (it is not written to disk).
+
+Copy from the script output:
+
+- **Public MCP URL** — `https://<tunnel>.trycloudflare.com/mcp`
+- **Header** — `Authorization: Bearer <MCP_AUTH_TOKEN>`
+
+`PUBLIC_BASE_URL` is the tunnel origin (no `/mcp`). Its hostname is added to FastMCP `allowed_hosts` / `allowed_origins` so Devin's requests are not rejected.
+
+### 2. Add the custom MCP in Devin
+
+1. Customize → MCPs → Add custom MCP
+2. URL: the public MCP URL above
+3. Header: `Authorization: Bearer <MCP_AUTH_TOKEN>`
+4. Scope: **organization** (Slack-triggered sessions need org scope)
+
+### 3. Create the Playbook
+
+Generate the Playbook text from `playbook/playbook.md` (do not hand-edit a duplicate):
+
+```bash
+uv run python scripts/gen_devin_playbook.py
+# or write a gitignored copy:
+uv run python scripts/gen_devin_playbook.py --out
+```
+
+In Devin, create a Playbook with macro `!account-research` and paste that generated text **after** playbook changes on this branch have landed (regenerate if `playbook/playbook.md` moved).
+
+Slack:
+
+```
+@Devin !account-research acme.com
+```

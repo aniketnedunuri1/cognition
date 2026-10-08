@@ -16,3 +16,7 @@ cache/*
 
 .DS_Store
 *.egg-info/
+
+# Generated Devin Playbook text (rebuild from playbook/playbook.md)
+playbook/devin_playbook.generated.md
+.cloudflared-devin.log
