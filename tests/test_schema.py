@@ -57,6 +57,24 @@ def test_signal_needs_verified_recent_quote():
     assert "needs an exact quote" in reasons and "failed verification" in reasons and "older than 12 months" in reasons
 
 
+def test_company_linkedin_drops_tags_not_in_source():
+    src = web("https://linkedin.com/posts/brexhq_launch-1")
+    brief, report = run({"company_linkedin": [
+        {"value": "Brex announced a launch", "kind": "original",
+         "tags": ["Phil Burrows", "Nobody Here"],
+         "evidence": [{"source_id": src, "quote": "Phil Burrows leads platform"}]},
+    ]})
+    [post] = brief["company_linkedin"]
+    assert post["kind"] == "original" and post["tags"] == ["Phil Burrows"]
+    assert any("Nobody Here" in d["reason"] for d in report["dropped"])
+
+
+def test_company_linkedin_item_without_evidence_dropped():
+    brief, report = run({"company_linkedin": [{"value": "Unsourced post", "evidence": []}]})
+    assert brief["company_linkedin"] == []
+    assert report["dropped_count"] >= 1
+
+
 def test_use_case_must_exist_when_knowledge_loaded():
     src = web("https://brex.com/blog/fresh")
     raw = {"domain": "brex.com", "company_name": "Brex", "signals": [{

@@ -9,10 +9,11 @@ from __future__ import annotations
 import os
 import re
 from datetime import date
+from urllib.parse import urlsplit
 
 import httpx
 
-from .cache import cached_call, get_doc, make_doc, site
+from .cache import cached_call, get_doc, make_doc, site, source_id_for
 
 EXA_URL = "https://api.exa.ai"
 EXCERPT_CHARS = 6000
@@ -259,3 +260,83 @@ def search_people(company: str, roles: list[str]) -> dict:
             "highlight": ((e["doc"]["highlights"] or [""])[0] or "")[:HIGHLIGHT_CHARS],
         })
     return {"people": people, "former_employee_count": former, "not_at_company_count": not_listed}
+
+
+# ---------- search_company_linkedin ----------
+
+_LINKEDIN_SLUG = re.compile(r"linkedin\.com/company/([\w.-]+)")
+_IN_PROFILE = re.compile(r"linkedin\.com/in/[\w%-]+", re.I)
+_MENTION = re.compile(r"@([A-Z][\w.'’-]+(?:\s+[A-Z][\w.'’-]+){0,3})")
+_REPOST = re.compile(r"\b(?:reposted|reshared|shared a post|shared this)\b", re.I)
+
+
+def _linkedin_slug(url: str | None) -> str | None:
+    m = _LINKEDIN_SLUG.search(url or "")
+    return m[1] if m else None
+
+
+def _cached_org_linkedin_slug(domain: str) -> str | None:
+    """The slug from the already-cached Apollo org record. Never fetches."""
+    d = (domain or "").strip().lower()
+    if "://" in d:
+        d = urlsplit(d).netloc
+    d = d.split("/")[0].removeprefix("www.")
+    org = get_doc(source_id_for(f"apollo:org:{d}")) if d else None
+    return _linkedin_slug(((org or {}).get("data") or {}).get("linkedin"))
+
+
+def _post_kind(doc: dict, slug: str | None) -> str:
+    path = urlsplit(doc["url"]).path.lower() if doc.get("url") else ""
+    if slug and (path.startswith(f"/posts/{slug.lower()}") or path.startswith(f"/company/{slug.lower()}")):
+        return "original"
+    if _REPOST.search(" ".join([doc.get("title") or "", *(doc.get("highlights") or [])])):
+        return "possible_repost"
+    return "unknown"
+
+
+def _possible_tags(doc: dict) -> list[str]:
+    """Names/profile URLs that literally appear in the title or highlights. String match only."""
+    hay = "\n".join([doc.get("title") or "", *(doc.get("highlights") or [])])
+    return sorted(set(_IN_PROFILE.findall(hay)) | set(_MENTION.findall(hay)))
+
+
+def search_company_linkedin(company: str, domain: str | None = None,
+                            linkedin_slug: str | None = None, since: str | None = None) -> dict:
+    """Company LinkedIn activity via Exa search only. Original posts when the company
+    slug is known (path-prefix includeDomains); best-effort tags/reposts from search
+    snippets. Not a feed: whatever Exa happened to index."""
+    slug = linkedin_slug or _cached_org_linkedin_slug(domain or "")
+    domains = ([f"linkedin.com/posts/{slug}", f"linkedin.com/company/{slug}"] if slug
+               else ["linkedin.com"])
+    queries = {
+        "posts": f"{company} LinkedIn (post OR announcement OR news)",
+        "mentions": f"{company} tagged OR mentioned OR with",
+        "reposts": f"{company} reposted OR reshared OR shared a post",
+    }
+    rows: dict[str, dict] = {}
+    not_fetched: list[str] = []
+    for name, query in queries.items():
+        body: dict = {"query": query, "type": "auto", "includeDomains": domains,
+                      "contents": {"highlights": True}}
+        if since:
+            body["startPublishedDate"] = date.fromisoformat(since).isoformat()
+        try:
+            docs, _ = cached_call("exa/search", body, "discovery",
+                                  lambda b=body: _post("/search", b), _web_docs)
+        except ProviderError:
+            not_fetched.append(name)
+            continue
+        for d in docs:
+            row = rows.setdefault(d["source_id"], {
+                "source_id": d["source_id"],
+                "title": d["title"],
+                "site": site(d["url"]),
+                "published_date": d["published_date"],
+                "highlights": d["highlights"],
+                "kind": _post_kind(d, slug),
+                "possible_tags": _possible_tags(d),
+            })
+            if row["kind"] == "unknown":
+                row["kind"] = _post_kind(d, slug)
+    posts = sorted(rows.values(), key=lambda r: r["published_date"] or "", reverse=True)
+    return {"slug": slug, "posts": posts, "not_fetched": not_fetched}

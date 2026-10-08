@@ -1,7 +1,7 @@
 from datetime import date
 
 from conftest import load
-from server import exa
+from server import cache, exa
 from server.cache import get_doc
 
 TODAY = date(2026, 10, 7)
@@ -126,3 +126,85 @@ def test_search_web_include_domains_is_sent(stub):
     assert rows[0]["site"] == "linkedin.com"
     exa.search_web("Brex news")
     assert "includeDomains" not in bodies[1]
+
+
+# ---------- search_company_linkedin ----------
+
+LI = {
+    "posts": [{"url": "https://www.linkedin.com/posts/brexhq_launch-activity-111",
+               "title": "Brex launches a thing", "publishedDate": "2026-09-15T00:00:00Z",
+               "highlights": ["Today we launched something new"]}],
+    "mentions": [{"url": "https://www.linkedin.com/company/brexhq/posts/?feedView=all",
+                  "title": "Event recap", "publishedDate": "2026-09-10T00:00:00Z",
+                  "highlights": ["Great day with @Jane Doe linkedin.com/in/janedoe"]}],
+    "reposts": [{"url": "https://www.linkedin.com/posts/someone_else-999",
+                 "title": "A share", "publishedDate": "2026-09-01T00:00:00Z",
+                 "highlights": ["Brex reposted this"]}],
+}
+
+
+def _li_stub(stub, responses, bodies):
+    def fake(path, body):
+        bodies.append(body)
+        q = body["query"]
+        key = "mentions" if "tagged OR mentioned" in q else \
+              "reposts" if "reposted OR reshared" in q else "posts"
+        return {"results": responses.get(key, [])}
+    return stub("server.exa._post", fake)
+
+
+def test_slug_drives_path_prefix_domains(stub):
+    bodies = []
+    _li_stub(stub, LI, bodies)
+    out = exa.search_company_linkedin("Brex", linkedin_slug="brexhq")
+    assert out["slug"] == "brexhq"
+    assert len(bodies) == 3
+    assert all(b["includeDomains"] == ["linkedin.com/posts/brexhq", "linkedin.com/company/brexhq"]
+               for b in bodies)
+    assert any("post OR announcement OR news" in b["query"] for b in bodies)
+
+
+def test_slug_resolved_from_cached_apollo_org(stub):
+    cache.upsert_doc(cache.make_doc(identity="apollo:org:brex.com", kind="apollo_org",
+                                    label="Apollo", retrieved_at=cache.now_iso(),
+                                    data={"linkedin": "http://www.linkedin.com/company/brexhq"}))
+    bodies = []
+    _li_stub(stub, LI, bodies)
+    out = exa.search_company_linkedin("Brex", domain="brex.com")
+    assert out["slug"] == "brexhq"
+    assert bodies[0]["includeDomains"][0] == "linkedin.com/posts/brexhq"
+
+
+def test_no_slug_still_searches_without_inventing_one(stub):
+    bodies = []
+    _li_stub(stub, LI, bodies)
+    out = exa.search_company_linkedin("Brex", domain="brex.com")
+    assert out["slug"] is None
+    assert all(b["includeDomains"] == ["linkedin.com"] for b in bodies)
+
+
+def test_kind_and_tags_from_url_and_snippet_only(stub):
+    _li_stub(stub, LI, [])
+    out = exa.search_company_linkedin("Brex", linkedin_slug="brexhq")
+    kinds = {r["title"]: (r["kind"], r["possible_tags"]) for r in out["posts"]}
+    assert kinds["Brex launches a thing"] == ("original", [])
+    assert kinds["Event recap"][0] == "original"  # /company/<slug> URL
+    assert set(kinds["Event recap"][1]) == {"linkedin.com/in/janedoe", "Jane Doe"}
+    assert kinds["A share"] == ("possible_repost", [])
+
+
+def test_company_linkedin_query_failure_is_reported_not_guessed(stub):
+    def fake(path, body):
+        if "reposted OR reshared" in body["query"]:
+            raise exa.ProviderError("boom")
+        return {"results": []}
+    stub("server.exa._post", fake)
+    out = exa.search_company_linkedin("Brex", linkedin_slug="brexhq")
+    assert out["not_fetched"] == ["reposts"] and out["posts"] == []
+
+
+def test_company_linkedin_since_is_sent(stub):
+    bodies = []
+    _li_stub(stub, {}, bodies)
+    exa.search_company_linkedin("Brex", linkedin_slug="brexhq", since="2026-04-01")
+    assert all(b["startPublishedDate"] == "2026-04-01" for b in bodies)
