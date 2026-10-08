@@ -143,7 +143,7 @@ def make_doc(
     data: dict | None = None,
     label: str | None = None,
 ) -> dict:
-    """kind: web | person | job | apollo_org. label: how to cite non-URL sources."""
+    """kind: web | person | job | apollo_org | sumble. label: how to cite non-URL sources."""
     return {
         "source_id": source_id_for(identity),
         "kind": kind,
@@ -158,7 +158,7 @@ def make_doc(
     }
 
 
-_KIND_RANK = {"web": 0, "job": 1, "person": 1, "apollo_org": 1}
+_KIND_RANK = {"web": 0, "job": 1, "person": 1, "apollo_org": 1, "sumble": 1}
 
 
 def upsert_doc(new: dict) -> dict:

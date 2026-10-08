@@ -184,6 +184,7 @@ class Brief(BaseModel):
     competitive_context: list[CompetitiveItem] = []
     people: list[Person] = []
     top_contacts: list[TopContact] = []
+    org_chart: str | None = None  # source_id of a cached Sumble org chart (inferred lines)
     abm_themes: list[Assessment] = []
     drafts: list[Draft] = []
 
@@ -538,6 +539,13 @@ def validate_brief(raw: dict, *, today: date | None = None,
 
     brief.abm_themes = [a for i, x in _parse_list(raw.get("abm_themes"), Assessment, "abm_themes", v)
                         if (a := v.assessment(x, f"abm_themes[{i}]"))]
+
+    if sid := raw.get("org_chart"):
+        doc = get_doc(sid) if isinstance(sid, str) else None
+        if doc and doc.get("kind") == "sumble" and (doc.get("data") or {}).get("decision_makers") is not None:
+            brief.org_chart = sid
+        else:
+            v.drop("org_chart", f"{sid!r} is not a cached Sumble org chart (call get_org_chart first)")
 
     if raw.get("verdict"):
         try:

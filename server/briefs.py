@@ -384,6 +384,27 @@ def render_markdown(rec: dict) -> str:
         for p in wider:
             li = f"[LinkedIn]({_url(p['profile_source_id'])})" if p.get("profile_source_id") and _url(p["profile_source_id"]) else "—"
             L.append(f"| {p['name']} | {p['title']} | {p.get('team') or '—'} | {ROLE.get(p['deal_role'], p['deal_role'])} | {li} |")
+    L += ["", "## Org chart *(Sumble — inferred)*", ""]
+    oc = (get_doc(b["org_chart"]) or {}).get("data") if b.get("org_chart") else None
+    if not oc or not oc.get("decision_makers"):
+        L.append("Not found")
+    else:
+        L.append(f"*{oc.get('name') or b['domain']} — reporting lines inferred by Sumble, "
+                 f"not confirmed. (0.x) is Sumble's inference confidence.*")
+        L.append("")
+        for dm in oc["decision_makers"]:
+            role = dm["role"].replace("_", " ")
+            mgr = ((dm.get("manager") or {}).get("attributes") or {})
+            line = f"- **{dm['name']}**, {dm['title']} *({role})*"
+            if mgr.get("name"):
+                line += f" — reports to {mgr['name']}"
+            if dm.get("linkedin"):
+                line += f" · [LinkedIn]({dm['linkedin']})"
+            L.append(line)
+            for r in dm.get("reports") or []:
+                conf = f" ({r['confidence']:.1f})" if r.get("confidence") else ""
+                li = f" · [LinkedIn]({r['linkedin']})" if r.get("linkedin") else ""
+                L.append(f"  - {r['name']} — {r['title']}{conf}{li}")
     L += ["", "## Sources", ""] + src.lines()
 
     rep = rec["report"]

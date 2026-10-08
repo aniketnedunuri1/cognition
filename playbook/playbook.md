@@ -14,7 +14,7 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 4. **Attribute third-party numbers:** "Apollo reports ~1,800 employees", never "1,800 employees".
 5. **Record conflicts; don't silently pick a winner.** Put both facts in the JSON. Render shows one working number (Apollo if present, else the first). If they disagree by more than ~25%, the others go in a footnote, not a wall in the cell.
 6. **Label judgment.** Verdict, likely champion, entry point and ABM themes are assessments that cite the evidence they rest on. Don't start the text with "Assessment:"; the brief labels assessments itself.
-7. **Never infer reporting lines.** Show one only when a source states it.
+7. **Never infer reporting lines.** Show one only when a source states it. Exception: the Sumble org chart (`get_org_chart`) is *sourced* inference — always render it as its own labeled section, never fold it into `people`'s `reporting_line` or treat it as confirmed.
 8. **Quotes are verbatim.** Run `verify_quote` before using a quote. If it fails, find the real wording or drop it. Never paraphrase inside quote marks.
 9. **Facts live only in the brief.** The validator checks the brief; it can't check your chat messages. So any prose outside the rendered brief and Slack summary (status updates, error notes, questions to the rep) contains no facts about the account: no names, titles, numbers, signals or claims.
 
@@ -81,7 +81,7 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 5. **Hooks.**
    - Per person you will put on a **Who to work** card: `search_web("<name> <company> (post OR talk OR interview OR podcast)", include_domains=["linkedin.com"])`. That restriction returns indexed LinkedIn posts, talks and podcasts — use a hit as a hook only when the quote verifies.
    - Company news and mentions via Exa: `search_web("<company> LinkedIn news OR announcement", include_domains=["linkedin.com"])` plus the Stage 1 / Stage 3 news searches (no domain filter) for press mentions.
-6. **Teams:** as their own profiles describe it. No org charts.
+6. **Teams:** as their own profiles describe it. For the org chart, call `get_org_chart(domain)` once (it costs ~50–100 Sumble credits — after `get_company` confirms the account is worth it) and pass its `source_id` as `brief.org_chart`. It renders a separate decision-makers + inferred-direct-reports section — labeled as Sumble inference, not confirmed. Sumble people are *not* added to `people`/`top_contacts` on the org chart's say-so alone; the sourced pipeline (search_people + evidence) still decides who to work.
 7. **Subsidiaries:** `search_people(<parent>, ["CISO", "Procurement", "CTO"])` gives likely approvers, listed as gatekeepers.
 8. **Limits.** Search wide; list every **verified** person you found in `brief.people` (with `team` as the profile describes it). **3–5 Who to work cards** (page one): keep `top_contacts` first (max 3), then likely champions, incumbent owners, people with a hook, or a signal `who_cares` hit. **Drop title-only names from the cards.** The validator caps **cards** at 5 (`featured`); everyone else stays in `people` for the wider table. Prefer verified.
 9. **Top 3 to contact first,** ordered by the entry-point band. One line of why each, citing evidence.

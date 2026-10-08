@@ -286,6 +286,7 @@ def brief_to_docx(rec: dict, path: Path) -> Path:
     _drafts(doc, b, src)
     _abm(doc, b, src)
     _wider_buying_center(doc, b)
+    _org_chart(doc, b)
     _sources(doc, src, rec)
 
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -593,6 +594,62 @@ def _wider_buying_center(doc: Document, b: dict) -> None:
                 _link(cell.paragraphs[0], val, li_url)
             else:
                 _run(cell.paragraphs[0], val, size=8, color=MUTED if i else INK)
+
+
+def _org_chart(doc: Document, b: dict) -> None:
+    oc = (get_doc(b["org_chart"]) or {}).get("data") if b.get("org_chart") else None
+    if not oc or not oc.get("decision_makers"):
+        return
+    _heading(doc, "Org chart — Sumble (inferred)", page_break=True)
+    p = doc.add_paragraph()
+    p.paragraph_format.space_after = Pt(6)
+    _run(p, "Reporting lines are inferred by Sumble, not confirmed. "
+            "(0.x) on a direct report is Sumble's inference confidence.", size=8, italic=True, color=MUTED)
+    if oc.get("leaders_found") and oc["leaders_found"] > oc.get("leaders_considered", 0):
+        p = doc.add_paragraph()
+        p.paragraph_format.space_after = Pt(6)
+        _run(p, f"Sumble lists {oc['leaders_found']} leaders at Head+; "
+                f"top {oc['leaders_considered']} by seniority considered.", size=8, italic=True, color=MUTED)
+    for dm in oc["decision_makers"]:
+        head = doc.add_paragraph()
+        head.paragraph_format.space_before = Pt(8)
+        head.paragraph_format.space_after = Pt(1)
+        head.paragraph_format.keep_with_next = True
+        _run(head, dm["name"], size=11, bold=True)
+        _run(head, f"  —  {dm['title']}", size=10)
+        _run(head, f"   [{dm['role'].replace('_', ' ')}]", size=8, bold=True,
+             color=ROLE_INK.get(dm["role"], "1E40AF"))
+        line = doc.add_paragraph()
+        line.paragraph_format.space_after = Pt(1)
+        line.paragraph_format.keep_with_next = True
+        mgr = (dm.get("manager") or {}).get("attributes") or {}
+        if mgr.get("name"):
+            _run(line, f"Reports to: {mgr['name']}"
+                       + (f", {mgr.get('job_title')}" if mgr.get("job_title") else ""),
+                 size=9, color=MUTED)
+            _run(line, "   ", size=9)
+        if dm.get("location"):
+            _run(line, dm["location"], size=9, color=MUTED)
+            _run(line, "   ", size=9)
+        if dm.get("linkedin"):
+            _link(line, "LinkedIn", dm["linkedin"])
+        reports = dm.get("reports") or []
+        if reports:
+            lbl = doc.add_paragraph()
+            lbl.paragraph_format.space_after = Pt(0)
+            lbl.paragraph_format.keep_with_next = True
+            _run(lbl, f"Direct reports ({len(reports)}), inferred:", size=9, bold=True, color=MUTED)
+        for r in reports:
+            rp = doc.add_paragraph()
+            rp.paragraph_format.space_after = Pt(0)
+            rp.paragraph_format.left_indent = Inches(0.35)
+            _run(rp, f"•  {r['name']}", size=9)
+            _run(rp, f" — {r['title']}", size=9, color=MUTED)
+            if r.get("confidence"):
+                _run(rp, f"  ({r['confidence']:.1f})", size=8, color=MUTED)
+            if r.get("linkedin"):
+                _run(rp, "  ", size=9)
+                _link(rp, "LinkedIn", r["linkedin"])
 
 
 def _sources(doc: Document, src: _Sources, rec: dict) -> None:
