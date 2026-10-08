@@ -15,7 +15,9 @@ from pydantic import BaseModel, Field, ValidationError
 
 from .apollo import normalize_domain
 from .cache import get_doc, site, source_id_for
-from .exa import employment_at
+from .dates import parse_date
+from .exa import _history, employment_at
+from .knowledge import match_customers
 from .lint import lint_message
 from .verify import normalize, verify_quote
 
@@ -30,7 +32,9 @@ ISSUER_HOSTS = ("sec.gov", "businesswire.com", "prnewswire.com", "globenewswire.
 
 class Evidence(BaseModel):
     source_id: str
-    quote: str | None = None  # verbatim from the source; checked by verify_quote
+    quote: str | None = None       # verbatim from the source; checked by verify_quote
+    date_quote: str | None = None  # for undated sources: a verbatim byline/dateline on the same source
+    date: str | None = None        # set by the validator: source metadata date, else the verified date_quote
 
 
 class Fact(BaseModel):
@@ -88,7 +92,18 @@ class Signal(BaseModel):
 
 
 class CompetitiveItem(Fact):
-    situation: Literal["copilot_autocomplete", "piloting_competitor", "competitor_deal_recent", "other"]
+    situation: Literal["copilot_autocomplete", "piloting_competitor", "competitor_deal_recent",
+                       "competitor_in_production", "other"]
+
+
+ChampionKind = Literal["hiring_manager", "public_pain", "ex_devin_customer", "leads_signal_team",
+                       "new_in_role", "ai_appetite"]
+STRONG_CHAMPION = {"hiring_manager", "public_pain", "ex_devin_customer", "leads_signal_team"}
+
+
+class ChampionEvidence(Fact):
+    """Strong kinds make a Likely champion; new_in_role / ai_appetite only support one."""
+    kind: ChampionKind
 
 
 DealRole = Literal["economic_buyer", "champion", "technical_evaluator", "gatekeeper", "parent_org_approver"]
@@ -101,7 +116,7 @@ class Person(BaseModel):
     team: str | None = None           # as their own profile describes it
     why: str                          # agent's one-line assessment
     evidence: list[Evidence] = Field(min_length=1)
-    champion_evidence: list[Fact] = []
+    champion_evidence: list[ChampionEvidence] = []
     hooks: list[Fact] = []
     reporting_line: Fact | None = None  # only when a source states it
     # Set by the validator, never by the model:
@@ -128,12 +143,20 @@ class Email(BaseModel):
     body: str
 
 
+class Claim(BaseModel):
+    """One prospect-specific statement in a draft, with the verbatim quote that backs it."""
+    text: str
+    source_id: str
+    quote: str
+
+
 class Draft(BaseModel):
     name: str                          # must be in people
     email: Email
     linkedin_note: str
     linkedin_followup: str
     built_from: list[Evidence] = Field(min_length=1)
+    claims: list[Claim] = Field(min_length=1)  # every prospect-specific claim; each must verify
     # Set by the validator: no hook, champion evidence, or signal attached to this person.
     low_confidence: bool | None = None
     lint: list[dict] = []
@@ -210,8 +233,9 @@ class _Validator:
                 if not check["verified"]:
                     self.drop(p, f"quote failed verification: {check['reason']}")
                     continue
+            d = self._date(ev, doc, p)
+            ev.date = d.isoformat() if d else None
             if max_months is not None:
-                d = _doc_date(doc)
                 if d is None:
                     self.flags.append({"path": p, "flag": "publication date unknown"})
                 elif _months_between(d, self.today) > max_months:
@@ -219,6 +243,19 @@ class _Validator:
                     continue
             kept.append(ev)
         return kept
+
+    def _date(self, ev: Evidence, doc: dict, path: str) -> date | None:
+        """Source metadata date; for undated sources, a verified date_quote that states one date."""
+        if (d := _doc_date(doc)) or not ev.date_quote:
+            return d
+        check = verify_quote(ev.source_id, ev.date_quote)
+        if not check["verified"]:
+            self.flags.append({"path": f"{path}.date_quote", "flag": f"date_quote not verified: {check['reason']}"})
+            return None
+        if not (d := parse_date(ev.date_quote, self.today)):
+            self.flags.append({"path": f"{path}.date_quote",
+                               "flag": "date_quote doesn't state exactly one past date"})
+        return d
 
     def fact(self, f: Fact, path: str) -> Fact | None:
         f.evidence = self.evidence(f.evidence, f"{path}.evidence")
@@ -276,13 +313,36 @@ class _Validator:
                                                     f"listed on {p.current_basis}"})
 
         p.champion_evidence = self.facts(p.champion_evidence, f"{path}.champion_evidence")
+        ex_customers = self._ex_customers(profiles)
+        for i, c in enumerate(list(p.champion_evidence)):
+            if c.kind == "ex_devin_customer" and not ex_customers:
+                self.drop(f"{path}.champion_evidence[{i}]",
+                          "ex_devin_customer not confirmed: no past employer in the profile matches customers.json")
+                p.champion_evidence.remove(c)
         p.hooks = self.facts(p.hooks, f"{path}.hooks")
         if p.reporting_line:
             p.reporting_line = self.fact(p.reporting_line, f"{path}.reporting_line")
         p.verified = len(distinct) >= 2
-        p.label = "likely_champion" if p.champion_evidence else "candidate"
         p.profile_source_id = profiles[0]["source_id"] if profiles else None
         return p
+
+    def _ex_customers(self, profiles: list[dict]) -> list[dict]:
+        own = {normalize(c) for c in self.companies if c}
+        past = {h["company"] for d in profiles for h in _history(d["data"].get("person"))
+                if h["company"] and normalize(h["company"]) not in own}
+        return match_customers(sorted(past))
+
+    def label(self, p: Person, path: str, strong_signal_people: set[str]) -> None:
+        """Likely champion needs a strong evidence kind; tenure / AI title alone = Candidate.
+        leads_signal_team counts only if they're attached to a strong signal."""
+        strong = False
+        for i, c in enumerate(p.champion_evidence):
+            if c.kind == "leads_signal_team" and p.name not in strong_signal_people:
+                self.flags.append({"path": f"{path}.champion_evidence[{i}]",
+                                   "flag": "leads_signal_team without a strong signal naming them: supporting only"})
+            elif c.kind in STRONG_CHAMPION:
+                strong = True
+        p.label = "likely_champion" if strong else "candidate"
 
     def _official(self, doc: dict) -> bool:
         host = site(doc.get("url")) or ""
@@ -298,7 +358,7 @@ class _Validator:
         if not s.evidence:
             self.drop(path, "no valid evidence left")
             return None
-        if s.strength == "strong" and not any(_doc_date(get_doc(e.source_id)) for e in s.evidence):
+        if s.strength == "strong" and not any(e.date for e in s.evidence):
             s.strength = "medium"
             self.flags.append({"path": f"{path}.strength", "flag": "capped at medium: no dated evidence"})
         if self.use_cases is not None and s.use_case.lower() not in self.use_cases:
@@ -340,6 +400,9 @@ def validate_brief(raw: dict, *, today: date | None = None,
 
     brief.signals = [s for i, x in _parse_list(raw.get("signals"), Signal, "signals", v)
                      if (s := v.signal(x, f"signals[{i}]", names))]
+    strong_people = {n for s in brief.signals if s.strength == "strong" for n in s.who_cares}
+    for i, p in enumerate(brief.people):
+        v.label(p, f"people[{i}]", strong_people)
     brief.competitive_context = [c for i, x in _parse_list(raw.get("competitive_context"), CompetitiveItem,
                                                            "competitive_context", v)
                                  if (c := v.fact(x, f"competitive_context[{i}]"))]
@@ -379,7 +442,15 @@ def validate_brief(raw: dict, *, today: date | None = None,
         if not d.built_from:
             v.drop(path, "draft cites no valid sources")
             continue
-        ids = [e.source_id for e in d.built_from]
+        failed = []
+        for j, c in enumerate(d.claims):
+            check = verify_quote(c.source_id, c.quote)
+            if not check["verified"]:
+                failed.append(f"claim[{j}] {c.text[:60]!r}: {check['reason']}")
+        if failed:
+            v.drop(path, "unverified claims: " + "; ".join(failed))
+            continue
+        ids = [e.source_id for e in d.built_from] + [c.source_id for c in d.claims]
         checks = {
             "email": lint_message("email", d.email.body, ids, subject=d.email.subject),
             "linkedin_note": lint_message("linkedin_note", d.linkedin_note, ids),
@@ -401,9 +472,13 @@ def validate_brief(raw: dict, *, today: date | None = None,
         strong = any(s.strength == "strong" for s in brief.signals)
         reachable = any(p.current_basis for p in brief.people if p.name in anchored)
         piloting = any(c.situation == "piloting_competitor" for c in brief.competitive_context)
+        in_prod = any(c.situation == "competitor_in_production" for c in brief.competitive_context)
         if not piloting and not (strong and reachable):
             v.flags.append({"path": "verdict", "flag": "act_now needs a strong signal + a reachable contact "
                                                       "(verified current with a hook or signal), or a competitor pilot"})
+        elif in_prod and not piloting:
+            v.flags.append({"path": "verdict", "flag": "a direct competitor in production defaults to Warm "
+                                                      "(angle: displace or expand); act_now needs a reason beyond it"})
 
     report = {"dropped_count": len(v.dropped), "dropped": v.dropped, "flags": v.flags}
     return brief.model_dump(), report

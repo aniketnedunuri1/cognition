@@ -190,6 +190,7 @@ Contact-level signals from #2 attach to both the person and the account.
 | Copilot / autocomplete rollout | Positive — category accepted, pitch agents as the next step |
 | Piloting a direct competitor | Urgent — get in before the decision |
 | Big direct-competitor deal signed <6mo | **Not now**; note to revisit ~9–12mo after signing |
+| Direct competitor in production, no recent deal found | **Warm** by default; angle = displace or expand |
 
 **Per signal:** headline (one line a rep could say), evidence (quotes + links), Devin use case (exact name from `use_cases.json`), who cares (→ contacts), strength (strong / medium; weak is dropped). **Undated evidence can never be strong** (validator caps it at medium).
 
@@ -295,6 +296,7 @@ Full brief: <Google Doc link>
 ## Write-up notes
 
 - The validated Markdown in `briefs/` is the canonical record; the Google Doc is a copy made by the harness connector. Slack and the Doc are renders, never sources.
+- Draft claims: every prospect-specific claim in a draft must be listed with a verbatim quote, and each is verified (one failure blocks the draft); numbers, digits or words, must appear in the cited sources. Residual limit: we can't prove every claim in the prose was listed. The rep sees each claim with its quote under the draft.
 - Only the brief is validated. Agent prose outside it is unchecked, so the playbook forbids facts there and the Slack reply is the tool-rendered summary posted verbatim (in Devin this relies on the agent following the playbook; the CLI enforces it in code).
 
 ## Production notes (for write-up / Loom)

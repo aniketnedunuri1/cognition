@@ -28,17 +28,38 @@ PLACEHOLDER = re.compile(r"\[[^\]]{1,40}\]|\{\{?[^}]{0,40}\}?\}|<[a-z_ ]{2,30}>"
 NUMBER = re.compile(r"\$?\d[\d,]*(?:\.\d+)?(?:%|\+|(?:x|k|m|bn|b)\b)?", re.I)  # "8x", "40%", "$10M"; not "17 m(igration)"
 
 
+# Spelled-out quantities and their digit forms. "one" is excluded: it's ubiquitous in prose
+# ("one more angle") and in nearly every source, so checking it would prove nothing.
+_UNITS = ["two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
+          "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+NUMBER_WORDS = {w: str(i) for i, w in enumerate(_UNITS, 2)}
+NUMBER_WORDS |= {w: str(n) for w, n in [("twenty", 20), ("thirty", 30), ("forty", 40), ("fifty", 50),
+                                        ("sixty", 60), ("seventy", 70), ("eighty", 80), ("ninety", 90)]}
+NUMBER_WORDS |= {"dozen": "12", "dozens": "12", "hundred": "100", "hundreds": "100", "thousand": "1000",
+                 "thousands": "1000", "million": None, "millions": None, "billion": None, "billions": None,
+                 "twice": "2x", "double": "2x", "doubled": "2x", "triple": "3x", "tripled": "3x",
+                 "quadruple": "4x", "half": "50%", "halved": "50%"}
+# The meeting ask ("worth 20 minutes?", "a fifteen-minute call") is not a claim about anyone.
+# Narrow on purpose: "cut 40 minutes off every build" is a claim and stays checked.
+_N = r"(?:\d{1,2}|" + "|".join(NUMBER_WORDS) + r")"
+MEETING_LENGTH = re.compile(
+    rf"\b{_N}[\s-]+min(?:ute)?s?\s+(?:call|chat|meeting|conversation|walkthrough|demo|sync)\b"
+    rf"|\b(?:worth|have|spare|grab|find|would|could|is)\s+(?:a\s+)?{_N}[\s-]+min(?:ute)?s?\b", re.I)
+WORD_NUMBER = re.compile(r"\b(" + "|".join(sorted(NUMBER_WORDS, key=len, reverse=True)) + r")\b", re.I)
+
+
 def _num_core(tok: str) -> str:
     return tok.lower().replace("$", "").replace(",", "").replace(" ", "")
 
 
 def _source_text(source_ids: list[str]) -> str:
+    """Normalized text of the cited sources (with spaces; commas dropped from numbers)."""
     parts = []
     for sid in source_ids:
         doc = get_doc(sid) or {}
         parts += [doc.get("title") or "", doc.get("text") or "", *doc.get("highlights", []),
                   str(doc.get("data") or "")]
-    return normalize(" ".join(parts)).replace(",", "").replace(" ", "")
+    return re.sub(r"(?<=\d),(?=\d)", "", normalize(" ".join(parts)))
 
 
 def lint_message(channel: str, text: str, source_ids: list[str] | None = None,
@@ -86,10 +107,18 @@ def lint_message(channel: str, text: str, source_ids: list[str] | None = None,
             issue("block", f"{c['name']} is not a public reference: never name them")
 
     # every number must come from a cited source
-    nums = {t.strip() for t in NUMBER.findall(full) if re.search(r"\d", t)}
-    if nums:
+    claims_text = MEETING_LENGTH.sub(" ", full)
+    nums = {t.strip() for t in NUMBER.findall(claims_text) if re.search(r"\d", t)}
+    words = {m.lower() for m in WORD_NUMBER.findall(claims_text)}
+    if nums or words:
         hay = _source_text(source_ids or [])
-        missing = sorted(t for t in nums if _num_core(t) not in hay)
+        compact = hay.replace(" ", "")
+        missing = sorted(t for t in nums if _num_core(t) not in compact)
+        def sourced(w: str) -> bool:
+            digits = NUMBER_WORDS[w]
+            return bool(re.search(rf"\b{w}\b", hay) or
+                        (digits and re.search(rf"(?<![\d.]){re.escape(digits)}(?!\d)", hay)))
+        missing += sorted(w for w in words if not sourced(w))
         if missing:
             issue("block", f"numbers not found in the cited sources: {missing}")
 

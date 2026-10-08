@@ -8,7 +8,8 @@ from __future__ import annotations
 
 import json
 import os
-from datetime import date
+import re
+from datetime import date, datetime
 from pathlib import Path
 
 from .apollo import normalize_domain
@@ -21,6 +22,12 @@ VERDICT = {"act_now": "Act now", "warm": "Warm", "not_now": "Not now"}
 ROLE = {"economic_buyer": "Economic buyers", "champion": "Champions", "technical_evaluator": "Technical evaluators",
         "gatekeeper": "Gatekeepers", "parent_org_approver": "Parent-company approvers"}
 LOW_CONFIDENCE = "Low-confidence draft: no personal signal or hook found."
+KIND = {"hiring_manager": "hiring manager", "public_pain": "public talk about the pain",
+        "ex_devin_customer": "ex-Devin customer", "leads_signal_team": "leads the team on a strong signal",
+        "new_in_role": "new in role (supporting)", "ai_appetite": "AI appetite (supporting)"}
+# Single-valued quantities where disagreeing sources get flagged (the playbook's 25% threshold).
+QUANTITATIVE = ("headcount", "revenue", "funding")
+CONFLICT_RATIO = 1.25
 
 
 def bdir() -> Path:
@@ -131,7 +138,7 @@ class _Sources:
             d = get_doc(sid) or {}
             when = ", ".join(x for x in (
                 f"published {d['published_date'][:10]}" if d.get("published_date") else "",
-                f"retrieved {d['retrieved_at'][:10]}" if d.get("retrieved_at") else "") if x)
+                f"retrieved {_local_day(d['retrieved_at'])}" if d.get("retrieved_at") else "") if x)
             if d.get("url"):
                 out.append(f"{n}. [{d.get('title') or d['url']}]({d['url']}) — {when}")
             else:
@@ -139,19 +146,57 @@ class _Sources:
         return out
 
 
+def _local_day(iso: str) -> str:
+    """Retrieval times are stored in UTC; show the calendar day the run happened locally."""
+    return datetime.fromisoformat(iso).astimezone().date().isoformat()
+
+
+def _one_line(text: str) -> str:
+    return re.sub(r"\s+", " ", text or "").strip()
+
+
+def _plain(text: str) -> str:
+    """Drop a leading "Assessment:" the model added; the render already labels assessments."""
+    return re.sub(r"^\s*assessment\s*[:—-]\s*", "", text or "", flags=re.I)
+
+
+_AMOUNT = re.compile(r"\$?(\d[\d,]*(?:\.\d+)?)\s*(k|m|b|bn|thousand|million|billion)?\b", re.I)
+_SCALE = {"k": 1e3, "thousand": 1e3, "m": 1e6, "million": 1e6, "b": 1e9, "bn": 1e9, "billion": 1e9}
+
+
+def _amount(value: str) -> float | None:
+    m = _AMOUNT.search(value)
+    return float(m[1].replace(",", "")) * _SCALE.get((m[2] or "").lower(), 1) if m else None
+
+
+def conflicting(facts: list[dict]) -> bool:
+    """Sources disagree materially: the first amounts stated differ by more than 25%."""
+    amounts = [a for f in facts if (a := _amount(f["value"]))]
+    return len(amounts) > 1 and max(amounts) / min(amounts) > CONFLICT_RATIO
+
+
 def _url(source_id: str) -> str | None:
     return (get_doc(source_id) or {}).get("url")
 
 
-def _facts(src: _Sources, facts: list[dict]) -> str:
+def _facts(src: _Sources, facts: list[dict], check_conflict: bool = False) -> str:
     if not facts:
         return "Not found"
     out = "; ".join(f"{f['value']} {src.cite(f['evidence'])}" for f in facts)
-    return out + (" ⚠️ sources differ" if len({normalize(f["value"]) for f in facts}) > 1 else "")
+    return out + (" ⚠️ sources differ" if check_conflict and conflicting(facts) else "")
 
 
-def _quotes(src: _Sources, evidence: list[dict]) -> list[str]:
-    return [f'  > "{e["quote"]}" {src.cite([e])}' for e in evidence if e.get("quote")]
+def _dated(e: dict) -> str:
+    if not e.get("date"):
+        return " · date unknown"
+    via = f' (dated by "{_one_line(e["date_quote"])}")' if e.get("date_quote") and not \
+        (get_doc(e["source_id"]) or {}).get("published_date") else ""
+    return f" · {e['date']}{via}"
+
+
+def _quotes(src: _Sources, evidence: list[dict], dates: bool = False) -> list[str]:
+    return [f'  > "{_one_line(e["quote"])}" {src.cite([e])}{_dated(e) if dates else ""}'
+            for e in evidence if e.get("quote")]
 
 
 def render_markdown(rec: dict) -> str:
@@ -174,7 +219,7 @@ def render_markdown(rec: dict) -> str:
     v = b.get("verdict")
     L += ["## Verdict", ""]
     if v:
-        L += [f"**{VERDICT[v['verdict']]}** *(assessment)* — {v['why_now']} {src.cite(v['based_on'])}".rstrip()]
+        L += [f"**{VERDICT[v['verdict']]}** *(assessment)* — {_plain(v['why_now'])} {src.cite(v['based_on'])}".rstrip()]
         if v.get("watch_for"):
             L.append(f"\nWatch for: {v['watch_for']}")
     else:
@@ -185,7 +230,7 @@ def render_markdown(rec: dict) -> str:
               "parent_company": "Parent company", "headcount": "Headcount", "headcount_growth": "Headcount growth",
               "revenue": "Revenue", "funding": "Funding", "sells_to": "Sells to", "products": "Key products"}
     L += ["## Snapshot", "", "| | |", "|---|---|"]
-    L += [f"| {lab} | {_facts(src, b['snapshot'][k])} |" for k, lab in labels.items()]
+    L += [f"| {lab} | {_facts(src, b['snapshot'][k], k in QUANTITATIVE)} |" for k, lab in labels.items()]
     L.append("")
 
     labels = {"eng_headcount": "Engineering headcount", "open_eng_roles": "Open eng roles", "tech_stack": "Tech stack",
@@ -200,7 +245,7 @@ def render_markdown(rec: dict) -> str:
         L.append("No signals met the bar.")
     for s in sorted(b["signals"], key=lambda s: s["strength"] != "strong"):
         who = f" · Who cares: {', '.join(s['who_cares'])}" if s["who_cares"] else ""
-        L += [f"**{s['headline']}** — {s['strength']} · {s['use_case']}{who}"] + _quotes(src, s["evidence"]) + [""]
+        L += [f"**{s['headline']}** — {s['strength']} · {s['use_case']}{who}"] + _quotes(src, s["evidence"], dates=True) + [""]
     if b["competitive_context"]:
         L += ["**Competitive context**", ""]
         L += [f"- {c['value']} ({c['situation'].replace('_', ' ')}) {src.cite(c['evidence'])}" for c in b["competitive_context"]]
@@ -217,15 +262,15 @@ def render_markdown(rec: dict) -> str:
             ver = "verified" if p["verified"] else "single source"
             link = f" · [LinkedIn]({_url(p['profile_source_id'])})" if p.get("profile_source_id") else ""
             team = f" · {p['team']}" if p.get("team") else ""
-            L.append(f"- {tag}**{p['name']}**, {p['title']}{team} — {p['why']} *({ver}){link}* {src.cite(p['evidence'])}")
-            L += [f"  - Champion evidence: {f['value']} {src.cite(f['evidence'])}" for f in p["champion_evidence"]]
+            L.append(f"- {tag}**{p['name']}**, {p['title']}{team} — {_plain(p['why'])} *({ver}){link}* {src.cite(p['evidence'])}")
+            L += [f"  - Champion evidence ({KIND[f['kind']]}): {f['value']} {src.cite(f['evidence'])}" for f in p["champion_evidence"]]
             L += [f"  - Hook: {f['value']} {src.cite(f['evidence'])}" for f in p["hooks"]]
             if p.get("reporting_line"):
                 L.append(f"  - Reporting line (as stated): {p['reporting_line']['value']} {src.cite(p['reporting_line']['evidence'])}")
         L.append("")
 
     L += ["## Recommended entry: top 3", ""]
-    L += [f"{i}. **{t['name']}** — {t['why']['text']} {src.cite(t['why']['based_on'])}" for i, t in enumerate(b["top_contacts"], 1)]
+    L += [f"{i}. **{t['name']}** — {_plain(t['why']['text'])} {src.cite(t['why']['based_on'])}" for i, t in enumerate(b["top_contacts"], 1)]
     L += ["" if b["top_contacts"] else "None supported.", ""]
 
     L += ["## Drafted messages", "", "*Drafts for rep review. Never auto-sent.*", ""]
@@ -236,11 +281,14 @@ def render_markdown(rec: dict) -> str:
         L += [f"**Email — {d['email']['subject']}**", "", d["email"]["body"], "",
               f"**LinkedIn connection note**", "", d["linkedin_note"], "",
               f"**LinkedIn follow-up**", "", d["linkedin_followup"], "",
-              f"*Built from:* {src.cite(d['built_from'])}"]
+              f"**Claims to check** (each verified against its source):", ""]
+        for c in d["claims"]:
+            L += [f"- {_one_line(c['text'])} {src.cite([c])}", f'  > "{_one_line(c["quote"])}"']
+        L += ["", f"*Built from:* {src.cite(d['built_from'])}"]
         L += [f"*Lint ({x['channel']}):* {x['issue']}" for x in d["lint"]] + [""]
 
     L += ["## ABM themes *(assessment)*", ""]
-    L += [f"- {a['text']} {src.cite(a['based_on'])}" for a in b["abm_themes"]] or ["None."]
+    L += [f"- {_plain(a['text'])} {src.cite(a['based_on'])}" for a in b["abm_themes"]] or ["None."]
     L += ["", "## Sources", ""] + src.lines()
 
     rep = rec["report"]
@@ -253,7 +301,7 @@ def render_slack(rec: dict) -> str:
     v = b.get("verdict")
     L = [f"{b['company_name']} — {VERDICT[v['verdict']] if v else 'No supported verdict'}"]
     if v:
-        L.append(f"Why now: {v['why_now']}")
+        L.append(f"Why now: {_plain(v['why_now'])}")
     top = sorted(b["signals"], key=lambda s: s["strength"] != "strong")[:3]
     if top:
         L.append("Signals:")
@@ -261,7 +309,7 @@ def render_slack(rec: dict) -> str:
     if b["top_contacts"]:
         titles = {p["name"]: p["title"] for p in b["people"]}
         L.append("Start with:")
-        L += [f" {i}. {t['name']}, {titles.get(t['name'], '')} — {t['why']['text']}"
+        L += [f" {i}. {t['name']}, {titles.get(t['name'], '')} — {_plain(t['why']['text'])}"
               for i, t in enumerate(b["top_contacts"], 1)]
     md = _rel(bdir() / rec["domain"] / f"{rec['date']}.md")
     L.append(f"Full brief: {rec.get('doc_url') or md}")

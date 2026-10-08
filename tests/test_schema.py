@@ -74,7 +74,8 @@ def test_people_rules(stub):
         person("Will Palmeri", ids["Will Palmeri"]),                       # former, single source
         person("Jane Invented", ids["Phil Burrows"]),                      # name not in source
         person("Phil Burrows", ids["Phil Burrows"], blog,                  # verified + champion evidence
-               champion_evidence=[{"value": "Leads platform", "evidence": [{"source_id": blog, "quote": "Phil Burrows leads platform"}]}]),
+               champion_evidence=[{"kind": "public_pain", "value": "Leads platform",
+                                   "evidence": [{"source_id": blog, "quote": "Phil Burrows leads platform"}]}]),
     ]})
     names = [p["name"] for p in brief["people"]]
     assert names == ["Phil Burrows", "Phil Burrows"]
@@ -166,3 +167,78 @@ def test_undated_evidence_caps_strength_at_medium():
         "strength": "strong", "evidence": [{"source_id": undated, "quote": "migrating our monolith from Java 8"}]}]})
     assert brief["signals"][0]["strength"] == "medium"
     assert any("capped at medium" in f["flag"] for f in report["flags"])
+
+
+def champ(kind, src, quote="Phil Burrows leads platform"):
+    return {"kind": kind, "value": kind, "evidence": [{"source_id": src, "quote": quote}]}
+
+
+def strong_signal(src, who):
+    return {"headline": "Java 17 migration", "type": "migration", "horizon": "tactical", "use_case": "Migrations",
+            "strength": "strong", "who_cares": who,
+            "evidence": [{"source_id": src, "quote": "migrating our monolith from Java 8 to Java 17"}]}
+
+
+def test_champion_label_needs_strong_evidence(stub):
+    ids = profiles(stub)
+    blog = web("https://brex.com/blog/fresh")
+    phil = lambda *ev: person("Phil Burrows", ids["Phil Burrows"], champion_evidence=list(ev))
+    label = lambda raw: run(raw)[0]["people"][0]["label"]
+    assert label({"people": [phil(champ("new_in_role", blog), champ("ai_appetite", blog))]}) == "candidate"
+    assert label({"people": [phil(champ("hiring_manager", blog))]}) == "likely_champion"
+    brief, report = run({"people": [phil(champ("leads_signal_team", blog))]})
+    assert brief["people"][0]["label"] == "candidate"
+    assert any("supporting only" in f["flag"] for f in report["flags"])
+    assert label({"people": [phil(champ("leads_signal_team", blog))],
+                  "signals": [strong_signal(blog, ["Phil Burrows"])]}) == "likely_champion"
+
+
+def test_ex_devin_customer_must_match_profile_history(stub, tmp_path, monkeypatch):
+    import json
+    ids = profiles(stub)
+    blog = web("https://brex.com/blog/fresh")
+    kd = tmp_path / "k"; kd.mkdir()
+    monkeypatch.setenv("KNOWLEDGE_DIR", str(kd))
+    (kd / "customers.json").write_text(json.dumps({"customers": []}))
+    raw = {"people": [person("Phil Burrows", ids["Phil Burrows"], champion_evidence=[champ("ex_devin_customer", blog)])]}
+    brief, report = run(raw)
+    assert brief["people"][0]["label"] == "candidate"
+    assert "ex_devin_customer not confirmed" in report["dropped"][-1]["reason"]
+    (kd / "customers.json").write_text(json.dumps({"customers": [{"name": "Meta", "public_reference": True, "proofs": []}]}))
+    assert run(raw)[0]["people"][0]["label"] == "likely_champion"  # profile history: Engineering Leader at Meta
+
+
+def test_date_quote_dates_an_undated_source():
+    page = "Building agents: 5 lessons learned. By Graham Fuller, April 2026. We migrated our monolith from Java 8 to Java 17."
+    undated = web("https://brex.com/journal/agents", text=page, published=None)
+    # strategic (12 mo): "April 2026" resolves to Apr 1, past the 6-month tactical window by design
+    sig = {**strong_signal(undated, []), "horizon": "strategic",
+           "evidence": [{"source_id": undated, "date_quote": "By Graham Fuller, April 2026",
+                                                       "quote": "migrated our monolith from Java 8 to Java 17"}]}
+    brief, report = run({"signals": [sig]})
+    assert brief["signals"][0]["strength"] == "strong" and brief["signals"][0]["evidence"][0]["date"] == "2026-04-01"
+    assert not report["flags"]
+    for bad, flag in (("By Graham Fuller, May 2026", "not verified"), ("Building agents: 5 lessons learned", "exactly one")):
+        s2 = {**sig, "evidence": [{**sig["evidence"][0], "date_quote": bad}]}
+        brief, report = run({"signals": [s2]})
+        assert brief["signals"][0]["strength"] == "medium"
+        assert any(flag in f["flag"] for f in report["flags"]), bad
+
+
+def test_unverified_draft_claim_blocks_draft(stub):
+    from tests.test_briefs import EMAIL, NOTE, FOLLOW  # noqa: F401  (shared fixtures)
+    ids = profiles(stub)
+    blog = web("https://brex.com/blog/fresh")
+    draft = {"name": "Phil Burrows", "email": {"subject": "Your Java 17 migration", "body": EMAIL},
+             "linkedin_note": NOTE, "linkedin_followup": FOLLOW, "built_from": [{"source_id": blog}],
+             "claims": [{"text": "laptops kept sleeping", "source_id": blog, "quote": "local agent runs broke whenever a laptop slept"}]}
+    brief, report = run({"people": [person("Phil Burrows", ids["Phil Burrows"])], "drafts": [draft]})
+    assert brief["drafts"] == [] and "unverified claims" in report["dropped"][0]["reason"]
+
+
+def test_competitor_in_production_defaults_to_warm():
+    blog = web("https://brex.com/blog/fresh")
+    ev = [{"source_id": blog, "quote": "migrating our monolith from Java 8 to Java 17"}]
+    _, report = run({"verdict": {"verdict": "act_now", "why_now": "x", "based_on": ev},
+                     "competitive_context": [{"situation": "competitor_in_production", "value": "Cursor in prod", "evidence": ev}]})
+    assert any("defaults to Warm" in f["flag"] or "act_now needs" in f["flag"] for f in report["flags"])

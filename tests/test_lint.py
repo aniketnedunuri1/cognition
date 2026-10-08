@@ -60,3 +60,28 @@ def test_number_units_need_word_boundary(src):
     assert "17" in blocks(lint_message("linkedin_note", "Saw the Java 17 migration at Nubank.", [src]))
     from server.lint import NUMBER
     assert NUMBER.findall("Java 17 migration, 8x faster, $10M, 40%") == ["17", "8x", "$10M", "40%"]
+
+
+def test_spelled_out_numbers_need_sources(src):
+    for text in ("Your team built a library of eleven skills for Devin.",
+                 "Nubank ran a dozen migrations with Devin.",
+                 "Three teams at Nubank use Devin for migrations.",
+                 "Nubank saved millions with Devin on migrations."):
+        assert "numbers not found" in blocks(lint_message("linkedin_note", text, [src])), text
+    other = cache.upsert_doc(cache.make_doc(identity="https://brex.com/blog/skills", kind="web",
+                                            url="https://brex.com/blog/skills", retrieved_at=cache.now_iso(),
+                                            text="We wrote 11 skills and three teams adopted them in 2011."))["source_id"]
+    assert lint_message("linkedin_note", "Saw your team wrote eleven skills; three teams adopted them.", [other])["ok"]
+    assert "twelve" in blocks(lint_message("linkedin_note", "Twelve teams at Nubank adopted Devin.", [other]))
+
+
+def test_one_is_not_treated_as_a_claim(src):
+    assert lint_message("linkedin_note", "One more angle: Nubank used Devin on migrations.", [src])["ok"]
+
+
+def test_meeting_length_is_not_a_claim(src):
+    for ask in ("Worth twenty minutes next week?", "Open to a 15-minute call?", "Do you have 20 min Thursday?",
+                "Would twenty minutes next week be useful?"):
+        assert lint_message("linkedin_note", f"Teams at Nubank used Devin on migrations. {ask}", [src])["ok"], ask
+    for claim in ("Nubank cut 40 minutes off every build with Devin.", "Could Devin save you 40 minutes per build?"):
+        assert "40" in blocks(lint_message("linkedin_note", claim, [src])), claim

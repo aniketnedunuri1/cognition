@@ -1,0 +1,1416 @@
+{
+ "domain": "brex.com",
+ "date": "2026-10-07",
+ "saved_at": "2026-10-08T00:40:20+00:00",
+ "brief": {
+  "domain": "brex.com",
+  "company_name": "Brex",
+  "verdict": {
+   "verdict": "warm",
+   "why_now": "Assessment: Brex has live, specific migration work (Micronaut 4 remainder across 500+ Kotlin services, plus test-suite gaps the agents exposed) that maps to Code migration & modernization with fintech proof (Nubank, Itaú). But it is already running that exact workload on self-hosted Cursor agents and an in-house agent platform, so this is a displacement/expansion play, not a greenfield one. Warm rather than Act now because of that competitor rollout.",
+   "based_on": [
+    {
+     "source_id": "src_4892dbb7cb",
+     "quote": "To de-risk the remainder of this migration, we are looking beyond repository-level automation"
+    },
+    {
+     "source_id": "src_4892dbb7cb",
+     "quote": "We built a pipeline of custom self-hosted AI agents in Cursor that are capable of writing, building, and dynamically self-correcting code."
+    },
+    {
+     "source_id": "src_e1fbc7a018",
+     "quote": "Sofhia de Souza Gonçalves built a self-correcting agent pipeline in Cursor instead, and accelerated that old, manual work model by 32x."
+    },
+    {
+     "source_id": "src_6958f83cc0",
+     "quote": "The gap between \"AI agents can do this\" and \"AI agents are doing this reliably\" is mostly an infrastructure problem."
+    }
+   ],
+   "watch_for": "Scope of the Micronaut 4 remainder and the next framework/GraphQL federation upgrade; signs the platform team wants to stop maintaining its self-hosted agent harness; Capital One standardizing engineering tooling or procurement post-close; any Cursor contract renewal timing."
+  },
+  "snapshot": {
+   "hq": [
+    {
+     "value": "Apollo reports HQ in San Francisco, California, United States",
+     "evidence": [
+      {
+       "source_id": "src_8b7576ba1b",
+       "quote": null
+      }
+     ]
+    }
+   ],
+   "founded": [
+    {
+     "value": "Apollo reports founded 2017",
+     "evidence": [
+      {
+       "source_id": "src_8b7576ba1b",
+       "quote": null
+      }
+     ]
+    }
+   ],
+   "industry": [
+    {
+     "value": "Apollo reports industry: financial services",
+     "evidence": [
+      {
+       "source_id": "src_8b7576ba1b",
+       "quote": null
+      }
+     ]
+    }
+   ],
+   "ownership": [
+    {
+     "value": "Acquired by Capital One; LeadIQ describes Brex LLC as a wholly owned subsidiary of Capital One, N.A. The deal closed April 7, 2026 per Capital One's 8-K. CEO Pedro Franceschi continues to lead Brex as part of Capital One.",
+     "evidence": [
+      {
+       "source_id": "src_7be9916348",
+       "quote": "Brex LLC is a wholly owned subsidiary of Capital One, N.A."
+      },
+      {
+       "source_id": "src_3937fb8daf",
+       "quote": "Capital One Financial Corporation completed its previously announced acquisition of Brex Inc. on April 7, 2026."
+      },
+      {
+       "source_id": "src_d97fbeb2ee",
+       "quote": "Upon completion of the transaction, Franceschi will continue to lead Brex as part of Capital One."
+      }
+     ]
+    }
+   ],
+   "parent_company": [
+    {
+     "value": "Capital One (Apollo parent_company; confirmed by Capital One 8-K). Adds parent-level procurement and security approvers.",
+     "evidence": [
+      {
+       "source_id": "src_8b7576ba1b",
+       "quote": null
+      },
+      {
+       "source_id": "src_3937fb8daf",
+       "quote": null
+      }
+     ]
+    }
+   ],
+   "headcount": [
+    {
+     "value": "Apollo reports ~1,800 employees",
+     "evidence": [
+      {
+       "source_id": "src_8b7576ba1b",
+       "quote": null
+      }
+     ]
+    },
+    {
+     "value": "Revelio Labs reports ~1,757 employees (March 2026), in line with Apollo",
+     "evidence": [
+      {
+       "source_id": "src_ea5bf22cce",
+       "quote": "Brex, Inc. has approximately 1,757 total employees worldwide as of March 2026"
+      }
+     ]
+    },
+    {
+     "value": "CONFLICT: Tracxn reports 5,158 employees (Aug 31, 2026), far above Apollo; sources disagree",
+     "evidence": [
+      {
+       "source_id": "src_3ea6674d36",
+       "quote": "As of Aug 31, 2026, the latest employee count at Brex is 5158."
+      }
+     ]
+    }
+   ],
+   "headcount_growth": [
+    {
+     "value": "Apollo reports headcount growth of +7.8% (6 mo), +13.3% (12 mo), +31.0% (24 mo)",
+     "evidence": [
+      {
+       "source_id": "src_8b7576ba1b",
+       "quote": null
+      }
+     ]
+    }
+   ],
+   "revenue": [
+    {
+     "value": "Apollo reports annual revenue of $700M",
+     "evidence": [
+      {
+       "source_id": "src_8b7576ba1b",
+       "quote": null
+      }
+     ]
+    },
+    {
+     "value": "Litmus reports roughly $700M annualized revenue by August 2025",
+     "evidence": [
+      {
+       "source_id": "src_cc6056ad35",
+       "quote": "Brex reached roughly $700M in total annualized revenue by August 2025"
+      }
+     ]
+    },
+    {
+     "value": "CONFLICT: RocketReach reports $279M annual revenue; sources disagree",
+     "evidence": [
+      {
+       "source_id": "src_a0e3ed332e",
+       "quote": "The Brex annual revenue was $279 million in 2026."
+      }
+     ]
+    }
+   ],
+   "funding": [
+    {
+     "value": "Apollo reports $6.5B total funding, latest event an M&A by Capital One (Apollo lists $4.5B)",
+     "evidence": [
+      {
+       "source_id": "src_8b7576ba1b",
+       "quote": null
+      }
+     ]
+    },
+    {
+     "value": "Capital One announced the acquisition at $5.15B; the 8-K lists ~$2.56B cash plus 10,646,306 Capital One shares. Deal value differs from Apollo's figure.",
+     "evidence": [
+      {
+       "source_id": "src_d97fbeb2ee",
+       "quote": null
+      },
+      {
+       "source_id": "src_3937fb8daf",
+       "quote": null
+      }
+     ]
+    }
+   ],
+   "sells_to": [
+    {
+     "value": "Startups, mid-size companies and enterprises; homepage says it is trusted by 35,000+ companies",
+     "evidence": [
+      {
+       "source_id": "src_41204c9ef5",
+       "quote": "Trusted by 35,000+ top companies."
+      }
+     ]
+    }
+   ],
+   "products": [
+    {
+     "value": "Corporate cards, expense management, travel, bill pay, and banking and treasury, with AI-powered automation for expenses and accounting",
+     "evidence": [
+      {
+       "source_id": "src_41204c9ef5",
+       "quote": null
+      }
+     ]
+    }
+   ]
+  },
+  "engineering": {
+   "eng_headcount": [
+    {
+     "value": "Apollo reports 356 in engineering (plus 38 data science, 21 IT)",
+     "evidence": [
+      {
+       "source_id": "src_8b7576ba1b",
+       "quote": null
+      }
+     ]
+    }
+   ],
+   "open_eng_roles": [
+    {
+     "value": "Open engineering roles include Senior SWE Release Infra, Staff Application Security Engineer, Senior SWE Identity & Access Management, Staff SWE Banking, Senior SWE Frontend and Senior SWE Operational AI",
+     "evidence": [
+      {
+       "source_id": "src_81c9e75caf",
+       "quote": null
+      },
+      {
+       "source_id": "src_11abaa1d40",
+       "quote": null
+      },
+      {
+       "source_id": "src_ad7bfb5282",
+       "quote": null
+      },
+      {
+       "source_id": "src_7cae1cc60c",
+       "quote": null
+      },
+      {
+       "source_id": "src_079d06af64",
+       "quote": null
+      },
+      {
+       "source_id": "src_8a824989fb",
+       "quote": null
+      }
+     ]
+    }
+   ],
+   "tech_stack": [
+    {
+     "value": "Kotlin on Micronaut across 500+ microservices in a Bazel monorepo, with GraphQL",
+     "evidence": [
+      {
+       "source_id": "src_4892dbb7cb",
+       "quote": "Our core Kotlin framework at Brex is Micronaut and we use it across over 500 microservices."
+      }
+     ]
+    },
+    {
+     "value": "Buildkite, AWS/EKS, GitOps/FluxCD and cloud development environments (infra tech lead profile)",
+     "evidence": [
+      {
+       "source_id": "src_b5c24a5d3a",
+       "quote": "CI/CD, GitOps/FluxCD, Bazel, Polyglot monorepo development (Elixir, Kotlin/JVM), Buildkite, Cloud Development Environments, AWS/EKS"
+      }
+     ]
+    },
+    {
+     "value": "Datadog, Linear, Glean and Snowflake (oncall agent post)",
+     "evidence": [
+      {
+       "source_id": "src_0cf8206ede",
+       "quote": "Datadog for logs and metrics, Linear for ticket context, Glean for internal documentation, Snowflake for data queries"
+      }
+     ]
+    }
+   ],
+   "ai_dev_tools": [
+    {
+     "value": "Apollo lists Cursor",
+     "evidence": [
+      {
+       "source_id": "src_8b7576ba1b",
+       "quote": null
+      }
+     ]
+    },
+    {
+     "value": "Self-hosted Cursor agents run the Micronaut 4 migration pipeline",
+     "evidence": [
+      {
+       "source_id": "src_4892dbb7cb",
+       "quote": "We built a pipeline of custom self-hosted AI agents in Cursor that are capable of writing, building, and dynamically self-correcting code."
+      }
+     ]
+    },
+    {
+     "value": "The Corporate AI Lead is expanding access to Claude Code, ChatGPT and Cursor",
+     "evidence": [
+      {
+       "source_id": "src_47929001d7",
+       "quote": "My work includes expanding access to Claude Code, ChatGPT, and Cursor"
+      }
+     ]
+    },
+    {
+     "value": "The AI oncall agent runs on the Claude SDK; Brex also built an internal platform that delegates engineering tasks to agents",
+     "evidence": [
+      {
+       "source_id": "src_0cf8206ede",
+       "quote": "The investigation runs inside a Claude SDK session that handles tool orchestration and conversation state."
+      },
+      {
+       "source_id": "src_6958f83cc0",
+       "quote": null
+      }
+     ]
+    }
+   ],
+   "eng_blog_and_github": [
+    {
+     "value": "Active Brex Engineering Blog on brex.com (agents, migrations, CDC pipelines, MCP) and a Medium Brex Tech Blog",
+     "evidence": [
+      {
+       "source_id": "src_9e6230b72f",
+       "quote": null
+      },
+      {
+       "source_id": "src_a3e72d8817",
+       "quote": null
+      }
+     ]
+    },
+    {
+     "value": "GitHub org brexhq (verified, 85 public repos)",
+     "evidence": [
+      {
+       "source_id": "src_d7667dc170",
+       "quote": null
+      }
+     ]
+    }
+   ],
+   "ai_posture": [
+    {
+     "value": "The CEO positions Brex as an AI-native platform",
+     "evidence": [
+      {
+       "source_id": "src_d97fbeb2ee",
+       "quote": "We started Brex in 2017 as a category creator – bringing together financial services and software into one AI-native platform"
+      }
+     ]
+    },
+    {
+     "value": "The engineering blog treats agent reliability as an infrastructure and governance problem",
+     "evidence": [
+      {
+       "source_id": "src_6958f83cc0",
+       "quote": "Governance is critical. Agents should only have access to the information they need to perform the task at hand."
+      }
+     ]
+    },
+    {
+     "value": "The CFO expects Capital One scale to change the conversation about engineering headcount",
+     "evidence": [
+      {
+       "source_id": "src_809203afd3",
+       "quote": "To be at that scale and to have a different type of conversation around how much we spend on marketing or how many engineers we have is really exciting"
+      }
+     ]
+    }
+   ],
+   "priorities": [
+    {
+     "value": "Taking large monorepo migrations off manual effort (Micronaut 4, gRPC client consolidation)",
+     "evidence": [
+      {
+       "source_id": "src_4892dbb7cb",
+       "quote": null
+      },
+      {
+       "source_id": "src_6958f83cc0",
+       "quote": null
+      }
+     ]
+    },
+    {
+     "value": "Agent identity, auditability and governance (IAM hiring)",
+     "evidence": [
+      {
+       "source_id": "src_ad7bfb5282",
+       "quote": "as Brex invests in signed identity propagation, delegated and agent identity, fine-grained authorization, stronger auditability"
+      }
+     ]
+    },
+    {
+     "value": "Securing agentic workflows and proactive vulnerability work (AppSec hiring)",
+     "evidence": [
+      {
+       "source_id": "src_11abaa1d40",
+       "quote": null
+      }
+     ]
+    }
+   ],
+   "peers": [
+    {
+     "value": "Ramp: named competitor; public Devin customer (Tech debt & maintenance)",
+     "evidence": [
+      {
+       "source_id": "src_a0e3ed332e",
+       "quote": "Melio, Spendesk, Expensify, Sift, Ramp, Airbase, Divvy"
+      },
+      {
+       "source_id": "src_d43f49e7a2",
+       "quote": null
+      }
+     ]
+    },
+    {
+     "value": "Mercury: named competitor",
+     "evidence": [
+      {
+       "source_id": "src_eafd748806",
+       "quote": "Mercury, another competitor, also doubled its valuation"
+      }
+     ]
+    },
+    {
+     "value": "Expensify, Airbase, Spendesk: listed competitors",
+     "evidence": [
+      {
+       "source_id": "src_a0e3ed332e",
+       "quote": null
+      }
+     ]
+    }
+   ]
+  },
+  "signals": [
+   {
+    "headline": "Micronaut 4 migration still underway across 500+ Kotlin microservices (180 done, remainder being de-risked)",
+    "type": "migration",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_4892dbb7cb",
+      "quote": "Our core Kotlin framework at Brex is Micronaut and we use it across over 500 microservices."
+     },
+     {
+      "source_id": "src_4892dbb7cb",
+      "quote": "This allowed a single engineer to migrate 180 microservices in just one month."
+     },
+     {
+      "source_id": "src_4892dbb7cb",
+      "quote": "To de-risk the remainder of this migration, we are looking beyond repository-level automation"
+     },
+     {
+      "source_id": "src_e1fbc7a018",
+      "quote": "Sofhia de Souza Gonçalves built a self-correcting agent pipeline in Cursor instead, and accelerated that old, manual work model by 32x."
+     },
+     {
+      "source_id": "src_ba53509e7c",
+      "quote": "Meet the Brex engineer who said \"never again\" to painful framework upgrades. Sofhia de Souza Gonçalves built a self-correcting agent pipeline in Cursor"
+     }
+    ],
+    "use_case": "Code migration & modernization",
+    "who_cares": [
+     "Phil Burrows",
+     "Sridhar Mocherla",
+     "Chenming Cui",
+     "Sofhia de Souza Gonçalves"
+    ],
+    "strength": "strong"
+   },
+   {
+    "headline": "Agent-driven migration exposed test-suite gaps: PRs passed tests but caused runtime bugs",
+    "type": "quality_security",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_4892dbb7cb",
+      "quote": "because certain services had gaps in their test suites or lacked robust monitoring, anomalies slipped through."
+     }
+    ],
+    "use_case": "Test generation & QA",
+    "who_cares": [
+     "Phil Burrows",
+     "Sridhar Mocherla"
+    ],
+    "strength": "medium"
+   },
+   {
+    "headline": "gRPC client-factory consolidation across 400+ monorepo services run through an in-house agent platform",
+    "type": "migration",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_6958f83cc0",
+      "quote": "We needed to migrate gRPC client factories across 400+ services in our monorepo."
+     },
+     {
+      "source_id": "src_d06cfa75b0",
+      "quote": "Building autonomous agents for technical tasks: 5 lessons learned\n\nBy Graham Fuller, April 2026"
+     }
+    ],
+    "use_case": "Code migration & modernization",
+    "who_cares": [
+     "Graham Fuller",
+     "Phil Burrows"
+    ],
+    "strength": "medium"
+   },
+   {
+    "headline": "Hiring a Staff Application Security Engineer to drive proactive vulnerability discovery and cross-functional remediation",
+    "type": "quality_security",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_11abaa1d40",
+      "quote": "Drive proactive vulnerability discovery and offensive security testing strategies, executing complex attack chains to demonstrate business impact and prioritize cross-functional remediation."
+     }
+    ],
+    "use_case": "Vulnerability remediation",
+    "who_cares": [
+     "Mark Hillick",
+     "Matthew Fanto"
+    ],
+    "strength": "medium"
+   }
+  ],
+  "competitive_context": [
+   {
+    "value": "Direct competitor in production: Cursor (incl. self-hosted Cursor cloud agents) runs the Micronaut 4 migration workload, and Apollo lists Cursor. Competitive, not positive. Angle: Devin as a managed alternative to the harness Brex had to build (self-hosted nodes, headless auth, skills library) and to the laptop-dependence it hit first.",
+    "evidence": [
+     {
+      "source_id": "src_4892dbb7cb",
+      "quote": "If a laptop went to sleep, dropped its Wi-Fi connection, or was closed for a meeting, the agentic loop broke entirely."
+     },
+     {
+      "source_id": "src_4892dbb7cb",
+      "quote": "We built a pipeline of custom self-hosted AI agents in Cursor that are capable of writing, building, and dynamically self-correcting code."
+     },
+     {
+      "source_id": "src_8b7576ba1b",
+      "quote": null
+     }
+    ],
+    "situation": "other"
+   },
+   {
+    "value": "Claude Code and Claude SDK in use: IT is widening Claude Code and Cursor access, and an in-house Claude SDK oncall agent overlaps Bug triage & incident response. No signed-deal date found, so no Not now trigger.",
+    "evidence": [
+     {
+      "source_id": "src_0cf8206ede",
+      "quote": "The investigation runs inside a Claude SDK session that handles tool orchestration and conversation state."
+     },
+     {
+      "source_id": "src_47929001d7",
+      "quote": "My work includes expanding access to Claude Code, ChatGPT, and Cursor"
+     }
+    ],
+    "situation": "other"
+   },
+   {
+    "value": "Build-vs-buy: Brex built its own trigger, environment and feedback-loop platform for delegating engineering work to agents. Expect a build-vs-buy objection; lead with maintenance cost and parallelization, not capability.",
+    "evidence": [
+     {
+      "source_id": "src_6958f83cc0",
+      "quote": "The gap between \"AI agents can do this\" and \"AI agents are doing this reliably\" is mostly an infrastructure problem."
+     }
+    ],
+    "situation": "other"
+   }
+  ],
+  "people": [
+   {
+    "name": "James Reggio",
+    "title": "Chief Technology Officer",
+    "deal_role": "economic_buyer",
+    "team": "Engineering leadership",
+    "why": "CTO since Sep 2024; owns engineering budget. Exec sponsor for any agent rollout.",
+    "evidence": [
+     {
+      "source_id": "src_05929162b0",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [
+     {
+      "value": "Posted publicly about the Capital One deal (Jan 22, 2026)",
+      "evidence": [
+       {
+        "source_id": "src_05929162b0",
+        "quote": "Brex is joining forces with Capital One in the largest fintech-bank deal in history."
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "verified": false,
+    "label": "candidate",
+    "profile_source_id": "src_05929162b0",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Phil Burrows",
+    "title": "Head of Platform & Infra Engineering",
+    "deal_role": "champion",
+    "team": "Platform & Infra Engineering",
+    "why": "Heads the platform org that owns developer environments and the infra behind the migration pipelines.",
+    "evidence": [
+     {
+      "source_id": "src_40a9c6d1ee",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Has talked publicly about developer-experience pain (Signadot case study)",
+      "evidence": [
+       {
+        "source_id": "src_a4911db620",
+        "quote": "It’s fairly demoralizing and just annoying and frustrating as a developer."
+       }
+      ]
+     },
+     {
+      "value": "Reacted to Brex's Micronaut migration agent post (Jul 22, 2026)",
+      "evidence": [
+       {
+        "source_id": "src_40a9c6d1ee",
+        "quote": "Nobody wants to be the engineer manually doing a big, painful, and slow framework upgrade for a quarter."
+       }
+      ]
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Signadot case study on replacing homegrown preview environments",
+      "evidence": [
+       {
+        "source_id": "src_7310dd62cc",
+        "quote": null
+       },
+       {
+        "source_id": "src_64de97e6a0",
+        "quote": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "verified": false,
+    "label": "likely_champion",
+    "profile_source_id": "src_40a9c6d1ee",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Sridhar Mocherla",
+    "title": "Staff Software Engineer",
+    "deal_role": "technical_evaluator",
+    "team": "Infrastructure (technical lead per profile)",
+    "why": "Infra tech lead whose profile lists Micronaut, Bazel, Buildkite and cloud dev environments, the stack the migration agents run on.",
+    "evidence": [
+     {
+      "source_id": "src_b5c24a5d3a",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Profile lists the migration stack and earlier developer-friction work",
+      "evidence": [
+       {
+        "source_id": "src_b5c24a5d3a",
+        "quote": "GraphQL Federation, Bazel, Polyglot development(Protobuf, Go, Typescript, Python, Kotlin/JVM, Elixir), Micronaut, AWS/EKS"
+       },
+       {
+        "source_id": "src_b5c24a5d3a",
+        "quote": "Lead project to exhaustively analyze LinkedIn developer friction points"
+       }
+      ]
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "likely_champion",
+    "profile_source_id": "src_b5c24a5d3a",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Chenming Cui",
+    "title": "Software Engineer",
+    "deal_role": "champion",
+    "team": "Backend infrastructure",
+    "why": "Profile says he led the Micronaut 4 Upgrade Project and worked down security vulnerabilities.",
+    "evidence": [
+     {
+      "source_id": "src_f03e2e21c4",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Ran the migration Devin would target",
+      "evidence": [
+       {
+        "source_id": "src_f03e2e21c4",
+        "quote": "Led the Micronaut 4 Upgrade Project"
+       },
+       {
+        "source_id": "src_f03e2e21c4",
+        "quote": "Systematically eliminated multi-year security vulnerabilities, improving platform security across core services"
+       }
+      ]
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "likely_champion",
+    "profile_source_id": "src_f03e2e21c4",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Sofhia de Souza Gonçalves",
+    "title": "Software Engineer II",
+    "deal_role": "technical_evaluator",
+    "team": "Infrastructure (migration automation)",
+    "why": "Built the self-correcting Cursor agent pipeline for Micronaut 4 and co-authored the agent-delegation post. Expect a Cursor advocate.",
+    "evidence": [
+     {
+      "source_id": "src_0298033ce6",
+      "quote": null
+     },
+     {
+      "source_id": "src_ba53509e7c",
+      "quote": "Meet the Brex engineer who said \"never again\" to painful framework upgrades. Sofhia de Souza Gonçalves built a self-correcting agent pipeline in Cursor"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Brex credits her with the Cursor migration pipeline",
+      "evidence": [
+       {
+        "source_id": "src_e1fbc7a018",
+        "quote": "Sofhia de Souza Gonçalves built a self-correcting agent pipeline in Cursor instead, and accelerated that old, manual work model by 32x."
+       }
+      ]
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Co-contributor on Building autonomous agents for technical tasks",
+      "evidence": [
+       {
+        "source_id": "src_6958f83cc0",
+        "quote": "Contributors: Graham Fuller, Jacky Chung, Sofhia de Souza Gonçalves"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "verified": true,
+    "label": "likely_champion",
+    "profile_source_id": null,
+    "current_basis": "two_sources"
+   },
+   {
+    "name": "Graham Fuller",
+    "title": "Senior Software Engineer",
+    "deal_role": "technical_evaluator",
+    "team": "Engineering (agent delegation platform)",
+    "why": "Author of Brex's post on its internal platform for delegating engineering work to agents.",
+    "evidence": [
+     {
+      "source_id": "src_b812c7a578",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Public author on agent infrastructure",
+      "evidence": [
+       {
+        "source_id": "src_d06cfa75b0",
+        "quote": "Building autonomous agents for technical tasks: 5 lessons learned\n\nBy Graham Fuller, April 2026"
+       }
+      ]
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Post: the gap is mostly an infrastructure problem",
+      "evidence": [
+       {
+        "source_id": "src_6958f83cc0",
+        "quote": "The gap between \"AI agents can do this\" and \"AI agents are doing this reliably\" is mostly an infrastructure problem."
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "verified": false,
+    "label": "likely_champion",
+    "profile_source_id": "src_b812c7a578",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Daniel Jimenez",
+    "title": "Senior IT Systems Engineer",
+    "deal_role": "champion",
+    "team": "IT / AI enablement (Corporate AI Lead per profile)",
+    "why": "Runs AI tool distribution and governance with Security; new in his current role.",
+    "evidence": [
+     {
+      "source_id": "src_47929001d7",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "AI-enablement remit; in role about 1 month",
+      "evidence": [
+       {
+        "source_id": "src_47929001d7",
+        "quote": "My work includes expanding access to Claude Code, ChatGPT, and Cursor"
+       }
+      ]
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "likely_champion",
+    "profile_source_id": "src_47929001d7",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Sai Chiligireddy",
+    "title": "Staff AI Engineer & Tech Lead Manager - AI Ecosystem",
+    "deal_role": "champion",
+    "team": "AI/Agents Ecosystem",
+    "why": "Leads Brex's MCP platform and agentic identity; joined in May 2026.",
+    "evidence": [
+     {
+      "source_id": "src_c7e7a2cd98",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "AI title, new in role (5 months)",
+      "evidence": [
+       {
+        "source_id": "src_c7e7a2cd98",
+        "quote": "Lead for Brex's MCP platform, conversational, permission-aware access to financial data across Claude, ChatGpt, Cursor, and any MCP client"
+       }
+      ]
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "likely_champion",
+    "profile_source_id": "src_c7e7a2cd98",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Tim Foster",
+    "title": "Engineering Manager",
+    "deal_role": "champion",
+    "team": "Product engineering (AI)",
+    "why": "Hiring an AI Engineer for his team; previously at Capital One, which could help with parent-company navigation.",
+    "evidence": [
+     {
+      "source_id": "src_37e57084df",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Named hiring manager on an AI Engineer opening",
+      "evidence": [
+       {
+        "source_id": "src_37e57084df",
+        "quote": "I'm hiring an AI Engineer for my team in SF."
+       }
+      ]
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "likely_champion",
+    "profile_source_id": "src_37e57084df",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Graham McCarthy",
+    "title": "Engineering Manager",
+    "deal_role": "champion",
+    "team": "Product Data Platform",
+    "why": "Leads engineering for Brex's Product Data Platform and describes his focus as AI-native development.",
+    "evidence": [
+     {
+      "source_id": "src_726f2b463e",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "AI appetite in profile headline",
+      "evidence": [
+       {
+        "source_id": "src_726f2b463e",
+        "quote": "Agentic Products & AI-Native Development"
+       }
+      ]
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "likely_champion",
+    "profile_source_id": "src_726f2b463e",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Bruno Romero",
+    "title": "Staff Software Engineer",
+    "deal_role": "champion",
+    "team": "Engineering (São Paulo)",
+    "why": "Newly promoted to Staff; ex-Nubank, a public Devin customer.",
+    "evidence": [
+     {
+      "source_id": "src_9e8f6f46a1",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Ex-employee of Devin customer Nubank; new in role (1 month)",
+      "evidence": [
+       {
+        "source_id": "src_9e8f6f46a1",
+        "quote": null
+       },
+       {
+        "source_id": "src_c667764b4e",
+        "quote": null
+       }
+      ]
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "likely_champion",
+    "profile_source_id": "src_9e8f6f46a1",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Àyodélé Àbéjídé",
+    "title": "Principal Engineer",
+    "deal_role": "technical_evaluator",
+    "team": "Engineering",
+    "why": "Promoted to Principal Engineer in Sep 2026; senior technical voice in any evaluation.",
+    "evidence": [
+     {
+      "source_id": "src_7556a33ecf",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "New in role (1 month)",
+      "evidence": [
+       {
+        "source_id": "src_7556a33ecf",
+        "quote": null
+       }
+      ]
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "likely_champion",
+    "profile_source_id": "src_7556a33ecf",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Feng Zhao",
+    "title": "Senior Director of Engineering - Workflows",
+    "deal_role": "economic_buyer",
+    "team": "Spend / Workflows engineering",
+    "why": "BU engineering leader for the Spend org (travel, payables).",
+    "evidence": [
+     {
+      "source_id": "src_33f2e88946",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "candidate",
+    "profile_source_id": "src_33f2e88946",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Thomas Fisher",
+    "title": "Director of Engineering, Financial Services",
+    "deal_role": "economic_buyer",
+    "team": "Financial Services engineering",
+    "why": "BU engineering leader for financial products.",
+    "evidence": [
+     {
+      "source_id": "src_ceb4db5e1f",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "candidate",
+    "profile_source_id": "src_ceb4db5e1f",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Brandon Bloom",
+    "title": "Director of Engineering",
+    "deal_role": "champion",
+    "team": "Engineering",
+    "why": "Director of Engineering since Nov 2025.",
+    "evidence": [
+     {
+      "source_id": "src_40a722c973",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "candidate",
+    "profile_source_id": "src_40a722c973",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Antoine Azar",
+    "title": "Director of Engineering",
+    "deal_role": "champion",
+    "team": "Engineering",
+    "why": "Long-tenured Director of Engineering.",
+    "evidence": [
+     {
+      "source_id": "src_8c0afe5920",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "candidate",
+    "profile_source_id": "src_8c0afe5920",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Mark Hillick",
+    "title": "CISO",
+    "deal_role": "gatekeeper",
+    "team": "Security / Trust",
+    "why": "Security approval for any agent with repo and CI access.",
+    "evidence": [
+     {
+      "source_id": "src_193cbf2ecc",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "candidate",
+    "profile_source_id": "src_193cbf2ecc",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Matthew Fanto",
+    "title": "Platform Security Manager",
+    "deal_role": "gatekeeper",
+    "team": "Application Security, Infrastructure Security, Privacy Engineering",
+    "why": "Leads AppSec, InfraSec and Privacy Engineering; the AppSec opening sits in this area.",
+    "evidence": [
+     {
+      "source_id": "src_d3ba6d726c",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "candidate",
+    "profile_source_id": "src_d3ba6d726c",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Priyanka Chaudhary",
+    "title": "Engineering Manager, GRC",
+    "deal_role": "gatekeeper",
+    "team": "Governance, Risk & Compliance",
+    "why": "Owns third-party risk and AI security risk strategy per profile; vendor review path.",
+    "evidence": [
+     {
+      "source_id": "src_d22892ace5",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "candidate",
+    "profile_source_id": "src_d22892ace5",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Jon Buckbee",
+    "title": "Vice President, Enterprise Supplier Management",
+    "deal_role": "gatekeeper",
+    "team": "Capital One (parent) procurement: Credit Card, Retail Bank",
+    "why": "Parent-company procurement leader at Capital One; likely approver once Brex buying runs through the parent.",
+    "evidence": [
+     {
+      "source_id": "src_86dcefadcf",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "candidate",
+    "profile_source_id": "src_86dcefadcf",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Ashish Agrawal",
+    "title": "CTO & Managing Vice President, Capital One Business Cards",
+    "deal_role": "gatekeeper",
+    "team": "Capital One (parent) Business Cards technology",
+    "why": "Parent-company technology leader for business cards and payments; possible approver on shared tooling.",
+    "evidence": [
+     {
+      "source_id": "src_efefbad3fc",
+      "quote": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "verified": false,
+    "label": "candidate",
+    "profile_source_id": "src_efefbad3fc",
+    "current_basis": "profile"
+   }
+  ],
+  "top_contacts": [
+   {
+    "name": "James Reggio",
+    "why": {
+     "text": "Assessment: 200–2,000 band puts the CTO first as buyer; he owns the engineering budget that now includes Capital One's committed investment.",
+     "based_on": [
+      {
+       "source_id": "src_05929162b0",
+       "quote": null
+      },
+      {
+       "source_id": "src_809203afd3",
+       "quote": "They’ve committed to investing materially in Brex"
+      }
+     ]
+    }
+   },
+   {
+    "name": "Phil Burrows",
+    "why": {
+     "text": "Assessment: likely champion. He heads the platform org behind the migration agent harness and has spoken publicly about developer-experience pain.",
+     "based_on": [
+      {
+       "source_id": "src_40a9c6d1ee",
+       "quote": null
+      },
+      {
+       "source_id": "src_a4911db620",
+       "quote": "It’s fairly demoralizing and just annoying and frustrating as a developer."
+      }
+     ]
+    }
+   },
+   {
+    "name": "Sridhar Mocherla",
+    "why": {
+     "text": "Assessment: infra tech lead on the exact stack (Micronaut, Bazel, cloud dev environments); the right technical evaluator for the migration remainder.",
+     "based_on": [
+      {
+       "source_id": "src_b5c24a5d3a",
+       "quote": "GraphQL Federation, Bazel, Polyglot development(Protobuf, Go, Typescript, Python, Kotlin/JVM, Elixir), Micronaut, AWS/EKS"
+      },
+      {
+       "source_id": "src_4892dbb7cb",
+       "quote": null
+      }
+     ]
+    }
+   }
+  ],
+  "abm_themes": [
+   {
+    "text": "From homegrown agent harness to managed delegation: Brex has proven the pattern (self-hosted Cursor agents, an internal delegation platform). Market Devin as the way to stop maintaining that plumbing.",
+    "based_on": [
+     {
+      "source_id": "src_4892dbb7cb",
+      "quote": null
+     },
+     {
+      "source_id": "src_6958f83cc0",
+      "quote": "The gap between \"AI agents can do this\" and \"AI agents are doing this reliably\" is mostly an infrastructure problem."
+     }
+    ]
+   },
+   {
+    "text": "Bank-grade agent governance after Capital One: VPC deployment, audit logs and access controls line up with Brex's own governance lessons and its agent-identity investment.",
+    "based_on": [
+     {
+      "source_id": "src_6958f83cc0",
+      "quote": "Governance is critical. Agents should only have access to the information they need to perform the task at hand."
+     },
+     {
+      "source_id": "src_ad7bfb5282",
+      "quote": "as Brex invests in signed identity propagation, delegated and agent identity, fine-grained authorization, stronger auditability"
+     },
+     {
+      "source_id": "src_3937fb8daf",
+      "quote": null
+     }
+    ]
+   },
+   {
+    "text": "Fintech migration proof: lead with Nubank and Itaú migration and test-coverage outcomes for a Kotlin microservices estate with a remaining framework upgrade.",
+    "based_on": [
+     {
+      "source_id": "src_c667764b4e",
+      "quote": null
+     },
+     {
+      "source_id": "src_5903e45c48",
+      "quote": null
+     },
+     {
+      "source_id": "src_4892dbb7cb",
+      "quote": null
+     }
+    ]
+   }
+  ],
+  "drafts": [
+   {
+    "name": "James Reggio",
+    "email": {
+     "subject": "Delegated engineering at Capital One scale",
+     "body": "Hi James,\n\nYour team's posts on delegating engineering work to agents stood out: an internal platform for monorepo migrations, then a Cursor pipeline that moved 180 Micronaut services. With Capital One committed to investing materially in Brex, the open question is who keeps maintaining that harness as the scope grows.\n\nDevin is built for that work. It plans, codes and tests on its own VMs, splits big tasks across parallel cloud agents, and can deploy in your VPC, so your engineers act as architects and review the output. Teams at Ramp use Devin to fix tens of thousands of hours of technical debt.\n\nOpen to a short call on what your platform team would rather not own?\n\nBest,"
+    },
+    "linkedin_note": "James, I read Brex's posts on delegating engineering work to agents, from the gRPC migrations to the Micronaut 4 pipeline. I work on Devin at Cognition, which runs that kind of work across parallel cloud agents. Would be glad to connect and trade notes.",
+    "linkedin_followup": "James, one more data point from fintech: Nubank used Devin on migration work and reports an 8x engineering time efficiency gain and 20x cost savings. Your Micronaut 4 post said the remainder of that migration still needs de-risking, and that some services had gaps in their test suites. Both are workloads Devin takes as delegated tasks, with a human reviewing every PR before it merges. If it would help, I can share how Nubank scoped and sequenced theirs.",
+    "built_from": [
+     {
+      "source_id": "src_4892dbb7cb",
+      "quote": null
+     },
+     {
+      "source_id": "src_6958f83cc0",
+      "quote": null
+     },
+     {
+      "source_id": "src_809203afd3",
+      "quote": null
+     },
+     {
+      "source_id": "src_d43f49e7a2",
+      "quote": null
+     },
+     {
+      "source_id": "src_c667764b4e",
+      "quote": null
+     }
+    ],
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Phil Burrows",
+    "email": {
+     "subject": "The Micronaut 4 remainder",
+     "body": "Hi Phil,\n\nThe Micronaut 4 write-up from your org was candid: local agent runs broke whenever a laptop slept, so the team provisioned self-hosted nodes, headless auth and a library of eleven skills before the pipeline held. It also says the remainder of the migration still needs de-risking, and that some services had gaps in their test suites.\n\nDevin runs that loop as a product: it tests end to end on its own VMs, keeps working when the laptop is closed, and splits big tasks across parallel cloud agents. Nubank used Devin on migrations and reports an 8x engineering time efficiency gain.\n\nOpen to a short call on which parts of that harness your platform team could hand off?\n\nBest,"
+    },
+    "linkedin_note": "Phil, your org's Micronaut 4 agent pipeline post was one of the most honest write-ups I've read on running agents against a real monorepo. I work on Devin at Cognition, which handles that kind of migration loop in the cloud. Would be glad to connect.",
+    "linkedin_followup": "Phil, a follow-on thought. The migration post ended on validation: a few agent PRs passed every existing test and still caused runtime bugs, because some services had thin test suites. Devin can take coverage work as its own queue, writing and running tests service by service before the next upgrade wave lands. At Itaú, that approach 2x'ed test coverage, from ~50% to ~90+%. Happy to share how they sequenced it if that's useful for the rest of the rollout.",
+    "built_from": [
+     {
+      "source_id": "src_4892dbb7cb",
+      "quote": null
+     },
+     {
+      "source_id": "src_c667764b4e",
+      "quote": null
+     },
+     {
+      "source_id": "src_5903e45c48",
+      "quote": null
+     },
+     {
+      "source_id": "src_a4911db620",
+      "quote": null
+     }
+    ],
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Sridhar Mocherla",
+    "email": {
+     "subject": "Bazel monorepo migrations, delegated",
+     "body": "Hi Sridhar,\n\nYour profile lists Bazel, Micronaut, Buildkite and cloud development environments, the same stack the Micronaut 4 agent pipeline had to wrap with buildozer scripts, headless auth and self-hosted nodes.\n\nTechnically, Devin works inside your codebase and the tools your team already uses: it plans the change, builds and tests on its own VMs, picks up failed CI, and opens a PR for human review. Large migrations split across parallel cloud agents, and it can deploy in your VPC. Itaú used it for a 6x faster .NET to Java migration of 59 services.\n\nWould a technical walkthrough against one Bazel target be useful?\n\nBest,"
+    },
+    "linkedin_note": "Sridhar, saw you lead infrastructure at Brex across Bazel, Kotlin and Micronaut. I work on Devin at Cognition, an autonomous engineer that runs monorepo migrations across parallel cloud agents. Would be glad to connect.",
+    "linkedin_followup": "Sridhar, one more angle. Brex's migration pipeline requires a human review on every agent PR, which is the right call, but it moves the bottleneck to reviewers once agents start opening PRs overnight. Cognition built Devin Review for that: AI-assisted review of human- and agent-written PRs, including security findings, so a reviewer starts from a summary instead of a raw diff. Happy to show it on a sample Micronaut upgrade PR if that would help.",
+    "built_from": [
+     {
+      "source_id": "src_b5c24a5d3a",
+      "quote": null
+     },
+     {
+      "source_id": "src_4892dbb7cb",
+      "quote": null
+     },
+     {
+      "source_id": "src_5903e45c48",
+      "quote": null
+     },
+     {
+      "source_id": "src_5d13c40e84",
+      "quote": null
+     }
+    ],
+    "low_confidence": false,
+    "lint": []
+   }
+  ]
+ },
+ "report": {
+  "dropped_count": 1,
+  "dropped": [
+   {
+    "path": "signals[1].evidence[1]",
+    "reason": "signal evidence needs an exact quote"
+   }
+  ],
+  "flags": [
+   {
+    "path": "signals[0].evidence[0]",
+    "flag": "publication date unknown"
+   },
+   {
+    "path": "signals[0].evidence[1]",
+    "flag": "publication date unknown"
+   },
+   {
+    "path": "signals[0].evidence[2]",
+    "flag": "publication date unknown"
+   },
+   {
+    "path": "signals[1].evidence[0]",
+    "flag": "publication date unknown"
+   },
+   {
+    "path": "signals[2].evidence[0]",
+    "flag": "publication date unknown"
+   },
+   {
+    "path": "signals[2].evidence[1]",
+    "flag": "publication date unknown"
+   }
+  ]
+ },
+ "since_last_run": null,
+ "doc_url": null
+}

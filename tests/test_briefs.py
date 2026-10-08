@@ -51,7 +51,9 @@ def brief(blog, phil, *, with_hook=True, signal=True):
             "people": [person],
             "top_contacts": [{"name": "Phil Burrows", "why": {"text": "Owns the migration", "based_on": [{"source_id": phil}]}}],
             "drafts": [{"name": "Phil Burrows", "email": {"subject": "Your Java 17 migration", "body": EMAIL},
-                        "linkedin_note": NOTE, "linkedin_followup": FOLLOW, "built_from": ev + [{"source_id": blog}]}]}
+                        "linkedin_note": NOTE, "linkedin_followup": FOLLOW, "built_from": ev + [{"source_id": blog}],
+                        "claims": [{"text": "Brex is migrating its monolith to Java 17", "source_id": blog,
+                                    "quote": "migrating our monolith from Java 8 to Java 17"}]}]}
 
 
 def test_save_render_and_slack(env):
@@ -119,3 +121,24 @@ def test_doc_link_from_harness_connector(env):
     r = briefs.set_brief_link("brex.com", "https://docs.google.com/document/d/abc/edit")
     assert r["slack_summary"].endswith("Full brief: https://docs.google.com/document/d/abc/edit")
     assert briefs.get_last_brief("brex.com")["doc_url"] == "https://docs.google.com/document/d/abc/edit"
+
+
+def test_render_fixes():
+    from server.briefs import _local_day, _one_line, _plain, conflicting
+    assert conflicting([{"value": "Apollo reports ~1,800 employees"}, {"value": "Tracxn reports 5,158 employees"}])
+    assert not conflicting([{"value": "Apollo reports ~1,800 employees"}, {"value": "Revelio reports ~1,757 employees"}])
+    assert conflicting([{"value": "Apollo reports $700M"}, {"value": "RocketReach reports $279M"}])
+    assert not conflicting([{"value": "Kotlin on Micronaut"}, {"value": "Buildkite and AWS"}])
+    assert _one_line("Building agents\n\nBy Graham Fuller") == "Building agents By Graham Fuller"
+    assert _plain("Assessment: CTO first") == "CTO first" and _plain("CTO first") == "CTO first"
+    assert _local_day("2026-10-08T00:30:00+00:00") in ("2026-10-07", "2026-10-08")  # depends on the machine's zone
+
+
+def test_rendered_draft_shows_claims_and_no_false_conflicts(env):
+    blog, phil = env
+    b = brief(blog, phil)
+    b["engineering"] = {"tech_stack": [{"value": "Kotlin", "evidence": [{"source_id": blog}]},
+                                       {"value": "Java", "evidence": [{"source_id": blog}]}]}
+    md = briefs.save_brief("brex.com", b)["brief_markdown"]
+    assert "**Claims to check**" in md and '> "migrating our monolith from Java 8 to Java 17"' in md
+    assert "sources differ" not in md
