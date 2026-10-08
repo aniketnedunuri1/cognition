@@ -100,18 +100,27 @@ def _link(p: Paragraph, text: str, url: str) -> None:
 
 def _shade(cell: _Cell, fill: str) -> None:
     tcPr = cell._tc.get_or_add_tcPr()
+    for old in tcPr.findall(qn("w:shd")):
+        tcPr.remove(old)
     shd = OxmlElement("w:shd")
     shd.set(qn("w:fill"), fill)
     shd.set(qn("w:val"), "clear")
     tcPr.append(shd)
 
 
-def _borders(cell: _Cell, color: str | None = None, sz: str = "4") -> None:
+def _borders(cell: _Cell, color: str | None = None, sz: str = "4", accent: str | None = None) -> None:
     tcPr = cell._tc.get_or_add_tcPr()
+    for old in tcPr.findall(qn("w:tcBorders")):
+        tcPr.remove(old)
     tb = OxmlElement("w:tcBorders")
     for edge in ("top", "left", "bottom", "right"):
         el = OxmlElement(f"w:{edge}")
-        if color:
+        if accent and edge == "left":
+            el.set(qn("w:val"), "single")
+            el.set(qn("w:sz"), "16")
+            el.set(qn("w:color"), accent)
+            el.set(qn("w:space"), "0")
+        elif color:
             el.set(qn("w:val"), "single")
             el.set(qn("w:sz"), sz)
             el.set(qn("w:color"), color)
@@ -122,16 +131,20 @@ def _borders(cell: _Cell, color: str | None = None, sz: str = "4") -> None:
     tcPr.append(tb)
 
 
-def _cell_width(cell: _Cell, dxa: int) -> None:
+def _cell_width(cell: _Cell, dxa: int, pad: tuple[int, int, int, int] | None = None) -> None:
+    top, left, bottom, right = pad or (80, 120, 80, 120)
     tcPr = cell._tc.get_or_add_tcPr()
+    for tag in ("w:tcW", "w:tcMar"):
+        for old in tcPr.findall(qn(tag)):
+            tcPr.remove(old)
     w = OxmlElement("w:tcW")
     w.set(qn("w:w"), str(dxa))
     w.set(qn("w:type"), "dxa")
     tcPr.append(w)
     mar = OxmlElement("w:tcMar")
-    for edge, val in (("top", "80"), ("left", "120"), ("bottom", "80"), ("right", "120")):
+    for edge, val in (("top", top), ("left", left), ("bottom", bottom), ("right", right)):
         el = OxmlElement(f"w:{edge}")
-        el.set(qn("w:w"), val)
+        el.set(qn("w:w"), str(val))
         el.set(qn("w:type"), "dxa")
         mar.append(el)
     tcPr.append(mar)
@@ -161,15 +174,16 @@ def _tbl_width(table: Table, dxa: int, cols: list[int]) -> None:
     look.set(qn("w:firstRow"), "0")
     # Keep the table from inheriting Table Grid.
     table.style = "Normal Table"
+    table.autofit = False
 
 
-def _container(doc: Document, fill: str = CARD, width: int = CONTENT) -> _Cell:
+def _container(doc: Document, fill: str = CARD, width: int = CONTENT, accent: str | None = None) -> _Cell:
     table = doc.add_table(rows=1, cols=1)
     _tbl_width(table, width, [width])
     cell = table.cell(0, 0)
     _cell_width(cell, width)
     _shade(cell, fill)
-    _borders(cell, LINE, "4")
+    _borders(cell, LINE, "4", accent=accent)
     cell.paragraphs[0].text = ""
     return cell
 
@@ -195,6 +209,49 @@ def _cite(p: Paragraph, marker: str) -> None:
         _run(p, " " + marker, size=8, color=MUTED)
 
 
+_CITE_TAIL = re.compile(r"((?:\s*\[\d+\])+)\s*$")
+
+
+def _valued(p: Paragraph, text: str, *, size=10, echo: str | None = None) -> None:
+    """Working number/place is figure; 'Apollo reports' and [n] cites recede."""
+    if not text:
+        _run(p, "Not found", size=size, italic=True, color=MUTED)
+        return
+    cites = ""
+    m = _CITE_TAIL.search(text)
+    if m:
+        cites = "".join(re.findall(r"\[\d+\]", m.group(1)))
+        text = text[:m.start()].rstrip()
+    if text.startswith("Apollo reports "):
+        _run(p, "Apollo reports ", size=8, color=MUTED)
+        text = text[len("Apollo reports "):]
+    if echo:
+        for prefix in (f"{echo} in ", f"{echo}: ", "parent company: "):
+            if text.lower().startswith(prefix.lower()):
+                text = text[len(prefix):]
+                break
+    _run(p, text, size=size)
+    if cites:
+        _cite(p, cites)
+
+
+def _compat(doc: Document) -> None:
+    """Word 2013+ layout engine so page breaks and table widths are not compatibility-mode."""
+    settings = doc.settings.element
+    compat = settings.find(qn("w:compat"))
+    if compat is None:
+        compat = OxmlElement("w:compat")
+        settings.append(compat)
+    for old in list(compat):
+        if old.get(qn("w:name")) == "compatibilityMode":
+            compat.remove(old)
+    setting = OxmlElement("w:compatSetting")
+    setting.set(qn("w:name"), "compatibilityMode")
+    setting.set(qn("w:uri"), "http://schemas.microsoft.com/office/word")
+    setting.set(qn("w:val"), "15")
+    compat.append(setting)
+
+
 def brief_to_docx(rec: dict, path: Path) -> Path:
     b, src = rec["brief"], _Sources()
     doc = Document()
@@ -210,12 +267,16 @@ def brief_to_docx(rec: dict, path: Path) -> Path:
     normal.font.name = "Arial"
     normal.font.size = Pt(11)
     normal.font.color.rgb = _rgb(INK)
+    normal.paragraph_format.space_before = Pt(0)
+    normal.paragraph_format.space_after = Pt(0)
+    _compat(doc)
 
     title = doc.add_paragraph()
-    title.paragraph_format.space_after = Pt(2)
-    _run(title, f"{b['company_name']} — account brief", size=20, bold=True)
+    title.paragraph_format.space_after = Pt(0)
+    _run(title, f"{b['company_name']} — account brief", size=16, bold=True)
     meta = doc.add_paragraph()
-    meta.paragraph_format.space_after = Pt(10)
+    meta.paragraph_format.space_before = Pt(1)
+    meta.paragraph_format.space_after = Pt(8)
     _run(meta, f"{rec['date']}  ·  {b['domain']}", size=9, color=MUTED)
 
     _verdict(doc, b, src)
@@ -231,11 +292,13 @@ def brief_to_docx(rec: dict, path: Path) -> Path:
     return path
 
 
-def _heading(doc: Document, text: str) -> None:
+def _heading(doc: Document, text: str, *, page_break: bool = False) -> None:
     p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(14)
-    p.paragraph_format.space_after = Pt(6)
-    _run(p, text, size=13, bold=True)
+    if page_break:
+        p.paragraph_format.page_break_before = True
+    p.paragraph_format.space_before = Pt(4 if page_break else 10)
+    p.paragraph_format.space_after = Pt(4)
+    _run(p, text, size=12, bold=True)
 
 
 def _verdict(doc: Document, b: dict, src: _Sources) -> None:
@@ -245,60 +308,72 @@ def _verdict(doc: Document, b: dict, src: _Sources) -> None:
         _run(p, "No supported verdict.", italic=True, color=MUTED)
         return
     key = v["verdict"]
-    cell = _container(doc, VERDICT_FILL[key])
-    p = _p(cell, after=40)
-    _run(p, VERDICT[key], size=16, bold=True, color=VERDICT_INK[key])
-    _run(p, "   ", size=11)
-    _run(p, _plain(v["why_now"]), size=11)
-    _cite(p, src.cite(v["based_on"]))
+    cell = _container(doc, VERDICT_FILL[key], accent=VERDICT_INK[key])
+    badge = _p(cell, after=40)
+    _run(badge, VERDICT[key], size=13, bold=True, color=VERDICT_INK[key])
+    why = _p(cell, after=40)
+    _run(why, _plain(v["why_now"]), size=10)
+    _cite(why, src.cite(v["based_on"]))
     if v.get("watch_for"):
-        w = _p(cell, after=40)
-        _run(w, "Watch for: ", size=9, italic=True, color=MUTED)
-        _run(w, v["watch_for"], size=9, color=MUTED)
+        w = _p(cell, after=20)
+        _run(w, "Watch for: ", size=8, italic=True, color=MUTED)
+        _run(w, v["watch_for"], size=8, color=MUTED)
 
 
 def _snapshot(doc: Document, b: dict, src: _Sources) -> None:
     _heading(doc, "Snapshot")
     snap, eng = b["snapshot"], b["engineering"]
-    rows = [
+    notes = []
+    pairs = [
         ("HQ", _facts(src, snap["hq"])),
         ("Parent", _facts(src, snap["parent_company"])),
     ]
-    notes = []
     for key, lab in (("headcount", "Headcount"), ("revenue", "Revenue"), ("funding", "Funding")):
         cell, note = working_cell(src, snap[key])
-        rows.append((lab, cell))
+        pairs.append((lab, cell))
         if note:
             notes.append(f"{lab} — {note}")
     eng_hc = working_fact(eng["eng_headcount"])
-    rows += [
-        ("Eng size", _facts(src, [eng_hc] if eng_hc else [])),
-        ("Stack", _facts(src, eng["tech_stack"][:1])),
-    ]
-    table = doc.add_table(rows=len(rows), cols=2)
-    label_w, val_w = 1600, CONTENT - 1600
-    _tbl_width(table, CONTENT, [label_w, val_w])
-    for i, (lab, val) in enumerate(rows):
-        lc, vc = table.cell(i, 0), table.cell(i, 1)
-        _cell_width(lc, label_w)
-        _cell_width(vc, val_w)
-        _shade(lc, PAPER)
-        _shade(vc, PAPER)
-        for cell, color in ((lc, LINE), (vc, LINE)):
-            _bottom_only(cell, color)
-        lp, vp = lc.paragraphs[0], vc.paragraphs[0]
-        lp.text = ""; vp.text = ""
-        _run(lp, lab, size=9, bold=True, color=MUTED)
-        _run(vp, val, size=10)
+    pairs.insert(4, ("Eng size", _facts(src, [eng_hc] if eng_hc else [])))
+    # 2×3: HQ/Parent, Headcount/Revenue, Eng size/Funding
+    lab_w, val_w = 1200, 3840
+    table = doc.add_table(rows=3, cols=4)
+    _tbl_width(table, CONTENT, [lab_w, val_w, lab_w, val_w])
+    pad = (40, 80, 40, 80)
+    for i in range(3):
+        left, right = pairs[i * 2], pairs[i * 2 + 1]
+        _snap_kv(table.cell(i, 0), table.cell(i, 1), left[0], left[1], lab_w, val_w, pad)
+        _snap_kv(table.cell(i, 2), table.cell(i, 3), right[0], right[1], lab_w, val_w, pad)
+    stack = doc.add_table(rows=1, cols=2)
+    _tbl_width(stack, CONTENT, [lab_w, CONTENT - lab_w])
+    _snap_kv(stack.cell(0, 0), stack.cell(0, 1), "Stack",
+             _facts(src, eng["tech_stack"][:1]), lab_w, CONTENT - lab_w, pad)
     for note in notes:
         p = doc.add_paragraph()
         p.paragraph_format.space_before = Pt(2)
-        p.paragraph_format.space_after = Pt(2)
+        p.paragraph_format.space_after = Pt(1)
         _run(p, note, size=8, color=MUTED)
+
+
+def _snap_kv(lc: _Cell, vc: _Cell, lab: str, val: str, lab_w: int, val_w: int, pad) -> None:
+    _cell_width(lc, lab_w, pad)
+    _cell_width(vc, val_w, pad)
+    _shade(lc, PAPER)
+    _shade(vc, PAPER)
+    _bottom_only(lc, LINE)
+    _bottom_only(vc, LINE)
+    lp, vp = lc.paragraphs[0], vc.paragraphs[0]
+    lp.text, vp.text = "", ""
+    lp.paragraph_format.space_before = lp.paragraph_format.space_after = Pt(0)
+    vp.paragraph_format.space_before = vp.paragraph_format.space_after = Pt(0)
+    _run(lp, lab, size=8, bold=True, color=MUTED)
+    _valued(vp, val, size=10, echo=lab)
 
 
 def _bottom_only(cell: _Cell, color: str) -> None:
     tcPr = cell._tc.get_or_add_tcPr()
+    for old in tcPr.findall(qn("w:tcBorders")):
+        tcPr.remove(old)
     tb = OxmlElement("w:tcBorders")
     for edge in ("top", "left", "right", "bottom"):
         el = OxmlElement(f"w:{edge}")
@@ -315,40 +390,66 @@ def _bottom_only(cell: _Cell, color: str) -> None:
 
 def _people(doc: Document, b: dict, src: _Sources) -> None:
     _heading(doc, "Who to work")
-    if not b["people"]:
+    people = b["people"]
+    if not people:
         p = doc.add_paragraph()
         _run(p, "Not found", italic=True, color=MUTED)
         return
-    for p in b["people"]:
-        cell = _container(doc, CARD)
-        head = _p(cell, after=20)
-        _run(head, p["name"], size=12, bold=True)
-        _run(head, f"  {p['title']}", size=10, color=MUTED)
-        badges = _p(cell, after=40)
-        role = p["deal_role"]
-        _run(badges, ROLE.get(role, role), size=8, bold=True, color=ROLE_INK.get(role, INK))
-        if p["label"] == "likely_champion":
-            _run(badges, "   Likely champion", size=8, bold=True, color=CHAMPION_INK)
-        if p.get("incumbent_owner"):
-            _run(badges, "   Incumbent owner", size=8, bold=True, color=INCUMBENT_INK)
-        why = _p(cell, after=20)
-        _run(why, _plain(p["why"]), size=10)
-        _cite(why, src.cite(p["evidence"]))
-        if url := _url(p.get("profile_source_id") or ""):
-            _run(why, "  ", size=9)
-            _link(why, "LinkedIn", url)
-        hook = (p["hooks"] or [{}])[0].get("value") if p["hooks"] else None
-        if hook:
-            h = _p(cell, after=20)
-            _run(h, hook, size=9, color=MUTED)
-        # spacer after card
-        sp = doc.add_paragraph()
-        sp.paragraph_format.space_after = Pt(6)
-        sp.paragraph_format.space_before = Pt(0)
+    if len(people) == 1:
+        _person_card(_container(doc, CARD, accent=ROLE_INK.get(people[0]["deal_role"])), people[0], src)
+        return
+    gap = 160
+    col = (CONTENT - gap) // 2
+    rows = (len(people) + 1) // 2
+    grid = doc.add_table(rows=rows, cols=3)
+    _tbl_width(grid, CONTENT, [col, gap, col])
+    for i, person in enumerate(people):
+        r, c = divmod(i, 2)
+        cell = grid.cell(r, 0 if c == 0 else 2)
+        role = person["deal_role"]
+        _cell_width(cell, col, (60, 100, 60, 100))
+        _shade(cell, CARD)
+        _borders(cell, LINE, "4", accent=ROLE_INK.get(role, LINE))
+        _person_card(cell, person, src)
+        if c == 0:
+            gap_cell = grid.cell(r, 1)
+            _cell_width(gap_cell, gap, (0, 0, 0, 0))
+            _shade(gap_cell, PAPER)
+            _borders(gap_cell)
+            gap_cell.paragraphs[0].text = ""
+    if len(people) % 2:
+        empty = grid.cell(rows - 1, 2)
+        _cell_width(empty, col, (0, 0, 0, 0))
+        _shade(empty, PAPER)
+        _borders(empty)
+        empty.paragraphs[0].text = ""
+
+
+def _person_card(cell: _Cell, p: dict, src: _Sources) -> None:
+    head = _p(cell, after=20)
+    _run(head, p["name"], size=11, bold=True)
+    _run(head, f"  {p['title']}", size=9, color=MUTED)
+    badges = _p(cell, after=20)
+    role = p["deal_role"]
+    _run(badges, ROLE.get(role, role), size=8, bold=True, color=ROLE_INK.get(role, INK))
+    if p["label"] == "likely_champion":
+        _run(badges, "   Likely champion", size=8, bold=True, color=CHAMPION_INK)
+    if p.get("incumbent_owner"):
+        _run(badges, "   Incumbent owner", size=8, bold=True, color=INCUMBENT_INK)
+    why = _p(cell, after=20)
+    _run(why, _plain(p["why"]), size=9)
+    _cite(why, src.cite(p["evidence"]))
+    if url := _url(p.get("profile_source_id") or ""):
+        _run(why, "  ", size=8)
+        _link(why, "LinkedIn", url)
+    hook = (p["hooks"] or [{}])[0].get("value") if p["hooks"] else None
+    if hook and hook.rstrip(".")[:48].lower() not in _plain(p["why"]).lower():
+        h = _p(cell, after=10)
+        _run(h, hook, size=8, color=MUTED)
 
 
 def _signals(doc: Document, b: dict, src: _Sources) -> None:
-    _heading(doc, "Intent signals")
+    _heading(doc, "Intent signals", page_break=True)
     if not b["signals"]:
         p = doc.add_paragraph()
         _run(p, "No signals met the bar.", italic=True, color=MUTED)
@@ -380,17 +481,17 @@ def _signals(doc: Document, b: dict, src: _Sources) -> None:
 
 
 def _drafts(doc: Document, b: dict, src: _Sources) -> None:
-    _heading(doc, "Drafted messages")
+    _heading(doc, "Drafted messages", page_break=True)
     p = doc.add_paragraph()
     _run(p, "Drafts for rep review. Never auto-sent.", size=9, italic=True, color=MUTED)
     people = {x["name"]: x for x in b["people"]}
     for d in b["drafts"]:
-        cell = _container(doc, DRAFT)
+        person = people.get(d["name"])
+        role = person["deal_role"] if person else None
+        cell = _container(doc, DRAFT, accent=ROLE_INK.get(role) if role else None)
         head = _p(cell, after=40)
         _run(head, d["name"], size=13, bold=True)
-        person = people.get(d["name"])
-        if person:
-            role = person["deal_role"]
+        if role:
             _run(head, f"   {ROLE.get(role, role)}", size=8, bold=True, color=ROLE_INK.get(role, INK))
         if d["low_confidence"]:
             w = _p(cell, after=40)
@@ -409,11 +510,18 @@ def _drafts(doc: Document, b: dict, src: _Sources) -> None:
         for line in d["linkedin_followup"].splitlines() or [""]:
             _run(_p(cell, after=40), line or " ", size=10)
         if d.get("notes"):
-            notes_p = _p(cell, after=20)
+            inner = cell.add_table(rows=1, cols=1)
+            inner_w = CONTENT - 280
+            _tbl_width(inner, inner_w, [inner_w])
+            nc = inner.cell(0, 0)
+            _cell_width(nc, inner_w, (60, 100, 60, 100))
+            _shade(nc, NOTES)
+            _borders(nc, LINE, "4")
+            notes_p = _p(nc, after=20)
             _run(notes_p, "Send notes  ·  rep only, never sent", size=8, bold=True, color=MUTED)
             for line in d["notes"].splitlines():
-                np = _p(cell, after=10)
-                _run(np, line, size=9, color=MUTED)
+                np = _p(nc, after=8)
+                _run(np, line, size=8, color=MUTED)
         claims = _p(cell, after=20)
         _run(claims, "Claims to check", size=8, bold=True, color=MUTED)
         for c in d["claims"]:
