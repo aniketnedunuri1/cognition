@@ -11,6 +11,7 @@ import argparse
 import functools
 import hmac
 import os
+from urllib.parse import urlsplit
 
 from dotenv import load_dotenv
 from fastmcp import FastMCP
@@ -186,7 +187,39 @@ TOOLS = [search_web, fetch_page, search_people, get_company, get_jobs, verify_qu
          get_playbook, add_playbook_rule, add_golden_example]
 
 
-def build_server(auth_token: str | None = None) -> FastMCP:
+def public_host_origin(public_base_url: str) -> tuple[list[str], list[str]]:
+    """Hostname + origin FastMCP should allow for a public tunnel URL.
+
+    FastMCP 4's HostOriginGuardMiddleware (``allowed_hosts`` / ``allowed_origins``,
+    enabled via ``host_origin_protection``) rejects requests whose Host header
+    isn't on the list — a cloudflared hostname would 421 without this.
+    """
+    parsed = urlsplit(public_base_url.strip())
+    host = parsed.hostname
+    if not host:
+        raise ValueError(f"PUBLIC_BASE_URL has no hostname: {public_base_url!r}")
+    origin = f"{parsed.scheme or 'https'}://{parsed.netloc}"
+    return [host], [origin]
+
+
+def _allow_public_host(mcp: FastMCP, public_base_url: str) -> None:
+    """So ``http_app()`` (tests) and ``run()`` both get the tunnel on the allowlist."""
+    hosts, origins = public_host_origin(public_base_url)
+    inner = mcp.http_app
+
+    def http_app(*args, **kwargs):
+        if not kwargs.get("allowed_hosts"):
+            kwargs["allowed_hosts"] = hosts
+        if not kwargs.get("allowed_origins"):
+            kwargs["allowed_origins"] = origins
+        if not kwargs.get("host_origin_protection"):
+            kwargs["host_origin_protection"] = True
+        return inner(*args, **kwargs)
+
+    mcp.http_app = http_app  # type: ignore[method-assign]
+
+
+def build_server(auth_token: str | None = None, public_base_url: str | None = None) -> FastMCP:
     auth = None
     if auth_token:
         auth = DebugTokenVerifier(validate=lambda t: hmac.compare_digest(t, auth_token))
@@ -201,6 +234,8 @@ def build_server(auth_token: str | None = None) -> FastMCP:
             return PlainTextResponse("Not found", status_code=404)
         return FileResponse(path, filename=f"{path.parent.name}-{path.stem}.docx", media_type=DOCX)
 
+    if public_base_url:
+        _allow_public_host(mcp, public_base_url)
     return mcp
 
 
@@ -227,8 +262,15 @@ def main() -> None:
         token, public = os.environ.get("MCP_AUTH_TOKEN"), os.environ.get("PUBLIC_BASE_URL")
         if not token or not public:
             raise SystemExit("--http needs MCP_AUTH_TOKEN and PUBLIC_BASE_URL (the tunnel's https URL)")
+        try:
+            hosts, origins = public_host_origin(public)
+        except ValueError as e:
+            raise SystemExit(str(e)) from e
         briefs.BASE_URL = public
-        build_server(token).run(transport="http", host=args.host, port=args.port)
+        build_server(token, public_base_url=public).run(
+            transport="http", host=args.host, port=args.port,
+            allowed_hosts=hosts, allowed_origins=origins, host_origin_protection=True,
+        )
     else:
         build_server().run()
 
