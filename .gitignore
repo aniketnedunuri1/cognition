@@ -20,3 +20,7 @@ cache/*
 # Generated Devin Playbook text (rebuild from playbook/playbook.md)
 playbook/devin_playbook.generated.md
 .cloudflared-devin.log
+
+# Word lock files + generated org-chart docs
+~$*.docx
+org_charts.docx
