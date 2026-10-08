@@ -45,6 +45,15 @@ def _saved(domain: str) -> list[Path]:
     return sorted((bdir() / normalize_domain(domain)).glob("*.json"))
 
 
+def _tokens_path() -> Path:
+    return bdir() / ".tokens.json"
+
+
+def _load_tokens() -> dict:
+    p = _tokens_path()
+    return json.loads(p.read_text()) if p.exists() else {}
+
+
 # ---------- diff ----------
 
 def diff_briefs(old: dict, new: dict) -> dict:
@@ -80,12 +89,17 @@ def save_brief(domain: str, brief: dict) -> dict:
     since = {"since": prev["date"], **diff_briefs(prev["brief"], clean)} if prev else None
 
     out = bdir() / domain / f"{today}.json"
-    same_day = load_record(domain, today)  # a re-save keeps the brief's download link
-    token = (same_day[1].get("download_token") if same_day else None) or secrets.token_urlsafe(16)
+    # Download tokens live in a gitignored sidecar so committed briefs carry no secrets.
+    tokens = _load_tokens()
+    token = tokens.get(f"{domain}/{today}") or secrets.token_urlsafe(16)
+    tokens[f"{domain}/{today}"] = token
+    _tokens_path().parent.mkdir(parents=True, exist_ok=True)
+    _tokens_path().write_text(json.dumps(tokens, indent=1))
     record = {"domain": domain, "date": today, "saved_at": now_iso(), "brief": clean,
               "report": report, "since_last_run": since, "download_token": token}
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(record, indent=1, ensure_ascii=False))
+    disk = {k: v for k, v in record.items() if k != "download_token"}
+    out.write_text(json.dumps(disk, indent=1, ensure_ascii=False))
     markdown = render_markdown(record)
     out.with_suffix(".md").write_text(markdown)
     from .docx_render import brief_to_docx
@@ -105,10 +119,9 @@ def find_download(token: str) -> Path | None:
     """The .docx for a download token, if any brief has it."""
     if not token:
         return None
-    for path in bdir().glob("*/*.json"):
-        rec = json.loads(path.read_text())
-        if hmac.compare_digest(str(rec.get("download_token") or ""), token):
-            docx = path.with_suffix(".docx")
+    for key, tok in _load_tokens().items():
+        if hmac.compare_digest(tok, token):
+            docx = (bdir() / key).with_suffix(".docx")
             return docx if docx.exists() else None
     return None
 
@@ -127,7 +140,11 @@ def get_last_brief(domain: str) -> dict:
 
 def load_record(domain: str, day: str | None = None) -> tuple[Path, dict] | None:
     files = [p for p in _saved(domain) if day is None or p.stem == day]
-    return (files[-1], json.loads(files[-1].read_text())) if files else None
+    if not files:
+        return None
+    rec = json.loads(files[-1].read_text())
+    rec["download_token"] = _load_tokens().get(f"{rec['domain']}/{rec['date']}")
+    return files[-1], rec
 
 
 # ---------- renders ----------

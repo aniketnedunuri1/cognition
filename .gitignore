@@ -3,6 +3,9 @@
 secrets/*
 !secrets/.gitkeep
 
+# Per-brief download tokens (access control for /briefs/<token>/ links)
+briefs/.tokens.json
+
 # Python
 .venv/
 __pycache__/
