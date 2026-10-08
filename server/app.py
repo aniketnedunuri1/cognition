@@ -1,7 +1,7 @@
 """MCP server: deterministic data tools. No judgment lives here.
 
     python -m server.app                 # stdio (CLI runner, Claude Code)
-    python -m server.app --http          # Streamable HTTP (Devin), bearer token required
+    python -m server.app --http          # Streamable HTTP (Devin): MCP_AUTH_TOKEN + PUBLIC_BASE_URL
     python -m server.app --replay        # cache only (committed demo)
 """
 
@@ -16,6 +16,8 @@ from dotenv import load_dotenv
 from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
 from fastmcp.server.auth.providers.debug import DebugTokenVerifier
+from starlette.requests import Request
+from starlette.responses import FileResponse, PlainTextResponse, Response
 
 from . import apollo, briefs, exa, feedback, knowledge, lint, verify
 from .cache import ROOT, CacheMiss
@@ -142,7 +144,8 @@ def lint_message(channel: str, text: str, source_ids: list[str] | None = None,
 def save_brief(domain: str, brief: dict) -> dict:
     """Validate and save the brief (shape: playbook Output contract). Returns the validator
     report (what was dropped and why), the since-last-run diff, the rendered brief_markdown,
-    and the Slack summary. Fix drops with real evidence — never by rewording — then save again."""
+    and the Slack summary (its "Full brief" is the .docx link). Fix drops with real evidence —
+    never by rewording — then save again. Post the final slack_summary verbatim."""
     return briefs.save_brief(domain, brief)
 
 
@@ -150,13 +153,6 @@ def save_brief(domain: str, brief: dict) -> dict:
 def get_last_brief(domain: str) -> dict:
     """The most recently saved brief for this domain, for since-last-run comparison."""
     return briefs.get_last_brief(domain)
-
-
-@_tool
-def set_brief_link(domain: str, url: str) -> dict:
-    """After creating a Google Doc from brief_markdown with your Google Docs/Drive tool,
-    pass its link here. Returns the Slack summary with the link filled in: post it verbatim."""
-    return briefs.set_brief_link(domain, url)
 
 
 @_tool
@@ -184,7 +180,7 @@ def add_golden_example(persona: str, channel: str, message: str, subject: str | 
 
 TOOLS = [search_web, fetch_page, search_people, get_company, get_jobs, verify_quote,
          get_positioning, match_customers, refresh_positioning, apply_knowledge_update,
-         lint_message, save_brief, get_last_brief, set_brief_link,
+         lint_message, save_brief, get_last_brief,
          get_playbook, add_playbook_rule, add_golden_example]
 
 
@@ -192,7 +188,21 @@ def build_server(auth_token: str | None = None) -> FastMCP:
     auth = None
     if auth_token:
         auth = DebugTokenVerifier(validate=lambda t: hmac.compare_digest(t, auth_token))
-    return FastMCP("account-research", instructions=INSTRUCTIONS, tools=TOOLS, auth=auth)
+    mcp = FastMCP("account-research", instructions=INSTRUCTIONS, tools=TOOLS, auth=auth)
+
+    # The brief link in the Slack summary. Outside MCP auth (a rep clicks it in Slack):
+    # the per-brief random token in the path is the access control.
+    @mcp.custom_route("/briefs/{token}/{filename}", methods=["GET"], include_in_schema=False)
+    async def download_brief(request: Request) -> Response:
+        path = briefs.find_download(request.path_params["token"])
+        if not path:
+            return PlainTextResponse("Not found", status_code=404)
+        return FileResponse(path, filename=f"{path.parent.name}-{path.stem}.docx", media_type=DOCX)
+
+    return mcp
+
+
+DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
 
 def main() -> None:
@@ -212,9 +222,10 @@ def main() -> None:
         os.environ["CACHE_MODE"] = "fresh"
 
     if args.http:
-        token = os.environ.get("MCP_AUTH_TOKEN")
-        if not token:
-            raise SystemExit("MCP_AUTH_TOKEN must be set for --http")
+        token, public = os.environ.get("MCP_AUTH_TOKEN"), os.environ.get("PUBLIC_BASE_URL")
+        if not token or not public:
+            raise SystemExit("--http needs MCP_AUTH_TOKEN and PUBLIC_BASE_URL (the tunnel's https URL)")
+        briefs.BASE_URL = public
         build_server(token).run(transport="http", host=args.host, port=args.port)
     else:
         build_server().run()

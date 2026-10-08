@@ -14,7 +14,7 @@ A wrong fact costs a rep more than a missing one. It burns credibility with the 
 2. **The model's own knowledge is never a source.** It may "know" a CTO's name from training data that is years old. Facts come from tool calls only.
 3. **No fallbacks, defaults, or placeholders.** If the data isn't there, the section is empty or says "Not found." Never fill a gap with a plausible guess.
 4. **Report what a source says, attributed.** "Apollo reports $700M," not "$700M." Third-party numbers are never restated as our own estimate.
-5. **Conflicts are shown, not resolved.** Two sources disagree → show both, flag it.
+5. **Conflicts are recorded, not silently resolved.** The JSON keeps both facts. The human brief shows one working number (Apollo if present, else the first) and puts material disagreements (>25%) in a footnote.
 6. **Judgment is separated from fact.** Verdict, "likely champion," recommended entry point, and ABM themes are labeled as the agent's assessment and cite the facts they rest on. Nothing inferred is presented as fact (e.g. no asserted reporting lines).
 7. **Enforced in code, not just the prompt.** Every tool result carries a `source_id` per document; the model cites `source_id`s only, never URLs. The validator resolves each against the cache and drops (and counts) anything that doesn't resolve; `verify_quote` checks every quote against the cached full text of the cited source; people must be named in a source they cite. Real URLs + retrieved dates are filled in from the cache at render time.
 
@@ -23,8 +23,8 @@ A wrong fact costs a rep more than a missing one. It burns credibility with the 
 ## User loop
 
 1. Rep: `@Devin research acme.com` in Slack (or `python agent.py research acme.com` locally).
-2. Agent runs company → people → signals and saves the validated brief (Markdown); if the harness has a Google Docs/Drive connector, it copies the brief into a Doc verbatim.
-3. Agent replies in thread with the tool-rendered summary + doc link.
+2. Agent runs company → people → signals and saves the validated brief; the server renders it to Markdown and .docx in code.
+3. Agent replies in thread with the tool-rendered summary + the brief's .docx download link.
 4. Rep picks contacts (or accepts the suggested top 3).
 5. Agent drafts email + LinkedIn per contact, posts in thread.
 6. Rep edits / comments / approves.
@@ -86,8 +86,9 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 | `get_playbook()` / `add_playbook_rule(rule, scope)` | Feedback memory |
 | `add_golden_example(persona, message)` | Store approved messages |
 | `lint_message(channel, text, source_ids, subject?)` | Length, banned phrases, public_reference, no layoffs, no "Windsurf", no placeholders; every number must appear in the cited sources |
-| `save_brief(domain, brief_json)` / `get_last_brief(domain)` | Validate, persist, diff; returns report + rendered `brief_markdown` + Slack summary |
-| `set_brief_link(domain, url)` | Records the link of the Doc the harness's own Google connector created from `brief_markdown`; returns the Slack summary with the link (Google Docs/Drive URLs only) |
+| `save_brief(domain, brief_json)` / `get_last_brief(domain)` | Validate, persist, diff; renders `.md` + `.docx`; returns report + `brief_markdown` + Slack summary (with the brief link) |
+
+HTTP mode also serves `GET /briefs/<token>/<domain>-<date>.docx`: outside MCP auth (a rep clicks it in Slack), a random token per brief is the access control. `PUBLIC_BASE_URL` (the tunnel / host URL) is required with `--http`.
 
 ---
 
@@ -105,7 +106,7 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 | Who they sell to | Website, LLM-summarized |
 | Key products | Website |
 
-**Cross-check:** headcount and revenue are checked against a second source (website, press, filings). If sources disagree materially, show both and flag it. (Test: Exa said Brex = 6,570 employees / $283M; Apollo said 1,800 / $700M.)
+**Cross-check:** headcount and revenue are checked against a second source (website, press, filings). The JSON keeps every attributed fact. Render picks one working number (prefer the Apollo-attributed fact) and, if sources disagree by more than ~25%, puts the others in a footnote (`Other sources: Tracxn 5,158; TipRanks 5,389.`). Agreeing sources are extra `[n]` markers, not a second number in the cell. (Test: Exa said Brex = 6,570 employees / $283M; Apollo said 1,800 / $700M.)
 
 **B. Engineering & priorities** (the Devin-relevant part)
 - Engineering headcount (Apollo department count), open eng roles (Apollo jobs)
@@ -119,7 +120,7 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 
 ---
 
-## 2. Buying centers & contacts
+## 2. Who to work
 
 | Deal role | Typical titles |
 |---|---|
@@ -137,13 +138,15 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 2. Web pass per candidate for verification + hooks (blog posts, talks, podcasts, press quotes, GitHub, indexed LinkedIn posts). A profile without a "(Current)" marker for this company needs a second source before it's listed as current.
 
 **Finding champions** (evidence, not titles)
-1. Named as hiring manager / team lead in relevant job posts
-2. Has publicly discussed the pain (migrations, tech debt, test coverage, DX)
-3. AI appetite (posts about Copilot/Cursor, AI enablement title)
-4. New in role (<6 months, from profile start date)
-5. **Ex-employee of a Devin customer** (profile history × customers.json) — champion tracking
+1. Named as hiring manager / team lead in relevant job posts — a reason to list them, not a champion badge
+2. Has publicly discussed the pain (migrations, tech debt, test coverage, DX) — a hook, not a badge
+3. AI appetite (posts about Copilot/Cursor, AI enablement title) — supporting only
+4. New in role (<6 months, from profile start date) — supporting only
+5. **Ex-employee of a Devin customer** (profile history × customers.json) — the only **Likely champion** badge. We cannot prove they personally ran Devin, only that they worked at a Devin customer. Do not invent "used Devin" from an AI title.
 
-Labels: **Likely champion** (≥1 evidence item, linked) vs. **Candidate** (title only). Never "this is your champion."
+Labels: **Likely champion** (confirmed `ex_devin_customer` only) vs. **Candidate**. Never "this is your champion."
+
+**Incumbent owner:** someone rolling out or expanding Cursor, Claude Code, Copilot coding agent, or an in-house agent platform. That is a displace/expand risk, not a champion. They can hold both badges (ex-Devin-customer *and* incumbent owner). Copy must not pitch "have you tried agents?"
 
 **Direct reports / wider net:** no asserted reporting lines. People found with a source are grouped by team/function as their own profiles describe it (e.g. "Foundation Eng: Cloud Infra, Dev Tooling, Release Eng"). If a source states a reporting line (job post "reports to the Director of Platform", profile, org announcement), show it with that source.
 
@@ -151,9 +154,9 @@ Labels: **Likely champion** (≥1 evidence item, linked) vs. **Candidate** (titl
 
 **Listed as current only if** (enforced by the validator): the profile shows a current role at the account or its parent; or a single **official company source** names them (the account's or parent's own domain; or an SEC filing / press-wire release that names the company) — new leaders often haven't updated LinkedIn; or two independent sources do. A single third-party article alone is dropped. The person's name must appear in a source they cite.
 
-**Guardrails:** ~15–25 people max. Prefer verified (profiles can be stale). Never invent a person.
+**Guardrails:** **3–5 people** after validate (fewer is fine; empty is "Not found"). Search can still be wide. Keep the top 3 entry points first, then anyone with Devin-usage champion evidence, an incumbent-owner flag, a hook, or a signal `who_cares` hit. Drop title-only names — everyone else is a ZoomInfo export. The validator caps at 5. Prefer verified (profiles can be stale). Never invent a person.
 
-**Ends with:** top 3 to contact first + why. Default: champion first, multi-thread up to economic buyer.
+**Ends with:** top 3 to contact first + why. Default: champion first, multi-thread up to economic buyer. Render them as a single **Who to work** section (cards with deal-role + badges), not four directory heading groups.
 
 ---
 
@@ -165,7 +168,7 @@ Labels: **Likely champion** (≥1 evidence item, linked) vs. **Candidate** (titl
 |---|---|---|
 | Migration / modernization | Java 8→17, AngularJS sunset, COBOL | Job posts, eng blog |
 | Backlog / tech debt | "Reduce tech debt", maintenance contractors | Job posts, talks |
-| Quality / security | Test coverage push, vuln remediation roles | Job posts, eng blog |
+| Quality / security | Test coverage push, a vuln *backlog* with scope | Job posts, eng blog |
 | AI mandate | "X% more output with AI", "AI-first engineering" | Earnings calls, news, exec posts |
 | Leadership change | New CTO/VP Eng <6mo | 8-K, news, profile start dates |
 | Hiring composition | Many open roles for migration/maintenance/QA work | Apollo jobs + descriptions + Apollo growth |
@@ -180,7 +183,7 @@ Contact-level signals from #2 attach to both the person and the account.
 4. Mapped to a Devin use case in knowledge/
 5. Usable in a message without sounding creepy or generic
 
-**Excluded by default:** funding alone, generic "hiring engineers," tech stack alone, PR fluff. Plain cost-cut layoffs (no AI tie) = medium at best.
+**Excluded by default:** funding alone, generic "hiring engineers," tech stack alone, PR fluff. Plain cost-cut layoffs (no AI tie) = medium at best. A job posting is evidence only when the JD quotes **concrete Devin-shaped work** (a named migration, a coverage target, a vuln backlog with scope). "Hiring a Staff Application Security Engineer" is not a Vulnerability remediation signal. Do not force intent from a job title.
 
 **Cluster, don't count:** 5 job posts about one migration = 1 signal with 5 evidence items.
 
@@ -205,12 +208,12 @@ Contact-level signals from #2 attach to both the person and the account.
 - LinkedIn connection note: ≤300 chars
 - LinkedIn follow-up DM: ~400–600 chars, doesn't repeat the email
 
-**Angle by deal role:** economic buyer → mandate + peer proof. Champion → their specific pain. Evaluator → technical how-it-works.
+**Angle by deal role:** economic buyer → their mandate/metric + peer proof + one ask; **no product tour**. Devin-usage champion → their specific pain / prior Devin context. Evaluator → how it would run on *their* stack, not the CTO email with a name swap. LinkedIn: do not quote prior-employer trivia unless that trivia **is** the Devin-usage hook. Displace motion: do not say "throw away the pipeline you just published"; join the next wave (remainder, test gaps, harness upkeep). Drafts in the same brief must not share a skeleton.
 
 **b. Using research**
 - Structure: about them → why it matters → proof → soft ask
 - Must anchor on ≥1 verified signal or hook. None → say so, don't write generic.
-- Each draft ships with **"built from"** notes (signals + sources) for the rep.
+- Each draft ships with **"built from"** sources and **Send notes** (rep-only, never sent): 2–5 bullets covering why this angle, channel constraints, what not to say, and whether the LinkedIn follow-up is actually sendable.
 - **Peer proof first:** if a peer/competitor from #1 is a public Devin customer, lead with it. Frame as "teams at X use Devin for Y," not FOMO.
 - `lint_message` before showing: length, banned phrases ("hope this finds you well", "quick question", "revolutionize"…), only `public_reference: true` customers named, never mention layoffs.
 
@@ -232,7 +235,7 @@ Contact-level signals from #2 attach to both the person and the account.
 **Source rules** (enforced in `apply_knowledge_update`): core positioning only from Cognition-owned domains (cognition.ai, cognition.com, devin.ai) — a rewrite citing anything else is rejected. Third-party sources can add customers, never change the narrative or add use cases. `public_reference` is computed from the source domain, never set by the model. Every proof quote must verify, and the customer must be named in the page body (not just the title).
 
 **d. Learning from feedback**
-- Capture: rep edits (draft vs. sent diff), comments (Slack thread / Google Doc), approve/reject.
+- Capture: rep edits (draft vs. sent diff), comments (Slack thread), approve/reject.
 - Distill into `playbook/learned_rules.md`: rule + scope (global / persona) + evidence count.
 - Approved messages → golden examples per persona (top few), used as few-shot.
 - Contradicts an existing rule → ask the rep, don't silently overwrite.
@@ -262,22 +265,22 @@ Start with:
  1. <Name>, <Title> — <why>
  2. ...
  3. ...
-Full brief: <Google Doc link>
+Full brief: <.docx download link>
 ```
 
-**Brief** (AE + marketing): validated Markdown in `briefs/`; copied verbatim into a Google Doc by the harness connector when one is available (Devin MCP Marketplace / Claude Google Drive connector — the rep signs in once in that product; no Google setup in this repo). The CLI (strict MCP) outputs Markdown only.
+**Brief** (AE packet = `.docx`; Slack summary = the SDR artifact; Markdown = the git-diffable twin of the same *content*, not the same visual). Rendered in code from the validated JSON. The `.docx` is designed from the record (not converted from Markdown). The model never writes or copies the rendered brief. No Google Docs: Devin's Drive connector needs Google's Drive MCP developer-preview enrollment + OAuth, not worth it for this. The CLI prints the local path; HTTP mode links the .docx.
 1. Since last run (if applicable)
-2. Verdict + why now
-3. Snapshot
-4. Engineering & priorities
+2. Verdict badge + one-line why + watch-for
+3. Compact snapshot (one working number each)
+4. Engineering & priorities (Markdown; `.docx` folds eng size + stack into the snapshot)
 5. Intent signals (+ competitive context)
-6. Buying centers (by deal role; likely champions flagged; grouped by team)
+6. **Who to work** (3–5 people as cards: deal-role + likely-champion / incumbent-owner badges)
 7. Recommended entry: top 3
-8. Drafted messages (email + LinkedIn per contact, with "built from")
+8. Drafted messages (email + LinkedIn + send notes per contact, with "built from")
 9. ABM themes (2–3 account-level angles for marketing)
-10. Sources
+10. Sources (receding; not page one)
 
-**Source of truth:** `briefs/<domain>/<date>.json` + `.md`; Doc and Slack are renders of it. The Slack reply is the tool-rendered `slack_summary`, posted verbatim; agent prose outside the brief/summary carries no facts (it isn't validated).
+**Source of truth:** `briefs/<domain>/<date>.json`; the `.md`, `.docx` and Slack summary are renders of it. The Slack reply is the tool-rendered `slack_summary`, posted verbatim; agent prose outside the brief/summary carries no facts (it isn't validated).
 
 ---
 
@@ -289,14 +292,15 @@ Full brief: <Google Doc link>
 - TTL per entry: discovery calls (all Exa searches, Apollo job list) = 1 day; lookups of known things (fetched pages, Apollo firmographics) = 7 days. Reruns reuse fresh entries, refetch expired ones. `--replay` = cache only (committed demo); `--fresh` = refetch everything.
 - `cache/` is gitignored; the demo account's cache is committed once with `git add -f`.
 - Demo account's cache committed so reviewers can reproduce without API spend.
-- `.env.example` lists keys: `ANTHROPIC_API_KEY` (runner; or an existing Claude Code login), `EXA_API_KEY`, `APOLLO_API_KEY` (Free plan is enough). No Google credentials: the Doc comes from the harness connector.
+- `.env.example` lists keys: `ANTHROPIC_API_KEY` (runner; or an existing Claude Code login), `EXA_API_KEY`, `APOLLO_API_KEY` (Free plan is enough). HTTP mode adds `MCP_AUTH_TOKEN` and `PUBLIC_BASE_URL`. No Google credentials.
 
 ---
 
 ## Write-up notes
 
-- The validated Markdown in `briefs/` is the canonical record; the Google Doc is a copy made by the harness connector. Slack and the Doc are renders, never sources.
-- Draft claims: every prospect-specific claim in a draft must be listed with a verbatim quote, and each is verified (one failure blocks the draft); numbers, digits or words, must appear in the cited sources. Residual limit: we can't prove every claim in the prose was listed. The rep sees each claim with its quote under the draft.
+- The validated JSON in `briefs/` is the canonical record; Markdown, .docx and Slack are renders in code, never sources.
+- Draft claims: every prospect-specific claim in a draft must be listed with a verbatim quote, and each is verified (one failure blocks the draft); numbers, digits or words, must appear in the cited sources. A real quote can still fail to support its claim (run 3: "runs in a Bazel monorepo" cited to a quote about Cursor agents), so every capitalized term and number in a claim must also appear in its own quote (deterministic; exempt: prospect, contact, Devin, sentence-initial words; a small abbreviation map, PR ↔ pull request). Deliberately over-blocks. Residual limits: lowercase terms aren't checked ("monorepo"), and we can't prove every claim in the prose was listed. The rep sees each claim with its quote under the draft. **Production next step: an LLM judge (claim entailed by quote?) as a separate review pass, kept out of the deterministic validator.**
+- Champion evidence `works_on_signal` is checkable (the person is in a strong signal's `who_cares`) but "leads" isn't, so it is kept as evidence only with a senior profile title (Manager / Lead / Staff / Principal / Director / Head); otherwise the validator turns it into a hook. It never earns **Likely champion**. That badge is only confirmed `ex_devin_customer` (profile history × `customers.json`). Honest limit: we cannot prove they personally ran Devin.
 - Only the brief is validated. Agent prose outside it is unchecked, so the playbook forbids facts there and the Slack reply is the tool-rendered summary posted verbatim (in Devin this relies on the agent following the playbook; the CLI enforces it in code).
 
 ## Production notes (for write-up / Loom)
@@ -305,6 +309,7 @@ Full brief: <Google Doc link>
 - **Reply / meeting outcomes** become the primary feedback signal (beyond edits).
 - **Per-rep rule scope**, promoted to global when several reps agree.
 - **Scheduled runs** (Agent SDK, headless) for weekly "since last run" on the target list.
+- **Google Workspace:** a service account writes the same rendered brief into a shared team Drive folder as a Google Doc (no per-rep OAuth); the link replaces the .docx download.
 - **Data provider is swappable** — point at whatever Cognition already pays for (ZoomInfo, Sales Nav, etc.).
 - **Lookalikes** — same customer + firmographic data could feed a marketing list builder.
 
@@ -317,6 +322,6 @@ Full brief: <Google Doc link>
 - [x] Devin: custom MCP supported (stdio / SSE / HTTP); Playbooks invokable via `!macro`
 - [x] Devin: custom MCP available in Slack-triggered sessions (per Devin). Needs a public HTTPS URL; added via Customize → MCPs → Add custom MCP, bearer header, org scope. Validate with MCP Inspector first; confirm with a real Slack run.
 - [ ] Claude in Slack: confirm custom connectors + skills work there
-- [x] Google Docs: handled by the harness's own Google connector (Devin / Claude), not this repo. Doc comments as a feedback source: via that connector, not built here
+- [x] Google Docs: dropped. Devin's Drive connector needs Google's Drive MCP developer-preview enrollment + OAuth. The server renders a .docx and serves it at a per-brief link instead (see Production notes for Google Workspace)
 - [x] Exa: `startPublishedDate` supports incremental search (use only for bounded windows, per Exa guidance)
-- [ ] Demo account choice (not a Devin customer, strong public eng footprint)
+- [x] Demo account choice: brex.com (not a Devin customer, strong public eng footprint)

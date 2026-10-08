@@ -8,6 +8,7 @@ from the cache, never from model output.
 
 from __future__ import annotations
 
+import re
 from datetime import date
 from typing import Literal
 
@@ -18,7 +19,7 @@ from .cache import get_doc, site, source_id_for
 from .dates import parse_date
 from .exa import _history, employment_at
 from .knowledge import match_customers
-from .lint import lint_message
+from .lint import NUMBER_WORDS, lint_message
 from .verify import normalize, verify_quote
 
 SIGNAL_MAX_MONTHS = {"tactical": 6, "strategic": 12}
@@ -96,13 +97,18 @@ class CompetitiveItem(Fact):
                        "competitor_in_production", "other"]
 
 
-ChampionKind = Literal["hiring_manager", "public_pain", "ex_devin_customer", "leads_signal_team",
+ChampionKind = Literal["hiring_manager", "public_pain", "ex_devin_customer", "works_on_signal",
                        "new_in_role", "ai_appetite"]
-STRONG_CHAMPION = {"hiring_manager", "public_pain", "ex_devin_customer", "leads_signal_team"}
+# The only checkable Devin-usage proxy: profile history × customers.json.
+# hiring_manager / public_pain / works_on_signal stay as facts; they do not earn the badge.
+DEVIN_USAGE = "ex_devin_customer"
+# works_on_signal is kept as evidence only for someone senior enough to carry it internally.
+SENIOR_TITLE = re.compile(r"\b(manager|lead|staff|principal|director|head)\b", re.I)
+PEOPLE_MAX = 5
 
 
 class ChampionEvidence(Fact):
-    """Strong kinds make a Likely champion; new_in_role / ai_appetite only support one."""
+    """Likely champion is only confirmed ex_devin_customer. Other kinds explain why they're listed."""
     kind: ChampionKind
 
 
@@ -119,6 +125,9 @@ class Person(BaseModel):
     champion_evidence: list[ChampionEvidence] = []
     hooks: list[Fact] = []
     reporting_line: Fact | None = None  # only when a source states it
+    # Model judgment: they own a competitor rollout (Cursor, Claude Code, Copilot agent, in-house).
+    # Must be backed in why/hooks. Not a champion — a displace/expand risk.
+    incumbent_owner: bool = False
     # Set by the validator, never by the model:
     verified: bool | None = None
     label: Literal["likely_champion", "candidate"] | None = None
@@ -157,6 +166,7 @@ class Draft(BaseModel):
     linkedin_followup: str
     built_from: list[Evidence] = Field(min_length=1)
     claims: list[Claim] = Field(min_length=1)  # every prospect-specific claim; each must verify
+    notes: str = ""  # rep-only send notes; never part of a message
     # Set by the validator: no hook, champion evidence, or signal attached to this person.
     low_confidence: bool | None = None
     lint: list[dict] = []
@@ -194,6 +204,63 @@ def _months_between(d: date, today: date) -> float:
     return (today - d).days / 30.44
 
 
+# ---------- claim ↔ quote overlap ----------
+
+# A verified quote can still fail to support its claim ("runs in a Bazel monorepo" cited
+# to a quote about Cursor agents). So every specific term in a claim (capitalized words,
+# numbers) must appear in its own quote. Deterministic and deliberately strict: a claim
+# that over-blocks gets a better quote or is split; a semantic judge is out of scope here.
+ABBREVIATIONS = [{"pr", "pull request"}, {"ci", "continuous integration"},
+                 {"cd", "continuous delivery", "continuous deployment"}, {"qa", "quality assurance"},
+                 {"sre", "site reliability"}, {"k8s", "kubernetes"}, {"ai", "artificial intelligence"},
+                 {"ml", "machine learning"}, {"llm", "large language model"}, {"eng", "engineering"}]
+_SENTENCES = re.compile(r"(?<=[.!?:;])\s+")
+_WORD = re.compile(r"[A-Za-z0-9][\w'’.+#&-]*")
+
+
+def _forms(term: str) -> set[str]:
+    """The term, its singular ("PRs" → "pr"), and abbreviation equivalents, normalized."""
+    t = normalize(term)
+    forms = {t} | ({t[:-1]} if len(t) > 2 and t.endswith("s") else set())
+    for group in ABBREVIATIONS:
+        if forms & group:
+            forms |= group
+    return forms
+
+
+def _in_quote(forms: set[str], quote: str) -> bool:
+    return any(re.search(rf"(?<![\w]){re.escape(f)}(?:s|es|'s)?(?![\w])", quote) for f in forms)
+
+
+def unsupported_terms(claim: str, quote: str, ignore: set[str]) -> list[str]:
+    """Capitalized terms and numbers in `claim` that its `quote` doesn't contain.
+    Ignored: names in `ignore` (prospect, contact, Devin) and sentence-initial words,
+    unless their casing is a term's (PRs, BazelCon, CI)."""
+    q = re.sub(r"(?<=\d),(?=\d)", "", normalize(quote))
+    missing = []
+    for sentence in _SENTENCES.split(re.sub(r"(?<=\d),(?=\d)", "", claim.strip())):
+        for i, word in enumerate(_WORD.findall(sentence)):
+            word = re.sub(r"['’]s$", "", word.rstrip(".'’"))
+            for j, part in enumerate(p for p in word.split("-") if p):
+                low = part.lower()
+                if low in ignore:
+                    continue
+                if re.search(r"\d", part) and low not in {"k8s"}:
+                    nums = re.findall(r"\d+(?:[.,]\d+)*", part)
+                    if not all(re.search(rf"(?<![\d.]){re.escape(n.replace(',', ''))}(?!\d)", q) for n in nums):
+                        missing.append(part)
+                elif low in NUMBER_WORDS:
+                    digits = NUMBER_WORDS[low]
+                    if not (_in_quote({low}, q) or (digits and re.search(rf"(?<![\d.]){re.escape(digits)}(?!\d)", q))):
+                        missing.append(part)
+                elif any(c.isupper() for c in part):
+                    if i == 0 and j == 0 and not any(c.isupper() for c in part[1:]):
+                        continue  # capitalized only because it starts the sentence
+                    if not _in_quote(_forms(part), q):
+                        missing.append(part)
+    return list(dict.fromkeys(missing))
+
+
 class _Validator:
     def __init__(self, company_name: str, domain: str, today: date, use_cases: set[str] | None):
         # The account plus its parent (from the cached Apollo record, not model output):
@@ -210,6 +277,7 @@ class _Validator:
         self.use_cases = {u.lower() for u in use_cases} if use_cases else None
         self.dropped: list[dict] = []
         self.flags: list[dict] = []
+        self.profile_titles: dict[str, set[str]] = {}  # name -> current titles on their profile
 
     def drop(self, path: str, reason: str) -> None:
         self.dropped.append({"path": path, "reason": reason})
@@ -323,6 +391,7 @@ class _Validator:
         if p.reporting_line:
             p.reporting_line = self.fact(p.reporting_line, f"{path}.reporting_line")
         p.verified = len(distinct) >= 2
+        self.profile_titles[p.name] = profile_titles
         p.profile_source_id = profiles[0]["source_id"] if profiles else None
         return p
 
@@ -333,16 +402,24 @@ class _Validator:
         return match_customers(sorted(past))
 
     def label(self, p: Person, path: str, strong_signal_people: set[str]) -> None:
-        """Likely champion needs a strong evidence kind; tenure / AI title alone = Candidate.
-        leads_signal_team counts only if they're attached to a strong signal."""
-        strong = False
-        for i, c in enumerate(p.champion_evidence):
-            if c.kind == "leads_signal_team" and p.name not in strong_signal_people:
-                self.flags.append({"path": f"{path}.champion_evidence[{i}]",
-                                   "flag": "leads_signal_team without a strong signal naming them: supporting only"})
-            elif c.kind in STRONG_CHAMPION:
-                strong = True
-        p.label = "likely_champion" if strong else "candidate"
+        """Likely champion = confirmed ex_devin_customer only. We cannot prove they ran Devin,
+        only that they worked at a Devin customer. An AI title is not a champion.
+        works_on_signal stays as evidence only for someone in a strong signal's who_cares whose
+        profile title is senior; otherwise it becomes a hook. It never earns the badge."""
+        for i, c in enumerate(list(p.champion_evidence)):
+            if c.kind != "works_on_signal":
+                continue
+            if p.name not in strong_signal_people:
+                why = "not in a strong signal's who_cares"
+            elif not any(SENIOR_TITLE.search(t) for t in self.profile_titles.get(p.name, ())):
+                why = f"profile title {sorted(self.profile_titles.get(p.name, ())) or 'unknown'} isn't senior"
+            else:
+                continue
+            self.flags.append({"path": f"{path}.champion_evidence[{i}]",
+                               "flag": f"works_on_signal kept as a hook: {why}"})
+            p.champion_evidence.remove(c)
+            p.hooks.append(Fact(value=c.value, evidence=c.evidence))
+        p.label = "likely_champion" if any(c.kind == DEVIN_USAGE for c in p.champion_evidence) else "candidate"
 
     def _official(self, doc: dict) -> bool:
         host = site(doc.get("url")) or ""
@@ -369,6 +446,33 @@ class _Validator:
             self.flags.append({"path": f"{path}.who_cares", "flag": f"removed names not in people: {unknown}"})
             s.who_cares = [n for n in s.who_cares if n in people]
         return s
+
+
+def _top_names(raw: dict) -> list[str]:
+    names = []
+    for item in raw.get("top_contacts") or []:
+        if isinstance(item, dict) and (n := item.get("name")) and n not in names:
+            names.append(n)
+    return names
+
+
+def _person_rank(p: Person, top: list[str], who: set[str], index: int) -> tuple:
+    if p.name in top:
+        return (0, top.index(p.name))
+    if any(c.kind == DEVIN_USAGE for c in p.champion_evidence):
+        return (1, index)
+    if p.incumbent_owner or p.hooks or p.champion_evidence or p.name in who:
+        return (2, index)
+    return (3, index)
+
+
+_GREETING = re.compile(r"^(?:hi|hey|hello|dear)?\s*[\w.'’-]+(?:\s[\w.'’-]+)?,?\s*", re.I)
+
+
+def email_opening(body: str) -> tuple[str, ...]:
+    """First 8 content-words after a greeting; used to flag copy-paste skeletons."""
+    rest = _GREETING.sub("", (body or "").strip(), count=1)
+    return tuple(w.lower() for w in re.findall(r"[A-Za-z0-9']+", rest)[:8])
 
 
 def _parse_list(raw: list, model, path: str, v: _Validator) -> list:
@@ -403,6 +507,17 @@ def validate_brief(raw: dict, *, today: date | None = None,
     strong_people = {n for s in brief.signals if s.strength == "strong" for n in s.who_cares}
     for i, p in enumerate(brief.people):
         v.label(p, f"people[{i}]", strong_people)
+    who = {n for s in brief.signals for n in s.who_cares}
+    top = _top_names(raw)
+    ranked = sorted(enumerate(brief.people), key=lambda ip: _person_rank(ip[1], top, who, ip[0]))
+    keep = {i for i, _ in ranked[:PEOPLE_MAX]}
+    for i, p in enumerate(brief.people):
+        if i not in keep:
+            v.drop(f"people[{i}]", f"people cap: kept {PEOPLE_MAX}, dropped {p.name}")
+    brief.people = [p for i, p in enumerate(brief.people) if i in keep]
+    names = {p.name for p in brief.people}
+    for s in brief.signals:
+        s.who_cares = [n for n in s.who_cares if n in names]
     brief.competitive_context = [c for i, x in _parse_list(raw.get("competitive_context"), CompetitiveItem,
                                                            "competitive_context", v)
                                  if (c := v.fact(x, f"competitive_context[{i}]"))]
@@ -432,6 +547,9 @@ def validate_brief(raw: dict, *, today: date | None = None,
 
     attached = {n for s in brief.signals for n in s.who_cares}
     anchored = {p.name for p in brief.people if p.hooks or p.champion_evidence or p.name in attached}
+    # Claim terms that never need to be in the quote: the prospect, and Devin itself.
+    own_names = {"devin", "i", *normalize(brief.company_name).split(),
+                 *(dom.split(".")[0] for dom in v.domains[:1])}
 
     for i, d in _parse_list(raw.get("drafts"), Draft, "drafts", v):
         path = f"drafts[{i}]"
@@ -443,10 +561,13 @@ def validate_brief(raw: dict, *, today: date | None = None,
             v.drop(path, "draft cites no valid sources")
             continue
         failed = []
+        ignore = own_names | set(normalize(d.name).split())
         for j, c in enumerate(d.claims):
             check = verify_quote(c.source_id, c.quote)
             if not check["verified"]:
                 failed.append(f"claim[{j}] {c.text[:60]!r}: {check['reason']}")
+            elif missing := unsupported_terms(c.text, c.quote, ignore):
+                failed.append(f"claim[{j}] {c.text[:60]!r}: its quote doesn't contain {missing}")
         if failed:
             v.drop(path, "unverified claims: " + "; ".join(failed))
             continue
@@ -463,6 +584,18 @@ def validate_brief(raw: dict, *, today: date | None = None,
         d.lint = [{"channel": ch, **x} for ch, r in checks.items() for x in r["issues"]]
         d.low_confidence = d.name not in anchored
         brief.drafts.append(d)
+
+    openings: dict[tuple[str, ...], str] = {}
+    for d in brief.drafts:
+        key = email_opening(d.email.body)
+        if len(key) < 8:
+            continue
+        if key in openings:
+            msg = f"same opening as {openings[key]}'s email"
+            d.lint.append({"channel": "email", "severity": "fix", "issue": msg})
+            v.flags.append({"path": "drafts", "flag": f"{d.name}: {msg}"})
+        else:
+            openings[key] = d.name
 
     missing = [t.name for t in brief.top_contacts if t.name not in {d.name for d in brief.drafts}]
     if missing:

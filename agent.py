@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent
 SERVER = "research"
 MODEL = "claude-opus-5-5"
 STAGES = ("company", "people", "signals", "draft")
-RENDERERS = ("save_brief", "set_brief_link")  # tools whose result carries the rendered Slack summary
+RENDERERS = ("save_brief",)  # tools whose result carries the rendered Slack summary
 
 
 def tool_names() -> list[str]:
@@ -108,7 +108,7 @@ async def run(args) -> int:
         # unvalidated, so it's only shown on request (-v), labeled as such.
         print(summary)
         if saved:
-            print(f"\nBrief: {saved} (+ .md)")
+            print(f"\nBrief: {saved} (+ .md, .docx)")
         if args.verbose and final.result:
             print(f"\n--- agent notes (not validated) ---\n{final.result}", file=sys.stderr)
     else:

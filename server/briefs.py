@@ -1,14 +1,17 @@
-"""Brief persistence, "since last run" diff, and renders (Markdown for the Doc, text for Slack).
+"""Brief persistence, "since last run" diff, and renders (Markdown, .docx, Slack text).
 
-briefs/<domain>/<YYYY-MM-DD>.json is the source of truth; the Doc and Slack are
-renders of it. Every URL and date in a render comes from the cache, never the model.
+briefs/<domain>/<YYYY-MM-DD>.json is the source of truth; the .md, .docx and Slack
+summary are renders of it. Every URL and date in a render comes from the cache, never
+the model. In HTTP mode the .docx is served at an unguessable per-brief link.
 """
 
 from __future__ import annotations
 
+import hmac
 import json
 import os
 import re
+import secrets
 from datetime import date, datetime
 from pathlib import Path
 
@@ -19,15 +22,19 @@ from .schema import validate_brief
 from .verify import normalize
 
 VERDICT = {"act_now": "Act now", "warm": "Warm", "not_now": "Not now"}
-ROLE = {"economic_buyer": "Economic buyers", "champion": "Champions", "technical_evaluator": "Technical evaluators",
-        "gatekeeper": "Gatekeepers", "parent_org_approver": "Parent-company approvers"}
+ROLE = {"economic_buyer": "Economic buyer", "champion": "Champion",
+        "technical_evaluator": "Technical evaluator", "gatekeeper": "Gatekeeper",
+        "parent_org_approver": "Parent-company approver"}
 LOW_CONFIDENCE = "Low-confidence draft: no personal signal or hook found."
 KIND = {"hiring_manager": "hiring manager", "public_pain": "public talk about the pain",
-        "ex_devin_customer": "ex-Devin customer", "leads_signal_team": "leads the team on a strong signal",
+        "ex_devin_customer": "ex-Devin customer", "works_on_signal": "works on a strong signal",
         "new_in_role": "new in role (supporting)", "ai_appetite": "AI appetite (supporting)"}
 # Single-valued quantities where disagreeing sources get flagged (the playbook's 25% threshold).
 QUANTITATIVE = ("headcount", "revenue", "funding")
 CONFLICT_RATIO = 1.25
+# Public base URL of the HTTP server (set by `server.app --http`). None: the CLI, which
+# shows the local file path instead of a link.
+BASE_URL: str | None = None
 
 
 def bdir() -> Path:
@@ -72,31 +79,38 @@ def save_brief(domain: str, brief: dict) -> dict:
     prev = json.loads(previous[-1].read_text()) if previous else None
     since = {"since": prev["date"], **diff_briefs(prev["brief"], clean)} if prev else None
 
-    record = {"domain": domain, "date": today, "saved_at": now_iso(), "brief": clean,
-              "report": report, "since_last_run": since, "doc_url": None}
     out = bdir() / domain / f"{today}.json"
+    same_day = load_record(domain, today)  # a re-save keeps the brief's download link
+    token = (same_day[1].get("download_token") if same_day else None) or secrets.token_urlsafe(16)
+    record = {"domain": domain, "date": today, "saved_at": now_iso(), "brief": clean,
+              "report": report, "since_last_run": since, "download_token": token}
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(record, indent=1, ensure_ascii=False))
-    out.with_suffix(".md").write_text(render_markdown(record))
+    markdown = render_markdown(record)
+    out.with_suffix(".md").write_text(markdown)
+    from .docx_render import brief_to_docx
+    brief_to_docx(record, out.with_suffix(".docx"))
     return {"saved": _rel(out), "report": report, "since_last_run": since,
-            "brief_markdown": out.with_suffix(".md").read_text(), "slack_summary": render_slack(record)}
+            "brief_markdown": markdown, "slack_summary": render_slack(record)}
 
 
-DOC_HOSTS = ("https://docs.google.com/", "https://drive.google.com/")
+def brief_link(rec: dict) -> str:
+    """The .docx download link in HTTP mode; the local path otherwise."""
+    if BASE_URL and rec.get("download_token"):
+        return f"{BASE_URL.rstrip('/')}/briefs/{rec['download_token']}/{rec['domain']}-{rec['date']}.docx"
+    return _rel(bdir() / rec["domain"] / f"{rec['date']}.docx")
 
 
-def set_brief_link(domain: str, url: str) -> dict:
-    """Record the link to the Doc the harness connector created from brief_markdown;
-    returns the Slack summary with the link in it."""
-    if not url.startswith(DOC_HOSTS):
-        return {"ok": False, "reason": f"expected a Google Docs/Drive link starting with {DOC_HOSTS}"}
-    found = load_record(domain)
-    if not found:
-        return {"ok": False, "reason": "save_brief first"}
-    path, rec = found
-    rec["doc_url"] = url
-    path.write_text(json.dumps(rec, indent=1, ensure_ascii=False))
-    return {"ok": True, "slack_summary": render_slack(rec)}
+def find_download(token: str) -> Path | None:
+    """The .docx for a download token, if any brief has it."""
+    if not token:
+        return None
+    for path in bdir().glob("*/*.json"):
+        rec = json.loads(path.read_text())
+        if hmac.compare_digest(str(rec.get("download_token") or ""), token):
+            docx = path.with_suffix(".docx")
+            return docx if docx.exists() else None
+    return None
 
 
 def _rel(path: Path) -> str:
@@ -108,7 +122,7 @@ def get_last_brief(domain: str) -> dict:
     if not files:
         return {"found": False, "domain": normalize_domain(domain)}
     rec = json.loads(files[-1].read_text())
-    return {"found": True, "date": rec["date"], "brief": rec["brief"], "doc_url": rec.get("doc_url")}
+    return {"found": True, "date": rec["date"], "brief": rec["brief"]}
 
 
 def load_record(domain: str, day: str | None = None) -> tuple[Path, dict] | None:
@@ -175,6 +189,48 @@ def conflicting(facts: list[dict]) -> bool:
     return len(amounts) > 1 and max(amounts) / min(amounts) > CONFLICT_RATIO
 
 
+def working_fact(facts: list[dict]) -> dict | None:
+    """One working number: Apollo-attributed if present, else the first fact."""
+    if not facts:
+        return None
+    return next((f for f in facts if f["value"].startswith("Apollo reports")), facts[0])
+
+
+_NAMED_AMT = re.compile(
+    r"([A-Z][A-Za-z.+]*(?:\sLabs)?)\s+(?:reports|lists|estimates|puts)\s+"
+    r"(?:.*?)(~?\$[\d,]+(?:\.\d+)?(?:\s*(?:million|billion|k|m|b|bn))?|"
+    r"~?[\d,]{3,}(?:\.\d+)?(?:\s*(?:million|billion|k|m|b|bn))?)", re.I)
+
+
+def _agrees(fact: dict, working: dict) -> bool:
+    a, b = _amount(fact["value"]), _amount(working["value"])
+    return bool(a and b and max(a, b) / min(a, b) <= CONFLICT_RATIO)
+
+
+def _named_amounts(value: str) -> list[str]:
+    return [f"{m[1]} {m[2].strip()}" for m in _NAMED_AMT.finditer(value)]
+
+
+def working_cell(src: _Sources, facts: list[dict]) -> tuple[str, str | None]:
+    """One working value for the row; material conflicts become a footnote, not a cell wall."""
+    if not facts:
+        return "Not found", None
+    working = working_fact(facts)
+    cites = src.cite(working["evidence"])
+    extra, notes = [], []
+    for f in facts:
+        if f is working:
+            continue
+        if _agrees(f, working):
+            extra.append(src.cite(f["evidence"]))
+        else:
+            notes.extend(_named_amounts(f["value"]) or [f["value"]])
+    cell = f"{working['value']} {cites}{''.join(extra)}".rstrip()
+    if notes and conflicting(facts):
+        return cell, f"Other sources: {'; '.join(dict.fromkeys(notes))}."
+    return cell, None
+
+
 def _url(source_id: str) -> str | None:
     return (get_doc(source_id) or {}).get("url")
 
@@ -230,8 +286,18 @@ def render_markdown(rec: dict) -> str:
               "parent_company": "Parent company", "headcount": "Headcount", "headcount_growth": "Headcount growth",
               "revenue": "Revenue", "funding": "Funding", "sells_to": "Sells to", "products": "Key products"}
     L += ["## Snapshot", "", "| | |", "|---|---|"]
-    L += [f"| {lab} | {_facts(src, b['snapshot'][k], k in QUANTITATIVE)} |" for k, lab in labels.items()]
+    notes = []
+    for k, lab in labels.items():
+        if k in QUANTITATIVE:
+            cell, note = working_cell(src, b["snapshot"][k])
+            if note:
+                notes.append(f"⚠️ {lab} — {note}")
+        else:
+            cell = _facts(src, b["snapshot"][k])
+        L.append(f"| {lab} | {cell} |")
     L.append("")
+    if notes:
+        L += notes + [""]
 
     labels = {"eng_headcount": "Engineering headcount", "open_eng_roles": "Open eng roles", "tech_stack": "Tech stack",
               "ai_dev_tools": "AI dev tools", "eng_blog_and_github": "Eng blog / GitHub", "ai_posture": "AI posture",
@@ -251,22 +317,26 @@ def render_markdown(rec: dict) -> str:
         L += [f"- {c['value']} ({c['situation'].replace('_', ' ')}) {src.cite(c['evidence'])}" for c in b["competitive_context"]]
         L.append("")
 
-    L += ["## Buying centers", ""]
-    for role, title in ROLE.items():
-        people = [p for p in b["people"] if p["deal_role"] == role]
-        if not people:
-            continue
-        L += [f"### {title}", ""]
-        for p in sorted(people, key=lambda p: (p.get("team") or "", p["name"])):
-            tag = "**Likely champion** · " if p["label"] == "likely_champion" else ""
-            ver = "verified" if p["verified"] else "single source"
-            link = f" · [LinkedIn]({_url(p['profile_source_id'])})" if p.get("profile_source_id") else ""
-            team = f" · {p['team']}" if p.get("team") else ""
-            L.append(f"- {tag}**{p['name']}**, {p['title']}{team} — {_plain(p['why'])} *({ver}){link}* {src.cite(p['evidence'])}")
-            L += [f"  - Champion evidence ({KIND[f['kind']]}): {f['value']} {src.cite(f['evidence'])}" for f in p["champion_evidence"]]
-            L += [f"  - Hook: {f['value']} {src.cite(f['evidence'])}" for f in p["hooks"]]
-            if p.get("reporting_line"):
-                L.append(f"  - Reporting line (as stated): {p['reporting_line']['value']} {src.cite(p['reporting_line']['evidence'])}")
+    L += ["## Who to work", ""]
+    if not b["people"]:
+        L += ["Not found", ""]
+    for p in b["people"]:
+        badges = []
+        if p["label"] == "likely_champion":
+            badges.append("**Likely champion**")
+        if p.get("incumbent_owner"):
+            badges.append("**Incumbent owner**")
+        tag = (" · ".join(badges) + " · ") if badges else ""
+        ver = "verified" if p["verified"] else "single source"
+        link = f" · [LinkedIn]({_url(p['profile_source_id'])})" if p.get("profile_source_id") else ""
+        team = f" · {p['team']}" if p.get("team") else ""
+        role = ROLE.get(p["deal_role"], p["deal_role"])
+        L.append(f"- {tag}**{p['name']}**, {p['title']}{team} · {role} — {_plain(p['why'])} *({ver}){link}* {src.cite(p['evidence'])}")
+        L += [f"  - Champion evidence ({KIND[f['kind']]}): {f['value']} {src.cite(f['evidence'])}" for f in p["champion_evidence"]]
+        L += [f"  - Hook: {f['value']} {src.cite(f['evidence'])}" for f in p["hooks"]]
+        if p.get("reporting_line"):
+            L.append(f"  - Reporting line (as stated): {p['reporting_line']['value']} {src.cite(p['reporting_line']['evidence'])}")
+    if b["people"]:
         L.append("")
 
     L += ["## Recommended entry: top 3", ""]
@@ -280,8 +350,10 @@ def render_markdown(rec: dict) -> str:
             L += [f"> ⚠️ {LOW_CONFIDENCE}", ""]
         L += [f"**Email — {d['email']['subject']}**", "", d["email"]["body"], "",
               f"**LinkedIn connection note**", "", d["linkedin_note"], "",
-              f"**LinkedIn follow-up**", "", d["linkedin_followup"], "",
-              f"**Claims to check** (each verified against its source):", ""]
+              f"**LinkedIn follow-up**", "", d["linkedin_followup"], ""]
+        if d.get("notes"):
+            L += ["**Send notes** *(rep only — never sent)*", "", d["notes"], ""]
+        L += [f"**Claims to check** (each verified against its source):", ""]
         for c in d["claims"]:
             L += [f"- {_one_line(c['text'])} {src.cite([c])}", f'  > "{_one_line(c["quote"])}"']
         L += ["", f"*Built from:* {src.cite(d['built_from'])}"]
@@ -311,6 +383,5 @@ def render_slack(rec: dict) -> str:
         L.append("Start with:")
         L += [f" {i}. {t['name']}, {titles.get(t['name'], '')} — {_plain(t['why']['text'])}"
               for i, t in enumerate(b["top_contacts"], 1)]
-    md = _rel(bdir() / rec["domain"] / f"{rec['date']}.md")
-    L.append(f"Full brief: {rec.get('doc_url') or md}")
+    L.append(f"Full brief: {brief_link(rec)}")
     return "\n".join(L)
