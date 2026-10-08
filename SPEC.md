@@ -16,7 +16,7 @@ A wrong fact costs a rep more than a missing one. It burns credibility with the 
 4. **Report what a source says, attributed.** "Apollo reports $700M," not "$700M." Third-party numbers are never restated as our own estimate.
 5. **Conflicts are recorded, not silently resolved.** The JSON keeps both facts. The human brief shows one working number (Apollo if present, else the first) and puts material disagreements (>25%) in a footnote.
 6. **Judgment is separated from fact.** Verdict, "likely champion," recommended entry point, and ABM themes are labeled as the agent's assessment and cite the facts they rest on. Nothing inferred is presented as fact (e.g. no asserted reporting lines).
-7. **Enforced in code, not just the prompt.** Every tool result carries a `source_id` per document; the model cites `source_id`s only, never URLs. The validator resolves each against the cache and drops (and counts) anything that doesn't resolve; `verify_quote` checks every quote against the cached full text of the cited source; people must be named in a source they cite. Real URLs + retrieved dates are filled in from the cache at render time.
+7. **Enforced in code, not just the prompt.** Every tool result carries a `source_id` per document; the model cites `source_id`s only, never URLs. The validator resolves each against the cache and drops (and counts) anything that doesn't resolve; `verify_quotes` checks every quote against the cached full text of the cited source; people must be named in a source they cite. Real URLs + retrieved dates are filled in from the cache at render time.
 
 ---
 
@@ -77,7 +77,7 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 | `fetch_page(url_or_source_id, offset?)` | Exa `/contents`, cached. Full text cached; model gets a 6k-char excerpt (page with `offset`). Job descriptions and any known URL |
 | `search_people(company, roles)` | Exa `/search` with `category: "people"`: current title, history, start dates, team descriptions |
 | `search_company_linkedin(company, domain?, linkedin_slug?, since?)` | Exa `/search` against `linkedin.com/posts/<slug>` + `linkedin.com/company/<slug>` path prefixes (slug from the arg or the cached Apollo org's linkedin_url; never invented). Three cached searches: posts, mentions, reposts. Rows carry `kind` (original / possible_repost / unknown, from URL + snippet language only) and `possible_tags` (names / `/in/` links literally in the snippet). Not a feed: only what Exa indexed; per-query `not_fetched` on failure |
-| `verify_quote(source_id, quote)` | Deterministic check that a quote exists in that source's cached full text (a quote cited to the wrong source fails) |
+| `verify_quotes(quotes)` | Deterministic check that each quote exists in its source's cached full text — batched, one call per set (a quote cited to the wrong source fails) |
 | `get_company(domain)` | Apollo org enrichment (Free plan): firmographics, parent org, revenue, dept headcount, 6/12/24mo growth, funding, AI tools, engineering tech stack (eng categories only; a hint until a job post / blog / profile confirms it) |
 | `get_jobs(domain)` | Apollo job postings (Free plan): title, URL, posted date. Deduped by title; descriptions fetched via `fetch_page` only for eng-relevant roles |
 | `get_positioning()` | Read knowledge/ files |
@@ -186,7 +186,7 @@ Contact-level signals from #2 attach to both the person and the account.
 
 **The bar — all five or it's dropped:**
 1. Specific (concrete work, not "they use AI")
-2. Evidenced (URL + exact quote + date, passes `verify_quote`)
+2. Evidenced (URL + exact quote + date, passes `verify_quotes`)
 3. Recent (≤6mo tactical, ≤12mo strategic)
 4. Mapped to a Devin use case in knowledge/
 5. Usable in a message without sounding creepy or generic
