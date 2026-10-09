@@ -295,7 +295,8 @@ def _dated(e: dict) -> str:
         return " · date unknown"
     via = f' (dated by "{_one_line(e["date_quote"])}")' if e.get("date_quote") and not \
         (get_doc(e["source_id"]) or {}).get("published_date") else ""
-    return f" · {e['date']}{via}"
+    stale = " ⚠️ may be outdated" if e.get("stale") else ""
+    return f" · {e['date']}{via}{stale}"
 
 
 def _quotes(src: _Sources, evidence: list[dict], dates: bool = False) -> list[str]:

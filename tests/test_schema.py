@@ -57,6 +57,18 @@ def test_signal_needs_verified_recent_quote():
     assert "needs an exact quote" in reasons and "failed verification" in reasons and "older than 6 months" in reasons
 
 
+def test_signal_evidence_over_3_months_kept_but_flagged_stale():
+    aging = web("https://brex.com/blog/aging", published="2026-05-01T00:00:00Z")  # ~5 months at TODAY
+    brief, report = run({"signals": [tier1_signal(aging, [])]})
+    ev = brief["signals"][0]["evidence"][0]
+    assert ev["stale"] is True
+    assert any("may be outdated" in f["flag"] for f in report["flags"])
+    fresh = web("https://brex.com/blog/fresh2")  # 2026-08-01, < 3 months
+    brief, report = run({"signals": [tier1_signal(fresh, [])]})
+    assert brief["signals"][0]["evidence"][0]["stale"] is None
+    assert not any("may be outdated" in f["flag"] for f in report["flags"])
+
+
 def test_company_linkedin_drops_tags_not_in_source():
     src = web("https://linkedin.com/posts/brexhq_launch-1")
     brief, report = run({"company_linkedin": [
@@ -286,8 +298,9 @@ def test_date_quote_dates_an_undated_source():
            "evidence": [{"source_id": undated, "date_quote": "By Graham Fuller, June 2026",
                                                        "quote": "migrated our monolith from Java 8 to Java 17"}]}
     brief, report = run({"signals": [sig]})
-    assert brief["signals"][0]["tier"] == 1 and brief["signals"][0]["evidence"][0]["date"] == "2026-06-01"
-    assert not [f for f in report["flags"] if f["path"] != "org_chart"]
+    ev = brief["signals"][0]["evidence"][0]
+    assert brief["signals"][0]["tier"] == 1 and ev["date"] == "2026-06-01" and ev["stale"] is True
+    assert not [f for f in report["flags"] if f["path"] != "org_chart" and "may be outdated" not in f["flag"]]
     for bad, flag in (("By Graham Fuller, May 2026", "not verified"), ("Building agents: 5 lessons learned", "exactly one")):
         s2 = {**sig, "evidence": [{**sig["evidence"][0], "date_quote": bad}]}
         brief, report = run({"signals": [s2]})

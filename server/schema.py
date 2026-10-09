@@ -23,8 +23,10 @@ from .lint import NUMBER_WORDS, lint_message
 from .verify import normalize, verify_quote
 
 # Signals must be current: ≤6 months across the board. The space moves monthly —
-# a stale exec statement is not a signal, however strategic it sounds.
+# a stale exec statement is not a signal, however strategic it sounds. Evidence
+# older than SIGNAL_WARN_MONTHS is kept but marked stale in the brief.
 SIGNAL_MAX_MONTHS = {"tactical": 6, "strategic": 6}
+SIGNAL_WARN_MONTHS = 3
 
 # Hosts of company-issued documents (filings, press releases). Official only when
 # the document names the company; the company's own domain is always official.
@@ -38,6 +40,7 @@ class Evidence(BaseModel):
     quote: str | None = None       # verbatim from the source; checked by verify_quote
     date_quote: str | None = None  # for undated sources: a verbatim byline/dateline on the same source
     date: str | None = None        # set by the validator: source metadata date, else the verified date_quote
+    stale: bool | None = None      # set by the validator: dated >SIGNAL_WARN_MONTHS ago; may be outdated
 
 
 class Fact(BaseModel):
@@ -331,9 +334,13 @@ class _Validator:
             if max_months is not None:
                 if d is None:
                     self.flags.append({"path": p, "flag": "publication date unknown"})
-                elif _months_between(d, self.today) > max_months:
+                elif (months := _months_between(d, self.today)) > max_months:
                     self.drop(p, f"source dated {d} is older than {max_months} months")
                     continue
+                elif months > SIGNAL_WARN_MONTHS:
+                    ev.stale = True
+                    self.flags.append({"path": p, "flag": f"dated {d} — over {SIGNAL_WARN_MONTHS} months "
+                                                          "old; may be outdated"})
             kept.append(ev)
         return kept
 

@@ -111,7 +111,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
 **The bar. All five, or the signal is dropped:**
 1. **Specific:** concrete work ("moving 40 services off Java 8"), not "they use AI".
 2. **Evidenced:** a verified quote and a dated source. If the source has no publication date, add a `date_quote`: a verbatim byline or dateline from the same page with at least three words, such as "By Graham Fuller, April 2026". Verify it with `verify_quotes` like any quote; it must state exactly one date. A month-only date counts as the 1st of that month.
-3. **Recent:** ≤ 6 months across the board — tactical and strategic both. The space moves monthly; an exec statement from a year ago describes a different company. Prefer the newest dated evidence and the freshest items first.
+3. **Recent:** aim for ≤ 3 months; ≤ 6 months is the hard cap — tactical and strategic both. The space moves monthly; an exec statement from a year ago describes a different company. Prefer the newest dated evidence and the freshest items first. Evidence 3–6 months old is kept but flagged in the brief as possibly outdated, so only reach for it when nothing fresher exists.
 4. **Mapped:** to a use-case name copied exactly from `get_positioning().use_cases`.
 5. **Usable:** a rep could say it to the prospect without sounding creepy or generic.
 
