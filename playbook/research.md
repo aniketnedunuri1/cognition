@@ -22,7 +22,7 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 | Field | How |
 |---|---|
 | HQ, founded, industry, ownership, parent | `get_company(domain)`. Apollo not found → website + search; otherwise Not found |
-| Headcount + growth, revenue, funding | Apollo, attributed. **Cross-check** headcount and revenue with one `search_web` (filings for public companies, else press). Keep every attributed fact in the JSON. Sources differ by more than ~25% → the render shows one working number and a footnote; do not dump every variant in the field |
+| Headcount + growth, revenue, funding | Apollo, attributed. **Cross-check** headcount and revenue with one `search_web` (filings for public companies, else press). Keep every attributed fact in the JSON. Sources differ by more than ~25% → the render shows one working number only; the disagreement stays in the JSON |
 | Who they sell to, key products | `fetch_page("https://<domain>")`; one or two sentences grounded in the page |
 | Eng headcount, open eng roles | Apollo department headcount; `get_jobs(domain)` engineering titles |
 | Tech stack | `get_tech_stack(domain)` — Sumble's confirmed-used stack (verified via job posts); the primary source. Only when Sumble returns not found/empty: Apollo's `eng_tech_stack_hint` (website tags) as a hint, never stated as fact without a job post, eng blog or profile |
@@ -159,7 +159,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
 ## Stage 4: Drafts
 
 **Per contact:** every Who to work card — one draft set per `featured` person (3–5 cards, or the rep's picks). A card exists to be worked: the validator flags any card with no draft, and every `top_contacts` name needs one.
-- **Email:** subject of 4–6 words; plain-text body of 75–120 words; one ask.
+- **Email:** subject is always `Cognition <> <Company>` — Cognition is a known brand, so no clever subject lines. Plain-text body of 75–120 words; one ask.
 - **LinkedIn connection note:** at most 300 characters.
 - **LinkedIn follow-up DM:** 400–600 characters, and it doesn't repeat the email.
 
@@ -186,6 +186,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
 - say "Windsurf", even when a proof quote does. Older Cognition copy says "Devin and Windsurf"; proof quotes are evidence, not copy. The product is Devin (Devin Desktop)
 - frame Devin as replacing their engineers; the positioning is engineers working as architects and delegating execution
 - use hype words or filler: "hope this finds you well", "quick question", "revolutionize", "game-changer", "synergy", "circle back"
+- ask to "compare notes" or "comparing notes" — nobody says that; use a direct ask instead ("worth 20 minutes?", "open to a short call?")
 - use em/en dashes (—, –) anywhere in a draft: commas, periods or parentheses instead. Lint blocks on them.
 
 **Claims:** every prospect-specific statement in a draft (what they built, said, hired for or are migrating) is listed in `claims` as `{text, source_id, quote}`, with the quote verbatim from that source. Verify all of them in one `verify_quotes` call before saving. **The quote must say what the claim says:** every capitalized term and number in the claim (Bazel, PRs, Micronaut 4, eleven) must appear in that claim's own quote. Only the prospect's name, the contact's name, "Devin" and a sentence's first word are exempt ("AI" is not); common abbreviations match their long form (PR = pull request, CI, QA, SRE). If one quote doesn't cover the claim, split it into claims with their own quotes or cut the term. One failed claim blocks the whole draft. The rep sees each claim with its quote under the draft, so list them all. If a statement can't be backed by a quote, cut it from the draft.

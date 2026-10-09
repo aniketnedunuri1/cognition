@@ -14,7 +14,7 @@ A wrong fact costs a rep more than a missing one. It burns credibility with the 
 2. **The model's own knowledge is never a source.** It may "know" a CTO's name from training data that is years old. Facts come from tool calls only.
 3. **No fallbacks, defaults, or placeholders.** If the data isn't there, the section is empty or says "Not found." Never fill a gap with a plausible guess.
 4. **Report what a source says, attributed.** "Apollo reports $700M," not "$700M." Third-party numbers are never restated as our own estimate.
-5. **Conflicts are recorded, not silently resolved.** The JSON keeps both facts. The human brief shows one working number (Apollo if present, else the first) and puts material disagreements (>25%) in a footnote.
+5. **Conflicts are recorded, not silently resolved.** The JSON keeps both facts. The human brief shows one working number (Apollo if present, else the first); disagreeing sources stay in the JSON and are not rendered.
 6. **Judgment is separated from fact.** Verdict, "champion," recommended entry point, and ABM themes are labeled as the agent's assessment and cite the facts they rest on. Nothing inferred is presented as fact (e.g. no asserted reporting lines).
 7. **Enforced in code, not just the prompt.** Every tool result carries a `source_id` per document; the model cites `source_id`s only, never URLs. The validator resolves each against the cache and drops (and counts) anything that doesn't resolve; `verify_quotes` checks every quote against the cached full text of the cited source; people must be named in a source they cite. Real URLs + retrieved dates are filled in from the cache at render time.
 
@@ -109,7 +109,7 @@ HTTP mode also serves `GET /briefs/<token>/<domain>-<date>.docx`: outside MCP au
 | Who they sell to | Website, LLM-summarized |
 | Key products | Website |
 
-**Cross-check:** headcount and revenue are checked against a second source (website, press, filings). The JSON keeps every attributed fact. Render picks one working number (prefer the Apollo-attributed fact) and, if sources disagree by more than ~25%, puts the others in a footnote (`Other sources: Tracxn 5,158; TipRanks 5,389.`). Agreeing sources are extra `[n]` markers, not a second number in the cell. (Test: Exa said Brex = 6,570 employees / $283M; Apollo said 1,800 / $700M.)
+**Cross-check:** headcount and revenue are checked against a second source (website, press, filings). The JSON keeps every attributed fact. Render picks one working number (prefer the Apollo-attributed fact) and strips the attribution prefix; disagreeing sources stay in the JSON, never rendered. Agreeing sources are extra `[n]` markers, not a second number in the cell. Snapshot fields with no facts are omitted, not shown as "Not found". (Test: Exa said Brex = 6,570 employees / $283M; Apollo said 1,800 / $700M.)
 
 **B. Engineering & priorities** (the Devin-relevant part)
 - Engineering headcount (Apollo department count), open eng roles (Apollo jobs)
@@ -215,7 +215,7 @@ Contact-level signals from #2 attach to both the person and the account.
 ## 4. Message drafting
 
 **a. Formats (per contact)**
-- Email: 4–6 word subject, 75–120 word plain-text body, one ask
+- Email: subject is always `Cognition <> <Company>`, 75–120 word plain-text body, one ask
 - LinkedIn connection note: ≤300 chars
 - LinkedIn follow-up DM: ~400–600 chars, doesn't repeat the email
 
@@ -311,7 +311,7 @@ Full brief: <.docx download link>
 ## Write-up notes
 
 - The validated JSON in `briefs/` is the canonical record; Markdown, .docx and Slack are renders in code, never sources.
-- Draft claims: every prospect-specific claim in a draft must be listed with a verbatim quote, and each is verified (one failure blocks the draft); numbers, digits or words, must appear in the cited sources. A real quote can still fail to support its claim (run 3: "runs in a Bazel monorepo" cited to a quote about Cursor agents), so every capitalized term and number in a claim must also appear in its own quote (deterministic; exempt: prospect, contact, Devin, sentence-initial words; a small abbreviation map, PR ↔ pull request). Deliberately over-blocks. Residual limits: lowercase terms aren't checked ("monorepo"), and we can't prove every claim in the prose was listed. The rep sees each claim with its quote under the draft. **Production next step: an LLM judge (claim entailed by quote?) as a separate review pass, kept out of the deterministic validator.**
+- Draft claims: every prospect-specific claim in a draft must be listed with a verbatim quote, and each is verified (one failure blocks the draft); numbers, digits or words, must appear in the cited sources. A real quote can still fail to support its claim (run 3: "runs in a Bazel monorepo" cited to a quote about Cursor agents), so every capitalized term and number in a claim must also appear in its own quote (deterministic; exempt: prospect, contact, Devin, sentence-initial words; a small abbreviation map, PR ↔ pull request). Deliberately over-blocks. Residual limits: lowercase terms aren't checked ("monorepo"), and we can't prove every claim in the prose was listed. Claims live in the JSON but are not rendered in the brief. **Production next step: an LLM judge (claim entailed by quote?) as a separate review pass, kept out of the deterministic validator.**
 - **Champion** is checkable: confirmed `ex_devin_customer` (profile history × `customers.json`); or a senior profile title (Manager+/Staff/Principal/Director/Head, including VP/C-level) plus a verified `public_pain` quote; or senior plus `hiring_manager`. `works_on_signal` is checkable (the person is in a tier-1 signal's `who_cares`) but never earns the badge — supporting or hook only, same as `new_in_role` and `ai_appetite`. Honest limit on ex-customer: we cannot prove they personally ran Devin.
 - Only the brief is validated. Agent prose outside it is unchecked, so the playbook forbids facts there and the Slack reply is the tool-rendered summary posted verbatim (in Devin this relies on the agent following the playbook; the CLI enforces it in code).
 

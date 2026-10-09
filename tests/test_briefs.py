@@ -153,7 +153,7 @@ def test_docx_and_download_link(env, monkeypatch):
     stem = out["saved"].removesuffix(".json")
     assert out["slack_summary"].endswith(f"Full brief: {stem}.docx")  # CLI: local path
     text = _docx_text(f"{stem}.docx")
-    assert "Brex — account brief" in text and "Claims to check" in text and "Your Java 17 migration" in text
+    assert "Brex — account brief" in text and "Your Java 17 migration" in text and "Claims to check" not in text
     assert "Who to work" in text
     assert "Wider buying center" in text
 
@@ -191,7 +191,7 @@ def test_rendered_draft_shows_claims_and_no_false_conflicts(env):
     b["engineering"] = {"tech_stack": [{"value": "Kotlin", "evidence": [{"source_id": blog}]},
                                        {"value": "Java", "evidence": [{"source_id": blog}]}]}
     md = briefs.save_brief("brex.com", b)["brief_markdown"]
-    assert "**Claims to check**" in md and '> "migrating our monolith from Java 8 to Java 17"' in md
+    assert "Claims to check" not in md and '> "migrating our monolith from Java 8 to Java 17"' in md
     assert "sources differ" not in md
     assert "## Who to work" in md and "## Buying centers" not in md
     assert "## Wider buying center" in md
@@ -210,14 +210,13 @@ def test_working_number_render(env):
     ]}
     md = briefs.save_brief("brex.com", b)["brief_markdown"]
     head = next(l for l in md.splitlines() if l.startswith("| Headcount |"))
-    assert "Apollo reports ~1,800 employees" in head
+    assert "~1,800 employees" in head and "Apollo" not in head
     assert "5,158" not in head and "1,757" not in head
     assert "sources differ" not in head
-    assert "Other sources: Tracxn 5,158" in md
-    assert "1,757" not in md
+    assert "Other sources" not in md and "Tracxn" not in md and "1,757" not in md
     rev = next(l for l in md.splitlines() if l.startswith("| Revenue |"))
     assert "$700M" in rev and "$279M" not in rev
-    assert "RocketReach $279M" in md
+    assert "RocketReach" not in md
 
 
 def test_company_linkedin_rendered_in_md_and_docx(env):

@@ -16,7 +16,7 @@ from docx.text.paragraph import Paragraph
 
 from .briefs import (
     ADD_LABELS, LOW_CONFIDENCE, ROLE, VERDICT, _Sources, _dated, _facts,
-    _one_line, _plain, _posted_ago, _url, card_people, champion_reason, sort_signals, wider_people,
+    _one_line, _plain, _posted_ago, _unattr, _url, card_people, champion_reason, sort_signals, wider_people,
     working_cell, working_fact,
 )
 from .cache import get_doc
@@ -219,18 +219,15 @@ _CITE_TAIL = re.compile(r"((?:\s*\[\d+\])+)\s*$")
 
 
 def _valued(p: Paragraph, text: str, *, size=10, echo: str | None = None) -> None:
-    """Working number/place is figure; 'Apollo reports' and [n] cites recede."""
+    """Working number/place is figure; the attribution prefix and [n] cites recede."""
     if not text:
-        _run(p, "Not found", size=size, italic=True, color=MUTED)
         return
     cites = ""
     m = _CITE_TAIL.search(text)
     if m:
         cites = "".join(re.findall(r"\[\d+\]", m.group(1)))
         text = text[:m.start()].rstrip()
-    if text.startswith("Apollo reports "):
-        _run(p, "Apollo reports ", size=8, color=MUTED)
-        text = text[len("Apollo reports "):]
+    text = _unattr(text)
     if echo:
         for prefix in (f"{echo} in ", f"{echo}: ", "parent company: "):
             if text.lower().startswith(prefix.lower()):
@@ -332,36 +329,29 @@ def _verdict(doc: Document, b: dict, src: _Sources) -> None:
 def _snapshot(doc: Document, b: dict, src: _Sources) -> None:
     _heading(doc, "Snapshot")
     snap, eng = b["snapshot"], b["engineering"]
-    notes = []
-    pairs = [
-        ("HQ", _facts(src, snap["hq"])),
-        ("Parent", _facts(src, snap["parent_company"])),
-    ]
+    # Fields with no facts are omitted entirely, never "Not found".
+    pairs = []
+    for lab, facts in (("HQ", snap["hq"]), ("Parent", snap["parent_company"])):
+        if facts:
+            pairs.append((lab, _facts(src, facts)))
     for key, lab in (("headcount", "Headcount"), ("revenue", "Revenue"), ("funding", "Funding")):
-        cell, note = working_cell(src, snap[key])
-        pairs.append((lab, cell))
-        if note:
-            notes.append(f"{lab} — {note}")
-    eng_hc = working_fact(eng["eng_headcount"])
-    pairs.insert(4, ("Eng size", _facts(src, [eng_hc] if eng_hc else [])))
-    # 2×3: HQ/Parent, Headcount/Revenue, Eng size/Funding
+        if snap[key]:
+            pairs.append((lab, working_cell(src, snap[key])))
+    if eng_hc := working_fact(eng["eng_headcount"]):
+        pairs.insert(-1 if snap["funding"] else len(pairs),
+                     ("Eng size", _facts(src, [eng_hc])))
+    if eng["tech_stack"]:
+        pairs.append(("Stack", _facts(src, eng["tech_stack"][:1])))
     lab_w, val_w = 1200, 3840
-    table = doc.add_table(rows=3, cols=4)
-    _tbl_width(table, CONTENT, [lab_w, val_w, lab_w, val_w])
     pad = (40, 80, 40, 80)
-    for i in range(3):
-        left, right = pairs[i * 2], pairs[i * 2 + 1]
-        _snap_kv(table.cell(i, 0), table.cell(i, 1), left[0], left[1], lab_w, val_w, pad)
-        _snap_kv(table.cell(i, 2), table.cell(i, 3), right[0], right[1], lab_w, val_w, pad)
-    stack = doc.add_table(rows=1, cols=2)
-    _tbl_width(stack, CONTENT, [lab_w, CONTENT - lab_w])
-    _snap_kv(stack.cell(0, 0), stack.cell(0, 1), "Stack",
-             _facts(src, eng["tech_stack"][:1]), lab_w, CONTENT - lab_w, pad)
-    for note in notes:
-        p = doc.add_paragraph()
-        p.paragraph_format.space_before = Pt(2)
-        p.paragraph_format.space_after = Pt(1)
-        _run(p, note, size=8, color=MUTED)
+    while pairs:
+        row = pairs[:2]
+        pairs = pairs[2:]
+        table = doc.add_table(rows=1, cols=4)
+        _tbl_width(table, CONTENT, [lab_w, val_w, lab_w, val_w])
+        for col, pair in ((0, row[0]), (2, row[1] if len(row) > 1 else None)):
+            lab, val = pair or ("", "")
+            _snap_kv(table.cell(0, col), table.cell(0, col + 1), lab, val, lab_w, val_w, pad)
 
 
 def _snap_kv(lc: _Cell, vc: _Cell, lab: str, val: str, lab_w: int, val_w: int, pad) -> None:
@@ -472,7 +462,7 @@ def _signals(doc: Document, b: dict, src: _Sources) -> None:
         _run(meta, f"  ·  {SOURCE_LABELS.get(s['source'], s['source'])}", size=8, color=MUTED)
         _run(meta, f"  ·  {s['use_case']}", size=9, color=MUTED)
         if s["who_cares"]:
-            _run(meta, f"  ·  Who cares: {', '.join(s['who_cares'])}", size=9, color=MUTED)
+            _run(meta, f"  ·  Relevant for: {', '.join(s['who_cares'])}", size=9, color=MUTED)
         for e in s["evidence"]:
             if not e.get("quote"):
                 continue
@@ -502,9 +492,10 @@ def _signals(doc: Document, b: dict, src: _Sources) -> None:
             sp.paragraph_format.space_after = Pt(4)
     if b["competitive_context"]:
         _heading(doc, "Competitive context")
-        for c in b["competitive_context"]:
+        for i, c in enumerate(b["competitive_context"], 1):
             p = doc.add_paragraph()
             p.paragraph_format.space_after = Pt(6)
+            _run(p, f"{i}. ", size=10)
             _run(p, c["value"], size=10)
             _run(p, f"  ({c['situation'].replace('_', ' ')})", size=9, color=MUTED)
             _cite(p, src.cite(c["evidence"]))
@@ -572,14 +563,6 @@ def _drafts(doc: Document, b: dict, src: _Sources) -> None:
             for line in d["notes"].splitlines():
                 np = _p(nc, after=8)
                 _run(np, line, size=8, color=MUTED)
-        claims = _p(cell, after=20)
-        _run(claims, "Claims to check", size=8, bold=True, color=MUTED)
-        for c in d["claims"]:
-            cp = _p(cell, after=8)
-            _run(cp, _one_line(c["text"]), size=8, color=MUTED)
-            _cite(cp, src.cite([c]))
-            qp = _p(cell, after=16)
-            _run(qp, f'"{_one_line(c["quote"])}"', size=8, italic=True, color=MUTED)
         built = _p(cell, after=20)
         _run(built, "Built from: ", size=8, color=MUTED)
         _cite(built, src.cite(d["built_from"]))

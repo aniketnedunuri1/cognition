@@ -14,14 +14,15 @@ from .knowledge import _load
 from .verify import normalize
 
 LIMITS = {
-    "email": {"subject_words": (4, 6), "body_words": (75, 120)},
+    "email": {"body_words": (75, 120)},
     "linkedin_note": {"chars": (1, 300)},
     "linkedin_followup": {"chars": (400, 600)},
 }
 BANNED = ["hope this finds you well", "hope you're well", "hope you are well", "quick question",
           "revolutionize", "revolutionary", "game-changer", "game changer", "synergy", "circle back",
           "touch base", "just following up", "just checking in", "cutting-edge", "best-in-class",
-          "world-class", "replace your engineers", "replace engineers", "replacing engineers"]
+          "world-class", "replace your engineers", "replace engineers", "replacing engineers",
+          "compare notes", "comparing notes"]
 LAYOFFS = re.compile(r"\blay ?offs?\b|\blaid off\b|\bjob cuts\b|\breduction in force\b|\bdownsiz|"
                      r"\bheadcount reduction|\bRIF\b", re.I)
 PLACEHOLDER = re.compile(r"\[[^\]]{1,40}\]|\{\{?[^}]{0,40}\}?\}|<[a-z_ ]{2,30}>", re.I)
@@ -78,10 +79,8 @@ def lint_message(channel: str, text: str, source_ids: list[str] | None = None,
     words, chars = len(text.split()), len(text)
     lim = LIMITS[channel]
     if channel == "email":
-        n = len((subject or "").split())
-        lo, hi = lim["subject_words"]
-        if not lo <= n <= hi:
-            issue("fix", f"subject has {n} words; needs {lo}-{hi}")
+        if not re.match(r"^Cognition\s*<>\s*\S", (subject or "").strip()):
+            issue("fix", 'subject should be "Cognition <> <Company>"')
         lo, hi = lim["body_words"]
         if not lo <= words <= hi:
             issue("fix", f"body has {words} words; needs {lo}-{hi}")

@@ -26,7 +26,7 @@ def src(tmp_path, monkeypatch):
 
 
 def test_clean_email_passes(src):
-    r = lint_message("email", BODY, [src], subject="Your ETL sub-module migration")
+    r = lint_message("email", BODY, [src], subject="Cognition <> Brex")
     assert r["ok"], r["issues"]
 
 

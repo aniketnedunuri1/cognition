@@ -230,6 +230,15 @@ def _plain(text: str) -> str:
     return re.sub(r"^\s*assessment\s*[:—-]\s*", "", text or "", flags=re.I)
 
 
+_ATTR = re.compile(r"^[A-Z][\w.+]*(?:\s+[A-Z][\w.+]*)*\s+(?:reports|lists|estimates|puts)\s+")
+
+
+def _unattr(value: str) -> str:
+    """Snapshot/stack cells render without the "Apollo reports" attribution prefix;
+    the attribution stays in the JSON fact."""
+    return _ATTR.sub("", value or "", count=1)
+
+
 _AMOUNT = re.compile(r"\$?(\d[\d,]*(?:\.\d+)?)\s*(k|m|b|bn|thousand|million|billion)?\b", re.I)
 _SCALE = {"k": 1e3, "thousand": 1e3, "m": 1e6, "million": 1e6, "b": 1e9, "bn": 1e9, "billion": 1e9}
 
@@ -267,34 +276,24 @@ def _named_amounts(value: str) -> list[str]:
     return [f"{m[1]} {m[2].strip()}" for m in _NAMED_AMT.finditer(value)]
 
 
-def working_cell(src: _Sources, facts: list[dict]) -> tuple[str, str | None]:
-    """One working value for the row; material conflicts become a footnote, not a cell wall."""
-    if not facts:
-        return "Not found", None
+def working_cell(src: _Sources, facts: list[dict]) -> str:
+    """One working value for the row (Apollo preferred); disagreeing sources stay in the JSON."""
     working = working_fact(facts)
     cites = src.cite(working["evidence"])
-    extra, notes = [], []
-    for f in facts:
-        if f is working:
-            continue
-        if _agrees(f, working):
-            extra.append(src.cite(f["evidence"]))
-        else:
-            notes.extend(_named_amounts(f["value"]) or [f["value"]])
-    cell = f"{working['value']} {cites}{''.join(extra)}".rstrip()
-    if notes and conflicting(facts):
-        return cell, f"Other sources: {'; '.join(dict.fromkeys(notes))}."
-    return cell, None
+    extra = [src.cite(f["evidence"]) for f in facts if f is not working and _agrees(f, working)]
+    return f"{_unattr(working['value'])} {cites}{''.join(extra)}".rstrip()
 
 
 def _url(source_id: str) -> str | None:
     return (get_doc(source_id) or {}).get("url")
 
 
-def _facts(src: _Sources, facts: list[dict], check_conflict: bool = False) -> str:
+def _facts(src: _Sources, facts: list[dict], check_conflict: bool = False,
+           unattr: bool = False) -> str:
     if not facts:
         return "Not found"
-    out = "; ".join(f"{f['value']} {src.cite(f['evidence'])}" for f in facts)
+    out = "; ".join(f"{_unattr(f['value']) if unattr else f['value']} {src.cite(f['evidence'])}"
+                    for f in facts)
     return out + (" ⚠️ sources differ" if check_conflict and conflicting(facts) else "")
 
 
@@ -366,31 +365,29 @@ def render_markdown(rec: dict) -> str:
               "parent_company": "Parent company", "headcount": "Headcount", "headcount_growth": "Headcount growth",
               "revenue": "Revenue", "funding": "Funding", "sells_to": "Sells to", "products": "Key products"}
     L += ["## Snapshot", "", "| | |", "|---|---|"]
-    notes = []
     for k, lab in labels.items():
+        if not b["snapshot"][k]:
+            continue
         if k in QUANTITATIVE:
-            cell, note = working_cell(src, b["snapshot"][k])
-            if note:
-                notes.append(f"⚠️ {lab} — {note}")
+            cell = working_cell(src, b["snapshot"][k])
         else:
-            cell = _facts(src, b["snapshot"][k])
+            cell = _facts(src, b["snapshot"][k], unattr=True)
         L.append(f"| {lab} | {cell} |")
     L.append("")
-    if notes:
-        L += notes + [""]
 
     labels = {"eng_headcount": "Engineering headcount", "open_eng_roles": "Open eng roles", "tech_stack": "Tech stack",
               "ai_dev_tools": "AI dev tools", "eng_blog_and_github": "Eng blog / GitHub", "ai_posture": "AI posture",
               "priorities": "What they care about", "peers": "Peers"}
     L += ["## Engineering & priorities", ""]
-    L += [f"- **{lab}:** {_facts(src, b['engineering'][k])}" for k, lab in labels.items()]
+    L += [f"- **{lab}:** {_facts(src, b['engineering'][k], unattr=k in ('eng_headcount', 'tech_stack'))}"
+          for k, lab in labels.items()]
     L.append("")
 
     L += ["## Intent signals", ""]
     if not b["signals"]:
         L.append("No signals met the bar.")
     for s in sort_signals(b["signals"]):
-        who = f" · Who cares: {', '.join(s['who_cares'])}" if s["who_cares"] else ""
+        who = f" · Relevant for: {', '.join(s['who_cares'])}" if s["who_cares"] else ""
         label = SOURCE_LABELS.get(s["source"], s["source"])
         L += [f"**{s['headline']}** — Tier {s['tier']} · {label} · {s['use_case']}{who}"] \
             + _quotes(src, s["evidence"], dates=True) + [""]
@@ -404,7 +401,8 @@ def render_markdown(rec: dict) -> str:
         L.append("")
     if b["competitive_context"]:
         L += ["**Competitive context**", ""]
-        L += [f"- {c['value']} ({c['situation'].replace('_', ' ')}) {src.cite(c['evidence'])}" for c in b["competitive_context"]]
+        L += [f"{i}. {c['value']} ({c['situation'].replace('_', ' ')}) {src.cite(c['evidence'])}"
+              for i, c in enumerate(b["competitive_context"], 1)]
         L.append("")
 
     L += ["## Company LinkedIn", ""]
@@ -455,9 +453,6 @@ def render_markdown(rec: dict) -> str:
               f"**LinkedIn follow-up**", "", d["linkedin_followup"], ""]
         if d.get("notes"):
             L += ["**Send notes** *(rep only — never sent)*", "", d["notes"], ""]
-        L += [f"**Claims to check** (each verified against its source):", ""]
-        for c in d["claims"]:
-            L += [f"- {_one_line(c['text'])} {src.cite([c])}", f'  > "{_one_line(c["quote"])}"']
         L += ["", f"*Built from:* {src.cite(d['built_from'])}"]
         L += [f"*Lint ({x['channel']}):* {x['issue']}" for x in d["lint"]] + [""]
 

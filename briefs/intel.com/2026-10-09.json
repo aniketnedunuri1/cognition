@@ -1,0 +1,1493 @@
+{
+ "domain": "intel.com",
+ "date": "2026-10-09",
+ "saved_at": "2026-10-09T17:51:08+00:00",
+ "brief": {
+  "domain": "intel.com",
+  "company_name": "Intel",
+  "verdict": {
+   "verdict": "not_now",
+   "why_now": "Intel announced a company-wide Gemini Enterprise deal on July 16, 2026 that includes agentic coding assistance, and the CIO says coding tools are the next stage of that rollout; a direct-competitor deal under 6 months old means wait, not push.",
+   "based_on": [
+    {
+     "source_id": "src_ca792395c7",
+     "quote": "introduces dedicated agentic coding assistance and engineering automation utilizing Gemini’s advanced reasoning capabilities to streamline development pipelines and automate complex, multi-step software workflows",
+     "date_quote": null,
+     "date": "2026-07-16",
+     "stale": null
+    },
+    {
+     "source_id": "src_0400d3989b",
+     "quote": "taken a staged approach to the rollout, beginning with productivity capabilities before expanding into data and coding tools",
+     "date_quote": null,
+     "date": "2026-10-05",
+     "stale": null
+    }
+   ],
+   "watch_for": "Revisit April to July 2027 (9 to 12 months after the Gemini deal). Earlier triggers: gaps or friction in the Gemini coding-tools stage, a named Developer Productivity or AI enablement leader evaluating other agents, or the CTO Office C-to-Rust work moving from research to a production migration."
+  },
+  "snapshot": {
+   "hq": [
+    {
+     "value": "Santa Clara, California (Apollo)",
+     "evidence": [
+      {
+       "source_id": "src_4b8cdc590a",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "founded": [
+    {
+     "value": "1968 (Apollo)",
+     "evidence": [
+      {
+       "source_id": "src_4b8cdc590a",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "industry": [
+    {
+     "value": "Semiconductors (Apollo)",
+     "evidence": [
+      {
+       "source_id": "src_4b8cdc590a",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "ownership": [
+    {
+     "value": "Public, Nasdaq: INTC",
+     "evidence": [
+      {
+       "source_id": "src_4b8cdc590a",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      },
+      {
+       "source_id": "src_ca792395c7",
+       "quote": "Intel (Nasdaq: INTC) designs and manufactures advanced semiconductors that connect and power the modern world",
+       "date_quote": null,
+       "date": "2026-07-16",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "parent_company": [],
+   "headcount": [
+    {
+     "value": "Apollo reports ~86,000 employees",
+     "evidence": [
+      {
+       "source_id": "src_4b8cdc590a",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "Axis Intelligence, citing the Q2 2026 release, reports headcount fell 18.84% to 82,300",
+     "evidence": [
+      {
+       "source_id": "src_16cc2371aa",
+       "quote": "as headcount fell 18.84% to 82,300",
+       "date_quote": null,
+       "date": "2026-10-01",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "headcount_growth": [
+    {
+     "value": "Apollo reports +0.9% over 6 months, -1.3% over 12 months, -13.3% over 24 months",
+     "evidence": [
+      {
+       "source_id": "src_4b8cdc590a",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "revenue": [
+    {
+     "value": "Apollo reports $52.9B annual revenue",
+     "evidence": [
+      {
+       "source_id": "src_4b8cdc590a",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "Q2 2026 revenue $16.1B, up 25% YoY (Intel Q2 release)",
+     "evidence": [
+      {
+       "source_id": "src_90dfbbc425",
+       "quote": "Second-quarter revenue was $16.1 billion, up 25% year-over-year (YoY).",
+       "date_quote": null,
+       "date": "2026-07-23",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "funding": [],
+   "sells_to": [
+    {
+     "value": "Designs and manufactures semiconductors for computing, data center, networking and AI customers",
+     "evidence": [
+      {
+       "source_id": "src_ca792395c7",
+       "quote": "Intel (Nasdaq: INTC) designs and manufactures advanced semiconductors that connect and power the modern world",
+       "date_quote": null,
+       "date": "2026-07-16",
+       "stale": null
+      },
+      {
+       "source_id": "src_971eb652c1",
+       "quote": "Get high-density, power-efficient performance for AI-ready networking and 5G core",
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "products": [
+    {
+     "value": "Xeon 6+ processors for AI-ready networking and 5G core; Arc G-series handheld processors (intel.com)",
+     "evidence": [
+      {
+       "source_id": "src_971eb652c1",
+       "quote": "Get high-density, power-efficient performance for AI-ready networking and 5G core",
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ]
+  },
+  "engineering": {
+   "eng_headcount": [
+    {
+     "value": "Apollo reports ~46,000 in engineering",
+     "evidence": [
+      {
+       "source_id": "src_4b8cdc590a",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "open_eng_roles": [
+    {
+     "value": "Apollo lists 488 postings, 144 engineering-relevant titles; recent: Cloud Software Development Engineer, GPU Software Development Engineer, AI Platform and Agentic Engineer",
+     "evidence": [
+      {
+       "source_id": "src_7c4c9e50fe",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-10-04",
+       "stale": null
+      },
+      {
+       "source_id": "src_3ceef4e6a0",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-10-07",
+       "stale": null
+      },
+      {
+       "source_id": "src_05cbc3cb4f",
+       "quote": "Apply Agentic AI coding assistants to accelerate software development while maintaining rigorous engineering review and validation",
+       "date_quote": null,
+       "date": "2026-09-21",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "tech_stack": [
+    {
+     "value": "Sumble reports Python (1,945 confirming job posts), Jira (289), GitHub (253), Jenkins (220), plus AWS, Azure, Ansible, Terraform, Grafana, Splunk",
+     "evidence": [
+      {
+       "source_id": "src_05d48217a0",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "ai_dev_tools": [
+    {
+     "value": "Intel announced Gemini agentic coding assistance as part of its Google Cloud deal",
+     "evidence": [
+      {
+       "source_id": "src_ca792395c7",
+       "quote": "introduces dedicated agentic coding assistance and engineering automation utilizing Gemini’s advanced reasoning capabilities to streamline development pipelines and automate complex, multi-step software workflows",
+       "date_quote": null,
+       "date": "2026-07-16",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "CIO cites strong Gemini adoption and widespread Copilot use across functions",
+     "evidence": [
+      {
+       "source_id": "src_0400d3989b",
+       "quote": "strong adoption of the Gemini platform, employees building their own agents, and widespread use of Copilot across functions",
+       "date_quote": null,
+       "date": "2026-10-05",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "Global Head of AI oversees Gemini Enterprise Agent Platform, N8N, Anthropic Claude and Azure AI inferencing",
+     "evidence": [
+      {
+       "source_id": "src_7339c3f810",
+       "quote": "Oversee deployment of Intel's critical AI platforms including Google Gemini Enterprise Agent Platform, N8N, Anthropic Claude, and Microsoft Azure AI inferencing",
+       "date_quote": null,
+       "date": "2026-09-07",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "Apollo lists Copilot, Cursor and GitHub Copilot as AI coding tools; Sumble confirms none via job posts",
+     "evidence": [
+      {
+       "source_id": "src_4b8cdc590a",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      },
+      {
+       "source_id": "src_05d48217a0",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "eng_blog_and_github": [
+    {
+     "value": "GitHub org intel with 1,367 public repos",
+     "evidence": [
+      {
+       "source_id": "src_414f0f0a4d",
+       "quote": "Public repos: 1367",
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "intel.com research blog: IDEAS for TRACTOR (C-to-Rust translation)",
+     "evidence": [
+      {
+       "source_id": "src_58d103f8e3",
+       "quote": "IDEAS for TRACTOR",
+       "date_quote": null,
+       "date": "2026-08-24",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "ai_posture": [
+    {
+     "value": "CEO on Q2 call: embracing an AI-first mentality throughout operations",
+     "evidence": [
+      {
+       "source_id": "src_719045dbf1",
+       "quote": "Our recent announcement to deepen our collaboration with Google Cloud will help to accelerate the transformation as we fully embrace an AI-first mentality throughout operations",
+       "date_quote": null,
+       "date": "2026-07-23",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "CEO on No Priors: moving Intel off being a legacy spreadsheet company",
+     "evidence": [
+      {
+       "source_id": "src_b664fb5571",
+       "quote": "We are changing Intel used to be a very old legacy spreadsheet company",
+       "date_quote": null,
+       "date": "2026-06-21",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "CIO tracks ROI, cycle-time and time-to-market for AI",
+     "evidence": [
+      {
+       "source_id": "src_0400d3989b",
+       "quote": "we track hard business metrics: ROI, cycle-time improvements, time-to-market gains",
+       "date_quote": null,
+       "date": "2026-10-05",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "priorities": [
+    {
+     "value": "Supply to meet demand that outpaces it",
+     "evidence": [
+      {
+       "source_id": "src_719045dbf1",
+       "quote": "Strong demand for our products continue to outpace our growing supply",
+       "date_quote": null,
+       "date": "2026-07-23",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "Company-wide Gemini Enterprise rollout, staged from productivity to data and coding tools",
+     "evidence": [
+      {
+       "source_id": "src_0400d3989b",
+       "quote": "taken a staged approach to the rollout, beginning with productivity capabilities before expanding into data and coding tools",
+       "date_quote": null,
+       "date": "2026-10-05",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "peers": [
+    {
+     "value": "NVIDIA, Qualcomm, Texas Instruments (fiscal.ai peer list); none matched as public Devin customers",
+     "evidence": [
+      {
+       "source_id": "src_34a6d4b6dc",
+       "quote": "NVIDIA Corporation (NVDA) ... QUALCOMM Incorporated (QCOM) ... Texas Instruments Incorporated (TXN)",
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ]
+  },
+  "signals": [
+   {
+    "headline": "CTO Office using LLMs to translate C into safe Rust for DARPA",
+    "type": "migration",
+    "source": "eng_blog",
+    "horizon": "strategic",
+    "evidence": [
+     {
+      "source_id": "src_58d103f8e3",
+      "quote": "Intel works on C-to-Rust translation as part of the DARPA TRACTOR (Translating All C-to-Rust) program",
+      "date_quote": null,
+      "date": "2026-08-24",
+      "stale": null
+     },
+     {
+      "source_id": "src_58d103f8e3",
+      "quote": "Marius Arvinte, CTO Office",
+      "date_quote": null,
+      "date": "2026-08-24",
+      "stale": null
+     }
+    ],
+    "use_case": "Code migration & modernization",
+    "who_cares": [
+     "Marius Arvinte"
+    ],
+    "tier": 2
+   },
+   {
+    "headline": "CIO says coding tools come next in the staged Gemini rollout",
+    "type": "ai_mandate",
+    "source": "exec_statement",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_0400d3989b",
+      "quote": "taken a staged approach to the rollout, beginning with productivity capabilities before expanding into data and coding tools",
+      "date_quote": null,
+      "date": "2026-10-05",
+      "stale": null
+     },
+     {
+      "source_id": "src_0400d3989b",
+      "quote": "we track hard business metrics: ROI, cycle-time improvements, time-to-market gains",
+      "date_quote": null,
+      "date": "2026-10-05",
+      "stale": null
+     }
+    ],
+    "use_case": "Feature development capacity",
+    "who_cares": [
+     "Cynthia (Cindy) Stoddard",
+     "Kyle Short"
+    ],
+    "tier": 2
+   },
+   {
+    "headline": "Design Quality team wants engineers fluent in agentic coding assistants",
+    "type": "hiring_composition",
+    "source": "job_post",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_05cbc3cb4f",
+      "quote": "Apply Agentic AI coding assistants to accelerate software development while maintaining rigorous engineering review and validation",
+      "date_quote": null,
+      "date": "2026-09-21",
+      "stale": null
+     }
+    ],
+    "use_case": "Feature development capacity",
+    "who_cares": [],
+    "tier": 3
+   },
+   {
+    "headline": "CEO says Intel is going AI-first across operations",
+    "type": "ai_mandate",
+    "source": "exec_statement",
+    "horizon": "strategic",
+    "evidence": [
+     {
+      "source_id": "src_719045dbf1",
+      "quote": "Our recent announcement to deepen our collaboration with Google Cloud will help to accelerate the transformation as we fully embrace an AI-first mentality throughout operations",
+      "date_quote": null,
+      "date": "2026-07-23",
+      "stale": null
+     }
+    ],
+    "use_case": "Feature development capacity",
+    "who_cares": [
+     "Cynthia (Cindy) Stoddard"
+    ],
+    "tier": 3
+   }
+  ],
+  "additional_signals": [
+   {
+    "label": "tech_mention",
+    "headline": "New paper targets coding agents writing kernels for Intel GPUs",
+    "evidence": [
+     {
+      "source_id": "src_e4d85edd11",
+      "quote": "A Tile Programming Model for Programmers and Coding Agents on Intel GPUs",
+      "date_quote": null,
+      "date": "2026-10-03",
+      "stale": null
+     }
+    ],
+    "days_ago": 6
+   },
+   {
+    "label": "news_mention",
+    "headline": "Intel launches Inference Microservices for LLMs on Xeon",
+    "evidence": [
+     {
+      "source_id": "src_e666f7c2a4",
+      "quote": "Running LLMs on Intel Xeon is easier than ever with Intel Inference Microservices.",
+      "date_quote": null,
+      "date": "2026-09-29",
+      "stale": null
+     }
+    ],
+    "days_ago": 10
+   }
+  ],
+  "competitive_context": [
+   {
+    "value": "July 16, 2026 Google Cloud deal brings Gemini agentic coding assistance company-wide; CIO says coding tools follow productivity in the staged rollout. Revisit 9 to 12 months after signing.",
+    "evidence": [
+     {
+      "source_id": "src_ca792395c7",
+      "quote": "introduces dedicated agentic coding assistance and engineering automation utilizing Gemini’s advanced reasoning capabilities to streamline development pipelines and automate complex, multi-step software workflows",
+      "date_quote": null,
+      "date": "2026-07-16",
+      "stale": null
+     },
+     {
+      "source_id": "src_0400d3989b",
+      "quote": "taken a staged approach to the rollout, beginning with productivity capabilities before expanding into data and coding tools",
+      "date_quote": null,
+      "date": "2026-10-05",
+      "stale": null
+     }
+    ],
+    "situation": "competitor_deal_recent"
+   },
+   {
+    "value": "Apollo lists Cursor and GitHub Copilot; CIO cites widespread Copilot use across functions (likely Microsoft Copilot, unconfirmed which). Anthropic Claude is also an enterprise platform.",
+    "evidence": [
+     {
+      "source_id": "src_4b8cdc590a",
+      "quote": null,
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     },
+     {
+      "source_id": "src_0400d3989b",
+      "quote": "strong adoption of the Gemini platform, employees building their own agents, and widespread use of Copilot across functions",
+      "date_quote": null,
+      "date": "2026-10-05",
+      "stale": null
+     },
+     {
+      "source_id": "src_7339c3f810",
+      "quote": "Oversee deployment of Intel's critical AI platforms including Google Gemini Enterprise Agent Platform, N8N, Anthropic Claude, and Microsoft Azure AI inferencing",
+      "date_quote": null,
+      "date": "2026-09-07",
+      "stale": null
+     }
+    ],
+    "situation": "other"
+   }
+  ],
+  "company_linkedin": [
+   {
+    "value": "Intel names Pushkar Ranade permanent CTO (May 2026)",
+    "evidence": [
+     {
+      "source_id": "src_3488757ce8",
+      "quote": "We also announced the permanent appointment of Pushkar Ranade as chief technology officer",
+      "date_quote": null,
+      "date": "2026-05-04",
+      "stale": null
+     }
+    ],
+    "kind": "original",
+    "tags": []
+   },
+   {
+    "value": "Computex 2026 chip-to-systems AI announcements",
+    "evidence": [
+     {
+      "source_id": "src_1efd3a4bbd",
+      "quote": "Intel and its partners will help you solve them with chip-to-systems AI innovations",
+      "date_quote": null,
+      "date": "2026-06-02",
+      "stale": null
+     }
+    ],
+    "kind": "original",
+    "tags": []
+   }
+  ],
+  "people": [
+   {
+    "name": "Cynthia (Cindy) Stoddard",
+    "title": "SVP and CIO",
+    "deal_role": "economic_buyer",
+    "team": "Intel IT",
+    "why": "Owns the Gemini Enterprise rollout and its staging into coding tools; tracks ROI and cycle time.",
+    "evidence": [
+     {
+      "source_id": "src_8d81f08591",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-24",
+      "stale": null
+     },
+     {
+      "source_id": "src_ca792395c7",
+      "quote": "Our work with Google Cloud allows us to provide our employees with a central hub to build and deploy agents through Gemini Enterprise",
+      "date_quote": null,
+      "date": "2026-07-16",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [
+     {
+      "value": "Oct 2026 interview: staged rollout, productivity first, then data and coding tools",
+      "evidence": [
+       {
+        "source_id": "src_0400d3989b",
+        "quote": "taken a staged approach to the rollout, beginning with productivity capabilities before expanding into data and coding tools",
+        "date_quote": null,
+        "date": "2026-10-05",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": true,
+    "verified": true,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_8d81f08591",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Kyle Short",
+    "title": "Sr. Director, Global Head of AI Intel Corporation",
+    "deal_role": "champion",
+    "team": "Intel IT, AI Center of Excellence",
+    "why": "Runs the enterprise AI platforms (Gemini, Claude, N8N) and AI CoE; decides which work goes to which platform.",
+    "evidence": [
+     {
+      "source_id": "src_7339c3f810",
+      "quote": "Oversee deployment of Intel's critical AI platforms including Google Gemini Enterprise Agent Platform, N8N, Anthropic Claude, and Microsoft Azure AI inferencing",
+      "date_quote": null,
+      "date": "2026-09-07",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "AI enablement title and platform ownership",
+      "evidence": [
+       {
+        "source_id": "src_7339c3f810",
+        "quote": "I also lead our AI Center of Excellence, AI FinOps",
+        "date_quote": null,
+        "date": "2026-09-07",
+        "stale": null
+       }
+      ],
+      "kind": "ai_appetite"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Portfolio of nearly 20,000 custom AI assistants",
+      "evidence": [
+       {
+        "source_id": "src_7339c3f810",
+        "quote": "Portfolio spans nearly 20,000 custom AI assistants, 700 RAG pipelines",
+        "date_quote": null,
+        "date": "2026-09-07",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": {
+     "value": "Reports to the CIO (stated on his profile)",
+     "evidence": [
+      {
+       "source_id": "src_7339c3f810",
+       "quote": "reporting directly to the CIO",
+       "date_quote": null,
+       "date": "2026-09-07",
+       "stale": null
+      }
+     ]
+    },
+    "incumbent_owner": true,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_7339c3f810",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Michael Wenzler",
+    "title": "Senior Software Engineering Manager - Developer Productivity",
+    "deal_role": "champion",
+    "team": "Developer Productivity",
+    "why": "Owns the development environment and build, test and deploy tooling for a large software system.",
+    "evidence": [
+     {
+      "source_id": "src_a7f5d8bd37",
+      "quote": "I manage a global team responsible for the development environment for a large and complex software system",
+      "date_quote": null,
+      "date": "2026-09-22",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [
+     {
+      "value": "Team builds, tests and deploys the software internally and externally",
+      "evidence": [
+       {
+        "source_id": "src_a7f5d8bd37",
+        "quote": "We are responsible for building and maintaining the tools needed to develop the software as well as for building, testing and deploying the software",
+        "date_quote": null,
+        "date": "2026-09-22",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_a7f5d8bd37",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Madhu D.",
+    "title": "Software Engineering Manager",
+    "deal_role": "champion",
+    "team": "Developer Productivity, build and CI/CD",
+    "why": "Delivers the global enterprise build system and CI/CD; previously at a Devin customer.",
+    "evidence": [
+     {
+      "source_id": "src_c8dac1d673",
+      "quote": "Responsible for delivering large scale global enterprise build system that allows Continuous Delivery of Intel’s software to ecosystem and partners",
+      "date_quote": null,
+      "date": "2026-08-16",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Previously worked at a Devin customer (worked-at, not proof of use)",
+      "evidence": [
+       {
+        "source_id": "src_c8dac1d673",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-08-16",
+        "stale": null
+       }
+      ],
+      "kind": "ex_devin_customer"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Product strategy for Global Build Agent Cloud",
+      "evidence": [
+       {
+        "source_id": "src_c8dac1d673",
+        "quote": "Developed product strategy for Global Build Agent Cloud",
+        "date_quote": null,
+        "date": "2026-08-16",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "likely_champion",
+    "featured": true,
+    "profile_source_id": "src_c8dac1d673",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Marius Arvinte",
+    "title": "Research Scientist",
+    "deal_role": "technical_evaluator",
+    "team": "Intel Labs, CTO Office",
+    "why": "Co-author of the IDEAS C-to-Rust translation work; best technical read on agent-driven migration.",
+    "evidence": [
+     {
+      "source_id": "src_798b20b664",
+      "quote": "Code Translation and Generation using LLMs",
+      "date_quote": null,
+      "date": "2026-09-08",
+      "stale": null
+     },
+     {
+      "source_id": "src_58d103f8e3",
+      "quote": "Marius Arvinte, CTO Office",
+      "date_quote": null,
+      "date": "2026-08-24",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [
+     {
+      "value": "Aug 2026 post: IDEAS for TRACTOR, C to safe Rust",
+      "evidence": [
+       {
+        "source_id": "src_58d103f8e3",
+        "quote": "Intel works on C-to-Rust translation as part of the DARPA TRACTOR (Translating All C-to-Rust) program",
+        "date_quote": null,
+        "date": "2026-08-24",
+        "stale": null
+       }
+      ]
+     },
+     {
+      "value": "On the team behind the C-to-Rust signal",
+      "evidence": [
+       {
+        "source_id": "src_58d103f8e3",
+        "quote": "Marius Arvinte, CTO Office",
+        "date_quote": null,
+        "date": "2026-08-24",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": true,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": null,
+    "current_basis": "official_source"
+   },
+   {
+    "name": "Anand Krishnappa",
+    "title": "Director of DevOps, SW Release Management",
+    "deal_role": "champion",
+    "team": "AI accelerator software DevOps",
+    "why": "Leads DevOps and CI/CD for AI accelerator software across India and US.",
+    "evidence": [
+     {
+      "source_id": "src_93b1420920",
+      "quote": "Lead a team of DevOps engineers supporting Intel AI accelerator development, establishing CI/CD pipelines across India and US",
+      "date_quote": null,
+      "date": "2026-09-26",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_93b1420920",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Lisa Pearce Haas",
+    "title": "CVP, Client Computing & Physical AI Software Engineering",
+    "deal_role": "economic_buyer",
+    "team": "Client Computing & Physical AI Software",
+    "why": "BU software engineering executive; possible sponsor for a software-org pilot.",
+    "evidence": [
+     {
+      "source_id": "src_2892a27e1b",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-08-24",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_2892a27e1b",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Smitesh Pawar",
+    "title": "Vice President of Software Engineering",
+    "deal_role": "economic_buyer",
+    "team": "Software Engineering",
+    "why": "VP of Software Engineering; previously at a Devin customer.",
+    "evidence": [
+     {
+      "source_id": "src_708be2fe35",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-21",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Previously worked at a Devin customer",
+      "evidence": [
+       {
+        "source_id": "src_708be2fe35",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-09-21",
+        "stale": null
+       }
+      ],
+      "kind": "ex_devin_customer"
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "likely_champion",
+    "featured": true,
+    "profile_source_id": "src_708be2fe35",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Purnam Sheth",
+    "title": "VP, GM Trusted Platform Software Engineering, Software and Advanced Technology Group",
+    "deal_role": "economic_buyer",
+    "team": "Software and Advanced Technology Group",
+    "why": "BU VP of platform software; previously at a Devin customer.",
+    "evidence": [
+     {
+      "source_id": "src_709bd6fce1",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-21",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Previously worked at a Devin customer",
+      "evidence": [
+       {
+        "source_id": "src_709bd6fce1",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-09-21",
+        "stale": null
+       }
+      ],
+      "kind": "ex_devin_customer"
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "likely_champion",
+    "featured": true,
+    "profile_source_id": "src_709bd6fce1",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Earnest Cheong",
+    "title": "Vice President, GM of Cloud SW Engineering",
+    "deal_role": "economic_buyer",
+    "team": "Cloud Software Engineering",
+    "why": "Runs cloud software engineering, where ten Cloud Software Development Engineer roles are open.",
+    "evidence": [
+     {
+      "source_id": "src_622c955c33",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-05",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_622c955c33",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Brent Conran",
+    "title": "Chief Information Security Officer",
+    "deal_role": "gatekeeper",
+    "team": "Information Security",
+    "why": "Security review for any agent with repo access.",
+    "evidence": [
+     {
+      "source_id": "src_81370fe8be",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-19",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_81370fe8be",
+    "current_basis": "profile"
+   }
+  ],
+  "top_contacts": [
+   {
+    "name": "Kyle Short",
+    "why": {
+     "text": "Owns the AI platforms and CoE that decide which engineering work goes to agents; incumbent owner of the Gemini and Claude platforms, so lead with prioritization, not displacement.",
+     "based_on": [
+      {
+       "source_id": "src_7339c3f810",
+       "quote": "Oversee deployment of Intel's critical AI platforms including Google Gemini Enterprise Agent Platform, N8N, Anthropic Claude, and Microsoft Azure AI inferencing",
+       "date_quote": null,
+       "date": "2026-09-07",
+       "stale": null
+      }
+     ]
+    }
+   },
+   {
+    "name": "Michael Wenzler",
+    "why": {
+     "text": "Developer Productivity owner of build, test and deploy tooling: the most direct home for delegated backlog work.",
+     "based_on": [
+      {
+       "source_id": "src_a7f5d8bd37",
+       "quote": "I manage a global team responsible for the development environment for a large and complex software system",
+       "date_quote": null,
+       "date": "2026-09-22",
+       "stale": null
+      }
+     ]
+    }
+   },
+   {
+    "name": "Madhu D.",
+    "why": {
+     "text": "Runs the enterprise build system and CI/CD, and previously worked at a Devin customer.",
+     "based_on": [
+      {
+       "source_id": "src_c8dac1d673",
+       "quote": "Responsible for delivering large scale global enterprise build system that allows Continuous Delivery of Intel’s software to ecosystem and partners",
+       "date_quote": null,
+       "date": "2026-08-16",
+       "stale": null
+      }
+     ]
+    }
+   }
+  ],
+  "org_chart": null,
+  "abm_themes": [
+   {
+    "text": "Coding tools are the next stage of Intel's staged Gemini rollout: position Devin for delegated, end-to-end engineering work alongside Gemini, framed around governance of what goes to agents.",
+    "based_on": [
+     {
+      "source_id": "src_0400d3989b",
+      "quote": "taken a staged approach to the rollout, beginning with productivity capabilities before expanding into data and coding tools",
+      "date_quote": null,
+      "date": "2026-10-05",
+      "stale": null
+     },
+     {
+      "source_id": "src_ca792395c7",
+      "quote": "introduces dedicated agentic coding assistance and engineering automation utilizing Gemini’s advanced reasoning capabilities to streamline development pipelines and automate complex, multi-step software workflows",
+      "date_quote": null,
+      "date": "2026-07-16",
+      "stale": null
+     }
+    ]
+   },
+   {
+    "text": "Memory-safety modernization: Intel's CTO Office already uses LLMs for C-to-Rust translation, so migration proof resonates with research and platform teams.",
+    "based_on": [
+     {
+      "source_id": "src_58d103f8e3",
+      "quote": "Intel works on C-to-Rust translation as part of the DARPA TRACTOR (Translating All C-to-Rust) program",
+      "date_quote": null,
+      "date": "2026-08-24",
+      "stale": null
+     }
+    ]
+   },
+   {
+    "text": "Outcome metrics: the CIO measures AI by ROI and cycle time, so lead with customer metrics, not seat counts.",
+    "based_on": [
+     {
+      "source_id": "src_0400d3989b",
+      "quote": "we track hard business metrics: ROI, cycle-time improvements, time-to-market gains",
+      "date_quote": null,
+      "date": "2026-10-05",
+      "stale": null
+     }
+    ]
+   }
+  ],
+  "drafts": [
+   {
+    "name": "Cynthia (Cindy) Stoddard",
+    "email": {
+     "subject": "Sequencing the coding tools stage",
+     "body": "Hi Cindy,\n\nYou've described Intel's Gemini rollout as staged, with productivity first and data and coding tools after. That next stage is usually where the governance questions get harder: which engineering work stays with assistants, and which gets delegated end to end.\n\nThat second bucket is where Devin fits alongside what you already run. It picks up a ticket, runs the tests and opens a PR for an engineer to review. Itaú used it for a 6x faster .NET to Java migration of 59 services.\n\nOpen to comparing notes on how other enterprises have sliced that work before your coding stage starts?\n\nBest,"
+    },
+    "linkedin_note": "Hi Cindy, I enjoyed your recent interview on staging Intel's AI rollout. I work with engineering leaders on what to delegate to coding agents. Would be glad to connect.",
+    "linkedin_followup": "Thanks for connecting, Cindy. Something I hear from enterprises that track ROI and cycle time the way you described: the coding stage is easiest to measure when the work is a bounded backlog, like a migration or a vulnerability queue, rather than seat adoption. Itaú had 70% of security vulnerabilities automatically remediated with Devin. If a backlog like that exists at Intel, happy to share how teams scoped a first project. Worth a short call next month?",
+    "built_from": [
+     {
+      "source_id": "src_0400d3989b",
+      "quote": "taken a staged approach to the rollout, beginning with productivity capabilities before expanding into data and coding tools",
+      "date_quote": null,
+      "date": "2026-10-05",
+      "stale": null
+     },
+     {
+      "source_id": "src_5903e45c48",
+      "quote": null,
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Intel's Gemini rollout is staged, with productivity first and data and coding tools after",
+      "source_id": "src_0400d3989b",
+      "quote": "With Gemini rolling out across Intel, which use cases have shown the greatest potential so far ... taken a staged approach to the rollout, beginning with productivity capabilities before expanding into data and coding tools"
+     },
+     {
+      "text": "Stoddard gave a recent interview on staging Intel's AI rollout",
+      "source_id": "src_0400d3989b",
+      "quote": "Intel CIO Cynthia Stoddard explains how AI is reshaping employee skills ... taken a staged approach to the rollout, beginning with productivity capabilities before expanding into data and coding tools"
+     },
+     {
+      "text": "Intel tracks ROI and cycle time",
+      "source_id": "src_0400d3989b",
+      "quote": "we track hard business metrics: ROI, cycle-time improvements, time-to-market gains"
+     }
+    ],
+    "notes": "- Economic buyer and incumbent owner of the Gemini rollout: frame Devin as the delegated-work layer alongside Gemini, never a replacement.\n- Do not mention layoffs or criticize the Google deal.\n- Exec likely light on LinkedIn: note kept minimal, put effort into the email.\n- Verdict is Not now: use this as a relationship touch ahead of the coding-tools stage.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Kyle Short",
+    "email": {
+     "subject": "Which engineering work goes agentic",
+     "body": "Hi Kyle,\n\nYour team already runs Gemini Enterprise, Claude and N8N across a portfolio of nearly 20,000 custom AI assistants. My guess is the harder call now is prioritization: which engineering backlogs are worth handing to an agent that works unattended, and how you govern that next to the platforms you have.\n\nDevin takes a scoped ticket, works in its own environment and comes back with a PR and test results. At GE Aerospace, a previously constrained team completed 2x the user stories.\n\nCould we spend 20 minutes in early November mapping one backlog to that model?\n\nBest,"
+    },
+    "linkedin_note": "Hi Kyle, saw that your team oversees Intel's Gemini Enterprise and Claude platforms. I talk with AI platform leads about which engineering work to delegate to agents next. Happy to connect.",
+    "linkedin_followup": "Thanks for connecting, Kyle. A question I'd put to anyone running an AI center of excellence: once assistants are everywhere, who decides which long-running engineering tasks get delegated, and how is the output reviewed? Teams using Devin usually start with one queue, like flaky tests or dependency upgrades, where the PR becomes the audit trail. Happy to share how others set those guardrails if useful. Would a quick call in the next couple of weeks work?",
+    "built_from": [
+     {
+      "source_id": "src_7339c3f810",
+      "quote": "Oversee deployment of Intel's critical AI platforms including Google Gemini Enterprise Agent Platform, N8N, Anthropic Claude, and Microsoft Azure AI inferencing",
+      "date_quote": null,
+      "date": "2026-09-07",
+      "stale": null
+     },
+     {
+      "source_id": "src_419a02000b",
+      "quote": null,
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Kyle's team runs Gemini Enterprise, Claude and N8N",
+      "source_id": "src_7339c3f810",
+      "quote": "Oversee deployment of Intel's critical AI platforms including Google Gemini Enterprise Agent Platform, N8N, Anthropic Claude, and Microsoft Azure AI inferencing"
+     },
+     {
+      "text": "a portfolio of nearly 20,000 custom AI assistants",
+      "source_id": "src_7339c3f810",
+      "quote": "Portfolio spans nearly 20,000 custom AI assistants, 700 RAG pipelines"
+     },
+     {
+      "text": "Kyle leads Intel's AI center of excellence",
+      "source_id": "src_7339c3f810",
+      "quote": "I also lead our AI Center of Excellence, AI FinOps"
+     }
+    ],
+    "notes": "- Strategy owner: keep it on governance and prioritization, not ticket mechanics.\n- Incumbent owner of Gemini and Claude platforms: position as complement, never displace.\n- LinkedIn follow-up is sendable once connected.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Michael Wenzler",
+    "email": {
+     "subject": "Build and test backlog idea",
+     "body": "Hi Michael,\n\nYour team owns the development environment for a large, complex software system, including the tools to build, test and deploy it. In setups like that, the backlog tends to be the unglamorous work: test gaps, flaky jobs, toolchain upgrades that never get prioritized.\n\nThat's the kind of work teams hand to Devin. It clones the repo, runs your build and tests, and opens a PR your engineers review. Litera saw 93% faster regression cycles after rolling it out.\n\nIf any of that sounds familiar, would a short walkthrough on one repo be useful?\n\nBest,"
+    },
+    "linkedin_note": "Hi Michael, I noticed you lead Developer Productivity at Intel. I work with teams that delegate build and test backlog to coding agents. Would be glad to connect.",
+    "linkedin_followup": "Thanks for connecting, Michael. Curious how your team decides what makes the cut when building, testing and deployment tooling all compete for the same people. Where Devin tends to help first is the long tail: raising coverage on modules nobody wants to touch, or chasing intermittent failures. Litera also saw 40% increased test coverage with it. Happy to show what a first week looks like on one repo, would that be useful?",
+    "built_from": [
+     {
+      "source_id": "src_a7f5d8bd37",
+      "quote": "I manage a global team responsible for the development environment for a large and complex software system",
+      "date_quote": null,
+      "date": "2026-09-22",
+      "stale": null
+     },
+     {
+      "source_id": "src_a49527cfb2",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-07-10",
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Michael's team owns the development environment for a large, complex software system",
+      "source_id": "src_a7f5d8bd37",
+      "quote": "I manage a global team responsible for the development environment for a large and complex software system"
+     },
+     {
+      "text": "including the tools to build, test and deploy it",
+      "source_id": "src_a7f5d8bd37",
+      "quote": "We are responsible for building and maintaining the tools needed to develop the software as well as for building, testing and deploying the software"
+     },
+     {
+      "text": "Michael leads Developer Productivity at Intel",
+      "source_id": "src_a7f5d8bd37",
+      "quote": "Senior Software Engineering Manager - Developer Productivity"
+     }
+    ],
+    "notes": "- Champion angle: his own build, test and deploy backlog.\n- Hook search surfaced a different Michael Wenzler (US Treasury): do not reference any posts.\n- LinkedIn follow-up is sendable.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Madhu D.",
+    "email": {
+     "subject": "Failed builds as a queue",
+     "body": "Hi Madhu,\n\nYou've been delivering the global enterprise build system behind Continuous Delivery of Intel's software, on Jenkins, GitLab and Kubernetes. A build farm that size probably throws off a steady stream of failed jobs and config fixes that someone has to chase.\n\nDevin can take those as they land: it reads the failure, reproduces it in its own environment, and proposes a fix as a PR. Finch has merged around 3,000 PRs with Devin, roughly 20 months of engineering time.\n\nOpen to a quick look next week at whether your failure queue would suit that?\n\nBest,"
+    },
+    "linkedin_note": "Hi Madhu, I saw your work on Intel's enterprise build system and CI/CD. I work with teams that route failed builds to a coding agent. Would be good to connect.",
+    "linkedin_followup": "Thanks for connecting, Madhu. One pattern I see in large CI/CD shops: the shared agent pool gets the investment, but triage of what broke still lands on engineers one ticket at a time. Teams wire Devin to the failure feed so each break arrives with a diagnosis and a candidate fix. Airbyte had 990 engineering issues triaged by Devin in 90 days. If that sounds relevant to the Global Build Agent Cloud, happy to compare notes. Worth a call?",
+    "built_from": [
+     {
+      "source_id": "src_c8dac1d673",
+      "quote": "Responsible for delivering large scale global enterprise build system that allows Continuous Delivery of Intel’s software to ecosystem and partners",
+      "date_quote": null,
+      "date": "2026-08-16",
+      "stale": null
+     },
+     {
+      "source_id": "src_32da745a29",
+      "quote": null,
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     },
+     {
+      "source_id": "src_62a22b958f",
+      "quote": null,
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Madhu delivers the global enterprise build system behind Continuous Delivery of Intel's software",
+      "source_id": "src_c8dac1d673",
+      "quote": "Responsible for delivering large scale global enterprise build system that allows Continuous Delivery of Intel’s software to ecosystem and partners"
+     },
+     {
+      "text": "on Jenkins, GitLab and Kubernetes",
+      "source_id": "src_c8dac1d673",
+      "quote": "Technologies: Jenkins, GitLab, Docker, Kubernetes"
+     },
+     {
+      "text": "Madhu works on Intel's enterprise build system and CI/CD",
+      "source_id": "src_c8dac1d673",
+      "quote": "Responsible for delivering large scale global enterprise build system that allows Continuous Delivery of Intel’s software to ecosystem and partners ... deliver large scale CI/CD system"
+     },
+     {
+      "text": "the Global Build Agent Cloud",
+      "source_id": "src_c8dac1d673",
+      "quote": "Developed product strategy for Global Build Agent Cloud"
+     }
+    ],
+    "notes": "- Champion angle: CI/CD failure triage on the build system he owns.\n- Prior employer is a Devin customer, but do not assume he used Devin; don't mention it in outreach.\n- LinkedIn follow-up is sendable.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Marius Arvinte",
+    "email": {
+     "subject": "IDEAS harness and parallel agents",
+     "body": "Hi Marius,\n\nI read the IDEAS for TRACTOR post. Keeping the LLM to the translation step and making everything else deterministic, with test-suite equivalence as the yardstick, is a sensible line to draw for C to safe Rust.\n\nWhere Devin could fit is the work around that harness: it runs in its own VM, builds the project, runs the equivalence tests on each partial translation and opens a PR when a module passes. On a different language pair, Mercedes-Benz used it to cut a COBOL modernization from an estimated eight months to eight days.\n\nWould you be up for 15 minutes comparing approaches?\n\nBest,"
+    },
+    "linkedin_note": "Hi Marius, I enjoyed the IDEAS for TRACTOR write-up on translating C to safe Rust. I work on coding agents for large migrations and would value comparing notes. Glad to connect.",
+    "linkedin_followup": "Thanks for connecting, Marius. A question from the post that stuck with me: whether it's cheaper to translate straight to idiomatic Rust or run a refactoring pass afterwards. That second pass is the kind of bounded, test-checked work Devin handles well, since each change ships as a PR a Rust developer can review. Curious whether you've tried agents on the refactor stage yet. Happy to share what we've seen if that's useful.",
+    "built_from": [
+     {
+      "source_id": "src_58d103f8e3",
+      "quote": "aims to automate C translation to safe Rust",
+      "date_quote": null,
+      "date": "2026-08-24",
+      "stale": null
+     },
+     {
+      "source_id": "src_d347984f66",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-04-27",
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Marius's team published the IDEAS for TRACTOR post",
+      "source_id": "src_58d103f8e3",
+      "quote": "IDEAS for TRACTOR"
+     },
+     {
+      "text": "the harness keeps the LLM to the translation step and makes everything else deterministic",
+      "source_id": "src_58d103f8e3",
+      "quote": "Except for the “LLM call” block, all other components are deterministic"
+     },
+     {
+      "text": "test-suite equivalence as the yardstick",
+      "source_id": "src_58d103f8e3",
+      "quote": "could it measure if the translation up to that point is test-suite equivalent to the original C code"
+     },
+     {
+      "text": "translating C to safe Rust",
+      "source_id": "src_58d103f8e3",
+      "quote": "aims to automate C translation to safe Rust"
+     },
+     {
+      "text": "whether it's cheaper to translate straight to idiomatic Rust or run a refactoring pass afterwards",
+      "source_id": "src_58d103f8e3",
+      "quote": "Is it feasible to directly translate C-to-idiomatic-Rust, or is it more cost-effective to run a post-translation refactoring stage?"
+     }
+    ],
+    "notes": "- Technical evaluator: talk about how it runs against their harness, not the exec pitch.\n- Research team, not a buyer: aim for a technical conversation and a pointer to platform owners.\n- LinkedIn follow-up is sendable.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Smitesh Pawar",
+    "email": {
+     "subject": "Agent work after Gemini rollout",
+     "body": "Hi Smitesh,\n\nIntel's CIO has said the Gemini rollout is staged, with coding tools coming after the productivity phase. For a software engineering org, that's usually when the question shifts from autocomplete to which backlogs can be handed off entirely.\n\nDevin takes a scoped task, such as a framework upgrade or a migration, works it in its own environment and opens a PR for review. Nubank reported an 8x engineering time efficiency gain and 20x cost savings on a migration with it.\n\nIf a backlog like that sits in your org, would a short conversation later this quarter be worthwhile?\n\nBest,"
+    },
+    "linkedin_note": "Hi Smitesh, I work with software engineering leaders on delegating migrations and upgrades to coding agents. Would be glad to connect.",
+    "linkedin_followup": "Thanks for connecting, Smitesh. A pattern I see in large software orgs: once AI assistants are rolled out broadly, the next gains come from handing off whole tasks rather than lines of code, like dependency upgrades, test backfill or a service migration, each returned as a reviewable PR. Teams usually prove it on one bounded backlog before widening. If you have a candidate in mind, happy to walk through how others scoped the first one. Open to a short call?",
+    "built_from": [
+     {
+      "source_id": "src_0400d3989b",
+      "quote": "taken a staged approach to the rollout, beginning with productivity capabilities before expanding into data and coding tools",
+      "date_quote": null,
+      "date": "2026-10-05",
+      "stale": null
+     },
+     {
+      "source_id": "src_c667764b4e",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-06-20",
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Intel's CIO has said the Gemini rollout is staged, with coding tools coming after the productivity phase",
+      "source_id": "src_0400d3989b",
+      "quote": "Intel CIO Cynthia Stoddard explains how AI is reshaping employee skills ... With Gemini rolling out across Intel, which use cases have shown the greatest potential so far ... taken a staged approach to the rollout, beginning with productivity capabilities before expanding into data and coding tools"
+     }
+    ],
+    "notes": "- Low-confidence draft: no personal signal or hook found. Built from company-level research.\n- Economic buyer: mandate plus proof, no product tour.\n- Prior employer is a Devin customer; don't assume he used Devin and don't mention it.\n- LinkedIn follow-up is generic; send only if the note is accepted.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Purnam Sheth",
+    "email": {
+     "subject": "Memory safety backlog in platform software",
+     "body": "Hi Purnam,\n\nIntel's CTO Office recently wrote that memory safety errors account for up to 70% of high-severity real-world vulnerabilities, and published its work translating C to safe Rust. For a trusted platform software team, I'd guess that's less a research question than a backlog.\n\nDevin works through that kind of backlog one PR at a time: it picks up a finding, writes the fix, runs your tests and hands it to an engineer to review. Itaú had 70% of security vulnerabilities automatically remediated with it.\n\nWorth 20 minutes to see whether part of your backlog would fit?\n\nBest,"
+    },
+    "linkedin_note": "Hi Purnam, I work with platform software teams on clearing security and memory-safety backlogs with coding agents. Would be glad to connect.",
+    "linkedin_followup": "Thanks for connecting, Purnam. One thing that stood out in the CTO Office post on translating C to safe Rust: the hard part isn't the first translation, it's keeping partial translations test-suite equivalent and reviewable. Teams use Devin for exactly that kind of bounded, test-checked change, landing each step as a PR rather than one big rewrite. If memory safety or vulnerability fixes are on your roadmap, happy to compare notes. Would a short call work?",
+    "built_from": [
+     {
+      "source_id": "src_58d103f8e3",
+      "quote": "Memory safety errors still account for the majority (up to 70%) of high-severity real-world security vulnerabilities.",
+      "date_quote": null,
+      "date": "2026-08-24",
+      "stale": null
+     },
+     {
+      "source_id": "src_5903e45c48",
+      "quote": null,
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Intel's CTO Office wrote that memory safety errors account for up to 70% of high-severity real-world vulnerabilities",
+      "source_id": "src_58d103f8e3",
+      "quote": "Marius Arvinte, CTO Office Cory Cornelius, CTO Office ... Memory safety errors still account for the majority (up to 70%) of high-severity real-world security vulnerabilities."
+     },
+     {
+      "text": "Intel's CTO Office published its work translating C to safe Rust",
+      "source_id": "src_58d103f8e3",
+      "quote": "Marius Arvinte, CTO Office Cory Cornelius, CTO Office ... aims to automate C translation to safe Rust"
+     },
+     {
+      "text": "keeping partial translations test-suite equivalent",
+      "source_id": "src_58d103f8e3",
+      "quote": "could it measure if the translation up to that point is test-suite equivalent to the original C code"
+     }
+    ],
+    "notes": "- Low-confidence draft: no personal signal or hook found. Built from company-level research.\n- Angle ties his Trusted Platform remit to the CTO Office memory-safety work; confirm his team's scope before sending.\n- Prior employer is a Devin customer; don't mention it.\n- LinkedIn follow-up is sendable once connected.",
+    "low_confidence": false,
+    "lint": []
+   }
+  ]
+ },
+ "report": {
+  "dropped_count": 0,
+  "dropped": [],
+  "flags": [
+   {
+    "path": "people[4].champion_evidence[0]",
+    "flag": "works_on_signal kept as a hook: not in a tier-1 signal's who_cares"
+   },
+   {
+    "path": "org_chart",
+    "flag": "no org chart — get_org_chart(domain, people) is required once per account"
+   }
+  ]
+ },
+ "since_last_run": null
+}

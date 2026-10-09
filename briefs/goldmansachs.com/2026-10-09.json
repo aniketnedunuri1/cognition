@@ -1,0 +1,1402 @@
+{
+ "domain": "goldmansachs.com",
+ "date": "2026-10-09",
+ "saved_at": "2026-10-09T04:17:44+00:00",
+ "brief": {
+  "domain": "goldmansachs.com",
+  "company_name": "Goldman Sachs",
+  "verdict": {
+   "verdict": "act_now",
+   "why_now": "Two tier-1 motions with reachable contacts: the CIO plans to scale Devin into the thousands, and a new CTO of The Core Engineering (Sep 2026) has a scaled-engineering mandate. Claude in production sets the angle (expand), not the timing.",
+   "based_on": [
+    {
+     "source_id": "src_8e60fe9019",
+     "quote": "with CIO Marco Argenti planning to scale into the thousands",
+     "date_quote": null,
+     "date": "2026-08-19"
+    },
+    {
+     "source_id": "src_ec94b79811",
+     "quote": "Dinesh will also serve as chief technology officer of The Core Engineering.",
+     "date_quote": null,
+     "date": "2026-09-03"
+    },
+    {
+     "source_id": "src_ec94b79811",
+     "quote": "apply consistent practices, governance, and processes, and achieve scaled engineering solutions for the entire organization",
+     "date_quote": null,
+     "date": "2026-09-03"
+    }
+   ],
+   "watch_for": "Q3 earnings commentary on AI engineering productivity; any expansion of Claude coding agents into the same use cases."
+  },
+  "snapshot": {
+   "hq": [
+    {
+     "value": "Apollo reports HQ in New York, New York, United States",
+     "evidence": [
+      {
+       "source_id": "src_5c648b28d4",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "founded": [
+    {
+     "value": "Apollo reports founded 1869",
+     "evidence": [
+      {
+       "source_id": "src_5c648b28d4",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "industry": [
+    {
+     "value": "Apollo reports financial services",
+     "evidence": [
+      {
+       "source_id": "src_5c648b28d4",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "ownership": [
+    {
+     "value": "Public (NYSE: GS)",
+     "evidence": [
+      {
+       "source_id": "src_ec94b79811",
+       "quote": "The Goldman Sachs Group, Inc. (NYSE: GS)",
+       "date_quote": null,
+       "date": "2026-09-03"
+      }
+     ]
+    }
+   ],
+   "parent_company": [],
+   "headcount": [
+    {
+     "value": "Apollo reports ~47,000 employees",
+     "evidence": [
+      {
+       "source_id": "src_5c648b28d4",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "Goldman Sachs homepage reports 46K+ people around the world",
+     "evidence": [
+      {
+       "source_id": "src_1b66973711",
+       "quote": "Goldman Sachs People Around the World",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "headcount_growth": [
+    {
+     "value": "Apollo reports +2.2% (6mo), +4.0% (12mo)",
+     "evidence": [
+      {
+       "source_id": "src_5c648b28d4",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "revenue": [
+    {
+     "value": "Apollo reports annual revenue of $125.1B",
+     "evidence": [
+      {
+       "source_id": "src_5c648b28d4",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "Goldman reported record Q2 2026 revenues of $20.3 billion",
+     "evidence": [
+      {
+       "source_id": "src_798b1f4ea3",
+       "quote": "we generated record revenues of $20.3 billion",
+       "date_quote": null,
+       "date": "2026-07-14"
+      }
+     ]
+    }
+   ],
+   "funding": [],
+   "sells_to": [
+    {
+     "value": "Corporations, institutions and wealth clients through Global Banking & Markets and Asset & Wealth Management",
+     "evidence": [
+      {
+       "source_id": "src_1b66973711",
+       "quote": "Our strategy is anchored in our world-class, interconnected Global Banking & Markets and Asset & Wealth Management franchises",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "products": [
+    {
+     "value": "Global Banking & Markets and Asset & Wealth Management franchises",
+     "evidence": [
+      {
+       "source_id": "src_1b66973711",
+       "quote": "Our strategy is anchored in our world-class, interconnected Global Banking & Markets and Asset & Wealth Management franchises",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ]
+  },
+  "engineering": {
+   "eng_headcount": [
+    {
+     "value": "Apollo reports 6,211 in engineering",
+     "evidence": [
+      {
+       "source_id": "src_5c648b28d4",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "Fortune reports CIO Argenti oversees 12,000 engineers",
+     "evidence": [
+      {
+       "source_id": "src_aa76cf2c2c",
+       "quote": "his 12,000 engineers",
+       "date_quote": null,
+       "date": "2026-05-08"
+      }
+     ]
+    }
+   ],
+   "open_eng_roles": [
+    {
+     "value": "The Stack reports 31 open roles in The Core Engineering, 13 at VP level",
+     "evidence": [
+      {
+       "source_id": "src_f49f8f499b",
+       "quote": "31 open roles in its core engineering unit, including 13 at VP level",
+       "date_quote": null,
+       "date": "2026-09-05"
+      }
+     ]
+    }
+   ],
+   "tech_stack": [
+    {
+     "value": "Sumble reports Java, Python, AWS, Kafka, React, Terraform (confirmed via job posts)",
+     "evidence": [
+      {
+       "source_id": "src_44295ee212",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "ai_dev_tools": [
+    {
+     "value": "Devin and Claude available to all developers",
+     "evidence": [
+      {
+       "source_id": "src_4bdc58fa24",
+       "quote": "All of the bank’s developers have access to updated agentic technology, including Claude and Devin, Cognition’s AI coding assistant.",
+       "date_quote": null,
+       "date": "2026-08-25"
+      }
+     ]
+    },
+    {
+     "value": "Apollo lists Claude Code, Copilot, GitHub Copilot",
+     "evidence": [
+      {
+       "source_id": "src_5c648b28d4",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "eng_blog_and_github": [
+    {
+     "value": "Engineering blog at developer.gs.com",
+     "evidence": [
+      {
+       "source_id": "src_5c9aa006bc",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "GitHub: goldmansachs open source",
+     "evidence": [
+      {
+       "source_id": "src_034a4d6dac",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "ai_posture": [
+    {
+     "value": "CIO: \"The transfer of the institutional knowledge into the AI is the biggest question\"",
+     "evidence": [
+      {
+       "source_id": "src_4bdc58fa24",
+       "quote": "The transfer of the institutional knowledge into the AI is the biggest question",
+       "date_quote": null,
+       "date": "2026-08-25"
+      }
+     ]
+    },
+    {
+     "value": "CIO measures team velocity, not individual AI usage",
+     "evidence": [
+      {
+       "source_id": "src_aa76cf2c2c",
+       "quote": "measuring the speed at which a team can develop a feature",
+       "date_quote": null,
+       "date": "2026-05-08"
+      }
+     ]
+    },
+    {
+     "value": "CIO: \"There’s zero time between idea and prototype.\"",
+     "evidence": [
+      {
+       "source_id": "src_aa76cf2c2c",
+       "quote": "There’s zero time between idea and prototype.",
+       "date_quote": null,
+       "date": "2026-05-08"
+      }
+     ]
+    }
+   ],
+   "priorities": [
+    {
+     "value": "Scale coding agents into the thousands",
+     "evidence": [
+      {
+       "source_id": "src_8e60fe9019",
+       "quote": "with CIO Marco Argenti planning to scale into the thousands",
+       "date_quote": null,
+       "date": "2026-08-19"
+      }
+     ]
+    },
+    {
+     "value": "Consistent practices and scaled engineering across The Core",
+     "evidence": [
+      {
+       "source_id": "src_ec94b79811",
+       "quote": "apply consistent practices, governance, and processes, and achieve scaled engineering solutions for the entire organization",
+       "date_quote": null,
+       "date": "2026-09-03"
+      }
+     ]
+    }
+   ],
+   "peers": [
+    {
+     "value": "JPMorgan, Morgan Stanley, Citi, Bank of America",
+     "evidence": [
+      {
+       "source_id": "src_4c60864c43",
+       "quote": "JPMorgan, Goldman Sachs, Morgan Stanley, Citi and Bank of America have each put AI of their own making in front of their staff",
+       "date_quote": null,
+       "date": "2026-09-15"
+      }
+     ]
+    },
+    {
+     "value": "Peer proof: Citi rolls out Devin to 40,000 developers",
+     "evidence": [
+      {
+       "source_id": "src_84d58730f4",
+       "quote": "Citi rolls out Devin to 40,000 developers for autonomous code, testing, and documentation",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ]
+  },
+  "signals": [
+   {
+    "headline": "CIO plans to scale Devin agents from hundreds into the thousands",
+    "type": "ai_mandate",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_8e60fe9019",
+      "quote": "with CIO Marco Argenti planning to scale into the thousands",
+      "date_quote": null,
+      "date": "2026-08-19"
+     },
+     {
+      "source_id": "src_8e60fe9019",
+      "quote": "Goldman Sachs runs hundreds of Devin AI agents alongside its roughly 12,000 human developers",
+      "date_quote": null,
+      "date": "2026-08-19"
+     },
+     {
+      "source_id": "src_2be112b680",
+      "quote": "is evaluating a full organizational rollout",
+      "date_quote": null,
+      "date": "2026-06-11"
+     }
+    ],
+    "use_case": "Code migration & modernization",
+    "who_cares": [
+     "Marco Argenti",
+     "Sarrah Cherhabil",
+     "Nizar Tyrewalla"
+    ],
+    "strength": "strong"
+   },
+   {
+    "headline": "Ex-Nomura CTO Dinesh Keswani now runs engineering for The Core",
+    "type": "leadership_change",
+    "horizon": "strategic",
+    "evidence": [
+     {
+      "source_id": "src_ec94b79811",
+      "quote": "Dinesh will also serve as chief technology officer of The Core Engineering.",
+      "date_quote": null,
+      "date": "2026-09-03"
+     },
+     {
+      "source_id": "src_ec94b79811",
+      "quote": "apply consistent practices, governance, and processes, and achieve scaled engineering solutions for the entire organization",
+      "date_quote": null,
+      "date": "2026-09-03"
+     },
+     {
+      "source_id": "src_f49f8f499b",
+      "quote": "“The Core Engineering” meanwhile at Goldman is home to 2,000+ engineers",
+      "date_quote": null,
+      "date": "2026-09-05"
+     }
+    ],
+    "use_case": "Code migration & modernization",
+    "who_cares": [
+     "Dinesh Keswani"
+    ],
+    "strength": "strong"
+   },
+   {
+    "headline": "Engineers write agent skills for how Goldman does cloud migration",
+    "type": "migration",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_4bdc58fa24",
+      "quote": "the “cloud fast track” skill teaches AI what good cloud migration looks like, specifically at Goldman",
+      "date_quote": null,
+      "date": "2026-08-25"
+     },
+     {
+      "source_id": "src_4bdc58fa24",
+      "quote": "The firm has drafted “skills” — reusable bundles of instructions for performing specific tasks",
+      "date_quote": null,
+      "date": "2026-08-25"
+     }
+    ],
+    "use_case": "Code migration & modernization",
+    "who_cares": [
+     "Marco Argenti"
+    ],
+    "strength": "medium"
+   },
+   {
+    "headline": "AWM hired a VP to move core banking off FIS and Fiserv",
+    "type": "migration",
+    "horizon": "strategic",
+    "evidence": [
+     {
+      "source_id": "src_16b7c8df83",
+      "quote": "lead the strategic migration of our legacy core banking platforms (e.g., FIS, Fiserv) to a modern, cloud-based ledger system",
+      "date_quote": "Posted on May 21, 2026",
+      "date": "2026-05-21"
+     }
+    ],
+    "use_case": "Code migration & modernization",
+    "who_cares": [
+     "Evan Kotsovinos"
+    ],
+    "strength": "medium"
+   }
+  ],
+  "competitive_context": [
+   {
+    "value": "Claude is available to all Goldman developers alongside Devin; Apollo also lists Claude Code and GitHub Copilot. Angle: expand Devin into work the Claude rollout does not cover.",
+    "evidence": [
+     {
+      "source_id": "src_4bdc58fa24",
+      "quote": "All of the bank’s developers have access to updated agentic technology, including Claude and Devin, Cognition’s AI coding assistant.",
+      "date_quote": null,
+      "date": "2026-08-25"
+     },
+     {
+      "source_id": "src_5c648b28d4",
+      "quote": null,
+      "date_quote": null,
+      "date": null
+     }
+    ],
+    "situation": "competitor_in_production"
+   },
+   {
+    "value": "Goldman Sachs is already a public Devin customer — this is an expansion motion, not a new logo.",
+    "evidence": [
+     {
+      "source_id": "src_84d58730f4",
+      "quote": "Goldman Sachs is piloting its first autonomous coder, Devin",
+      "date_quote": null,
+      "date": null
+     },
+     {
+      "source_id": "src_8e60fe9019",
+      "quote": "Goldman Sachs runs hundreds of Devin AI agents alongside its roughly 12,000 human developers",
+      "date_quote": null,
+      "date": "2026-08-19"
+     }
+    ],
+    "situation": "other"
+   },
+   {
+    "value": "In-house agentic SDLC tooling (AgentGraph) built by the Agentic AI (SDLC) team.",
+    "evidence": [
+     {
+      "source_id": "src_b0940b0818",
+      "quote": "Designed and built AgentGraph, an agentic tool that performs deep static and semantic analysis of codebases",
+      "date_quote": null,
+      "date": "2026-08-26"
+     }
+    ],
+    "situation": "other"
+   }
+  ],
+  "company_linkedin": [],
+  "people": [
+   {
+    "name": "Sarrah Cherhabil",
+    "title": "Managing Director- head of Developer AI AI transformation",
+    "deal_role": "champion",
+    "team": "Developer AI",
+    "why": "Heads Developer AI, the group that owns developer-facing AI rollout; closest owner of the Devin scale-up.",
+    "evidence": [
+     {
+      "source_id": "src_577a6825bd",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-21"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "AI-enablement title: head of Developer AI",
+      "evidence": [
+       {
+        "source_id": "src_577a6825bd",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-09-21"
+       }
+      ],
+      "kind": "ai_appetite"
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_577a6825bd",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Dinesh Keswani",
+    "title": "Partner and Co-Head of The Core Engineering",
+    "deal_role": "economic_buyer",
+    "team": "The Core Engineering",
+    "why": "Joined Sep 2026 as CTO of The Core Engineering with a mandate for consistent practices and scaled engineering.",
+    "evidence": [
+     {
+      "source_id": "src_ec94b79811",
+      "quote": "Dinesh will also serve as chief technology officer of The Core Engineering.",
+      "date_quote": null,
+      "date": "2026-09-03"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Joined Goldman Sachs as Partner and CTO of The Core Engineering in September 2026",
+      "evidence": [
+       {
+        "source_id": "src_ec94b79811",
+        "quote": "Dinesh will also serve as chief technology officer of The Core Engineering.",
+        "date_quote": null,
+        "date": "2026-09-03"
+       }
+      ],
+      "kind": "new_in_role"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Press release: mandate to apply consistent practices and scaled engineering across the organization",
+      "evidence": [
+       {
+        "source_id": "src_ec94b79811",
+        "quote": "apply consistent practices, governance, and processes, and achieve scaled engineering solutions for the entire organization",
+        "date_quote": null,
+        "date": "2026-09-03"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": null,
+    "current_basis": "official_source"
+   },
+   {
+    "name": "Marco Argenti",
+    "title": "Chief Information Officer",
+    "deal_role": "economic_buyer",
+    "team": "Engineering (firmwide)",
+    "why": "CIO and public sponsor of the Devin rollout; describes plans to scale agents into the thousands.",
+    "evidence": [
+     {
+      "source_id": "src_cf71a0ce1c",
+      "quote": "Marco is the firm’s chief information officer.",
+      "date_quote": null,
+      "date": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Public statements on making AI agents Goldman-specific",
+      "evidence": [
+       {
+        "source_id": "src_4bdc58fa24",
+        "quote": "The transfer of the institutional knowledge into the AI is the biggest question",
+        "date_quote": null,
+        "date": "2026-08-25"
+       }
+      ],
+      "kind": "ai_appetite"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Says transferring institutional knowledge into AI is the biggest question",
+      "evidence": [
+       {
+        "source_id": "src_4bdc58fa24",
+        "quote": "The transfer of the institutional knowledge into the AI is the biggest question",
+        "date_quote": null,
+        "date": "2026-08-25"
+       }
+      ]
+     },
+     {
+      "value": "Plans to scale agents into the thousands",
+      "evidence": [
+       {
+        "source_id": "src_8e60fe9019",
+        "quote": "with CIO Marco Argenti planning to scale into the thousands",
+        "date_quote": null,
+        "date": "2026-08-19"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": null,
+    "current_basis": "official_source"
+   },
+   {
+    "name": "James Bywater",
+    "title": "Managing Director",
+    "deal_role": "champion",
+    "team": "Developer Experience & Runtime; Test Engineering",
+    "why": "Runs global test engineering, build/test performance and ephemeral environments; owns where agent-written code gets tested.",
+    "evidence": [
+     {
+      "source_id": "src_75ac932429",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-24"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [
+     {
+      "value": "Mission: integrated build and testing solutions for all of Goldman's SDLCs",
+      "evidence": [
+       {
+        "source_id": "src_75ac932429",
+        "quote": "My mission is to build integrated build and testing solutions for all of Goldman's SDLCs",
+        "date_quote": null,
+        "date": "2026-09-24"
+       }
+      ]
+     },
+     {
+      "value": "Global head of test engineering, build and test performance, and ephemeral environments teams",
+      "evidence": [
+       {
+        "source_id": "src_75ac932429",
+        "quote": "Global head of test engineering, build and test performance, and ephemeral environments teams.",
+        "date_quote": null,
+        "date": "2026-09-24"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_75ac932429",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Matteo Pelati",
+    "title": "Executive Director - Agentic AI (SDLC)",
+    "deal_role": "technical_evaluator",
+    "team": "Agentic AI (SDLC)",
+    "why": "Built AgentGraph, an in-house agentic SDLC tool; evaluator and potential blocker for anything overlapping it.",
+    "evidence": [
+     {
+      "source_id": "src_b0940b0818",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-08-26"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Leads agentic AI for the SDLC",
+      "evidence": [
+       {
+        "source_id": "src_b0940b0818",
+        "quote": "drives Spec-Driven Development to implement an evergreen agentic SDLC",
+        "date_quote": null,
+        "date": "2026-08-26"
+       }
+      ],
+      "kind": "ai_appetite"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Built AgentGraph for deep static and semantic analysis of codebases",
+      "evidence": [
+       {
+        "source_id": "src_b0940b0818",
+        "quote": "Designed and built AgentGraph, an agentic tool that performs deep static and semantic analysis of codebases",
+        "date_quote": null,
+        "date": "2026-08-26"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": true,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_b0940b0818",
+    "current_basis": "profile"
+   },
+   {
+    "name": "John Madsen",
+    "title": "Chief Technology Officer and Head of Core Engineering",
+    "deal_role": "economic_buyer",
+    "team": "Core Engineering",
+    "why": "Firm CTO; exec sponsor for engineering-wide tooling.",
+    "evidence": [
+     {
+      "source_id": "src_8c3e105e96",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-21"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_8c3e105e96",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Nizar Tyrewalla",
+    "title": "Global Head of Product, Developer AI",
+    "deal_role": "champion",
+    "team": "Developer AI",
+    "why": "Product owner for developer AI; secured a three-year investment framework covering licensing.",
+    "evidence": [
+     {
+      "source_id": "src_2021afc063",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-10"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Owns Developer AI product and investment planning",
+      "evidence": [
+       {
+        "source_id": "src_2021afc063",
+        "quote": "Secured approval for a three-year investment framework covering engineering, cloud, and licensing",
+        "date_quote": null,
+        "date": "2026-09-10"
+       }
+      ],
+      "kind": "ai_appetite"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Secured a three-year investment framework covering engineering, cloud, and licensing",
+      "evidence": [
+       {
+        "source_id": "src_2021afc063",
+        "quote": "Secured approval for a three-year investment framework covering engineering, cloud, and licensing",
+        "date_quote": null,
+        "date": "2026-09-10"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_2021afc063",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Sunny SUN",
+    "title": "Developer AI Harness Product Lead",
+    "deal_role": "technical_evaluator",
+    "team": "Developer AI Harness",
+    "why": "Product-manages the harness that brings frontier AI coding tools to Goldman engineers.",
+    "evidence": [
+     {
+      "source_id": "src_dc2d7a1488",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-13"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Product-manages the Developer AI Harness",
+      "evidence": [
+       {
+        "source_id": "src_dc2d7a1488",
+        "quote": "I product manage the Developer AI Harness at Goldman Sachs — bringing frontier AI coding tools",
+        "date_quote": null,
+        "date": "2026-09-13"
+       }
+      ],
+      "kind": "ai_appetite"
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_dc2d7a1488",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Richard Stein",
+    "title": "Managing Director",
+    "deal_role": "champion",
+    "team": "Software Development and Developer AI",
+    "why": "Profile headline: Global Head of Software Development and Developer AI.",
+    "evidence": [
+     {
+      "source_id": "src_bb13262387",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-10"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_bb13262387",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Kristen Viscardi",
+    "title": "VP of Developler Collaboration / SDLC Engineering",
+    "deal_role": "champion",
+    "team": "Developer Collaboration / SDLC Engineering",
+    "why": "Runs SDLC engineering in Developer Experience.",
+    "evidence": [
+     {
+      "source_id": "src_1af6eb2b82",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-05"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_1af6eb2b82",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Rohan Deshpande",
+    "title": "Managing Director and Technology Fellow, Global Head of Application Development Platform",
+    "deal_role": "technical_evaluator",
+    "team": "Application Development Platform",
+    "why": "Owns the application development platform agents run on.",
+    "evidence": [
+     {
+      "source_id": "src_b509dfc254",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-21"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_b509dfc254",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Evan Kotsovinos",
+    "title": "Partner and Head of Asset & Wealth Management Engineering",
+    "deal_role": "economic_buyer",
+    "team": "AWM Engineering",
+    "why": "Joined Jul 2026 to run AWM Engineering, where a core banking migration leader was being hired.",
+    "evidence": [
+     {
+      "source_id": "src_b234ed208f",
+      "quote": "Evan Kotsovinos has joined the firm as a Partner and head of Asset & Wealth Management (AWM) Engineering",
+      "date_quote": null,
+      "date": "2026-07-06"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": null,
+    "current_basis": "official_source"
+   },
+   {
+    "name": "Max Kowalewski",
+    "title": "Chief Information Security Officer",
+    "deal_role": "gatekeeper",
+    "team": "Security",
+    "why": "Security approver for agent deployments.",
+    "evidence": [
+     {
+      "source_id": "src_4007acec36",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-05"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_4007acec36",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Matt Tucker",
+    "title": "Head of Strategic Engagements",
+    "deal_role": "gatekeeper",
+    "team": "Procurement",
+    "why": "Profile headline: Head of Procurement.",
+    "evidence": [
+     {
+      "source_id": "src_8cdc9e8b8c",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-11"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_8cdc9e8b8c",
+    "current_basis": "profile"
+   }
+  ],
+  "top_contacts": [
+   {
+    "name": "Sarrah Cherhabil",
+    "why": {
+     "text": "Heads Developer AI, the closest owner of scaling Devin into the thousands.",
+     "based_on": [
+      {
+       "source_id": "src_577a6825bd",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-09-21"
+      },
+      {
+       "source_id": "src_8e60fe9019",
+       "quote": "with CIO Marco Argenti planning to scale into the thousands",
+       "date_quote": null,
+       "date": "2026-08-19"
+      }
+     ]
+    }
+   },
+   {
+    "name": "Dinesh Keswani",
+    "why": {
+     "text": "New CTO of The Core Engineering (Sep 2026) with a mandate for consistent practices and scaled engineering.",
+     "based_on": [
+      {
+       "source_id": "src_ec94b79811",
+       "quote": "Dinesh will also serve as chief technology officer of The Core Engineering.",
+       "date_quote": null,
+       "date": "2026-09-03"
+      },
+      {
+       "source_id": "src_ec94b79811",
+       "quote": "apply consistent practices, governance, and processes, and achieve scaled engineering solutions for the entire organization",
+       "date_quote": null,
+       "date": "2026-09-03"
+      }
+     ]
+    }
+   },
+   {
+    "name": "Marco Argenti",
+    "why": {
+     "text": "CIO and exec sponsor; publicly frames institutional knowledge in agents as the biggest question.",
+     "based_on": [
+      {
+       "source_id": "src_4bdc58fa24",
+       "quote": "The transfer of the institutional knowledge into the AI is the biggest question",
+       "date_quote": null,
+       "date": "2026-08-25"
+      },
+      {
+       "source_id": "src_8e60fe9019",
+       "quote": "with CIO Marco Argenti planning to scale into the thousands",
+       "date_quote": null,
+       "date": "2026-08-19"
+      }
+     ]
+    }
+   }
+  ],
+  "org_chart": null,
+  "abm_themes": [
+   {
+    "text": "From hundreds to thousands: expand the existing Devin footprint into new use cases.",
+    "based_on": [
+     {
+      "source_id": "src_8e60fe9019",
+      "quote": "with CIO Marco Argenti planning to scale into the thousands",
+      "date_quote": null,
+      "date": "2026-08-19"
+     },
+     {
+      "source_id": "src_2be112b680",
+      "quote": "is evaluating a full organizational rollout",
+      "date_quote": null,
+      "date": "2026-06-11"
+     }
+    ]
+   },
+   {
+    "text": "Goldman-specific agents: skills and evals that encode institutional knowledge.",
+    "based_on": [
+     {
+      "source_id": "src_4bdc58fa24",
+      "quote": "The transfer of the institutional knowledge into the AI is the biggest question",
+      "date_quote": null,
+      "date": "2026-08-25"
+     },
+     {
+      "source_id": "src_4bdc58fa24",
+      "quote": "the “cloud fast track” skill teaches AI what good cloud migration looks like, specifically at Goldman",
+      "date_quote": null,
+      "date": "2026-08-25"
+     }
+    ]
+   },
+   {
+    "text": "Modernization in The Core and AWM core banking.",
+    "based_on": [
+     {
+      "source_id": "src_ec94b79811",
+      "quote": "apply consistent practices, governance, and processes, and achieve scaled engineering solutions for the entire organization",
+      "date_quote": null,
+      "date": "2026-09-03"
+     },
+     {
+      "source_id": "src_16b7c8df83",
+      "quote": "lead the strategic migration of our legacy core banking platforms (e.g., FIS, Fiserv) to a modern, cloud-based ledger system",
+      "date_quote": "Posted on May 21, 2026",
+      "date": "2026-05-21"
+     }
+    ]
+   }
+  ],
+  "drafts": [
+   {
+    "name": "Sarrah Cherhabil",
+    "email": {
+     "subject": "Taking Devin from hundreds to thousands",
+     "body": "Hi Sarrah,\n\nI read that Marco is planning to scale Devin into the thousands, and that Goldman now writes skills like cloud fast track so agents learn how the firm does things.\n\nMy guess is the hard part now is less access and more which work goes to agents next, and who keeps those skills current as use cases multiply. Devin picks up the ticket, follows your skills, runs the tests and opens a PR for your engineers to review. Citi is rolling Devin out to 40,000 developers for code, testing and documentation.\n\nHappy to grab 20 minutes. We could pick one team's backlog and map what the next wave would look like. Does this week or next work?\n\nBest,"
+    },
+    "linkedin_note": "Hi Sarrah, I've been following how Goldman teaches agents firm-specific skills like cloud fast track. I work with banks running Devin at scale and would love to connect and swap notes.",
+    "linkedin_followup": "Thanks for connecting, Sarrah. Something I keep hearing from large engineering orgs scaling agents: the bottleneck moves from access to choosing the work. Migrations, test gaps and vulnerability backlogs tend to go first because results are easy to check in CI. Citi is rolling Devin out to 40,000 developers across code, testing and documentation. If useful, I could walk through how other banks pick that next wave in 20 minutes, no slides. Would next week work?",
+    "built_from": [
+     {
+      "source_id": "src_8e60fe9019",
+      "quote": "with CIO Marco Argenti planning to scale into the thousands",
+      "date_quote": null,
+      "date": "2026-08-19"
+     },
+     {
+      "source_id": "src_4bdc58fa24",
+      "quote": "the “cloud fast track” skill teaches AI what good cloud migration looks like, specifically at Goldman",
+      "date_quote": null,
+      "date": "2026-08-25"
+     },
+     {
+      "source_id": "src_84d58730f4",
+      "quote": "Citi rolls out Devin to 40,000 developers for autonomous code, testing, and documentation",
+      "date_quote": null,
+      "date": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Marco is planning to scale Devin into the thousands",
+      "source_id": "src_8e60fe9019",
+      "quote": "with CIO Marco Argenti planning to scale into the thousands"
+     },
+     {
+      "text": "Goldman now writes skills like cloud fast track",
+      "source_id": "src_4bdc58fa24",
+      "quote": "the “cloud fast track” skill teaches AI what good cloud migration looks like, specifically at Goldman"
+     }
+    ],
+    "notes": "- Champion for the expansion: she heads Developer AI, so frame around choosing the next wave, not adoption.\n- Goldman already runs Devin; never pitch 'have you tried agents'.\n- Claude is also available to all developers; don't knock it, position Devin for delegated work.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Dinesh Keswani",
+    "email": {
+     "subject": "Scaled engineering for The Core",
+     "body": "Hi Dinesh,\n\nCongratulations on joining as chief technology officer of The Core Engineering. The announcement says you'll apply consistent practices, governance, and processes, and achieve scaled engineering solutions for the entire organization.\n\nMy guess is a lot of that lands as modernization and standardization work across many services, the kind that stalls behind feature work. Goldman engineers already run hundreds of Devin agents, and Itaú used Devin for a 6x faster .NET to Java migration of 59 services.\n\nWould love to grab 20 minutes. We could pick one Core platform and sketch what handing its upgrade backlog to Devin would look like. This week or next?\n\nBest,"
+    },
+    "linkedin_note": "Hi Dinesh, congratulations on joining Goldman as chief technology officer of The Core Engineering. I work with bank engineering leaders on agent-driven modernization and would love to connect.",
+    "linkedin_followup": "Thanks for connecting, Dinesh. I'd be curious about your take: as The Core moves to consistent practices across teams, which upgrades and migrations sit longest in the backlog? That's usually where engineering leaders hand work to Devin first, since every change comes back as a PR with tests your teams review. Itaú ran a 6x faster .NET to Java migration of 59 services that way. Happy to share what that looked like in 20 minutes if useful.",
+    "built_from": [
+     {
+      "source_id": "src_ec94b79811",
+      "quote": "Dinesh will also serve as chief technology officer of The Core Engineering.",
+      "date_quote": null,
+      "date": "2026-09-03"
+     },
+     {
+      "source_id": "src_ec94b79811",
+      "quote": "apply consistent practices, governance, and processes, and achieve scaled engineering solutions for the entire organization",
+      "date_quote": null,
+      "date": "2026-09-03"
+     },
+     {
+      "source_id": "src_8e60fe9019",
+      "quote": "Goldman Sachs runs hundreds of Devin AI agents alongside its roughly 12,000 human developers",
+      "date_quote": null,
+      "date": "2026-08-19"
+     },
+     {
+      "source_id": "src_5903e45c48",
+      "quote": "6x faster .NET -> Java migration of 59 services",
+      "date_quote": null,
+      "date": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "joining as chief technology officer of The Core Engineering",
+      "source_id": "src_ec94b79811",
+      "quote": "Dinesh will also serve as chief technology officer of The Core Engineering."
+     },
+     {
+      "text": "you'll apply consistent practices, governance, and processes, and achieve scaled engineering solutions for the entire organization",
+      "source_id": "src_ec94b79811",
+      "quote": "apply consistent practices, governance, and processes, and achieve scaled engineering solutions for the entire organization"
+     },
+     {
+      "text": "Goldman engineers already run hundreds of Devin agents",
+      "source_id": "src_8e60fe9019",
+      "quote": "Goldman Sachs runs hundreds of Devin AI agents alongside its roughly 12,000 human developers"
+     }
+    ],
+    "notes": "- New in seat (Sep 2026): mandate is consistent practices and scale, so lead with that, not product.\n- Don't bring up Nomura history; it isn't the Devin hook.\n- Follow-up is sendable once he accepts.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Marco Argenti",
+    "email": {
+     "subject": "Goldman-specific agents, at scale",
+     "body": "Hi Marco,\n\nYou've said that \"the transfer of the institutional knowledge into the AI is the biggest question,\" and that Goldman now writes skills like cloud fast track so agents learn what good looks like at the firm.\n\nMy guess is that gets harder as Devin scales into the thousands, because every new use case needs its own skills and evals. Devin picks up the ticket, applies those skills, runs the tests and opens a PR for review. Citi is rolling Devin out to 40,000 developers.\n\nWould love 20 minutes to pick one use case for the next wave and walk through it. This week or next?\n\nBest,"
+    },
+    "linkedin_note": "Hi Marco, your point that the transfer of institutional knowledge into AI is the biggest question stuck with me. I work with bank engineering teams scaling Devin and would love to connect.",
+    "linkedin_followup": "Thanks for connecting, Marco. The skills-and-evals approach you described is the part large engineering orgs struggle with most: once agents work across many teams, keeping firm-specific knowledge current becomes the job. Citi is rolling Devin out to 40,000 developers and faces the same question of which work goes to agents next. If useful, I'd be glad to spend 20 minutes on how teams pick that next wave and measure it.",
+    "built_from": [
+     {
+      "source_id": "src_4bdc58fa24",
+      "quote": "The transfer of the institutional knowledge into the AI is the biggest question",
+      "date_quote": null,
+      "date": "2026-08-25"
+     },
+     {
+      "source_id": "src_4bdc58fa24",
+      "quote": "the “cloud fast track” skill teaches AI what good cloud migration looks like, specifically at Goldman",
+      "date_quote": null,
+      "date": "2026-08-25"
+     },
+     {
+      "source_id": "src_8e60fe9019",
+      "quote": "with CIO Marco Argenti planning to scale into the thousands",
+      "date_quote": null,
+      "date": "2026-08-19"
+     },
+     {
+      "source_id": "src_84d58730f4",
+      "quote": "Citi rolls out Devin to 40,000 developers for autonomous code, testing, and documentation",
+      "date_quote": null,
+      "date": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "the transfer of the institutional knowledge into the AI is the biggest question",
+      "source_id": "src_4bdc58fa24",
+      "quote": "The transfer of the institutional knowledge into the AI is the biggest question"
+     },
+     {
+      "text": "Goldman now writes skills like cloud fast track",
+      "source_id": "src_4bdc58fa24",
+      "quote": "the “cloud fast track” skill teaches AI what good cloud migration looks like, specifically at Goldman"
+     },
+     {
+      "text": "Devin scales into the thousands",
+      "source_id": "src_8e60fe9019",
+      "quote": "with CIO Marco Argenti planning to scale into the thousands"
+     },
+     {
+      "text": "skills-and-evals approach you described",
+      "source_id": "src_4bdc58fa24",
+      "quote": "That’s why we try to systematize them by doing these evals"
+     }
+    ],
+    "notes": "- Exec sponsor of the existing Devin rollout; keep it about his stated problem (institutional knowledge), no product tour.\n- He measures team velocity, not usage; avoid seat-count framing.\n- Likely reached via exec channels; LinkedIn may not be read.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "James Bywater",
+    "email": {
+     "subject": "Test gaps as agents scale",
+     "body": "Hi James,\n\nI saw that you run Goldman's global test engineering, build and test performance, and ephemeral environments teams, with a mission to build integrated build and testing solutions for all of Goldman's SDLCs.\n\nMy guess is that as more code comes from agents, missing tests show up faster than teams can write them. Devin picks up the ticket, writes the tests, runs them in its own environment and opens a PR for your engineers to review. At Litera, Devin delivered 93% faster regression cycles.\n\nHappy to connect for 20 minutes. We could pick one service and walk through what that would look like. This week or next?\n\nBest,"
+    },
+    "linkedin_note": "Hi James, I saw your teams build integrated build and testing solutions for all of Goldman's SDLCs. I work on agent-written tests and would love to connect.",
+    "linkedin_followup": "Thanks for connecting, James. Curious how your test engineering teams think about agent-written code: in most large orgs the review queue fills with PRs that lack tests before anyone notices. Devin can take the test-gap tickets, write the tests in its own environment and open a PR your engineers review. Litera saw 93% faster regression cycles. If useful, I'd be glad to walk through one service in 20 minutes.",
+    "built_from": [
+     {
+      "source_id": "src_75ac932429",
+      "quote": "Global head of test engineering, build and test performance, and ephemeral environments teams.",
+      "date_quote": null,
+      "date": "2026-09-24"
+     },
+     {
+      "source_id": "src_75ac932429",
+      "quote": "My mission is to build integrated build and testing solutions for all of Goldman's SDLCs",
+      "date_quote": null,
+      "date": "2026-09-24"
+     },
+     {
+      "source_id": "src_a49527cfb2",
+      "quote": "93% Faster regression cycles",
+      "date_quote": null,
+      "date": "2026-07-10"
+     }
+    ],
+    "claims": [
+     {
+      "text": "you run Goldman's global test engineering, build and test performance, and ephemeral environments teams",
+      "source_id": "src_75ac932429",
+      "quote": "Global head of test engineering, build and test performance, and ephemeral environments teams."
+     },
+     {
+      "text": "build integrated build and testing solutions for all of Goldman's SDLCs",
+      "source_id": "src_75ac932429",
+      "quote": "My mission is to build integrated build and testing solutions for all of Goldman's SDLCs"
+     }
+    ],
+    "notes": "- Champion angle: test gaps from agent-written code, matches his test engineering remit.\n- Goldman already runs Devin; frame as extending it into test engineering.\n- Follow-up is sendable after he accepts.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Matteo Pelati",
+    "email": {
+     "subject": "AgentGraph and Devin side by side",
+     "body": "Hi Matteo,\n\nI read about AgentGraph, the agentic tool you built that performs deep static and semantic analysis of codebases and drives Spec-Driven Development toward an evergreen agentic SDLC.\n\nMy guess is that once specs and dependency graphs exist, the bottleneck becomes executing changes across many repos. Devin works in its own environment: it clones the repo, runs your build and tests, then opens a PR so reviewers see exactly what changed. Teams using it typically take test coverage from 50-60% up to 80-90%.\n\nHappy to compare notes on how the two could fit together in 20 minutes. This week or next?\n\nBest,"
+    },
+    "linkedin_note": "Hi Matteo, AgentGraph's approach of building a full dependency graph to drive spec-driven delivery is a smart one. I work on Devin at Cognition and would love to connect.",
+    "linkedin_followup": "Thanks for connecting, Matteo. I'd be curious how you think about execution once AgentGraph produces the specs: whether agents run in your own harness or alongside other tools. Devin runs each task in its own environment, runs your build and tests and opens a PR, so it can sit downstream of a spec-driven flow rather than replace it. That keeps your dependency graph and specs as the source of truth. Glad to swap notes for 20 minutes if that's useful.",
+    "built_from": [
+     {
+      "source_id": "src_b0940b0818",
+      "quote": "Designed and built AgentGraph, an agentic tool that performs deep static and semantic analysis of codebases",
+      "date_quote": null,
+      "date": "2026-08-26"
+     },
+     {
+      "source_id": "src_b0940b0818",
+      "quote": "drives Spec-Driven Development to implement an evergreen agentic SDLC",
+      "date_quote": null,
+      "date": "2026-08-26"
+     },
+     {
+      "source_id": "src_b0940b0818",
+      "quote": "constructs a full dependency graph",
+      "date_quote": null,
+      "date": "2026-08-26"
+     },
+     {
+      "source_id": "src_0f8c427244",
+      "quote": "Companies' test coverage typically rises from 50-60% to 80-90% when using Devin.",
+      "date_quote": null,
+      "date": "2025-11-14"
+     }
+    ],
+    "claims": [
+     {
+      "text": "AgentGraph, the agentic tool you built that performs deep static and semantic analysis of codebases",
+      "source_id": "src_b0940b0818",
+      "quote": "Designed and built AgentGraph, an agentic tool that performs deep static and semantic analysis of codebases"
+     },
+     {
+      "text": "drives Spec-Driven Development toward an evergreen agentic SDLC",
+      "source_id": "src_b0940b0818",
+      "quote": "drives Spec-Driven Development to implement an evergreen agentic SDLC"
+     },
+     {
+      "text": "building a full dependency graph",
+      "source_id": "src_b0940b0818",
+      "quote": "constructs a full dependency graph"
+     }
+    ],
+    "notes": "- Incumbent owner of in-house agentic SDLC tooling: position Devin as complementary, never as a replacement for AgentGraph.\n- Technical evaluator: talk about how it runs on their stack, not exec metrics.\n- Follow-up is sendable after he accepts.",
+    "low_confidence": false,
+    "lint": []
+   }
+  ]
+ },
+ "report": {
+  "dropped_count": 0,
+  "dropped": [],
+  "flags": [
+   {
+    "path": "verdict",
+    "flag": "a direct competitor in production defaults to Warm (angle: displace or expand); act_now needs a reason beyond it"
+   }
+  ]
+ },
+ "since_last_run": null
+}
