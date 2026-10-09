@@ -182,6 +182,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
 - say "Windsurf", even when a proof quote does. Older Cognition copy says "Devin and Windsurf"; proof quotes are evidence, not copy. The product is Devin (Devin Desktop)
 - frame Devin as replacing their engineers; the positioning is engineers working as architects and delegating execution
 - use hype words or filler: "hope this finds you well", "quick question", "revolutionize", "game-changer", "synergy", "circle back"
+- use em/en dashes (—, –) anywhere in a draft: commas, periods or parentheses instead. Lint blocks on them.
 
 **Claims:** every prospect-specific statement in a draft (what they built, said, hired for or are migrating) is listed in `claims` as `{text, source_id, quote}`, with the quote verbatim from that source. Verify all of them in one `verify_quotes` call before saving. **The quote must say what the claim says:** every capitalized term and number in the claim (Bazel, PRs, Micronaut 4, eleven) must appear in that claim's own quote. Only the prospect's name, the contact's name, "Devin" and a sentence's first word are exempt ("AI" is not); common abbreviations match their long form (PR = pull request, CI, QA, SRE). If one quote doesn't cover the claim, split it into claims with their own quotes or cut the term. One failed claim blocks the whole draft. The rep sees each claim with its quote under the draft, so list them all. If a statement can't be backed by a quote, cut it from the draft.
 

@@ -98,6 +98,8 @@ def lint_message(channel: str, text: str, source_ids: list[str] | None = None,
             issue("block", f"banned phrase: {phrase!r}")
     if "windsurf" in low:
         issue("block", "never say Windsurf: the product is Devin (Devin Desktop)")
+    if any(d in text for d in ("—", "–", "―")):
+        issue("block", "no em/en dashes: use commas, periods or parentheses")
     if LAYOFFS.search(full):
         issue("block", "never mention layoffs")
     if m := PLACEHOLDER.search(full):

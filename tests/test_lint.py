@@ -85,3 +85,9 @@ def test_meeting_length_is_not_a_claim(src):
         assert lint_message("linkedin_note", f"Teams at Nubank used Devin on migrations. {ask}", [src])["ok"], ask
     for claim in ("Nubank cut 40 minutes off every build with Devin.", "Could Devin save you 40 minutes per build?"):
         assert "40" in blocks(lint_message("linkedin_note", claim, [src])), claim
+
+
+def test_no_em_dashes(src):
+    for bad in ("Nubank uses Devin — it handles the migration.", "Saw the post – nice work.", "A―B"):
+        assert "em/en dashes" in blocks(lint_message("linkedin_note", bad, [src])), bad
+    assert lint_message("linkedin_note", "Nubank uses Devin; it handles the migration.", [src])["ok"]
