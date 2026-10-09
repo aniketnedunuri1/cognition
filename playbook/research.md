@@ -154,7 +154,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
 
 ## Stage 4: Drafts
 
-**Per contact:** every Who to work card — one draft set per `featured` person (3–5 cards, or the rep's picks). A card exists to be worked: the validator flags any card with no draft.
+**Per contact:** every Who to work card — one draft set per `featured` person (3–5 cards, or the rep's picks). A card exists to be worked: the validator flags any card with no draft, and every `top_contacts` name needs one.
 - **Email:** subject of 4–6 words; plain-text body of 75–120 words; one ask.
 - **LinkedIn connection note:** at most 300 characters.
 - **LinkedIn follow-up DM:** 400–600 characters, and it doesn't repeat the email.
@@ -183,13 +183,13 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
 - frame Devin as replacing their engineers; the positioning is engineers working as architects and delegating execution
 - use hype words or filler: "hope this finds you well", "quick question", "revolutionize", "game-changer", "synergy", "circle back"
 
-**Claims:** every prospect-specific statement in a draft (what they built, said, hired for or are migrating) is listed in `claims` as `{text, source_id, quote}`, with the quote verbatim from that source. Verify all of them in one `verify_quotes` call before saving. **The quote must say what the claim says:** every capitalized term and number in the claim (Bazel, PRs, Micronaut 4, eleven) must appear in that claim's own quote. Only the prospect's name, the contact's name, "Devin" and a sentence's first word are exempt; common abbreviations match their long form (PR = pull request, CI, QA, SRE). If one quote doesn't cover the claim, split it into claims with their own quotes or cut the term. One failed claim blocks the whole draft. The rep sees each claim with its quote under the draft, so list them all. If a statement can't be backed by a quote, cut it from the draft.
+**Claims:** every prospect-specific statement in a draft (what they built, said, hired for or are migrating) is listed in `claims` as `{text, source_id, quote}`, with the quote verbatim from that source. Verify all of them in one `verify_quotes` call before saving. **The quote must say what the claim says:** every capitalized term and number in the claim (Bazel, PRs, Micronaut 4, eleven) must appear in that claim's own quote. Only the prospect's name, the contact's name, "Devin" and a sentence's first word are exempt ("AI" is not); common abbreviations match their long form (PR = pull request, CI, QA, SRE). If one quote doesn't cover the claim, split it into claims with their own quotes or cut the term. One failed claim blocks the whole draft. The rep sees each claim with its quote under the draft, so list them all. If a statement can't be backed by a quote, cut it from the draft.
 
-**Checks:** run `lint_message(channel, text, source_ids, subject?)` on every draft, where `source_ids` covers the draft's built-from and claim sources. Every number in the message, in digits or words ("eleven", "a dozen", "three teams"), must appear in one of them. The meeting ask ("worth 20 minutes?") is exempt. Fix and re-lint until it passes.
+**Checks:** run `lint_message(channel, text, source_ids, subject?)` on every draft, where `source_ids` covers the draft's built-from and claim sources. Every number in the message, in digits or words ("eleven", "a dozen", "three teams"), must appear in one of them. The meeting ask ("worth 20 minutes?") is exempt. Lint all three channels (email, `linkedin_note`, `linkedin_followup`), not just the email. Placeholders such as `[Your Name]` fail lint: end at the sign-off. Fix and re-lint until it passes.
 
 **Built from:** each draft lists the signals, hooks and proof `source_id`s it uses.
 
-**Send notes** (`drafts[].notes`, 2–5 short bullets, rep-only, never sent):
+**Send notes** (`drafts[].notes`: one string of 2–5 short `- ` lines, rep-only, never sent):
 - why this angle for this person
 - channel constraint (e.g. email only — they said they don't use LinkedIn messaging)
 - what not to say (incumbent, displace vs erase, no prior-job trivia)
@@ -214,18 +214,25 @@ If `get_last_brief` returned a brief, report:
 
 ## Output contract
 
-**1. Brief:** call `save_brief(domain, brief)` with this shape. Everything cites `source_id`s; the validator fills in `verified`, `label`, `featured`, `current_basis` and `profile_source_id` itself.
+**1. Brief:** call `save_brief(domain, brief)` with this shape. Everything cites `source_id`s; the validator fills in `verified`, `label`, `featured`, `current_basis` and `profile_source_id` itself. A field that breaks the schema is dropped whole, so check these before the first save:
+- Every `snapshot` and `engineering` field is a **list** of Facts, even with one fact (`hq: [Fact]`, never `hq: Fact`).
+- `drafts[].notes` is one string, not a list.
+- `people[].title` is copied exactly from the profile's current title.
+- Apollo `src_` sources are structured data: cite them without a `quote`.
+- Set `org_chart` to the `get_org_chart` `source_id`.
+- For big briefs, write the JSON to a file and send it with a script; don't retype it.
 
 ```
 {
   domain, company_name,
   verdict: {verdict: act_now|warm|not_now, why_now, based_on: [Evidence], watch_for},
+  org_chart: source_id,
   snapshot:    {hq, founded, industry, ownership, parent_company, headcount, headcount_growth,
-                revenue, funding, sells_to, products: [Fact]},
+                revenue, funding, sells_to, products},   // every field: [Fact]
   engineering: {eng_headcount, open_eng_roles, tech_stack, ai_dev_tools, eng_blog_and_github,
-                ai_posture, priorities, peers: [Fact]},
-  signals: [{headline, type, source: job_post|leader_hire|eng_blog|exec_statement|news_press|
-             social_post|profile|other, horizon: tactical|strategic,
+                ai_posture, priorities, peers},          // every field: [Fact]
+  signals: [{headline, type: SignalType,
+             source: job_post|leader_hire|eng_blog|exec_statement|news_press|social_post|profile|other, horizon: tactical|strategic,
              evidence: [Evidence with quote], use_case, who_cares: [names], tier: 1|2|3}],
   competitive_context: [{situation, value, evidence}],
   company_linkedin: [{value, kind: original|possible_repost|unknown, tags: [names], evidence}],
@@ -235,11 +242,12 @@ If `get_last_brief` returned a brief, report:
             reporting_line: Fact|null, incumbent_owner: bool}],   // all verified people; validator sets featured on 3–5 cards
   top_contacts: [{name, why: Assessment}],          // max 3, must be in people
   abm_themes: [Assessment],                         // 2–3 account-level angles for marketing
-  drafts: [{name, email: {subject, body}, linkedin_note, linkedin_followup, notes, built_from: [Evidence],
+  drafts: [{name, email: {subject, body}, linkedin_note, linkedin_followup, notes: string, built_from: [Evidence],
             claims: [{text, source_id, quote}]}]
                                                     // low_confidence is set by the validator
 }
 Fact = {value, evidence: [Evidence]}   Evidence = {source_id, quote?, date_quote?}   Assessment = {text, based_on: [Evidence]}
+SignalType: migration | tech_debt | quality_security | ai_mandate | leadership_change | hiring_composition | layoffs_ai
 competitive_context situation: copilot_autocomplete | piloting_competitor | competitor_deal_recent | competitor_in_production | other
 ```
 

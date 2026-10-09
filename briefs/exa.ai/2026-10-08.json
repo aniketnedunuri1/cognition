@@ -1,0 +1,1237 @@
+{
+ "domain": "exa.ai",
+ "date": "2026-10-08",
+ "saved_at": "2026-10-09T03:08:51+00:00",
+ "brief": {
+  "domain": "exa.ai",
+  "company_name": "Exa",
+  "verdict": {
+   "verdict": "act_now",
+   "why_now": "New CTO Jeff Pinner (joined Aug 2026) inherits a stated mandate to do larger-than-Google-scale engineering quickly, and Exa's infra team already runs Devin per Cognition's public customer story — an expansion motion with a fresh economic buyer.",
+   "based_on": [
+    {
+     "source_id": "src_9578b57ec0",
+     "quote": "Exa has humongous engineering and research to do at larger-than-google-scale and we need to do it quickly.",
+     "date_quote": null,
+     "date": "2026-08-21"
+    },
+    {
+     "source_id": "src_2ebae4d3bf",
+     "quote": "I'm excited to announce my new role as CTO of Exa",
+     "date_quote": null,
+     "date": "2026-08-21"
+    },
+    {
+     "source_id": "src_721aedb23c",
+     "quote": "one multi-week Devin session fully built a test-system contract and rolled it out service by service",
+     "date_quote": null,
+     "date": null
+    }
+   ],
+   "watch_for": "Who Pinner puts over platform/infra tooling, whether the open Head of Security role is filled (new approver for agent access), and any public Cursor/Claude Code/Codex standardization by Exa engineering."
+  },
+  "snapshot": {
+   "hq": [
+    {
+     "value": "Apollo reports San Francisco, California, United States",
+     "evidence": [
+      {
+       "source_id": "src_983acc70b1",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "founded": [
+    {
+     "value": "Apollo reports 2021",
+     "evidence": [
+      {
+       "source_id": "src_983acc70b1",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "industry": [
+    {
+     "value": "Apollo reports information technology & services; builds web search APIs for AI agents",
+     "evidence": [
+      {
+       "source_id": "src_983acc70b1",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "ownership": [
+    {
+     "value": "Private, venture-backed (Series C, May 2026)",
+     "evidence": [
+      {
+       "source_id": "src_2c6718d70a",
+       "quote": "Exa just raised $250M at a $2.2B valuation led by a16z to power all agents with the highest quality web search.",
+       "date_quote": null,
+       "date": "2026-05-20"
+      }
+     ]
+    }
+   ],
+   "parent_company": [],
+   "headcount": [
+    {
+     "value": "Apollo reports ~210 employees",
+     "evidence": [
+      {
+       "source_id": "src_983acc70b1",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "Crustdata reports 202 employees",
+     "evidence": [
+      {
+       "source_id": "src_b784ba3a46",
+       "quote": "The company has raised $357M and employs 202 people.",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "Growjo reports 294 employees",
+     "evidence": [
+      {
+       "source_id": "src_bde6046eba",
+       "quote": "Exa has 294 Employees.",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "headcount_growth": [
+    {
+     "value": "Apollo reports +80.2% (6 mo), +170.3% (12 mo)",
+     "evidence": [
+      {
+       "source_id": "src_983acc70b1",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "revenue": [
+    {
+     "value": "Apollo reports ~$10M annual revenue",
+     "evidence": [
+      {
+       "source_id": "src_983acc70b1",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "Sacra estimates $10M annualized revenue in Sep 2025",
+     "evidence": [
+      {
+       "source_id": "src_278ed9e9b1",
+       "quote": "Sacra estimates that Exa hit $10M in Sep 2025",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "Swellpulse reports $12M ARR as of 2025",
+     "evidence": [
+      {
+       "source_id": "src_e4f7e4a934",
+       "quote": "Exa reached $12M ARR as of 2025, more than doubling from $5.7M ARR in 2024",
+       "date_quote": null,
+       "date": "2026-05-22"
+      }
+     ]
+    }
+   ],
+   "funding": [
+    {
+     "value": "Apollo reports $362.1M total; latest $250M Series C (May 2026) led by Andreessen Horowitz at a $2.2B valuation",
+     "evidence": [
+      {
+       "source_id": "src_983acc70b1",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      },
+      {
+       "source_id": "src_2c6718d70a",
+       "quote": "Exa just raised $250M at a $2.2B valuation led by a16z to power all agents with the highest quality web search.",
+       "date_quote": null,
+       "date": "2026-05-20"
+      }
+     ]
+    }
+   ],
+   "sells_to": [
+    {
+     "value": "Developers and AI companies building agents; the homepage cites 500,000 developers, and the Series C post says over 5,000 companies use Exa",
+     "evidence": [
+      {
+       "source_id": "src_c8397f5ba6",
+       "quote": "Join 500,000 developers building AI on top of the world's information.",
+       "date_quote": null,
+       "date": null
+      },
+      {
+       "source_id": "src_2c6718d70a",
+       "quote": "Since then, the number of companies using Exa has grown to over 5,000.",
+       "date_quote": null,
+       "date": "2026-05-20"
+      }
+     ]
+    }
+   ],
+   "products": [
+    {
+     "value": "Search, Contents, Agent and Monitors APIs, Websets, Exa Connect, MCP server; search for coding agents across docs and repos",
+     "evidence": [
+      {
+       "source_id": "src_c8397f5ba6",
+       "quote": "The docs your coding agent needs: powers coding agents with smart, token-efficient search across docs and repos.",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ]
+  },
+  "engineering": {
+   "eng_headcount": [
+    {
+     "value": "Apollo reports 77 in engineering",
+     "evidence": [
+      {
+       "source_id": "src_983acc70b1",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "open_eng_roles": [
+    {
+     "value": "17 engineering-relevant titles on Apollo jobs, incl. Head of Security, Software Engineer (Security), Research Engineer (Index Intelligence; Content Understanding), Forward Deployed Engineer",
+     "evidence": [
+      {
+       "source_id": "src_9c81fb9bc6",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-09-02"
+      },
+      {
+       "source_id": "src_37d1ab83b4",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-08-28"
+      },
+      {
+       "source_id": "src_e76d2ba6da",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-10-03"
+      },
+      {
+       "source_id": "src_b3cd7a6abb",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-10-03"
+      }
+     ]
+    }
+   ],
+   "tech_stack": [
+    {
+     "value": "Sumble reports Rust, PyTorch and ClickHouse confirmed via job posts",
+     "evidence": [
+      {
+       "source_id": "src_d70baa93f9",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "ai_dev_tools": [
+    {
+     "value": "Apollo lists Cursor (website-tag data, not confirmed by Sumble or a job post); Sumble reports no AI coding tools",
+     "evidence": [
+      {
+       "source_id": "src_983acc70b1",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      },
+      {
+       "source_id": "src_d70baa93f9",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "Devin is in use: Cognition's customer story describes a multi-week Devin session rolling out a test-system contract",
+     "evidence": [
+      {
+       "source_id": "src_721aedb23c",
+       "quote": "one multi-week Devin session fully built a test-system contract and rolled it out service by service",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "eng_blog_and_github": [
+    {
+     "value": "Engineering/research blog at exa.ai (e.g. Composing a Search Engine, exa-d data framework); GitHub org exa-labs (exa-mcp-server)",
+     "evidence": [
+      {
+       "source_id": "src_dab741f1fa",
+       "quote": "Composing a Search Engine",
+       "date_quote": null,
+       "date": "2026-04-17"
+      },
+      {
+       "source_id": "src_9777fa9917",
+       "quote": "In this post, we will walk through exa-d, our inhouse data processing framework, designed to handle this complexity at scale.",
+       "date_quote": null,
+       "date": "2026-01-13"
+      },
+      {
+       "source_id": "src_b7622ad62e",
+       "quote": "exa-labs/exa-mcp-server - Exa MCP for web search and web crawling! (5091 stars)",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "ai_posture": [
+    {
+     "value": "Co-founder Jeffrey Wang says AI coding gains are uneven: big in frontend/internal tooling, negative in reliability/infra",
+     "evidence": [
+      {
+       "source_id": "src_326f430a73",
+       "quote": "Productivity gains from vibe coding AI tools are not evenly distributed.",
+       "date_quote": null,
+       "date": "2025-10-27"
+      },
+      {
+       "source_id": "src_326f430a73",
+       "quote": "Reliability and infrastructure: 0.5x (mistakes here cost a lot)",
+       "date_quote": null,
+       "date": "2025-10-27"
+      }
+     ]
+    },
+    {
+     "value": "Engineering blog says most code is now written by agents, raising robustness questions for search pipelines",
+     "evidence": [
+      {
+       "source_id": "src_dab741f1fa",
+       "quote": "This complexity is increased by the reality that most code is now written by agents: even if agents write locally correct code, reasoning through global constraints and requirements remains hard for them.",
+       "date_quote": null,
+       "date": "2026-04-17"
+      }
+     ]
+    },
+    {
+     "value": "CEO Will Bryk: massive-scale infra still needs top human engineers",
+     "evidence": [
+      {
+       "source_id": "src_046cf236dd",
+       "quote": "AI is automating all software, but massive-scale infra like building a search engine still requires the smartest humans on the planet.",
+       "date_quote": null,
+       "date": "2026-01-13"
+      }
+     ]
+    }
+   ],
+   "priorities": [
+    {
+     "value": "Scale infrastructure to 100s of thousands of searches per second and train next-gen models (Series C use of funds)",
+     "evidence": [
+      {
+       "source_id": "src_2c6718d70a",
+       "quote": "With this funding, we’re going to train our next-gen class of models and scale our infrastructure to handle 100s of thousands of searches per second.",
+       "date_quote": null,
+       "date": "2026-05-20"
+      }
+     ]
+    },
+    {
+     "value": "Provisioning for Bing-scale agent traffic",
+     "evidence": [
+      {
+       "source_id": "src_7766c2f3ef",
+       "quote": "we're already starting to provision for Bing-scale traffic.",
+       "date_quote": null,
+       "date": "2026-08-03"
+      }
+     ]
+    }
+   ],
+   "peers": [
+    {
+     "value": "Tavily, Parallel, Firecrawl, Perplexity, Brave (named together by Tavily's comparison); none are public Devin customers",
+     "evidence": [
+      {
+       "source_id": "src_ad59e4ead1",
+       "quote": "Even though Tavily, Exa, Parallel, Firecrawl, Perplexity, and Brave are often lumped together as equal options",
+       "date_quote": null,
+       "date": "2026-09-14"
+      }
+     ]
+    }
+   ]
+  },
+  "signals": [
+   {
+    "headline": "New CTO Jeff Pinner joined Aug 2026 with a mandate to do larger-than-Google-scale engineering quickly",
+    "type": "leadership_change",
+    "horizon": "strategic",
+    "evidence": [
+     {
+      "source_id": "src_9578b57ec0",
+      "quote": "I'm thrilled to announce that Jeff Pinner has joined Exa as CTO.",
+      "date_quote": null,
+      "date": "2026-08-21"
+     },
+     {
+      "source_id": "src_9578b57ec0",
+      "quote": "Exa has humongous engineering and research to do at larger-than-google-scale and we need to do it quickly.",
+      "date_quote": null,
+      "date": "2026-08-21"
+     },
+     {
+      "source_id": "src_2ebae4d3bf",
+      "quote": "This means we will need to operate at scale that is orders of magnitude larger than what humans search on the web today.",
+      "date_quote": null,
+      "date": "2026-08-21"
+     }
+    ],
+    "use_case": "Feature development capacity",
+    "who_cares": [
+     "Jeff Pinner",
+     "Will Bryk"
+    ],
+    "strength": "strong"
+   },
+   {
+    "headline": "Eng blog: keeping search pipelines robust now that most code is written by agents",
+    "type": "quality_security",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_dab741f1fa",
+      "quote": "How do we ensure our search pipelines are robust as most code is written by agents?",
+      "date_quote": null,
+      "date": "2026-04-17"
+     },
+     {
+      "source_id": "src_dab741f1fa",
+      "quote": "This complexity is increased by the reality that most code is now written by agents: even if agents write locally correct code, reasoning through global constraints and requirements remains hard for them.",
+      "date_quote": null,
+      "date": "2026-04-17"
+     }
+    ],
+    "use_case": "Code review",
+    "who_cares": [
+     "Jeeyoung Kim",
+     "Jeff Pinner"
+    ],
+    "strength": "medium"
+   },
+   {
+    "headline": "Co-founder: AI coding tools make reliability/infra work slower (0.5x) while frontend gains 5-10x",
+    "type": "ai_mandate",
+    "horizon": "strategic",
+    "evidence": [
+     {
+      "source_id": "src_326f430a73",
+      "quote": "Productivity gains from vibe coding AI tools are not evenly distributed.",
+      "date_quote": null,
+      "date": "2025-10-27"
+     },
+     {
+      "source_id": "src_326f430a73",
+      "quote": "Reliability and infrastructure: 0.5x (mistakes here cost a lot)",
+      "date_quote": null,
+      "date": "2025-10-27"
+     }
+    ],
+    "use_case": "Test generation & QA",
+    "who_cares": [
+     "Jeffrey Wang",
+     "João Adriano"
+    ],
+    "strength": "medium"
+   },
+   {
+    "headline": "Hiring a Head of Security whose mandate includes vulnerability management across APIs, pipelines and GPU infra",
+    "type": "quality_security",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_9c81fb9bc6",
+      "quote": "Build security into the product-development lifecycle through threat modeling, architecture reviews, secure defaults, automated controls, vulnerability management, offensive testing, and engineering education.",
+      "date_quote": null,
+      "date": "2026-09-02"
+     },
+     {
+      "source_id": "src_37d1ab83b4",
+      "quote": "constantly think about how to operate securely with the introduction of new technologies (OS-level, AI coding agents, etc.)",
+      "date_quote": null,
+      "date": "2026-08-28"
+     }
+    ],
+    "use_case": "Vulnerability remediation",
+    "who_cares": [
+     "Jeff Pinner"
+    ],
+    "strength": "medium"
+   }
+  ],
+  "competitive_context": [
+   {
+    "value": "Existing Devin footprint: Cognition's public customer story quotes Exa's infrastructure lead on running Devin in the cloud; treat as expansion, not a new logo.",
+    "evidence": [
+     {
+      "source_id": "src_721aedb23c",
+      "quote": "If you want to parallelize more and you feel bottlenecked by the amount of tasks you can do in parallel end-to-end, then you need to go to the cloud, and you need to release some control, and Devin is the best platform to do that.",
+      "date_quote": null,
+      "date": null
+     },
+     {
+      "source_id": "src_721aedb23c",
+      "quote": "João Adriano, Infrastructure Lead at Exa",
+      "date_quote": null,
+      "date": null
+     }
+    ],
+    "situation": "other"
+   },
+   {
+    "value": "Apollo lists Cursor among Exa's AI coding tools (website tags; unconfirmed by Sumble). Note Exa also sells search to Cursor and Cognition.",
+    "evidence": [
+     {
+      "source_id": "src_983acc70b1",
+      "quote": null,
+      "date_quote": null,
+      "date": null
+     },
+     {
+      "source_id": "src_2c6718d70a",
+      "quote": "Exa already powers search for Cursor, Cognition, HubSpot, OpenRouter, Monday.com and over 400,000 developers.",
+      "date_quote": null,
+      "date": "2026-05-20"
+     }
+    ],
+    "situation": "other"
+   }
+  ],
+  "company_linkedin": [],
+  "people": [
+   {
+    "name": "Jeff Pinner",
+    "title": "Chief Technology Officer",
+    "deal_role": "economic_buyer",
+    "team": "Engineering (C-level)",
+    "why": "New CTO (Aug 2026); owns the scale mandate and any expansion budget.",
+    "evidence": [
+     {
+      "source_id": "src_4aa3024be3",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-04"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "New in role (started Aug 2026)",
+      "evidence": [
+       {
+        "source_id": "src_2ebae4d3bf",
+        "quote": "I'm excited to announce my new role as CTO of Exa",
+        "date_quote": null,
+        "date": "2026-08-21"
+       }
+      ],
+      "kind": "new_in_role"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Announced his CTO role, citing scale orders of magnitude beyond human web search",
+      "evidence": [
+       {
+        "source_id": "src_2ebae4d3bf",
+        "quote": "This means we will need to operate at scale that is orders of magnitude larger than what humans search on the web today.",
+        "date_quote": null,
+        "date": "2026-08-21"
+       }
+      ]
+     },
+     {
+      "value": "First launch since joining: Exa Snapshots",
+      "evidence": [
+       {
+        "source_id": "src_dd41ad3861",
+        "quote": "First product launch since joining Exa! ... Exa Snapshots lets you search the web in the past",
+        "date_quote": null,
+        "date": "2026-09-17"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_4aa3024be3",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Jeeyoung Kim",
+    "title": "Head of Engineering",
+    "deal_role": "champion",
+    "team": "Backend and Infrastructure",
+    "why": "Runs backend/infra engineering, where the agent-written-code robustness problem lives.",
+    "evidence": [
+     {
+      "source_id": "src_35c64939b8",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-21"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [
+     {
+      "value": "Panelist on the production agent stack (Exa, Vercel, Fireworks AI)",
+      "evidence": [
+       {
+        "source_id": "src_f979398fcc",
+        "quote": "Exa: Jeeyoung Kim - Head of Engineering",
+        "date_quote": null,
+        "date": "2026-03-30"
+       }
+      ]
+     },
+     {
+      "value": "Posted that Exa especially needs infra / platform engineers",
+      "evidence": [
+       {
+        "source_id": "src_58a2b92837",
+        "quote": "Exa is hiring, but we are especially in need of infra / platform engineers.",
+        "date_quote": null,
+        "date": "2026-01-23"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_35c64939b8",
+    "current_basis": "profile"
+   },
+   {
+    "name": "João Adriano",
+    "title": "Infrastructure Team Lead",
+    "deal_role": "champion",
+    "team": "Infrastructure",
+    "why": "Quoted in Cognition's Exa customer story as a Devin advocate; leads infra and the new Zurich office.",
+    "evidence": [
+     {
+      "source_id": "src_356788dc99",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-04"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Publicly says Devin is the best platform to parallelize end-to-end work in the cloud",
+      "evidence": [
+       {
+        "source_id": "src_721aedb23c",
+        "quote": "If you want to parallelize more and you feel bottlenecked by the amount of tasks you can do in parallel end-to-end, then you need to go to the cloud, and you need to release some control, and Devin is the best platform to do that.",
+        "date_quote": null,
+        "date": null
+       }
+      ],
+      "kind": "public_pain"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Spoke on how Exa evaluates and routes models in production",
+      "evidence": [
+       {
+        "source_id": "src_23747f9ef3",
+        "quote": "Our head of engineer, Yujing Qian shared how GMI Cloud routes prompts to the best-fit model, alongside Hoda Noorian from Notion and João Adriano from Exa, who broke down how their teams evaluate and route models in production.",
+        "date_quote": null,
+        "date": "2026-08-05"
+       }
+      ]
+     },
+     {
+      "value": "Leading the new Exa Zurich office",
+      "evidence": [
+       {
+        "source_id": "src_c69d9c937f",
+        "quote": "Felix Kroner and I are opening the new Exa Zurich office, which I will be leading.",
+        "date_quote": null,
+        "date": "2026-03-03"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_356788dc99",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Will Bryk",
+    "title": "Co-Founder and CEO",
+    "deal_role": "economic_buyer",
+    "team": "Executive",
+    "why": "CEO; set the larger-than-Google-scale engineering mandate. Exec sponsor, not first touch.",
+    "evidence": [
+     {
+      "source_id": "src_3f0be03694",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-02"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [
+     {
+      "value": "Announced Pinner's hire with an explicit speed-at-scale mandate",
+      "evidence": [
+       {
+        "source_id": "src_9578b57ec0",
+        "quote": "Exa has humongous engineering and research to do at larger-than-google-scale and we need to do it quickly.",
+        "date_quote": null,
+        "date": "2026-08-21"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_3f0be03694",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Jeffrey Wang",
+    "title": "Co-Founder",
+    "deal_role": "economic_buyer",
+    "team": "Executive",
+    "why": "Co-founder who has publicly quantified uneven AI coding gains across Exa engineering.",
+    "evidence": [
+     {
+      "source_id": "src_7f6cba2f1c",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-02"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "States AI tools slow reliability/infra work",
+      "evidence": [
+       {
+        "source_id": "src_326f430a73",
+        "quote": "Reliability and infrastructure: 0.5x (mistakes here cost a lot)",
+        "date_quote": null,
+        "date": "2025-10-27"
+       }
+      ],
+      "kind": "public_pain"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Post on uneven AI coding productivity at Exa",
+      "evidence": [
+       {
+        "source_id": "src_326f430a73",
+        "quote": "Productivity gains from vibe coding AI tools are not evenly distributed.",
+        "date_quote": null,
+        "date": "2025-10-27"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "likely_champion",
+    "featured": true,
+    "profile_source_id": "src_7f6cba2f1c",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Luke Chow",
+    "title": "Infrastructure Engineer",
+    "deal_role": "technical_evaluator",
+    "team": "Infra",
+    "why": "Infra IC; likely hands-on evaluator for expanded Devin workloads.",
+    "evidence": [
+     {
+      "source_id": "src_ea4f0d2310",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-21"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_ea4f0d2310",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Shreyas S.",
+    "title": "Founding Engineer",
+    "deal_role": "technical_evaluator",
+    "team": "Engineering",
+    "why": "Founding engineer; long codebase context.",
+    "evidence": [
+     {
+      "source_id": "src_f1e96c2e89",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-22"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_f1e96c2e89",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Carlos Marques",
+    "title": "MLOps Engineer",
+    "deal_role": "technical_evaluator",
+    "team": "ML Platform",
+    "why": "ML platform IC.",
+    "evidence": [
+     {
+      "source_id": "src_374cdd4b4b",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-22"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_374cdd4b4b",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Piru Chheang",
+    "title": "Head of IT",
+    "deal_role": "gatekeeper",
+    "team": "IT",
+    "why": "Named gatekeeper for tool access; Head of Security role is open.",
+    "evidence": [
+     {
+      "source_id": "src_7b7880875b",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-03"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_7b7880875b",
+    "current_basis": "profile"
+   }
+  ],
+  "top_contacts": [
+   {
+    "name": "Jeff Pinner",
+    "why": {
+     "text": "New CTO with a speed-at-scale mandate; expansion budget sits with him.",
+     "based_on": [
+      {
+       "source_id": "src_9578b57ec0",
+       "quote": "Exa has humongous engineering and research to do at larger-than-google-scale and we need to do it quickly.",
+       "date_quote": null,
+       "date": "2026-08-21"
+      },
+      {
+       "source_id": "src_2ebae4d3bf",
+       "quote": "I'm excited to announce my new role as CTO of Exa",
+       "date_quote": null,
+       "date": "2026-08-21"
+      }
+     ]
+    }
+   },
+   {
+    "name": "Jeeyoung Kim",
+    "why": {
+     "text": "Head of Engineering over backend/infra, where the eng blog flags robustness of agent-written code.",
+     "based_on": [
+      {
+       "source_id": "src_dab741f1fa",
+       "quote": "How do we ensure our search pipelines are robust as most code is written by agents?",
+       "date_quote": null,
+       "date": "2026-04-17"
+      },
+      {
+       "source_id": "src_f979398fcc",
+       "quote": "Exa: Jeeyoung Kim - Head of Engineering",
+       "date_quote": null,
+       "date": "2026-03-30"
+      }
+     ]
+    }
+   },
+   {
+    "name": "João Adriano",
+    "why": {
+     "text": "Existing Devin advocate on the infra team; best internal reference for expansion.",
+     "based_on": [
+      {
+       "source_id": "src_721aedb23c",
+       "quote": "If you want to parallelize more and you feel bottlenecked by the amount of tasks you can do in parallel end-to-end, then you need to go to the cloud, and you need to release some control, and Devin is the best platform to do that.",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   }
+  ],
+  "org_chart": "src_b4b0d6f95c",
+  "abm_themes": [
+   {
+    "text": "Expand from one infra team's Devin use to org-wide capacity under the new CTO's scale mandate.",
+    "based_on": [
+     {
+      "source_id": "src_721aedb23c",
+      "quote": "one multi-week Devin session fully built a test-system contract and rolled it out service by service",
+      "date_quote": null,
+      "date": null
+     },
+     {
+      "source_id": "src_9578b57ec0",
+      "quote": "Exa has humongous engineering and research to do at larger-than-google-scale and we need to do it quickly.",
+      "date_quote": null,
+      "date": "2026-08-21"
+     }
+    ]
+   },
+   {
+    "text": "Review and test coverage for agent-written code in critical search pipelines.",
+    "based_on": [
+     {
+      "source_id": "src_dab741f1fa",
+      "quote": "How do we ensure our search pipelines are robust as most code is written by agents?",
+      "date_quote": null,
+      "date": "2026-04-17"
+     },
+     {
+      "source_id": "src_326f430a73",
+      "quote": "Reliability and infrastructure: 0.5x (mistakes here cost a lot)",
+      "date_quote": null,
+      "date": "2025-10-27"
+     }
+    ]
+   },
+   {
+    "text": "Two-way partnership: Exa powers search for Cognition; position Devin as the engineering-side half of that relationship.",
+    "based_on": [
+     {
+      "source_id": "src_2c6718d70a",
+      "quote": "Exa already powers search for Cursor, Cognition, HubSpot, OpenRouter, Monday.com and over 400,000 developers.",
+      "date_quote": null,
+      "date": "2026-05-20"
+     }
+    ]
+   }
+  ],
+  "drafts": [
+   {
+    "name": "Jeff Pinner",
+    "email": {
+     "subject": "Your first months at Exa",
+     "body": "Hi Jeff,\n\nCongrats on the CTO role. The announcement said Exa has humongous engineering and research to do at larger-than-google-scale, and needs to do it quickly.\n\nMy guess is that leaves more infra and product work in the queue than the team can get to. Your team already uses Devin this way: one multi-week session built a test-system contract and rolled it out service by service. At Modal, Devin produces a useful early investigation on 80% of incidents.\n\nWould love 20 minutes to pick one backlog and walk through what scaling that would look like. This week or next?\n\nBest,"
+    },
+    "linkedin_note": "Hi Jeff, congrats on the CTO role at Exa and on shipping Exa Snapshots as your first launch. I work with teams using Devin to add engineering capacity on infra-heavy roadmaps, and your team already runs it. Would be glad to connect.",
+    "linkedin_followup": "Thanks for connecting, Jeff. One thing I left out of my email: your post said Exa will need to operate at scale that is orders of magnitude larger than what humans search on the web today. At that scale the backlog tends to be the unglamorous work around the core, like dependency upgrades, flaky tests and on-call chores. That's the work teams hand to Devin so engineers stay on the hard systems problems. Ramp says Devin fixes tens of thousands of hours of technical debt. Open to comparing notes on where that fits for Exa?",
+    "built_from": [
+     {
+      "source_id": "src_9578b57ec0",
+      "quote": "Exa has humongous engineering and research to do at larger-than-google-scale and we need to do it quickly.",
+      "date_quote": null,
+      "date": "2026-08-21"
+     },
+     {
+      "source_id": "src_721aedb23c",
+      "quote": "one multi-week Devin session fully built a test-system contract and rolled it out service by service",
+      "date_quote": null,
+      "date": null
+     },
+     {
+      "source_id": "src_630ea8707e",
+      "quote": null,
+      "date_quote": null,
+      "date": null
+     },
+     {
+      "source_id": "src_2ebae4d3bf",
+      "quote": "This means we will need to operate at scale that is orders of magnitude larger than what humans search on the web today.",
+      "date_quote": null,
+      "date": "2026-08-21"
+     },
+     {
+      "source_id": "src_dd41ad3861",
+      "quote": "First product launch since joining Exa! ... Exa Snapshots lets you search the web in the past",
+      "date_quote": null,
+      "date": "2026-09-17"
+     },
+     {
+      "source_id": "src_d43f49e7a2",
+      "quote": null,
+      "date_quote": null,
+      "date": "2025-03-25"
+     }
+    ],
+    "claims": [
+     {
+      "text": "Jeff Pinner has joined Exa as CTO",
+      "source_id": "src_9578b57ec0",
+      "quote": "I'm thrilled to announce that Jeff Pinner has joined Exa as CTO."
+     },
+     {
+      "text": "Exa has humongous engineering and research to do at larger-than-google-scale, and needs to do it quickly",
+      "source_id": "src_9578b57ec0",
+      "quote": "Exa has humongous engineering and research to do at larger-than-google-scale and we need to do it quickly."
+     },
+     {
+      "text": "one multi-week Devin session built a test-system contract and rolled it out service by service",
+      "source_id": "src_721aedb23c",
+      "quote": "one multi-week Devin session fully built a test-system contract and rolled it out service by service"
+     },
+     {
+      "text": "Exa Snapshots was his first launch since joining Exa",
+      "source_id": "src_dd41ad3861",
+      "quote": "First product launch since joining Exa! ... Exa Snapshots lets you search the web in the past"
+     },
+     {
+      "text": "Exa will need to operate at scale that is orders of magnitude larger than what humans search on the web today",
+      "source_id": "src_2ebae4d3bf",
+      "quote": "This means we will need to operate at scale that is orders of magnitude larger than what humans search on the web today."
+     }
+    ],
+    "notes": "Economic buyer, new in seat: lead with his own mandate, not a product tour. Expansion motion: Exa's infra team is already a public Devin customer, so frame as scaling what works. LinkedIn follow-up is sendable.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Jeeyoung Kim",
+    "email": {
+     "subject": "Robust pipelines, agent-written code",
+     "body": "Hi Jeeyoung,\n\nI read the Composing a Search Engine post, and the question of how you keep search pipelines robust as most code is written by agents stuck with me.\n\nMy guess is review is now where that pressure lands. Devin picks up the ticket, writes the tests and opens a PR, and Devin Review checks agent-written PRs before they merge. Companies' test coverage typically rises from 50-60% to 80-90% with Devin.\n\nHappy to grab 20 minutes and pick one pipeline service to walk through. Does this week or next work?\n\nBest,"
+    },
+    "linkedin_note": "Hi Jeeyoung, enjoyed the Composing a Search Engine post on keeping search pipelines robust when most code is written by agents. I spend my time with eng leaders working on that review problem. Would be glad to connect.",
+    "linkedin_followup": "Thanks for connecting. Separate from the review question: you posted that Exa is especially in need of infra / platform engineers. When hiring lags the roadmap, teams often hand Devin the platform chores that sit in the queue, like dependency upgrades, broken builds and flaky tests, so the engineers you do hire start on the hard problems. Your team already runs Devin across the whole lifecycle, so setup is largely done. Worth comparing notes on which chores would go first?",
+    "built_from": [
+     {
+      "source_id": "src_dab741f1fa",
+      "quote": "How do we ensure our search pipelines are robust as most code is written by agents?",
+      "date_quote": null,
+      "date": "2026-04-17"
+     },
+     {
+      "source_id": "src_0f8c427244",
+      "quote": null,
+      "date_quote": null,
+      "date": "2025-11-14"
+     },
+     {
+      "source_id": "src_58a2b92837",
+      "quote": "Exa is hiring, but we are especially in need of infra / platform engineers.",
+      "date_quote": null,
+      "date": "2026-01-23"
+     },
+     {
+      "source_id": "src_721aedb23c",
+      "quote": "Devin works across the whole lifecycle, from refining ideas into specs, shipping deployments, and monitoring production metrics.",
+      "date_quote": null,
+      "date": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Composing a Search Engine post",
+      "source_id": "src_dab741f1fa",
+      "quote": "Composing a Search Engine"
+     },
+     {
+      "text": "how you keep search pipelines robust as most code is written by agents",
+      "source_id": "src_dab741f1fa",
+      "quote": "How do we ensure our search pipelines are robust as most code is written by agents?"
+     },
+     {
+      "text": "Exa is especially in need of infra / platform engineers",
+      "source_id": "src_58a2b92837",
+      "quote": "Exa is hiring, but we are especially in need of infra / platform engineers."
+     },
+     {
+      "text": "Your team already runs Devin across the whole lifecycle",
+      "source_id": "src_721aedb23c",
+      "quote": "Devin works across the whole lifecycle, from refining ideas into specs, shipping deployments, and monitoring production metrics."
+     }
+    ],
+    "notes": "Champion angle: her team's own eng blog question, then a test/review mechanism. Different skeleton from the CTO email (no mandate, no peer metric lead). The hiring post is from Jan 2026, so it's a soft hook only. Follow-up is sendable.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "João Adriano",
+    "email": {
+     "subject": "Next wave after the test contract",
+     "body": "Hi João,\n\nYour line in the Devin story stuck with me: if you feel bottlenecked by how many tasks you can do in parallel end-to-end, you need to go to the cloud. The test-system contract rollout across roughly 30 to 40 PRs is the clearest example of that.\n\nMy guess is the next bottleneck is incident load as you provision for Bing-scale traffic. Devin can pick up alerts as they land, investigate, and come back with a PR. At Modal, Devin produces a useful early investigation on 80% of incidents.\n\nWould love 20 minutes to pick the next workstream together. This week or next?\n\nBest,"
+    },
+    "linkedin_note": "Hi João, loved your take in the Devin story on going to the cloud to parallelize end-to-end work. Also saw you're leading the new Exa Zurich office. Would be glad to connect and hear what's next for infra at Exa.",
+    "linkedin_followup": "Thanks for connecting, João. Saw you broke down how your teams evaluate and route models in production at the event GMI Cloud hosted with Notion. Routing changes tend to ripple through evals, configs and tests across many services. Curious whether that kind of change is something you'd hand to Devin next, or whether it stays hands-on for now. Happy to share how other infra teams split that work between people and Devin.",
+    "built_from": [
+     {
+      "source_id": "src_721aedb23c",
+      "quote": "If you want to parallelize more and you feel bottlenecked by the amount of tasks you can do in parallel end-to-end, then you need to go to the cloud, and you need to release some control, and Devin is the best platform to do that.",
+      "date_quote": null,
+      "date": null
+     },
+     {
+      "source_id": "src_721aedb23c",
+      "quote": "built a test-system contract and rolled it out service by service across roughly 30 to 40 PRs",
+      "date_quote": null,
+      "date": null
+     },
+     {
+      "source_id": "src_7766c2f3ef",
+      "quote": "we're already starting to provision for Bing-scale traffic.",
+      "date_quote": null,
+      "date": "2026-08-03"
+     },
+     {
+      "source_id": "src_630ea8707e",
+      "quote": null,
+      "date_quote": null,
+      "date": null
+     },
+     {
+      "source_id": "src_c69d9c937f",
+      "quote": "Felix Kroner and I are opening the new Exa Zurich office, which I will be leading.",
+      "date_quote": null,
+      "date": "2026-03-03"
+     },
+     {
+      "source_id": "src_23747f9ef3",
+      "quote": "Our head of engineer, Yujing Qian shared how GMI Cloud routes prompts to the best-fit model, alongside Hoda Noorian from Notion and João Adriano from Exa, who broke down how their teams evaluate and route models in production.",
+      "date_quote": null,
+      "date": "2026-08-05"
+     }
+    ],
+    "claims": [
+     {
+      "text": "if you feel bottlenecked by how many tasks you can do in parallel end-to-end, you need to go to the cloud",
+      "source_id": "src_721aedb23c",
+      "quote": "If you want to parallelize more and you feel bottlenecked by the amount of tasks you can do in parallel end-to-end, then you need to go to the cloud, and you need to release some control, and Devin is the best platform to do that."
+     },
+     {
+      "text": "The test-system contract rollout across roughly 30 to 40 PRs",
+      "source_id": "src_721aedb23c",
+      "quote": "built a test-system contract and rolled it out service by service across roughly 30 to 40 PRs"
+     },
+     {
+      "text": "you provision for Bing-scale traffic",
+      "source_id": "src_7766c2f3ef",
+      "quote": "we're already starting to provision for Bing-scale traffic."
+     },
+     {
+      "text": "you're leading the new Exa Zurich office",
+      "source_id": "src_c69d9c937f",
+      "quote": "Felix Kroner and I are opening the new Exa Zurich office, which I will be leading."
+     },
+     {
+      "text": "you broke down how your teams evaluate and route models in production at the event GMI Cloud hosted with Notion",
+      "source_id": "src_23747f9ef3",
+      "quote": "Our head of engineer, Yujing Qian shared how GMI Cloud routes prompts to the best-fit model, alongside Hoda Noorian from Notion and João Adriano from Exa, who broke down how their teams evaluate and route models in production."
+     }
+    ],
+    "notes": "Existing user and internal advocate: don't pitch Devin from scratch, pitch the next workstream. Incident angle is an assessment (no stated incident pain). Good source for an internal intro to Pinner. Follow-up is sendable.",
+    "low_confidence": false,
+    "lint": []
+   }
+  ]
+ },
+ "report": {
+  "dropped_count": 0,
+  "dropped": [],
+  "flags": []
+ },
+ "since_last_run": null
+}
