@@ -16,7 +16,8 @@ from docx.text.paragraph import Paragraph
 
 from .briefs import (
     LOW_CONFIDENCE, ROLE, VERDICT, _Sources, _dated, _facts,
-    _one_line, _plain, _url, card_people, wider_people, working_cell, working_fact,
+    _one_line, _plain, _url, card_people, champion_reason, sort_signals, wider_people,
+    working_cell, working_fact,
 )
 from .cache import get_doc
 
@@ -439,7 +440,8 @@ def _person_card(cell: _Cell, p: dict, src: _Sources) -> None:
     role = p["deal_role"]
     _run(badges, ROLE.get(role, role), size=8, bold=True, color=ROLE_INK.get(role, INK))
     if p["label"] == "likely_champion":
-        _run(badges, "   Likely champion", size=8, bold=True, color=CHAMPION_INK)
+        r = champion_reason(p)
+        _run(badges, f"   Likely champion{f' — {r}' if r else ''}", size=8, bold=True, color=CHAMPION_INK)
     if p.get("incumbent_owner"):
         _run(badges, "   Incumbent owner", size=8, bold=True, color=INCUMBENT_INK)
     why = _p(cell, after=20)
@@ -459,7 +461,7 @@ def _signals(doc: Document, b: dict, src: _Sources) -> None:
     if not b["signals"]:
         p = doc.add_paragraph()
         _run(p, "No signals met the bar.", italic=True, color=MUTED)
-    for s in sorted(b["signals"], key=lambda s: s["tier"]):
+    for s in sort_signals(b["signals"]):
         cell = _container(doc, SIGNAL_FILL)
         h = _p(cell, after=20)
         _run(h, s["headline"], size=11, bold=True)

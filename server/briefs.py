@@ -32,6 +32,23 @@ KIND = {"hiring_manager": "hiring manager", "public_pain": "public talk about th
 SOURCE_LABELS = {"job_post": "job post", "leader_hire": "leader hire", "eng_blog": "eng blog",
                  "exec_statement": "exec statement", "news_press": "news/press",
                  "social_post": "social post", "profile": "profile data", "other": "other"}
+# Why someone was badged, in rep words (ex-Devin customer is the strongest reason).
+BADGE_REASON = {"ex_devin_customer": "ex-Devin customer", "hiring_manager": "hiring this work",
+                "public_pain": "talks publicly about the pain"}
+
+
+def champion_reason(p: dict) -> str:
+    for k in BADGE_REASON:
+        if any(c["kind"] == k for c in p.get("champion_evidence") or []):
+            return BADGE_REASON[k]
+    return ""
+
+
+def sort_signals(signals: list[dict]) -> list[dict]:
+    """Tier first; inside a tier, newest dated evidence first."""
+    by_newest = sorted(signals, reverse=True,
+                       key=lambda s: max((e.get("date") or "" for e in s.get("evidence") or []), default=""))
+    return sorted(by_newest, key=lambda s: s["tier"])
 # Single-valued quantities where disagreeing sources get flagged (the playbook's 25% threshold).
 QUANTITATIVE = ("headcount", "revenue", "funding")
 CONFLICT_RATIO = 1.25
@@ -353,7 +370,7 @@ def render_markdown(rec: dict) -> str:
     L += ["## Intent signals", ""]
     if not b["signals"]:
         L.append("No signals met the bar.")
-    for s in sorted(b["signals"], key=lambda s: s["tier"]):
+    for s in sort_signals(b["signals"]):
         who = f" · Who cares: {', '.join(s['who_cares'])}" if s["who_cares"] else ""
         label = SOURCE_LABELS.get(s["source"], s["source"])
         L += [f"**{s['headline']}** — Tier {s['tier']} · {label} · {s['use_case']}{who}"] \
@@ -380,7 +397,8 @@ def render_markdown(rec: dict) -> str:
     for p in cards:
         badges = []
         if p["label"] == "likely_champion":
-            badges.append("**Likely champion**")
+            r = champion_reason(p)
+            badges.append(f"**Likely champion{f' ({r})' if r else ''}**")
         if p.get("incumbent_owner"):
             badges.append("**Incumbent owner**")
         tag = (" · ".join(badges) + " · ") if badges else ""
@@ -466,7 +484,7 @@ def render_slack(rec: dict) -> str:
     L = [f"{b['company_name']} — {VERDICT[v['verdict']] if v else 'No supported verdict'}"]
     if v:
         L.append(f"Why now: {_plain(v['why_now'])}")
-    top = sorted(b["signals"], key=lambda s: s["tier"])[:3]
+    top = sort_signals(b["signals"])[:3]
     if top:
         L.append("Signals:")
         L += [f" • {s['headline']} ({_url(s['evidence'][0]['source_id']) or 'source in doc'})" for s in top]

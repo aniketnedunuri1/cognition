@@ -22,7 +22,9 @@ from .knowledge import match_customers
 from .lint import NUMBER_WORDS, lint_message
 from .verify import normalize, verify_quote
 
-SIGNAL_MAX_MONTHS = {"tactical": 6, "strategic": 12}
+# Signals must be current: ≤6 months across the board. The space moves monthly —
+# a stale exec statement is not a signal, however strategic it sounds.
+SIGNAL_MAX_MONTHS = {"tactical": 6, "strategic": 6}
 
 # Hosts of company-issued documents (filings, press releases). Official only when
 # the document names the company; the company's own domain is always official.
@@ -110,6 +112,9 @@ ChampionKind = Literal["hiring_manager", "public_pain", "ex_devin_customer", "wo
                        "new_in_role", "ai_appetite"]
 # Badge paths: confirmed ex_devin_customer, or senior + public_pain quote, or senior + hiring_manager.
 # works_on_signal / new_in_role / ai_appetite are supporting or hooks only.
+# The badge means "they'll push for Devin internally" — it only makes sense on roles a rep
+# would work. Gatekeepers and parent approvers keep their evidence as lines, never the badge.
+BADGE_ROLES = {"economic_buyer", "champion", "technical_evaluator"}
 DEVIN_USAGE = "ex_devin_customer"
 # Manager+ (incl. VP/C-level) and Staff/Principal ICs. "Lead" alone is not enough.
 SENIOR_TITLE = re.compile(
@@ -444,7 +449,8 @@ class _Validator:
         pain = any(c.kind == "public_pain" and any(e.quote for e in c.evidence) for c in p.champion_evidence)
         hiring = any(c.kind == "hiring_manager" for c in p.champion_evidence)
         senior = self._senior(p)
-        p.label = "likely_champion" if ex or (senior and pain) or (senior and hiring) else "candidate"
+        qualifies = ex or (senior and pain) or (senior and hiring)
+        p.label = "likely_champion" if qualifies and p.deal_role in BADGE_ROLES else "candidate"
 
     def company_post(self, c: CompanyPost, path: str) -> CompanyPost | None:
         if not (c := self.fact(c, path)):
@@ -465,6 +471,11 @@ class _Validator:
         return False
 
     def signal(self, s: Signal, path: str, people: set[str]) -> Signal | None:
+        if re.search(r":\s|\s—\s", s.headline) or re.match(
+                r"(?i)building|driving|accelerating|transforming|scaling|unlocking|leveraging|pioneering", s.headline):
+            self.flags.append({"path": f"{path}.headline",
+                               "flag": "headline reads like a summary, not something a rep would say — "
+                                       "plain words naming the concrete work, no colon-subtitle"})
         s.evidence = self.evidence(s.evidence, f"{path}.evidence", require_quote=True,
                                    max_months=SIGNAL_MAX_MONTHS[s.horizon])
         if not s.evidence:
@@ -647,9 +658,9 @@ def validate_brief(raw: dict, *, today: date | None = None,
         else:
             openings[key] = d.name
 
-    missing = [t.name for t in brief.top_contacts if t.name not in {d.name for d in brief.drafts}]
+    missing = [p.name for p in brief.people if p.featured and p.name not in {d.name for d in brief.drafts}]
     if missing:
-        v.flags.append({"path": "drafts", "flag": f"top contacts without a draft: {missing}"})
+        v.flags.append({"path": "drafts", "flag": f"cards without a draft: {missing}"})
 
     if brief.verdict and brief.verdict.verdict == "act_now":
         tier1 = any(s.tier == 1 for s in brief.signals)

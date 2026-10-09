@@ -54,7 +54,7 @@ def test_signal_needs_verified_recent_quote():
     ]})
     assert len(brief["signals"]) == 1
     reasons = " ".join(d["reason"] for d in report["dropped"])
-    assert "needs an exact quote" in reasons and "failed verification" in reasons and "older than 12 months" in reasons
+    assert "needs an exact quote" in reasons and "failed verification" in reasons and "older than 6 months" in reasons
 
 
 def test_company_linkedin_drops_tags_not_in_source():
@@ -237,6 +237,30 @@ def test_champion_label_needs_strong_evidence(stub):
     junior = {**person("Pat Junior", junior_page), "title": "Software Engineer",
               "champion_evidence": [champ("hiring_manager", junior_page, quote="Pat Junior is the hiring manager")]}
     assert run({"people": [junior]})[0]["people"][0]["label"] == "candidate"
+    # Gatekeepers never get the badge — their evidence stays as lines, not a label.
+    gk = {**person("Phil Burrows", ids["Phil Burrows"], champion_evidence=[champ("hiring_manager", blog)]),
+          "deal_role": "gatekeeper"}
+    kept = run({"people": [gk]})[0]["people"][0]
+    assert kept["label"] == "candidate" and kept["champion_evidence"][0]["kind"] == "hiring_manager"
+
+
+def test_headline_flagged_when_it_reads_like_a_summary():
+    src = web("https://brex.com/blog/fresh")
+    sig = {**tier1_signal(src, []), "headline": "Building AI-assisted QA: test generation and regression selection"}
+    brief, report = run({"signals": [sig]})
+    assert brief["signals"]  # flag only — the signal still stands on its evidence
+    assert any("headline" in f["path"] for f in report["flags"])
+    clean = {**tier1_signal(src, []), "headline": "Java 17 migration"}
+    _, report = run({"signals": [clean]})
+    assert not any("headline" in f["path"] for f in report["flags"])
+
+
+def test_signals_sort_tier_then_newest():
+    from server.briefs import sort_signals
+    sig = lambda tier, *dates: {"tier": tier, "evidence": [{"date": d} for d in dates]}
+    out = sort_signals([sig(3, "2026-09-01"), sig(1, "2026-06-01"), sig(1, "2026-10-01", "2026-05-01"), sig(2)])
+    assert [(s["tier"], max((e["date"] for e in s["evidence"]), default="")) for s in out] == [
+        (1, "2026-10-01"), (1, "2026-06-01"), (2, ""), (3, "2026-09-01")]
 
 
 def test_ex_devin_customer_must_match_profile_history(stub, tmp_path, monkeypatch):
@@ -255,14 +279,14 @@ def test_ex_devin_customer_must_match_profile_history(stub, tmp_path, monkeypatc
 
 
 def test_date_quote_dates_an_undated_source():
-    page = "Building agents: 5 lessons learned. By Graham Fuller, April 2026. We migrated our monolith from Java 8 to Java 17."
+    page = "Building agents: 5 lessons learned. By Graham Fuller, June 2026. We migrated our monolith from Java 8 to Java 17."
     undated = web("https://brex.com/journal/agents", text=page, published=None)
-    # strategic (12 mo): "April 2026" resolves to Apr 1, past the 6-month tactical window by design
+    # strategic (6 mo): "June 2026" resolves to Jun 1, inside the 6-month window by design
     sig = {**tier1_signal(undated, []), "horizon": "strategic",
-           "evidence": [{"source_id": undated, "date_quote": "By Graham Fuller, April 2026",
+           "evidence": [{"source_id": undated, "date_quote": "By Graham Fuller, June 2026",
                                                        "quote": "migrated our monolith from Java 8 to Java 17"}]}
     brief, report = run({"signals": [sig]})
-    assert brief["signals"][0]["tier"] == 1 and brief["signals"][0]["evidence"][0]["date"] == "2026-04-01"
+    assert brief["signals"][0]["tier"] == 1 and brief["signals"][0]["evidence"][0]["date"] == "2026-06-01"
     assert not [f for f in report["flags"] if f["path"] != "org_chart"]
     for bad, flag in (("By Graham Fuller, May 2026", "not verified"), ("Building agents: 5 lessons learned", "exactly one")):
         s2 = {**sig, "evidence": [{**sig["evidence"][0], "date_quote": bad}]}

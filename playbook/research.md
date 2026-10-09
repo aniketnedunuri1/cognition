@@ -44,6 +44,8 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 | Technical evaluator | Staff/Principal Engineer, Architect |
 | Gatekeeper (named, not targeted) | CISO, Head of Security, Procurement |
 
+Two different labels, don't blur them: **`deal_role` is their seat in the deal** — who they are, how you'd approach them. **Likely champion** is a badge the validator sets when there's evidence they'll push for Devin internally (ex-Devin customer; senior + verified public-pain quote; senior + named hiring manager). The badge only renders on economic buyer / champion / technical evaluator cards — a gatekeeper's or approver's supporting evidence stays a line under their name, never the badge. `incumbent_owner` is a risk flag layered on top of any role.
+
 **Entry point by Apollo total headcount.** Bands only set the *order* of the top 3; search every role at every size.
 - **Under 200:** CTO or founder (plus an eng lead if found). 1–2 threads max.
 - **200–2,000:** CTO and VP Eng as buyers; Directors/EMs as champions; Platform/DevProd heads if found. Multi-thread.
@@ -88,7 +90,7 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 **Where to look, in tier order**
 
 *Tier 1 — someone is already trying to solve this:*
-- **Piloting or evaluating a coding agent** (Cursor, Claude Code, Codex, Factory, Copilot agent): eng-blog eval writeups, talks and podcasts describing a PoC, employee posts naming the tool, a JD whose mandate is the eval itself ("own our AI coding tools strategy"), the competitor's own site or case studies naming the account. Searches, `since` = 12 months:
+- **Piloting or evaluating a coding agent** (Cursor, Claude Code, Codex, Factory, Copilot agent): eng-blog eval writeups, talks and podcasts describing a PoC, employee posts naming the tool, a JD whose mandate is the eval itself ("own our AI coding tools strategy"), the competitor's own site or case studies naming the account. Searches, `since` = 6 months:
   - `<company> (Cursor OR "Claude Code" OR Codex OR Factory) (eval OR pilot OR PoC OR testing OR rollout)`
   - `<company> engineering blog coding agents`
   Pilots leak on social first — check indexed LinkedIn posts by their engineers too. Evidence of a *named* competitor also goes in `competitive_context` below; record it in both places.
@@ -98,7 +100,7 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 
 *Tier 2 — the pain is named and owned:*
 - **A named exec states the pain:** "testing is our clearest AI win", "we're migrating X" on an earnings call, podcast or conference talk (`exec_statement`; public companies: `"<company> earnings call AI engineering productivity"`).
-- **Eng blog post describing a specific pain with numbers** — flaky test infra, migration backlog, vuln debt (`eng_blog`). Searches, `since` = 12 months: `"<company> migration"`, `"legacy modernization"`, `"technical debt"`, `"test infrastructure"`.
+- **Eng blog post describing a specific pain with numbers** — flaky test infra, migration backlog, vuln debt (`eng_blog`). Searches, `since` = 6 months: `"<company> migration"`, `"legacy modernization"`, `"technical debt"`, `"test infrastructure"`.
 - **Hiring a leader whose mandate is the problem** — "Head of Developer Productivity", "QE transformation lead", "Director of AI Enablement" (`leader_hire`). Search leader titles explicitly; the leader hire is the signal, the IC posts it spawns are corroborating evidence on the same signal.
 - **Layoffs with an AI tie** and new-leader signals from Stage 2 attach to the person and the account.
 
@@ -109,13 +111,19 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 **The bar. All five, or the signal is dropped:**
 1. **Specific:** concrete work ("moving 40 services off Java 8"), not "they use AI".
 2. **Evidenced:** a verified quote and a dated source. If the source has no publication date, add a `date_quote`: a verbatim byline or dateline from the same page with at least three words, such as "By Graham Fuller, April 2026". Verify it with `verify_quotes` like any quote; it must state exactly one date. A month-only date counts as the 1st of that month.
-3. **Recent:** tactical (job posts, launches, incidents) ≤ 6 months; strategic (mandates, earnings, exec statements) ≤ 12 months.
+3. **Recent:** ≤ 6 months across the board — tactical and strategic both. The space moves monthly; an exec statement from a year ago describes a different company. Prefer the newest dated evidence and the freshest items first.
 4. **Mapped:** to a use-case name copied exactly from `get_positioning().use_cases`.
 5. **Usable:** a rep could say it to the prospect without sounding creepy or generic.
 
 **Excluded by default:** funding alone, generic "hiring engineers", tech stack alone, PR fluff. Plain cost-cutting layoffs with no AI tie are tier 3 at best.
 
 **One initiative = one signal.** All evidence pointing at the same program goes into a single signal: three job posts for the same QE buildout are **one signal with three evidence items**, never three separate signals. Mixed-source clusters take the highest-value `source` label (a leader hire plus the IC posts it spawned → `leader_hire`). If two signals would boil down to the same headline, merge them.
+
+**Headlines are said, not summarized.** Write the headline the way a rep would say it to a colleague — plain words naming the concrete work, ≤ ~12 words, no colon-subtitle, no gerund openers ("Building…", "Driving…"), no consulting-verb stack ("accelerating", "transforming", "leveraging"). The validator flags these shapes.
+- Bad: "Building AI-assisted QA tooling: test generation and regression selection"
+- Good: "New Director of Quality hired to build AI test generation"
+- Bad: "R&D leadership names testing as AI's clearest win"
+- Good: "CRO says testing is where AI dev tools already pay off"
 
 **Tiers**
 - **Tier 1:** a buying motion exists (above). Must be specific, dated and recent — undated evidence caps the signal at tier 2.
@@ -146,7 +154,7 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 
 ## Stage 4: Drafts
 
-**Per contact:** always the top 3 (or the rep's picks).
+**Per contact:** every Who to work card — one draft set per `featured` person (3–5 cards, or the rep's picks). A card exists to be worked: the validator flags any card with no draft.
 - **Email:** subject of 4–6 words; plain-text body of 75–120 words; one ask.
 - **LinkedIn connection note:** at most 300 characters.
 - **LinkedIn follow-up DM:** 400–600 characters, and it doesn't repeat the email.
