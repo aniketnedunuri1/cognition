@@ -12,5 +12,12 @@
    "message": "Hi James,\n\nBrex's write-up on the Micronaut 4 upgrade says one engineer migrated 180 microservices in a month, and that the remainder still needs de-risking because some services had gaps in their test suites.\n\nThat remainder is the kind of work fintech engineering teams hand to Devin. Itaú ran a 6x faster .NET to Java migration of 59 services, and at Ramp, Devin fixes tens of thousands of hours of technical debt.\n\nI'd start from the services still to migrate and the tests they lack, not from anything your team has already shipped.\n\nWould love to grab 20 minutes to chat through if you're interested!\n\nBest,\n[Your Name]",
    "approved": "2026-10-08"
   }
+ ],
+ "technical_evaluator/email": [
+  {
+   "subject": null,
+   "message": "Hi David,\n\nI saw that Gong is building AI tooling for quality engineering, and that your infrastructure team owns a lot of the core Java and Spring Boot frameworks.\n\nDevin works in its own environment. It clones the repo, runs your build and tests, then opens a PR so reviewers see exactly what changed. Teams using it typically take test coverage from 50–60% up to 80–90%.\n\nHappy to chat through how Devin can best support your team.\n\nWould love to chat if you're interested!\n\nBest,\n[Your Name]",
+   "approved": "2026-10-08"
+  }
  ]
 }
