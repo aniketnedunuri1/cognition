@@ -4,5 +4,11 @@
   "scope": "global",
   "evidence": 1,
   "added": "2026-10-08"
+ },
+ {
+  "rule": "Explain Devin through one concrete mechanism in a single sentence (\"picks up the ticket, writes the tests, opens a PR\" / \"clones the repo, runs your build, opens a PR\") — no product adjectives or claims.",
+  "scope": "global",
+  "evidence": 1,
+  "added": "2026-10-08"
  }
 ]
