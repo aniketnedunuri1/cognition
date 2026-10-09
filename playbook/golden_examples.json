@@ -1,0 +1,9 @@
+{
+ "champion/email": [
+  {
+   "subject": null,
+   "message": "Hi Jacob,\n\nI saw that Gong is building AI tooling for quality engineering, starting with Gong Reviewer, and expanding to things like test generation and regression selection.\n\nMy guess is those reviews are now flagging missing tests faster than anyone can write them. That's where Devin comes in - it picks up the ticket, writes the tests and opens a PR for your engineers to review. Litera says its regression cycles got 93% faster after rolling it out.\n\nHappy to connect for 20 minutes. We could pick one service and walk through what that would look like. Do you have time this week or next?\n\nBest,\n[Your Name]",
+   "approved": "2026-10-08"
+  }
+ ]
+}
