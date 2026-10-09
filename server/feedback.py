@@ -11,7 +11,7 @@ from pathlib import Path
 from .cache import ROOT
 from .vcs import commit
 
-DEAL_ROLES = ("economic_buyer", "champion", "technical_evaluator", "gatekeeper", "parent_org_approver")
+DEAL_ROLES = ("economic_buyer", "technical_evaluator", "gatekeeper", "parent_org_approver")
 CHANNELS = ("email", "linkedin_note", "linkedin_followup")
 EXAMPLES_PER_SLOT = 3
 

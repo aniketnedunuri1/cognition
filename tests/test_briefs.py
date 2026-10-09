@@ -40,7 +40,7 @@ FOLLOW = ("Thanks for connecting, Phil. One thing I did not put in my note: on J
 
 def brief(blog, phil, *, with_hook=True, signal=True):
     ev = [{"source_id": blog, "quote": "migrating our monolith from Java 8 to Java 17"}]
-    person = {"name": "Phil Burrows", "title": "Head of Platform & Infra Engineering", "deal_role": "champion",
+    person = {"name": "Phil Burrows", "title": "Head of Platform & Infra Engineering", "deal_role": "technical_evaluator",
               "why": "Leads platform", "evidence": [{"source_id": phil}],
               "hooks": [{"value": "Leads the platform team", "evidence": [{"source_id": blog, "quote": "Phil Burrows leads the platform team"}]}] if with_hook else []}
     return {"company_name": "Brex",
@@ -125,8 +125,8 @@ def test_feedback_rules_and_examples(tmp_path, monkeypatch):
     assert [x["rule"] for x in feedback.get_playbook()["learned_rules"]] == ["Lead with their signal"]
     assert "Lead with their signal" in (tmp_path / "learned_rules.md").read_text()
     for i in range(5):
-        feedback.add_golden_example("champion", "email", f"m{i}", subject="s")
-    assert [e["message"] for e in feedback.get_playbook()["golden_examples"]["champion/email"]] == ["m4", "m3", "m2"]
+        feedback.add_golden_example("technical_evaluator", "email", f"m{i}", subject="s")
+    assert [e["message"] for e in feedback.get_playbook()["golden_examples"]["technical_evaluator/email"]] == ["m4", "m3", "m2"]
 
 
 

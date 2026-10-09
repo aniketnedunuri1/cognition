@@ -21,7 +21,7 @@ def profiles(stub):
 
 
 def person(name, *ids, **kw):
-    return {"name": name, "title": "t", "deal_role": "champion", "why": "w",
+    return {"name": name, "title": "t", "deal_role": "technical_evaluator", "why": "w",
             "evidence": [{"source_id": i} for i in ids], **kw}
 
 
@@ -143,7 +143,7 @@ def test_people_rules(stub):
     assert names == ["Phil Burrows", "Phil Burrows"]
     first, second = brief["people"]
     assert first["verified"] is False and first["label"] == "candidate"
-    assert second["verified"] is True and second["label"] == "likely_champion"  # senior Head + public_pain quote
+    assert second["verified"] is True and second["label"] == "champion"  # senior Head + public_pain quote
     assert first["featured"] is True and second["featured"] is True
     assert first["profile_source_id"] == ids["Phil Burrows"]
     reasons = " ".join(d["reason"] for d in report["dropped"])
@@ -259,9 +259,9 @@ def test_champion_label_needs_strong_evidence(stub):
     phil = lambda *ev: person("Phil Burrows", ids["Phil Burrows"], champion_evidence=list(ev))
     label = lambda raw: run(raw)[0]["people"][0]["label"]
     assert label({"people": [phil(champ("new_in_role", blog), champ("ai_appetite", blog))]}) == "candidate"
-    # Senior Head of Platform + hiring_manager or public_pain quote → likely champion.
-    assert label({"people": [phil(champ("hiring_manager", blog))]}) == "likely_champion"
-    assert label({"people": [phil(champ("public_pain", blog))]}) == "likely_champion"
+    # Senior Head of Platform + hiring_manager or public_pain quote → champion.
+    assert label({"people": [phil(champ("hiring_manager", blog))]}) == "champion"
+    assert label({"people": [phil(champ("public_pain", blog))]}) == "champion"
     # No quote on public_pain: not the badge path, even if senior.
     assert label({"people": [phil({"kind": "public_pain", "value": "talked DX",
                                    "evidence": [{"source_id": blog}]})]}) == "candidate"
@@ -318,7 +318,7 @@ def test_ex_devin_customer_must_match_profile_history(stub, tmp_path, monkeypatc
     assert brief["people"][0]["label"] == "candidate"
     assert "ex_devin_customer not confirmed" in report["dropped"][-1]["reason"]
     (kd / "customers.json").write_text(json.dumps({"customers": [{"name": "Meta", "public_reference": True, "proofs": []}]}))
-    assert run(raw)[0]["people"][0]["label"] == "likely_champion"  # profile history: Engineering Leader at Meta
+    assert run(raw)[0]["people"][0]["label"] == "champion"  # profile history: Engineering Leader at Meta
 
 
 def test_date_quote_dates_an_undated_source():

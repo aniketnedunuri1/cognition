@@ -46,7 +46,7 @@ BUYER = re.compile(
     r"eng.*(svp|vp|vice president)",
     re.I,
 )
-CHAMPION = re.compile(
+PLATFORM = re.compile(
     r"(head|director|senior director|manager).*(platform|developer|devprod|"
     r"devex|productivity|infra|eng|ai|tools|enablement)|"
     r"(platform|developer|devprod|devex|productivity|infra|ai).*(head|director)",
@@ -155,23 +155,23 @@ def deal_role(title: str) -> str:
         return "gatekeeper"
     if BUYER.search(title) or NON_BUYER_EXEC.search(title):
         return "economic_buyer"
-    if CHAMPION.search(title):
-        return "champion"
+    if PLATFORM.search(title):
+        return "technical_evaluator"
     return "influencer"
 
 
 def why_line(title: str, role: str) -> str:
     if role == "economic_buyer":
         return "Likely economic buyer — owns engineering budget and tooling decisions."
-    if role == "champion":
-        return "Likely champion — owns the platform/dev-productivity surface Devin lands on."
+    if role == "technical_evaluator":
+        return "Technical evaluator — owns the platform/dev-productivity surface Devin lands on."
     if role == "gatekeeper":
         return "Gatekeeper — will review security/procurement. Named, not a first touch."
     return "Senior eng leader — likely in the room for a tooling decision."
 
 
 def pick_decision_makers(people: list[dict], *, small_org: bool = False) -> list[dict]:
-    """Dedupe by (name, title); rank buyers first, then champions, by seniority."""
+    """Dedupe by (name, title); rank buyers first, then evaluators, by seniority."""
     seen, cands = set(), []
     for p in people:
         a = p.get("attributes") or {}
@@ -192,7 +192,7 @@ def pick_decision_makers(people: list[dict], *, small_org: bool = False) -> list
             "role": role,
             "rank": LEVEL_RANK.get(a.get("job_level") or "", 0),
         })
-    order = {"economic_buyer": 0, "champion": 1, "influencer": 2, "gatekeeper": 3}
+    order = {"economic_buyer": 0, "technical_evaluator": 1, "influencer": 2, "gatekeeper": 3}
     cands.sort(key=lambda c: (order[c["role"]], -c["rank"]))
     picked = cands[:MAX_DMS]
     if picked and not any(c["role"] == "economic_buyer" for c in picked):

@@ -135,7 +135,7 @@ ChampionKind = Literal["hiring_manager", "public_pain", "ex_devin_customer", "wo
 # works_on_signal / new_in_role / ai_appetite are supporting or hooks only.
 # The badge means "they'll push for Devin internally" — it only makes sense on roles a rep
 # would work. Gatekeepers and parent approvers keep their evidence as lines, never the badge.
-BADGE_ROLES = {"economic_buyer", "champion", "technical_evaluator"}
+BADGE_ROLES = {"economic_buyer", "technical_evaluator"}
 DEVIN_USAGE = "ex_devin_customer"
 # Manager+ (incl. VP/C-level) and Staff/Principal ICs. "Lead" alone is not enough.
 SENIOR_TITLE = re.compile(
@@ -148,7 +148,7 @@ class ChampionEvidence(Fact):
     kind: ChampionKind
 
 
-DealRole = Literal["economic_buyer", "champion", "technical_evaluator", "gatekeeper", "parent_org_approver"]
+DealRole = Literal["economic_buyer", "technical_evaluator", "gatekeeper", "parent_org_approver"]
 
 
 class Person(BaseModel):
@@ -166,7 +166,7 @@ class Person(BaseModel):
     incumbent_owner: bool = False
     # Set by the validator, never by the model:
     verified: bool | None = None
-    label: Literal["likely_champion", "candidate"] | None = None
+    label: Literal["champion", "candidate"] | None = None
     featured: bool | None = None  # Who-to-work card (cap applies here only)
     profile_source_id: str | None = None
     current_basis: Literal["profile", "official_source", "two_sources"] | None = None
@@ -466,7 +466,7 @@ class _Validator:
         return bool(SENIOR_TITLE.search(p.title or ""))
 
     def label(self, p: Person, path: str, tier1_signal_people: set[str]) -> None:
-        """Likely champion = ex-Devin-customer, or senior + verified public_pain quote,
+        """Champion = ex-Devin-customer, or senior + verified public_pain quote,
         or senior + named hiring manager. works_on_signal / new_in_role / ai_appetite
         never earn the badge. works_on_signal not in a tier-1 signal's who_cares → hook."""
         for i, c in enumerate(list(p.champion_evidence)):
@@ -483,7 +483,7 @@ class _Validator:
         hiring = any(c.kind == "hiring_manager" for c in p.champion_evidence)
         senior = self._senior(p)
         qualifies = ex or (senior and pain) or (senior and hiring)
-        p.label = "likely_champion" if qualifies and p.deal_role in BADGE_ROLES else "candidate"
+        p.label = "champion" if qualifies and p.deal_role in BADGE_ROLES else "candidate"
 
     def company_post(self, c: CompanyPost, path: str) -> CompanyPost | None:
         if not (c := self.fact(c, path)):
@@ -554,12 +554,12 @@ def _top_names(raw: dict) -> list[str]:
 
 
 def _person_rank(p: Person, top: list[str], who: set[str], index: int) -> tuple:
-    """Lower is better. Cards: top_contacts, then likely champions, then hooks/signals.
+    """Lower is better. Cards: top_contacts, then champions, then hooks/signals.
     Prefer verified within a tier. Cap applies to cards only — extras stay in people."""
     verified = 0 if p.verified else 1
     if p.name in top:
         return (0, top.index(p.name), verified, index)
-    if p.label == "likely_champion":
+    if p.label == "champion":
         return (1, 0, verified, index)
     if p.incumbent_owner or p.hooks or p.champion_evidence or p.name in who:
         return (2, 0, verified, index)

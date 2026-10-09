@@ -32,7 +32,7 @@ VERDICT_FILL = {"act_now": "DCFCE7", "warm": "FEF3C7", "not_now": "F3F4F6"}
 VERDICT_INK = {"act_now": "166534", "warm": "B45309", "not_now": "4B5563"}
 # Deal role (reuse the same hue everywhere that role appears).
 ROLE_INK = {
-    "economic_buyer": "1E40AF", "champion": "0F766E", "technical_evaluator": "6D28D9",
+    "economic_buyer": "1E40AF", "technical_evaluator": "6D28D9",
     "gatekeeper": "4B5563", "parent_org_approver": "9A3412",
 }
 CHAMPION_INK = "047857"
@@ -441,9 +441,9 @@ def _person_card(cell: _Cell, p: dict, src: _Sources) -> None:
     badges = _p(cell, after=20)
     role = p["deal_role"]
     _run(badges, ROLE.get(role, role), size=8, bold=True, color=ROLE_INK.get(role, INK))
-    if p["label"] == "likely_champion":
+    if p["label"] == "champion":
         r = champion_reason(p)
-        _run(badges, f"   Likely champion{f' — {r}' if r else ''}", size=8, bold=True, color=CHAMPION_INK)
+        _run(badges, f"   Champion{f' — {r}' if r else ''}", size=8, bold=True, color=CHAMPION_INK)
     if p.get("incumbent_owner"):
         _run(badges, "   Incumbent owner", size=8, bold=True, color=INCUMBENT_INK)
     why = _p(cell, after=20)

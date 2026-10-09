@@ -40,15 +40,14 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 | Deal role | Titles to search |
 |---|---|
 | Economic buyer | CTO, SVP/VP Engineering, CIO, Chief AI Officer, Head of AI |
-| Champion | Head/Director of Platform, Developer Productivity, DevEx, Engineering Enablement; EMs running migrations |
-| Technical evaluator | Staff/Principal Engineer, Architect |
+| Technical evaluator | Staff/Principal Engineer, Architect; Head/Director of Platform, Developer Productivity, DevEx, Engineering Enablement; EMs running migrations |
 | Gatekeeper (named, not targeted) | CISO, Head of Security, Procurement |
 
-Two different labels, don't blur them: **`deal_role` is their seat in the deal** — who they are, how you'd approach them. **Likely champion** is a badge the validator sets when there's evidence they'll push for Devin internally (ex-Devin customer; senior + verified public-pain quote; senior + named hiring manager). The badge only renders on economic buyer / champion / technical evaluator cards — a gatekeeper's or approver's supporting evidence stays a line under their name, never the badge. `incumbent_owner` is a risk flag layered on top of any role.
+Two different labels, don't blur them: **`deal_role` is their seat in the deal** — who they are, how you'd approach them. **Champion** is a badge the validator sets when there's evidence they'll push for Devin internally (ex-Devin customer; senior + verified public-pain quote; senior + named hiring manager). The badge only renders on economic buyer / technical evaluator cards — a gatekeeper's or approver's supporting evidence stays a line under their name, never the badge. `incumbent_owner` is a risk flag layered on top of any role.
 
 **Entry point by Apollo total headcount.** Bands only set the *order* of the top 3; search every role at every size.
 - **Under 200:** CTO or founder (plus an eng lead if found). 1–2 threads max.
-- **200–2,000:** CTO and VP Eng as buyers; Directors/EMs as champions; Platform/DevProd heads if found. Multi-thread.
+- **200–2,000:** CTO and VP Eng as buyers; Directors/EMs and Platform/DevProd heads as evaluators. Multi-thread.
 - **Over 2,000:** enter via Heads of Platform / DevProd / DevEx / AI enablement and BU VPs/SVPs of Eng; CTO as exec sponsor. In non-tech enterprises (banks, insurance, retail) include the CIO as likely budget owner. Parent-company gatekeepers when applicable.
 
 **Steps**
@@ -57,7 +56,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
    - `is_current: true` → keep.
    - `false` or `"unknown"` → list only with an official company source (their site, a filing, a press release) or a second independent source.
    - A former employee is never listed as current.
-3. **Champion evidence.** Each item has a `kind`. The validator sets the label *Likely champion* when any of these hold:
+3. **Champion evidence.** Each item has a `kind`. The validator sets the label *Champion* when any of these hold:
    - `ex_devin_customer`: from `ex_devin_customers` in `search_people` (matched in code; the validator re-checks the profile history). We cannot prove they personally ran Devin — only that they worked at a Devin customer. Name the customer to the rep only if `public_reference` is true.
    - Senior title **and** `public_pain`: profile title is Manager+/Staff/Principal/Director/Head (or VP/C-level), plus a **verified quote** about the exact pain (migrations, tech debt, test coverage, DX). No quote → not this path.
    - Senior title **and** `hiring_manager`: named hiring manager on a relevant engineering job post (`fetch_page` on the post).
@@ -65,7 +64,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
      - `works_on_signal`: on the team behind a **tier-1** signal and listed in its `who_cares`. If they aren't, the validator keeps it as a hook.
      - `new_in_role`: `months_in_role` ≤ 6
      - `ai_appetite`: posts about AI coding tools, or an AI-enablement title. An AI title is not a champion.
-4. **Incumbent owner.** If they are rolling out or expanding Cursor, Claude Code, Copilot coding agent, or an in-house agent platform, set `incumbent_owner: true` and say so in `why` / a hook. That is a blocker risk, not a likely champion. They can be both (ex-Devin-customer *and* incumbent). Do not pitch "have you tried agents?"
+4. **Incumbent owner.** If they are rolling out or expanding Cursor, Claude Code, Copilot coding agent, or an in-house agent platform, set `incumbent_owner: true` and say so in `why` / a hook. That is a blocker risk, not a champion. They can be both (ex-Devin-customer *and* incumbent). Do not pitch "have you tried agents?"
 5. **Hooks.**
    - Per person you will put on a **Who to work** card: `search_web("<name> <company> (post OR talk OR interview OR podcast)", include_domains=["linkedin.com"])`. That restriction returns indexed LinkedIn posts, talks and podcasts — use a hit as a hook only when the quote verifies.
    - Company news and mentions via Exa: `search_web("<company> LinkedIn news OR announcement", include_domains=["linkedin.com"])` plus the Stage 1 / Stage 3 news searches (no domain filter) for press mentions.
@@ -75,7 +74,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
      - Nothing indexed → `company_linkedin: []`; the section renders as "Not found". No placeholder.
 6. **Teams:** as their own profiles describe it. **Org chart is required on every account:** call `get_org_chart(domain, people)` exactly once (it costs ~50–100 Sumble credits), passing your `people` as `[{name, linkedin_url}]` from their profile source URLs, and set `brief.org_chart` to its `source_id`. `save_brief` flags a missing org chart, so skipping it never passes silently. It anchors each matched person in Sumble's inferred org (manager + up to 5 direct reports) and renders a separate section — labeled as Sumble inference, not confirmed. Anchors it picked itself are marked "Sumble only — not yet sourced"; Sumble people are *not* added to `people`/`top_contacts` on the org chart's say-so alone.
 7. **Subsidiaries:** `search_people(<parent>, ["CISO", "Procurement", "CTO"])` gives likely approvers, listed as gatekeepers.
-8. **Limits.** Search wide; list every **verified** person you found in `brief.people` (with `team` as the profile describes it). **3–5 Who to work cards** (page one): keep `top_contacts` first (max 3), then likely champions, incumbent owners, people with a hook, or a signal `who_cares` hit. **Drop title-only names from the cards.** The validator caps **cards** at 5 (`featured`); everyone else stays in `people` for the wider table. Prefer verified.
+8. **Limits.** Search wide; list every **verified** person you found in `brief.people` (with `team` as the profile describes it). **3–5 Who to work cards** (page one): keep `top_contacts` first (max 3), then champions, incumbent owners, people with a hook, or a signal `who_cares` hit. **Drop title-only names from the cards.** The validator caps **cards** at 5 (`featured`); everyone else stays in `people` for the wider table. Prefer verified.
 9. **Top 3 to contact first,** ordered by the entry-point band. One line of why each, citing evidence.
 
 ---

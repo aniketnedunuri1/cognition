@@ -22,7 +22,7 @@ from .schema import validate_brief
 from .verify import normalize
 
 VERDICT = {"act_now": "Act now", "warm": "Warm", "not_now": "Not now"}
-ROLE = {"economic_buyer": "Economic buyer", "champion": "Champion",
+ROLE = {"economic_buyer": "Economic buyer",
         "technical_evaluator": "Technical evaluator", "gatekeeper": "Gatekeeper",
         "parent_org_approver": "Parent-company approver"}
 LOW_CONFIDENCE = "Low-confidence draft: no personal signal or hook found."
@@ -161,6 +161,11 @@ def _migrate(brief: dict) -> dict:
             s["tier"] = 1 if s.pop("strength", None) == "strong" else 2
             s.pop("strength", None)
         s.setdefault("source", "other")
+    for p in brief.get("people") or []:
+        if p.get("deal_role") == "champion":  # the seat is folded into technical_evaluator
+            p["deal_role"] = "technical_evaluator"
+        if p.get("label") == "likely_champion":
+            p["label"] = "champion"
     return brief
 
 
@@ -418,9 +423,9 @@ def render_markdown(rec: dict) -> str:
         L += ["Not found", ""]
     for p in cards:
         badges = []
-        if p["label"] == "likely_champion":
+        if p["label"] == "champion":
             r = champion_reason(p)
-            badges.append(f"**Likely champion{f' ({r})' if r else ''}**")
+            badges.append(f"**Champion{f' ({r})' if r else ''}**")
         if p.get("incumbent_owner"):
             badges.append("**Incumbent owner**")
         tag = (" · ".join(badges) + " · ") if badges else ""
