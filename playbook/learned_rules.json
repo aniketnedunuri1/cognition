@@ -22,5 +22,11 @@
   "scope": "global",
   "evidence": 1,
   "added": "2026-10-08"
+ },
+ {
+  "rule": "Keep emails to 3 short paragraphs, no bullets, no jargon. Conversational tone: contractions, \"My guess is\", \"Would love to\". Sign off \"Best, [Your Name]\".",
+  "scope": "global",
+  "evidence": 1,
+  "added": "2026-10-08"
  }
 ]
