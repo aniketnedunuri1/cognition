@@ -36,7 +36,13 @@
   "added": "2026-10-09"
  },
  {
-  "rule": "Never quote a contact's own press release, announcement or LinkedIn bio back at them verbatim. Paraphrase and add a take (why it matters, what it likely means for their backlog); verbatim echo reads as a search snippet, not homework.",
+  "rule": "Paraphrase what a contact said rather than quoting it back; a verbatim quote reads as research, not conversation, and never echo their own press release verbatim. Quote the artifact, not the person: keep their numbers and named programs exact.",
+  "scope": "global",
+  "evidence": 1,
+  "added": "2026-10-09"
+ },
+ {
+  "rule": "An email may contain at most one link, and only when it backs a stat or source the draft quotes or paraphrases (their write-up, the peer case study). Zero links is fine; two or more reads as spammy. Same cap applies to LinkedIn notes and follow-ups, where no link is usually better.",
   "scope": "global",
   "evidence": 1,
   "added": "2026-10-09"
