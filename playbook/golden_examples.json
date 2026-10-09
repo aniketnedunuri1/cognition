@@ -5,5 +5,12 @@
    "message": "Hi Jacob,\n\nI saw that Gong is building AI tooling for quality engineering, starting with Gong Reviewer, and expanding to things like test generation and regression selection.\n\nMy guess is those reviews are now flagging missing tests faster than anyone can write them. That's where Devin comes in - it picks up the ticket, writes the tests and opens a PR for your engineers to review. Litera says its regression cycles got 93% faster after rolling it out.\n\nHappy to connect for 20 minutes. We could pick one service and walk through what that would look like. Do you have time this week or next?\n\nBest,\n[Your Name]",
    "approved": "2026-10-08"
   }
+ ],
+ "economic_buyer/email": [
+  {
+   "subject": null,
+   "message": "Hi James,\n\nBrex's write-up on the Micronaut 4 upgrade says one engineer migrated 180 microservices in a month, and that the remainder still needs de-risking because some services had gaps in their test suites.\n\nThat remainder is the kind of work fintech engineering teams hand to Devin. Itaú ran a 6x faster .NET to Java migration of 59 services, and at Ramp, Devin fixes tens of thousands of hours of technical debt.\n\nI'd start from the services still to migrate and the tests they lack, not from anything your team has already shipped.\n\nWould love to grab 20 minutes to chat through if you're interested!\n\nBest,\n[Your Name]",
+   "approved": "2026-10-08"
+  }
  ]
 }
