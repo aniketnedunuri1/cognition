@@ -36,7 +36,10 @@ ROLE_INK = {
 }
 CHAMPION_INK = "047857"
 INCUMBENT_INK = "B91C1C"
-SIGNAL_INK = {"strong": "1D4ED8", "medium": "64748B"}
+SIGNAL_INK = {1: "1D4ED8", 2: "64748B", 3: "94A3B8"}
+SOURCE_LABELS = {"job_post": "job post", "leader_hire": "leader hire", "eng_blog": "eng blog",
+                 "exec_statement": "exec statement", "news_press": "news/press",
+                 "social_post": "social post", "profile": "profile data", "other": "other"}
 CARD = "F8FAFC"
 DRAFT = "F8FAFC"
 NOTES = "F3F4F6"
@@ -456,12 +459,13 @@ def _signals(doc: Document, b: dict, src: _Sources) -> None:
     if not b["signals"]:
         p = doc.add_paragraph()
         _run(p, "No signals met the bar.", italic=True, color=MUTED)
-    for s in sorted(b["signals"], key=lambda s: s["strength"] != "strong"):
+    for s in sorted(b["signals"], key=lambda s: s["tier"]):
         cell = _container(doc, SIGNAL_FILL)
         h = _p(cell, after=20)
         _run(h, s["headline"], size=11, bold=True)
         meta = _p(cell, after=40)
-        _run(meta, s["strength"], size=8, bold=True, color=SIGNAL_INK[s["strength"]])
+        _run(meta, f"Tier {s['tier']}", size=8, bold=True, color=SIGNAL_INK[s["tier"]])
+        _run(meta, f"  ·  {SOURCE_LABELS.get(s['source'], s['source'])}", size=8, color=MUTED)
         _run(meta, f"  ·  {s['use_case']}", size=9, color=MUTED)
         if s["who_cares"]:
             _run(meta, f"  ·  Who cares: {', '.join(s['who_cares'])}", size=9, color=MUTED)

@@ -46,7 +46,8 @@ def brief(blog, phil, *, with_hook=True, signal=True):
     return {"company_name": "Brex",
             "verdict": {"verdict": "act_now", "why_now": "Java 17 migration underway", "based_on": ev},
             "signals": [{"headline": "Java 8 → 17 migration this quarter", "type": "migration", "horizon": "tactical",
-                         "evidence": ev, "use_case": "Code migration & modernization", "strength": "strong",
+                         "evidence": ev, "use_case": "Code migration & modernization",
+                         "source": "eng_blog", "tier": 1,
                          "who_cares": []}] if signal else [],
             "people": [person],
             "top_contacts": [{"name": "Phil Burrows", "why": {"text": "Owns the migration", "based_on": [{"source_id": phil}]}}],
@@ -66,6 +67,23 @@ def test_save_render_and_slack(env):
     assert "https://brex.com/blog/java" in md and "[LinkedIn](https://linkedin.com/in/phil-burrows)" in md
     assert "Act now" in out["slack_summary"] and "https://brex.com/blog/java" in out["slack_summary"]
     assert briefs.get_last_brief("brex.com")["found"]
+
+
+def test_get_last_brief_migrates_old_signals(env):
+    blog, phil = env
+    briefs.save_brief("brex.com", brief(blog, phil))
+    path = next((briefs.bdir() / "brex.com").glob("*.json"))
+    rec = json.loads(path.read_text())
+    rec["brief"]["signals"][0].pop("tier")
+    rec["brief"]["signals"][0].pop("source")
+    rec["brief"]["signals"][0]["strength"] = "strong"
+    path.write_text(json.dumps(rec))
+    last = briefs.get_last_brief("brex.com")["brief"]
+    s = last["signals"][0]
+    assert s["tier"] == 1 and s["source"] == "other" and "strength" not in s
+    # The migrated brief re-validates instead of dropping its signals.
+    clean, report = briefs.validate_brief(last, use_cases=None)
+    assert clean["signals"][0]["tier"] == 1
 
 
 def test_low_confidence_label_set_by_validator(env):

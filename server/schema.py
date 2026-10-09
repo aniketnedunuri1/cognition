@@ -81,15 +81,24 @@ class Engineering(BaseModel):
 SignalType = Literal["migration", "tech_debt", "quality_security", "ai_mandate",
                      "leadership_change", "hiring_composition", "layoffs_ai"]
 
+# Where the evidence comes from. leader_hire = a JD for a leader whose mandate is
+# the problem (tier 2); job_post = IC job posts (always tier 3). profile = people
+# data, e.g. a champion move (ex-Devin customer lands in the account).
+SignalSource = Literal["job_post", "leader_hire", "eng_blog", "exec_statement",
+                       "news_press", "social_post", "profile", "other"]
+
 
 class Signal(BaseModel):
     headline: str
     type: SignalType
+    source: SignalSource
     horizon: Literal["tactical", "strategic"]
     evidence: list[Evidence] = Field(min_length=1)  # every item needs a quote
     use_case: str
     who_cares: list[str] = []  # names from people
-    strength: Literal["strong", "medium"]
+    # Predictive value: 1 = a buying motion exists, 2 = the pain is named and
+    # owned, 3 = corroborating only (never triggers the verdict alone).
+    tier: Literal[1, 2, 3]
 
 
 class CompetitiveItem(Fact):
@@ -418,17 +427,17 @@ class _Validator:
             return any(SENIOR_TITLE.search(t) for t in titles)
         return bool(SENIOR_TITLE.search(p.title or ""))
 
-    def label(self, p: Person, path: str, strong_signal_people: set[str]) -> None:
+    def label(self, p: Person, path: str, tier1_signal_people: set[str]) -> None:
         """Likely champion = ex-Devin-customer, or senior + verified public_pain quote,
         or senior + named hiring manager. works_on_signal / new_in_role / ai_appetite
-        never earn the badge. works_on_signal not in a strong signal's who_cares → hook."""
+        never earn the badge. works_on_signal not in a tier-1 signal's who_cares → hook."""
         for i, c in enumerate(list(p.champion_evidence)):
             if c.kind != "works_on_signal":
                 continue
-            if p.name in strong_signal_people:
+            if p.name in tier1_signal_people:
                 continue
             self.flags.append({"path": f"{path}.champion_evidence[{i}]",
-                               "flag": "works_on_signal kept as a hook: not in a strong signal's who_cares"})
+                               "flag": "works_on_signal kept as a hook: not in a tier-1 signal's who_cares"})
             p.champion_evidence.remove(c)
             p.hooks.append(Fact(value=c.value, evidence=c.evidence))
         ex = any(c.kind == DEVIN_USAGE for c in p.champion_evidence)
@@ -461,9 +470,13 @@ class _Validator:
         if not s.evidence:
             self.drop(path, "no valid evidence left")
             return None
-        if s.strength == "strong" and not any(e.date for e in s.evidence):
-            s.strength = "medium"
-            self.flags.append({"path": f"{path}.strength", "flag": "capped at medium: no dated evidence"})
+        if s.tier == 1 and not any(e.date for e in s.evidence):
+            s.tier = 2
+            self.flags.append({"path": f"{path}.tier", "flag": "capped at tier 2: no dated evidence"})
+        if s.source == "job_post" and s.tier != 3:
+            s.tier = 3
+            self.flags.append({"path": f"{path}.tier", "flag": "capped at tier 3: IC job posts are "
+                                                               "corroborating (leader hires use source=leader_hire)"})
         if self.use_cases is not None and s.use_case.lower() not in self.use_cases:
             self.drop(path, f"use case {s.use_case!r} is not in knowledge/use_cases")
             return None
@@ -533,9 +546,9 @@ def validate_brief(raw: dict, *, today: date | None = None,
 
     brief.signals = [s for i, x in _parse_list(raw.get("signals"), Signal, "signals", v)
                      if (s := v.signal(x, f"signals[{i}]", names))]
-    strong_people = {n for s in brief.signals if s.strength == "strong" for n in s.who_cares}
+    tier1_people = {n for s in brief.signals if s.tier == 1 for n in s.who_cares}
     for i, p in enumerate(brief.people):
-        v.label(p, f"people[{i}]", strong_people)
+        v.label(p, f"people[{i}]", tier1_people)
     who = {n for s in brief.signals for n in s.who_cares}
     top = _top_names(raw)
     ranked = sorted(enumerate(brief.people), key=lambda ip: _person_rank(ip[1], top, who, ip[0]))
@@ -567,6 +580,9 @@ def validate_brief(raw: dict, *, today: date | None = None,
             brief.org_chart = sid
         else:
             v.drop("org_chart", f"{sid!r} is not a cached Sumble org chart (call get_org_chart first)")
+    else:
+        v.flags.append({"path": "org_chart",
+                        "flag": "no org chart — get_org_chart(domain, people) is required once per account"})
 
     if raw.get("verdict"):
         try:
@@ -636,12 +652,12 @@ def validate_brief(raw: dict, *, today: date | None = None,
         v.flags.append({"path": "drafts", "flag": f"top contacts without a draft: {missing}"})
 
     if brief.verdict and brief.verdict.verdict == "act_now":
-        strong = any(s.strength == "strong" for s in brief.signals)
+        tier1 = any(s.tier == 1 for s in brief.signals)
         reachable = any(p.current_basis for p in brief.people if p.name in anchored)
         piloting = any(c.situation == "piloting_competitor" for c in brief.competitive_context)
         in_prod = any(c.situation == "competitor_in_production" for c in brief.competitive_context)
-        if not piloting and not (strong and reachable):
-            v.flags.append({"path": "verdict", "flag": "act_now needs a strong signal + a reachable contact "
+        if not piloting and not (tier1 and reachable):
+            v.flags.append({"path": "verdict", "flag": "act_now needs a tier-1 signal + a reachable contact "
                                                       "(verified current with a hook or signal), or a competitor pilot"})
         elif in_prod and not piloting:
             v.flags.append({"path": "verdict", "flag": "a direct competitor in production defaults to Warm "

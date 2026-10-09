@@ -27,8 +27,11 @@ ROLE = {"economic_buyer": "Economic buyer", "champion": "Champion",
         "parent_org_approver": "Parent-company approver"}
 LOW_CONFIDENCE = "Low-confidence draft: no personal signal or hook found."
 KIND = {"hiring_manager": "hiring manager", "public_pain": "public talk about the pain",
-        "ex_devin_customer": "ex-Devin customer", "works_on_signal": "works on a strong signal (supporting)",
+        "ex_devin_customer": "ex-Devin customer", "works_on_signal": "works on a tier-1 signal (supporting)",
         "new_in_role": "new in role (supporting)", "ai_appetite": "AI appetite (supporting)"}
+SOURCE_LABELS = {"job_post": "job post", "leader_hire": "leader hire", "eng_blog": "eng blog",
+                 "exec_statement": "exec statement", "news_press": "news/press",
+                 "social_post": "social post", "profile": "profile data", "other": "other"}
 # Single-valued quantities where disagreeing sources get flagged (the playbook's 25% threshold).
 QUANTITATIVE = ("headcount", "revenue", "funding")
 CONFLICT_RATIO = 1.25
@@ -130,12 +133,23 @@ def _rel(path: Path) -> str:
     return str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
 
 
+def _migrate(brief: dict) -> dict:
+    """Upgrade older saved briefs to the current schema so they can be merged and
+    re-saved. Signals: strength strong/medium → tier 1/2, missing source → other."""
+    for s in brief.get("signals") or []:
+        if "tier" not in s:
+            s["tier"] = 1 if s.pop("strength", None) == "strong" else 2
+            s.pop("strength", None)
+        s.setdefault("source", "other")
+    return brief
+
+
 def get_last_brief(domain: str) -> dict:
     files = _saved(domain)
     if not files:
         return {"found": False, "domain": normalize_domain(domain)}
     rec = json.loads(files[-1].read_text())
-    return {"found": True, "date": rec["date"], "brief": rec["brief"]}
+    return {"found": True, "date": rec["date"], "brief": _migrate(rec["brief"])}
 
 
 def load_record(domain: str, day: str | None = None) -> tuple[Path, dict] | None:
@@ -339,9 +353,11 @@ def render_markdown(rec: dict) -> str:
     L += ["## Intent signals", ""]
     if not b["signals"]:
         L.append("No signals met the bar.")
-    for s in sorted(b["signals"], key=lambda s: s["strength"] != "strong"):
+    for s in sorted(b["signals"], key=lambda s: s["tier"]):
         who = f" · Who cares: {', '.join(s['who_cares'])}" if s["who_cares"] else ""
-        L += [f"**{s['headline']}** — {s['strength']} · {s['use_case']}{who}"] + _quotes(src, s["evidence"], dates=True) + [""]
+        label = SOURCE_LABELS.get(s["source"], s["source"])
+        L += [f"**{s['headline']}** — Tier {s['tier']} · {label} · {s['use_case']}{who}"] \
+            + _quotes(src, s["evidence"], dates=True) + [""]
     if b["competitive_context"]:
         L += ["**Competitive context**", ""]
         L += [f"- {c['value']} ({c['situation'].replace('_', ' ')}) {src.cite(c['evidence'])}" for c in b["competitive_context"]]
@@ -450,7 +466,7 @@ def render_slack(rec: dict) -> str:
     L = [f"{b['company_name']} — {VERDICT[v['verdict']] if v else 'No supported verdict'}"]
     if v:
         L.append(f"Why now: {_plain(v['why_now'])}")
-    top = sorted(b["signals"], key=lambda s: s["strength"] != "strong")[:3]
+    top = sorted(b["signals"], key=lambda s: s["tier"])[:3]
     if top:
         L.append("Signals:")
         L += [f" • {s['headline']} ({_url(s['evidence'][0]['source_id']) or 'source in doc'})" for s in top]

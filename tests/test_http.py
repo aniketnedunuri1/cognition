@@ -70,7 +70,9 @@ def test_gen_devin_playbook_includes_macro_and_mcp_steps():
     out = subprocess.check_output([sys.executable, str(script)], cwd=ROOT, text=True)
     assert "!account-research" in out
     assert "@Devin !account-research acme.com" in out
+    assert "!feedback" in out and "!refresh-positioning" in out
     assert "Add custom MCP" in out
     assert "Authorization: Bearer" in out
     assert "organization" in out
-    assert (ROOT / "playbook" / "playbook.md").read_text() in out
+    for name in ("shared", "research", "feedback", "positioning"):
+        assert (ROOT / "playbook" / f"{name}.md").read_text() in out

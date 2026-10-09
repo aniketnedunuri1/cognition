@@ -20,8 +20,8 @@ cache/*
 .DS_Store
 *.egg-info/
 
-# Generated Devin Playbook text (rebuild from playbook/playbook.md)
-playbook/devin_playbook.generated.md
+# Generated Devin Playbook text (rebuild from playbook/)
+playbook/devin_*.generated.md
 .cloudflared-devin.log
 
 # Word lock files + generated org-chart docs

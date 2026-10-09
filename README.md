@@ -81,17 +81,26 @@ Copy from the script output:
 3. Header: `Authorization: Bearer <MCP_AUTH_TOKEN>`
 4. Scope: **organization** (Slack-triggered sessions need org scope)
 
-### 3. Create the Playbook
+### 3. Create the Playbooks
 
-Generate the Playbook text from `playbook/playbook.md` (do not hand-edit a duplicate):
+The playbook is split three ways so each session loads only what it needs;
+`playbook/shared.md` is prepended to each generated text:
+
+| File | Devin Playbook macro | Purpose |
+|---|---|---|
+| `playbook/research.md` | `!account-research` | Stages 0–4, one account or one `--stage` |
+| `playbook/feedback.md` | `!feedback` | Rep feedback → learned rules / golden examples |
+| `playbook/positioning.md` | `!refresh-positioning` | Scheduled knowledge refresh |
+
+Generate all three texts (do not hand-edit a duplicate):
 
 ```bash
 uv run python scripts/gen_devin_playbook.py
-# or write a gitignored copy:
+# or write gitignored copies:
 uv run python scripts/gen_devin_playbook.py --out
 ```
 
-In Devin, create a Playbook with macro `!account-research` and paste that generated text **after** playbook changes on this branch have landed (regenerate if `playbook/playbook.md` moved).
+In Devin, create one Playbook per macro and paste each generated text **after** playbook changes on this branch have landed (regenerate if `playbook/` changed).
 
 Slack:
 

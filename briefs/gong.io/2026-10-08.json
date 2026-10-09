@@ -1,0 +1,1140 @@
+{
+ "domain": "gong.io",
+ "date": "2026-10-08",
+ "saved_at": "2026-10-09T00:23:02+00:00",
+ "brief": {
+  "domain": "gong.io",
+  "company_name": "Gong",
+  "verdict": {
+   "verdict": "warm",
+   "why_now": "Gong is hiring a DevEx lead to evaluate and scale AI dev tools and a Director of Quality to build AI test generation, but Claude Code is already in production, so the angle is expanding into delegated test and cross-repo work rather than introducing agents.",
+   "based_on": [
+    {
+     "source_id": "src_b70d782993",
+     "quote": "Evaluate, operationalize, and scale emerging AI capabilities while ensuring they are adopted safely, effectively, and in ways that create measurable impact across R&D.",
+     "date_quote": null,
+     "date": "2026-09-21"
+    },
+    {
+     "source_id": "src_1b41e80887",
+     "quote": "Experience with AI-assisted quality workflows, test generation, or regression-selection workflows.",
+     "date_quote": null,
+     "date": "2026-09-23"
+    },
+    {
+     "source_id": "src_65da2ffe42",
+     "quote": "within three months, about 50% of our developers were already using it",
+     "date_quote": null,
+     "date": "2025-11-27"
+    },
+    {
+     "source_id": "src_c17bc4f906",
+     "quote": "Ohad comes to us from Gong, where he spent six years leading R&D",
+     "date_quote": null,
+     "date": "2026-09-09"
+    }
+   ],
+   "watch_for": "Who takes over R&D after the Chief R&D Officer's move to DriveNets (a new leader in the first 90 days is a budget-cycle opening), and who is hired into the DevEx Team Lead and Director of Quality roles."
+  },
+  "snapshot": {
+   "hq": [
+    {
+     "value": "Apollo reports San Francisco, California, United States",
+     "evidence": [
+      {
+       "source_id": "src_858dd42aa2",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "founded": [
+    {
+     "value": "Apollo reports 2015",
+     "evidence": [
+      {
+       "source_id": "src_858dd42aa2",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "industry": [
+    {
+     "value": "Apollo reports information technology & services",
+     "evidence": [
+      {
+       "source_id": "src_858dd42aa2",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "ownership": [],
+   "parent_company": [],
+   "headcount": [
+    {
+     "value": "Apollo reports ~2,100 employees",
+     "evidence": [
+      {
+       "source_id": "src_858dd42aa2",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "GetLatka reports 2,248 employees (late 2025)",
+     "evidence": [
+      {
+       "source_id": "src_62947f3eb6",
+       "quote": "2,248 employees, late 2025",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "headcount_growth": [
+    {
+     "value": "Apollo reports +9.0% over 6 months, +31.7% over 12 months",
+     "evidence": [
+      {
+       "source_id": "src_858dd42aa2",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "revenue": [
+    {
+     "value": "Apollo reports ~$500M annual revenue",
+     "evidence": [
+      {
+       "source_id": "src_858dd42aa2",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "Gong reports ARR has surpassed $500M",
+     "evidence": [
+      {
+       "source_id": "src_2ed7c9f2a4",
+       "quote": "Annual recurring revenue (ARR) has now surpassed $500 million.",
+       "date_quote": null,
+       "date": "2026-05-12"
+      }
+     ]
+    }
+   ],
+   "funding": [
+    {
+     "value": "Apollo reports $588.1M total funding",
+     "evidence": [
+      {
+       "source_id": "src_858dd42aa2",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "sells_to": [
+    {
+     "value": "Revenue teams: Gong says it helps more than 5,000 companies understand their teams and customers, automate sales workflows and close more deals.",
+     "evidence": [
+      {
+       "source_id": "src_1b41e80887",
+       "quote": "Gong helps more than 5,000 companies around the world deeply understand their teams and customers, automate critical sales workflows, and close more deals with less effort.",
+       "date_quote": null,
+       "date": "2026-09-23"
+      }
+     ]
+    }
+   ],
+   "products": [
+    {
+     "value": "Revenue AI platform built on the Gong Revenue Graph, with AI intelligence, specialized agents and applications",
+     "evidence": [
+      {
+       "source_id": "src_1b41e80887",
+       "quote": "Powered by the Gong Revenue Graph, AI-powered intelligence, specialized agents, and trusted applications",
+       "date_quote": null,
+       "date": "2026-09-23"
+      }
+     ]
+    }
+   ]
+  },
+  "engineering": {
+   "eng_headcount": [
+    {
+     "value": "Apollo reports ~487 in engineering",
+     "evidence": [
+      {
+       "source_id": "src_858dd42aa2",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "open_eng_roles": [
+    {
+     "value": "Engineering roles open include Director of Quality, Developer Experience Team Lead, Software Architect (AI Applications), Application Infrastructure Team Lead and DevOps Engineering Manager",
+     "evidence": [
+      {
+       "source_id": "src_1b41e80887",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-09-23"
+      },
+      {
+       "source_id": "src_b70d782993",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-09-21"
+      },
+      {
+       "source_id": "src_589ba374aa",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-10-08"
+      },
+      {
+       "source_id": "src_6a6a8f0eb1",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-01-29"
+      },
+      {
+       "source_id": "src_d79be1d281",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-08-12"
+      }
+     ]
+    }
+   ],
+   "tech_stack": [
+    {
+     "value": "Sumble (confirmed-used via job posts): Java, Python, AWS, Terraform, GitHub, React, Snowflake, dbt, LangChain",
+     "evidence": [
+      {
+       "source_id": "src_7c28c782a9",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    },
+    {
+     "value": "Application infrastructure on Java and Spring Boot",
+     "evidence": [
+      {
+       "source_id": "src_6a6a8f0eb1",
+       "quote": "Designing and maintaining mission-critical frameworks using Java and Spring Boot.",
+       "date_quote": null,
+       "date": "2026-01-29"
+      }
+     ]
+    }
+   ],
+   "ai_dev_tools": [
+    {
+     "value": "Claude Code powers Gong's in-house review agent (Gong Reviewer)",
+     "evidence": [
+      {
+       "source_id": "src_65da2ffe42",
+       "quote": "Claude Code gave us not only private, secure model deployment but also saved us significant time and integration efforts with its out-of-the-box tooling.",
+       "date_quote": null,
+       "date": "2025-11-27"
+      }
+     ]
+    },
+    {
+     "value": "Claude Code and Cursor are used for testing",
+     "evidence": [
+      {
+       "source_id": "src_7c6a824f6c",
+       "quote": "AI dev tools like Claude Code and Cursor have become integral to testing at Gong.",
+       "date_quote": null,
+       "date": "2025-10-31"
+      }
+     ]
+    },
+    {
+     "value": "Sumble lists Claude Code as confirmed-used",
+     "evidence": [
+      {
+       "source_id": "src_7c28c782a9",
+       "quote": null,
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "eng_blog_and_github": [
+    {
+     "value": "Gong Tech Blog on Medium (engineering, AI, Claude Code posts)",
+     "evidence": [
+      {
+       "source_id": "src_4eddbbcd87",
+       "quote": "How We Built a Custom Review Agent at Gong with Claude Code",
+       "date_quote": null,
+       "date": null
+      },
+      {
+       "source_id": "src_451cbc0dce",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-01-19"
+      }
+     ]
+    },
+    {
+     "value": "GitHub org gong-io with 6 public repos",
+     "evidence": [
+      {
+       "source_id": "src_3742ac5173",
+       "quote": "Public repos: 6",
+       "date_quote": null,
+       "date": null
+      }
+     ]
+    }
+   ],
+   "ai_posture": [
+    {
+     "value": "Chief R&D Officer frames AI as evolving, not replacing, engineers",
+     "evidence": [
+      {
+       "source_id": "src_7c6a824f6c",
+       "quote": "It’s not going to replace engineers, but it’s definitely going to evolve engineers into a newer version of themselves.",
+       "date_quote": null,
+       "date": "2025-10-31"
+      }
+     ]
+    },
+    {
+     "value": "Testing is named as where AI dev tools already work",
+     "evidence": [
+      {
+       "source_id": "src_7c6a824f6c",
+       "quote": "The obvious answer today is testing… we are writing better code with our AI dev tools.",
+       "date_quote": null,
+       "date": "2025-10-31"
+      }
+     ]
+    },
+    {
+     "value": "Gong engineering blog: the role is evolving from writing code to designing systems",
+     "evidence": [
+      {
+       "source_id": "src_451cbc0dce",
+       "quote": "The role isn’t disappearing. It’s evolving from writing code to designing systems.",
+       "date_quote": null,
+       "date": "2026-01-19"
+      }
+     ]
+    }
+   ],
+   "priorities": [
+    {
+     "value": "Coding-agent and AI code review adoption",
+     "evidence": [
+      {
+       "source_id": "src_589ba374aa",
+       "quote": "Drive adoption of coding agents, AI code review, and agentic workflows to improve velocity and quality.",
+       "date_quote": null,
+       "date": "2026-10-08"
+      }
+     ]
+    },
+    {
+     "value": "AI-powered developer tooling at scale",
+     "evidence": [
+      {
+       "source_id": "src_b70d782993",
+       "quote": "driving the adoption of AI-powered development tools that accelerate engineering productivity at scale.",
+       "date_quote": null,
+       "date": "2026-09-21"
+      }
+     ]
+    },
+    {
+     "value": "Engineering-owned quality model with AI-assisted test tooling",
+     "evidence": [
+      {
+       "source_id": "src_1b41e80887",
+       "quote": "Build the Quality Engineering methodology and tooling that help engineering teams improve automation, test data, test environments, and non-functional quality.",
+       "date_quote": null,
+       "date": "2026-09-23"
+      }
+     ]
+    }
+   ],
+   "peers": [
+    {
+     "value": "Chorus, Clari, Salesloft, Outreach, Aviso (no public Devin customers among them)",
+     "evidence": [
+      {
+       "source_id": "src_ce53951e16",
+       "quote": "Gong, Chorus, Clari, Salesloft, Outreach, and Aviso compared on conversation intelligence, revenue forecasting, and sales execution.",
+       "date_quote": null,
+       "date": "2026-07-01"
+      }
+     ]
+    }
+   ]
+  },
+  "signals": [
+   {
+    "headline": "Hiring a DevEx lead to evaluate and scale AI dev tools, with coding-agent adoption written into architect roles",
+    "type": "ai_mandate",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_b70d782993",
+      "quote": "driving the adoption of AI-powered development tools that accelerate engineering productivity at scale.",
+      "date_quote": null,
+      "date": "2026-09-21"
+     },
+     {
+      "source_id": "src_b70d782993",
+      "quote": "Evaluate, operationalize, and scale emerging AI capabilities while ensuring they are adopted safely, effectively, and in ways that create measurable impact across R&D.",
+      "date_quote": null,
+      "date": "2026-09-21"
+     },
+     {
+      "source_id": "src_b70d782993",
+      "quote": "hands-on experience evaluating and integrating AI-powered developer tools into engineering workflows",
+      "date_quote": null,
+      "date": "2026-09-21"
+     },
+     {
+      "source_id": "src_589ba374aa",
+      "quote": "Drive adoption of coding agents, AI code review, and agentic workflows to improve velocity and quality.",
+      "date_quote": null,
+      "date": "2026-10-08"
+     }
+    ],
+    "use_case": "Feature development capacity",
+    "who_cares": [
+     "Jacob Eckel",
+     "Ariel Bloch",
+     "Amit Reinich"
+    ],
+    "strength": "strong"
+   },
+   {
+    "headline": "New Director of Quality to build AI-assisted QE tooling, including test generation and regression selection",
+    "type": "quality_security",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_1b41e80887",
+      "quote": "Lead centralized Quality Engineering capabilities, including specialized manual quality validation, AI-assisted Quality Engineering tooling, and automation.",
+      "date_quote": null,
+      "date": "2026-09-23"
+     },
+     {
+      "source_id": "src_1b41e80887",
+      "quote": "Experience with AI-assisted quality workflows, test generation, or regression-selection workflows.",
+      "date_quote": null,
+      "date": "2026-09-23"
+     },
+     {
+      "source_id": "src_1b41e80887",
+      "quote": "Build the Quality Engineering methodology and tooling that help engineering teams improve automation, test data, test environments, and non-functional quality.",
+      "date_quote": null,
+      "date": "2026-09-23"
+     }
+    ],
+    "use_case": "Test generation & QA",
+    "who_cares": [],
+    "strength": "medium"
+   },
+   {
+    "headline": "Staff Engineer joined from a public Devin customer (worked there; personal Devin use not confirmed)",
+    "type": "leadership_change",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_483d664c8a",
+      "quote": "Cisco (CSCO) is a Software Development company.",
+      "date_quote": null,
+      "date": "2026-09-08"
+     },
+     {
+      "source_id": "src_483d664c8a",
+      "quote": "Jan 2026 - Present (8 months)",
+      "date_quote": null,
+      "date": "2026-09-08"
+     }
+    ],
+    "use_case": "Feature development capacity",
+    "who_cares": [
+     "David Diego Tal"
+    ],
+    "strength": "strong"
+   }
+  ],
+  "competitive_context": [
+   {
+    "value": "Claude Code powers Gong's in-house review agent; about half of developers used it within three months. Angle: expand beyond review, don't displace it.",
+    "evidence": [
+     {
+      "source_id": "src_65da2ffe42",
+      "quote": "Claude Code gave us not only private, secure model deployment but also saved us significant time and integration efforts with its out-of-the-box tooling.",
+      "date_quote": null,
+      "date": "2025-11-27"
+     },
+     {
+      "source_id": "src_65da2ffe42",
+      "quote": "within three months, about 50% of our developers were already using it",
+      "date_quote": null,
+      "date": "2025-11-27"
+     }
+    ],
+    "situation": "competitor_in_production"
+   },
+   {
+    "value": "Claude Code and Cursor are used for testing.",
+    "evidence": [
+     {
+      "source_id": "src_7c6a824f6c",
+      "quote": "AI dev tools like Claude Code and Cursor have become integral to testing at Gong.",
+      "date_quote": null,
+      "date": "2025-10-31"
+     }
+    ],
+    "situation": "competitor_in_production"
+   }
+  ],
+  "company_linkedin": [
+   {
+    "value": "Celebrate ’26 opening keynote with leaders from Cisco, AT&T and Anthropic",
+    "evidence": [
+     {
+      "source_id": "src_a78658416e",
+      "quote": "The Celebrate ’26 opening keynote brought together leaders from Cisco, AT&T, and Anthropic",
+      "date_quote": null,
+      "date": null
+     }
+    ],
+    "kind": "original",
+    "tags": []
+   }
+  ],
+  "people": [
+   {
+    "name": "Jacob Eckel",
+    "title": "VP, R&D Division Manager",
+    "deal_role": "champion",
+    "team": "Platform R&D Division (data pipelines, infrastructure, AI inference, mobile, developer experience)",
+    "why": "Leads the platform division that owns developer experience.",
+    "evidence": [
+     {
+      "source_id": "src_1f03253042",
+      "quote": "Currently leading the Platform R&D Division (11 teams, ~50 engineers) responsible for the data pipelines, infrastructure, AI application/inference, mobile, and developer experience.",
+      "date_quote": null,
+      "date": "2026-08-13"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [
+     {
+      "value": "Posted that bugs caught early are far cheaper to fix",
+      "evidence": [
+       {
+        "source_id": "src_9b8a797f12",
+        "quote": "We all know that a bug detected early in the development process is an order of magnitude cheaper to fix than one found in the later stages.",
+        "date_quote": null,
+        "date": "2024-07-21"
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_1f03253042",
+    "current_basis": "profile"
+   },
+   {
+    "name": "David Diego Tal",
+    "title": "Staff Engineer",
+    "deal_role": "technical_evaluator",
+    "team": "Engineering",
+    "why": "Staff engineer; profile history includes a public Devin customer.",
+    "evidence": [
+     {
+      "source_id": "src_483d664c8a",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-08"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Profile history includes Cisco, a public Devin customer",
+      "evidence": [
+       {
+        "source_id": "src_483d664c8a",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-09-08"
+       }
+      ],
+      "kind": "ex_devin_customer"
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "likely_champion",
+    "featured": true,
+    "profile_source_id": "src_483d664c8a",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Saar Fredi",
+    "title": "Director of Engineering AI Platform at Gong.io",
+    "deal_role": "champion",
+    "team": "AI Platform",
+    "why": "Runs AI Platform engineering.",
+    "evidence": [
+     {
+      "source_id": "src_34e297c968",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-08-19"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "AI Platform title",
+      "evidence": [
+       {
+        "source_id": "src_34e297c968",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-08-19"
+       }
+      ],
+      "kind": "ai_appetite"
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_34e297c968",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Shai Levi",
+    "title": "VP of Engineering, Portfolio App",
+    "deal_role": "economic_buyer",
+    "team": "Portfolio App",
+    "why": "BU VP of Engineering.",
+    "evidence": [
+     {
+      "source_id": "src_9c842d2ae4",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-15"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_9c842d2ae4",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Eli Koren",
+    "title": "Senior Director, R&D Group Manager",
+    "deal_role": "champion",
+    "team": "R&D",
+    "why": "R&D group manager.",
+    "evidence": [
+     {
+      "source_id": "src_0effeebba0",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-08"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_0effeebba0",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Yacov Tzadikov",
+    "title": "Senior Director of R&D - AI Applications",
+    "deal_role": "champion",
+    "team": "AI Applications",
+    "why": "R&D leader for AI applications.",
+    "evidence": [
+     {
+      "source_id": "src_b1235ac1a8",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-04"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_b1235ac1a8",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Aviad Sharfshtein",
+    "title": "Senior Director of Software Engineering",
+    "deal_role": "champion",
+    "team": "Engineering",
+    "why": "Senior engineering director.",
+    "evidence": [
+     {
+      "source_id": "src_7d1fc5e6e3",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-18"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_7d1fc5e6e3",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Ariel Bloch",
+    "title": "Senior Software Engineer, Developer Experience",
+    "deal_role": "technical_evaluator",
+    "team": "Developer Experience",
+    "why": "Works on Developer Experience.",
+    "evidence": [
+     {
+      "source_id": "src_4d43f83e39",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-18"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_4d43f83e39",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Amit Reinich",
+    "title": "DevEx Engineer",
+    "deal_role": "technical_evaluator",
+    "team": "Developer Experience",
+    "why": "Works on DevEx.",
+    "evidence": [
+     {
+      "source_id": "src_5f1d082fd7",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-08"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_5f1d082fd7",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Nadav Hoze",
+    "title": "Principal Software Architect",
+    "deal_role": "technical_evaluator",
+    "team": "Engineering",
+    "why": "Principal architect.",
+    "evidence": [
+     {
+      "source_id": "src_0016d41bd3",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-20"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_0016d41bd3",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Guy Havusha",
+    "title": "CISO",
+    "deal_role": "gatekeeper",
+    "team": "Security",
+    "why": "Security approver for agent access to code.",
+    "evidence": [
+     {
+      "source_id": "src_af98330d3a",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-24"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_af98330d3a",
+    "current_basis": "profile"
+   },
+   {
+    "name": "James Huang",
+    "title": "Director, Head of GRC",
+    "deal_role": "gatekeeper",
+    "team": "GRC",
+    "why": "Governance and compliance approver.",
+    "evidence": [
+     {
+      "source_id": "src_4d81aad2f5",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-03"
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Profile history includes Cisco, a public Devin customer",
+      "evidence": [
+       {
+        "source_id": "src_4d81aad2f5",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-09-03"
+       }
+      ],
+      "kind": "ex_devin_customer"
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "likely_champion",
+    "featured": true,
+    "profile_source_id": "src_4d81aad2f5",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Tal Sarid",
+    "title": "Senior Director - Head of Cyberdefense",
+    "deal_role": "gatekeeper",
+    "team": "Security",
+    "why": "Security stakeholder.",
+    "evidence": [
+     {
+      "source_id": "src_b6074f975a",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-21"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_b6074f975a",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Jim Gearhart",
+    "title": "VP Head of Information Technology",
+    "deal_role": "gatekeeper",
+    "team": "IT",
+    "why": "IT stakeholder.",
+    "evidence": [
+     {
+      "source_id": "src_f1ce5c3a48",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-08-08"
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_f1ce5c3a48",
+    "current_basis": "profile"
+   }
+  ],
+  "top_contacts": [
+   {
+    "name": "Jacob Eckel",
+    "why": {
+     "text": "Over-2,000 band entry point: leads the Platform R&D Division that includes developer experience.",
+     "based_on": [
+      {
+       "source_id": "src_1f03253042",
+       "quote": "Currently leading the Platform R&D Division (11 teams, ~50 engineers) responsible for the data pipelines, infrastructure, AI application/inference, mobile, and developer experience.",
+       "date_quote": null,
+       "date": "2026-08-13"
+      }
+     ]
+    }
+   },
+   {
+    "name": "David Diego Tal",
+    "why": {
+     "text": "Technical evaluator with a public Devin customer in his profile history.",
+     "based_on": [
+      {
+       "source_id": "src_483d664c8a",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-09-08"
+      }
+     ]
+    }
+   }
+  ],
+  "org_chart": null,
+  "abm_themes": [
+   {
+    "text": "Beyond review: Gong already automates review with Claude Code; position Devin for the test generation and regression work its new quality org is being built to deliver.",
+    "based_on": [
+     {
+      "source_id": "src_65da2ffe42",
+      "quote": "within three months, about 50% of our developers were already using it",
+      "date_quote": null,
+      "date": "2025-11-27"
+     },
+     {
+      "source_id": "src_1b41e80887",
+      "quote": "Experience with AI-assisted quality workflows, test generation, or regression-selection workflows.",
+      "date_quote": null,
+      "date": "2026-09-23"
+     }
+    ]
+   },
+   {
+    "text": "Cross-repo change at scale: API changes require synchronized updates across microservices, a fit for delegated multi-repo tickets.",
+    "based_on": [
+     {
+      "source_id": "src_65da2ffe42",
+      "quote": "Changing an API typically requires synchronized updates across multiple micro-services.",
+      "date_quote": null,
+      "date": "2025-11-27"
+     }
+    ]
+   }
+  ],
+  "drafts": [
+   {
+    "name": "Jacob Eckel",
+    "email": {
+     "subject": "Test generation for Gong's platform",
+     "body": "Hi Jacob,\n\nYour Platform R&D Division covers infrastructure, AI application/inference and developer experience, and Gong is now building AI-assisted Quality Engineering tooling, including test generation and regression-selection workflows.\n\nYour teams already built the Gong Reviewer on Claude Code, so review is covered. The open question is who writes the tests and regression coverage those reviews keep asking for. Devin takes those tickets end to end and opens PRs your engineers review. Litera reports 93% faster regression cycles with Devin.\n\nWorth 20 minutes to scope one service where Devin could own test generation?\n\nBest,"
+    },
+    "linkedin_note": "Jacob, I read how your teams built the Gong Reviewer and saw the new push on AI-assisted Quality Engineering tooling. I work with platform leaders on delegating test and regression work to agents. Would be glad to connect.",
+    "linkedin_followup": "Thanks for connecting, Jacob. One line from Gong's review agent write-up stuck with me: changing an API typically requires synchronized updates across multiple micro-services. That cross-repo shape is where Devin tends to help platform teams most: it takes a scoped change across several repositories, runs the tests, and hands back PRs for your engineers to review. If a cross-service change or a test backlog is on your roadmap, I can share how other teams split that work. Open to a short call?",
+    "built_from": [
+     {
+      "source_id": "src_1b41e80887",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-23"
+     },
+     {
+      "source_id": "src_1f03253042",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-08-13"
+     },
+     {
+      "source_id": "src_65da2ffe42",
+      "quote": null,
+      "date_quote": null,
+      "date": "2025-11-27"
+     },
+     {
+      "source_id": "src_4eddbbcd87",
+      "quote": null,
+      "date_quote": null,
+      "date": null
+     },
+     {
+      "source_id": "src_a49527cfb2",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-07-10"
+     }
+    ],
+    "claims": [
+     {
+      "text": "Your Platform R&D Division covers infrastructure, AI application/inference and developer experience",
+      "source_id": "src_1f03253042",
+      "quote": "Currently leading the Platform R&D Division (11 teams, ~50 engineers) responsible for the data pipelines, infrastructure, AI application/inference, mobile, and developer experience."
+     },
+     {
+      "text": "Gong is building AI-assisted Quality Engineering tooling",
+      "source_id": "src_1b41e80887",
+      "quote": "Lead centralized Quality Engineering capabilities, including specialized manual quality validation, AI-assisted Quality Engineering tooling, and automation."
+     },
+     {
+      "text": "including test generation and regression-selection workflows",
+      "source_id": "src_1b41e80887",
+      "quote": "Experience with AI-assisted quality workflows, test generation, or regression-selection workflows."
+     },
+     {
+      "text": "Your teams built the Gong Reviewer",
+      "source_id": "src_65da2ffe42",
+      "quote": "The Gong Reviewer handles 90% of reviews in 2–5 minutes"
+     },
+     {
+      "text": "built on Claude Code",
+      "source_id": "src_4eddbbcd87",
+      "quote": "How We Built a Custom Review Agent at Gong with Claude Code"
+     },
+     {
+      "text": "changing an API typically requires synchronized updates across multiple micro-services",
+      "source_id": "src_65da2ffe42",
+      "quote": "Changing an API typically requires synchronized updates across multiple micro-services."
+     }
+    ],
+    "notes": "- Platform/DevEx entry point for the over-2,000 band; lead with test generation, not review.\n- Gong already runs a Claude Code review agent: expand beyond it, never suggest replacing it.\n- LinkedIn follow-up is sendable once the note is accepted.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "David Diego Tal",
+    "email": {
+     "subject": "Delegated tests on Java services",
+     "body": "Hi David,\n\nGong's infrastructure teams maintain mission-critical frameworks on Java and Spring Boot, and Gong is now building AI-assisted Quality Engineering tooling with test generation and regression-selection workflows.\n\nFrom an evaluator's seat, the useful question is how an agent behaves on your stack. Devin works in its own environment, clones the repository, runs your build and tests, and opens a PR so reviewers see exactly what changed. Companies' test coverage typically rises from 50-60% to 80-90% when using Devin.\n\nWould you be open to a 20-minute technical walkthrough on one of your services?\n\nThanks,"
+    },
+    "linkedin_note": "David, I'm reaching out to engineers who evaluate AI agents on real codebases. Gong's new AI-assisted Quality Engineering work caught my eye. Would be glad to connect and compare notes.",
+    "linkedin_followup": "Thanks for connecting, David. A practical way to judge an agent is a small trial on real code: pick a Java service, give Devin a ticket to add regression tests, and review the PR it opens against your CI. Gong already has the Gong Reviewer in the loop, so Devin's output would land in the same review flow your engineers already trust. If that kind of side-by-side trial sounds useful, I can set it up with whatever scope you choose. Worth a look?",
+    "built_from": [
+     {
+      "source_id": "src_6a6a8f0eb1",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-01-29"
+     },
+     {
+      "source_id": "src_1b41e80887",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-23"
+     },
+     {
+      "source_id": "src_65da2ffe42",
+      "quote": null,
+      "date_quote": null,
+      "date": "2025-11-27"
+     },
+     {
+      "source_id": "src_0f8c427244",
+      "quote": null,
+      "date_quote": null,
+      "date": "2025-11-14"
+     }
+    ],
+    "claims": [
+     {
+      "text": "Gong's teams maintain mission-critical frameworks on Java and Spring Boot",
+      "source_id": "src_6a6a8f0eb1",
+      "quote": "Designing and maintaining mission-critical frameworks using Java and Spring Boot."
+     },
+     {
+      "text": "Gong is building AI-assisted Quality Engineering tooling",
+      "source_id": "src_1b41e80887",
+      "quote": "Lead centralized Quality Engineering capabilities, including specialized manual quality validation, AI-assisted Quality Engineering tooling, and automation."
+     },
+     {
+      "text": "with test generation and regression-selection workflows",
+      "source_id": "src_1b41e80887",
+      "quote": "Experience with AI-assisted quality workflows, test generation, or regression-selection workflows."
+     },
+     {
+      "text": "Gong already has the Gong Reviewer",
+      "source_id": "src_65da2ffe42",
+      "quote": "The Gong Reviewer handles 90% of reviews in 2–5 minutes"
+     }
+    ],
+    "notes": "- Low-confidence draft: no personal signal or hook found.\n- Technical evaluator angle: how it runs on their Java stack and CI.\n- Do not mention his prior employer; we can't show he personally used Devin.",
+    "low_confidence": false,
+    "lint": []
+   }
+  ]
+ },
+ "report": {
+  "dropped_count": 0,
+  "dropped": [],
+  "flags": []
+ },
+ "since_last_run": null
+}

@@ -1,40 +1,20 @@
 #!/usr/bin/env python3
-"""Build Devin Playbook text (macro !account-research) from playbook/playbook.md.
+"""Build Devin Playbook texts from playbook/*.md (shared.md is prepended to each).
 
-Prints to stdout. Optionally writes a generated file (gitignored) with --out.
+Prints all three to stdout, separated by headers. With --out, writes one
+gitignored file per playbook into playbook/ (devin_<name>.generated.md).
 Do not paste into Devin until playbook changes on main have merged.
 """
 
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PLAYBOOK = ROOT / "playbook" / "playbook.md"
-DEFAULT_OUT = ROOT / "playbook" / "devin_playbook.generated.md"
+PLAYBOOK_DIR = ROOT / "playbook"
 
-HEADER = """# Account Research — Devin Playbook
-
-Macro: `!account-research`
-
-## Slack
-
-```
-@Devin !account-research acme.com
-```
-
-Optional stage (company / people / signals / draft / feedback):
-
-```
-@Devin !account-research acme.com people
-```
-
-The session uses the HTTP MCP server (not stdio). Learned rules and briefs live
-on that server, so they persist across Slack sessions.
-
-## MCP (do this once)
+MCP_SETUP = """## MCP (do this once)
 
 1. Customize → MCPs → Add custom MCP
 2. URL: the public Streamable HTTP URL from `scripts/devin-http.sh`
@@ -48,7 +28,7 @@ Start the tunnel + server:
 ./scripts/devin-http.sh
 ```
 
-Regenerate this Playbook text after `playbook/playbook.md` changes:
+Regenerate this Playbook text after `playbook/` changes:
 
 ```
 uv run python scripts/gen_devin_playbook.py
@@ -58,25 +38,64 @@ uv run python scripts/gen_devin_playbook.py
 
 """
 
+PLAYBOOKS = [
+    ("research", "!account-research", """## Slack
 
-def generate(playbook_path: Path = PLAYBOOK) -> str:
-    body = playbook_path.read_text()
-    if not body.endswith("\n"):
-        body += "\n"
-    return HEADER + body
+```
+@Devin !account-research acme.com
+```
+
+Optional stage (company / people / signals / draft):
+
+```
+@Devin !account-research acme.com people
+```
+
+The session uses the HTTP MCP server (not stdio). Learned rules and briefs live
+on that server, so they persist across Slack sessions.
+
+"""),
+    ("feedback", "!feedback", """## Slack
+
+```
+@Devin !feedback acme.com "rep feedback text"
+```
+
+"""),
+    ("positioning", "!refresh-positioning", """## Slack / schedule
+
+```
+@Devin !refresh-positioning
+```
+
+Runs on a schedule; keeps customers/use_cases/proof quotes current.
+
+"""),
+]
+
+
+def generate(name: str) -> str:
+    shared = (PLAYBOOK_DIR / "shared.md").read_text()
+    body = (PLAYBOOK_DIR / f"{name}.md").read_text()
+    macro, header = next((m, h) for n, m, h in PLAYBOOKS if n == name)
+    title = body.splitlines()[0].lstrip("# ")
+    return f"# {title} — Devin Playbook\n\nMacro: `{macro}`\n\n" + header + MCP_SETUP \
+        + shared + "\n---\n\n" + body
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Generate Devin Playbook text from playbook/playbook.md")
-    ap.add_argument("--out", nargs="?", const=str(DEFAULT_OUT), default=None,
-                    help="write the generated text (default path if flag is passed with no value)")
+    ap = argparse.ArgumentParser(description="Generate Devin Playbook texts from playbook/")
+    ap.add_argument("--out", action="store_true",
+                    help="write gitignored copies to playbook/devin_<name>.generated.md")
     args = ap.parse_args()
-    text = generate()
-    sys.stdout.write(text)
-    if args.out:
-        out = Path(args.out)
-        out.write_text(text)
-        sys.stderr.write(f"Wrote {out}\n")
+    for name, macro, _ in PLAYBOOKS:
+        text = generate(name)
+        print(f"{'=' * 60}\n{macro}  →  playbook/devin_{name}.generated.md\n{'=' * 60}\n")
+        print(text)
+        if args.out:
+            out = PLAYBOOK_DIR / f"devin_{name}.generated.md"
+            out.write_text(text)
+            print(f"Wrote {out}", flush=True)
     return 0
 
 

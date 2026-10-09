@@ -60,18 +60,29 @@ def prompt_for(args) -> str:
     if args.command == "research":
         if args.stage:
             return (f"Account: {args.domain}. Run Stage 0, then only the `{args.stage}` stage of the playbook. "
-                    f"Report the result to the rep; save_brief only if you produced a full brief.")
+                    f"Then get_last_brief({args.domain}): if a brief exists, merge your output into it — "
+                    f"replace the `{args.stage}` section(s), keep every other section as returned, recompute "
+                    f"the verdict when signals or people changed — and save_brief the merged brief, fixing "
+                    f"what the validator dropped. If no brief exists, report the result to the rep instead.")
         return (f"Account: {args.domain}. Run Stages 0-4 of the playbook, then save_brief, fix what the "
                 f"validator dropped with real evidence, and save again.")
     if args.command == "feedback":
         return (f"Rep feedback on the {args.domain} brief:\n\n{args.text}\n\n"
-                f"Run Stage 6 of the playbook (get_last_brief and get_playbook first).")
+                f"Run the feedback procedure in your playbook (get_last_brief and get_playbook first).")
     return "Run the 'Maintaining positioning' procedure from the playbook until refresh_positioning returns no items."
+
+
+PLAYBOOKS = {"research": "research.md", "feedback": "feedback.md", "refresh-positioning": "positioning.md"}
+
+
+def system_prompt(command: str) -> str:
+    d = ROOT / "playbook"
+    return (d / "shared.md").read_text() + "\n---\n\n" + (d / PLAYBOOKS[command]).read_text()
 
 
 async def run(args) -> int:
     options = ClaudeAgentOptions(
-        system_prompt=(ROOT / "playbook" / "playbook.md").read_text(),
+        system_prompt=system_prompt(args.command),
         mcp_servers={SERVER: server_config(args)},
         strict_mcp_config=True,         # only our server: no MCP servers / connectors from the user's account
         tools=[],                       # no built-in tools: every fact comes through the MCP server

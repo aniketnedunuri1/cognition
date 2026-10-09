@@ -69,6 +69,11 @@ def test_org_chart_cites_cached_doc(stub):
         {"domain": "acme.com", "company_name": "Acme", "org_chart": out["source_id"]})
     assert clean["org_chart"] == out["source_id"]
     assert not any(d["path"] == "org_chart" for d in report["dropped"])
+    assert not any(f["path"] == "org_chart" for f in report["flags"])
+
+    clean, report = validate_brief({"domain": "acme.com", "company_name": "Acme"})
+    assert clean["org_chart"] is None
+    assert any("get_org_chart" in f["flag"] for f in report["flags"])
 
     clean, report = validate_brief(
         {"domain": "acme.com", "company_name": "Acme", "org_chart": "src_0000000000"})

@@ -113,8 +113,8 @@ def get_org_chart(domain: str, people: list[dict] | None = None) -> dict:
     label them "Sumble only, not yet sourced". unmatched_people lists passed names
     with no Sumble match. Reporting lines are Sumble's inference — never confirmed;
     attribute to Sumble and label inferred everywhere they appear.
-    Costs ~50-100 Sumble credits per account: call once, after get_company
-    confirms the account is worth it. To render, pass source_id as brief.org_chart."""
+    Costs ~50-100 Sumble credits per account: required — call exactly once per
+    account. To render, pass source_id as brief.org_chart."""
     return sumble.get_org_chart(domain, people)
 
 

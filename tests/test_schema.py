@@ -45,7 +45,7 @@ def test_signal_needs_verified_recent_quote():
     fresh = web("https://brex.com/blog/fresh")
     old = web("https://brex.com/blog/old", published="2025-01-01T00:00:00Z")
     sig = {"headline": "Java 17 migration", "type": "migration", "use_case": "Migrations",
-           "strength": "strong"}
+           "source": "eng_blog", "tier": 1}
     brief, report = run({"signals": [
         {**sig, "horizon": "tactical", "evidence": [{"source_id": fresh, "quote": "migrating our monolith from Java 8 to Java 17"}]},
         {**sig, "horizon": "tactical", "evidence": [{"source_id": fresh}]},
@@ -78,7 +78,8 @@ def test_company_linkedin_item_without_evidence_dropped():
 def test_use_case_must_exist_when_knowledge_loaded():
     src = web("https://brex.com/blog/fresh")
     raw = {"domain": "brex.com", "company_name": "Brex", "signals": [{
-        "headline": "h", "type": "migration", "horizon": "tactical", "use_case": "Vibes", "strength": "medium",
+        "headline": "h", "type": "migration", "horizon": "tactical", "use_case": "Vibes",
+        "source": "job_post", "tier": 3,
         "evidence": [{"source_id": src, "quote": "migrating our monolith from Java 8"}]}]}
     brief, _ = validate_brief(raw, today=TODAY, use_cases={"Migrations"})
     assert brief["signals"] == []
@@ -179,22 +180,33 @@ def test_parent_company_roles_count_as_current(stub):
     assert brief["people"][0]["current_basis"] == "profile"
 
 
-def test_undated_evidence_caps_strength_at_medium():
+def test_undated_evidence_caps_tier_at_2():
     undated = web("https://brex.com/blog/undated", published=None)
     brief, report = run({"signals": [{
         "headline": "h", "type": "migration", "horizon": "tactical", "use_case": "Migrations",
-        "strength": "strong", "evidence": [{"source_id": undated, "quote": "migrating our monolith from Java 8"}]}]})
-    assert brief["signals"][0]["strength"] == "medium"
-    assert any("capped at medium" in f["flag"] for f in report["flags"])
+        "source": "eng_blog", "tier": 1,
+        "evidence": [{"source_id": undated, "quote": "migrating our monolith from Java 8"}]}]})
+    assert brief["signals"][0]["tier"] == 2
+    assert any("capped at tier 2" in f["flag"] for f in report["flags"])
+
+
+def test_ic_job_post_capped_at_tier_3():
+    src = web("https://brex.com/jobs/qa-eng", text="Hiring a QA engineer: own test coverage of 90% across the monolith.")
+    brief, report = run({"signals": [{
+        "headline": "h", "type": "quality_security", "horizon": "tactical", "use_case": "Migrations",
+        "source": "job_post", "tier": 2,
+        "evidence": [{"source_id": src, "quote": "own test coverage of 90%"}]}]})
+    assert brief["signals"][0]["tier"] == 3
+    assert any("capped at tier 3" in f["flag"] for f in report["flags"])
 
 
 def champ(kind, src, quote="Phil Burrows leads platform"):
     return {"kind": kind, "value": kind, "evidence": [{"source_id": src, "quote": quote}]}
 
 
-def strong_signal(src, who):
+def tier1_signal(src, who):
     return {"headline": "Java 17 migration", "type": "migration", "horizon": "tactical", "use_case": "Migrations",
-            "strength": "strong", "who_cares": who,
+            "source": "eng_blog", "tier": 1, "who_cares": who,
             "evidence": [{"source_id": src, "quote": "migrating our monolith from Java 8 to Java 17"}]}
 
 
@@ -214,9 +226,9 @@ def test_champion_label_needs_strong_evidence(stub):
     brief, report = run({"people": [phil(champ("works_on_signal", blog))]})
     p = brief["people"][0]
     assert p["label"] == "candidate" and p["champion_evidence"] == [] and p["hooks"][0]["value"] == "works_on_signal"
-    assert any("not in a strong signal" in f["flag"] for f in report["flags"])
+    assert any("not in a tier-1 signal" in f["flag"] for f in report["flags"])
     kept = run({"people": [phil(champ("works_on_signal", blog))],
-                "signals": [strong_signal(blog, ["Phil Burrows"])]})[0]["people"][0]
+                "signals": [tier1_signal(blog, ["Phil Burrows"])]})[0]["people"][0]
     assert kept["label"] == "candidate" and kept["champion_evidence"][0]["kind"] == "works_on_signal"
     # Official-source IC (title isn't senior): hiring_manager does not badge.
     junior_page = web("https://www.brex.com/journal/press/junior",
@@ -246,16 +258,16 @@ def test_date_quote_dates_an_undated_source():
     page = "Building agents: 5 lessons learned. By Graham Fuller, April 2026. We migrated our monolith from Java 8 to Java 17."
     undated = web("https://brex.com/journal/agents", text=page, published=None)
     # strategic (12 mo): "April 2026" resolves to Apr 1, past the 6-month tactical window by design
-    sig = {**strong_signal(undated, []), "horizon": "strategic",
+    sig = {**tier1_signal(undated, []), "horizon": "strategic",
            "evidence": [{"source_id": undated, "date_quote": "By Graham Fuller, April 2026",
                                                        "quote": "migrated our monolith from Java 8 to Java 17"}]}
     brief, report = run({"signals": [sig]})
-    assert brief["signals"][0]["strength"] == "strong" and brief["signals"][0]["evidence"][0]["date"] == "2026-04-01"
-    assert not report["flags"]
+    assert brief["signals"][0]["tier"] == 1 and brief["signals"][0]["evidence"][0]["date"] == "2026-04-01"
+    assert not [f for f in report["flags"] if f["path"] != "org_chart"]
     for bad, flag in (("By Graham Fuller, May 2026", "not verified"), ("Building agents: 5 lessons learned", "exactly one")):
         s2 = {**sig, "evidence": [{**sig["evidence"][0], "date_quote": bad}]}
         brief, report = run({"signals": [s2]})
-        assert brief["signals"][0]["strength"] == "medium"
+        assert brief["signals"][0]["tier"] == 2
         assert any(flag in f["flag"] for f in report["flags"]), bad
 
 

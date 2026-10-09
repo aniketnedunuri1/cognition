@@ -65,8 +65,8 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 ### Devin setup
 
 - Custom MCP (HTTP) added under Customize → MCPs → Add custom MCP (bearer header, org scope).
-- Workflow lives in a Devin Playbook with macro `!account-research`. Slack: `@Devin !account-research acme.com`.
-- Playbook text is generated from `playbook/` so the CLI and Devin never drift.
+- Workflows live in three Devin Playbooks (`!account-research`, `!feedback`, `!refresh-positioning`) so each session loads only what it needs. Slack: `@Devin !account-research acme.com`.
+- Playbook texts are generated from `playbook/` (`shared.md` + one file per playbook) so the CLI and Devin never drift.
 - Same generation step emits a Claude Skill (`SKILL.md`); with the HTTP server as a custom connector, `@Claude` in Slack can run it too (unverified: test before promising).
 
 ### MCP tools
@@ -148,7 +148,7 @@ HTTP mode also serves `GET /briefs/<token>/<domain>-<date>.docx`: outside MCP au
 3. **Senior title** **and** named hiring manager on a relevant job post
 
 Supporting or hook only (never the badge):
-- `works_on_signal` — on the team behind a strong signal (`who_cares`)
+- `works_on_signal` — on the team behind a tier-1 signal (`who_cares`)
 - New in role (<6 months, from profile start date)
 - AI appetite (posts about Copilot/Cursor, AI enablement title)
 
@@ -193,9 +193,11 @@ Contact-level signals from #2 attach to both the person and the account.
 4. Mapped to a Devin use case in knowledge/
 5. Usable in a message without sounding creepy or generic
 
-**Excluded by default:** funding alone, generic "hiring engineers," tech stack alone, PR fluff. Plain cost-cut layoffs (no AI tie) = medium at best. A job posting is evidence only when the JD quotes **concrete Devin-shaped work** (a named migration, a coverage target, a vuln backlog with scope). "Hiring a Staff Application Security Engineer" is not a Vulnerability remediation signal. Do not force intent from a job title.
+**Excluded by default:** funding alone, generic "hiring engineers," tech stack alone, PR fluff. Plain cost-cut layoffs (no AI tie) = tier 3 at best. A job posting is evidence only when the JD quotes **concrete Devin-shaped work** (a named migration, a coverage target, a vuln backlog with scope). "Hiring a Staff Application Security Engineer" is not a Vulnerability remediation signal. Do not force intent from a job title.
 
-**Cluster, don't count:** 5 job posts about one migration = 1 signal with 5 evidence items.
+**One initiative = one signal.** All evidence pointing at the same program is one signal with many evidence items — three job posts for the same buildout are one signal, never three. Mixed-source clusters take the highest-value `source` label.
+
+**Tiers (predictive value), each labeled with a `source`:** 1 = a buying motion exists (competitor pilot/eval, champion moved, budget-cycle event, public eval language); 2 = the pain is named and owned (exec statement, numbered eng-blog pain, leader hire whose mandate is the problem); 3 = corroborating only (IC job posts — validator caps `job_post` here — generic AI adoption, stack/funding). Tier 3 never drives the verdict alone. **Undated evidence caps a signal at tier 2.**
 
 **Competitive context** (not a signal; changes verdict/angle):
 | Situation | Treatment |
@@ -205,7 +207,7 @@ Contact-level signals from #2 attach to both the person and the account.
 | Big direct-competitor deal signed <6mo | **Not now**; note to revisit ~9–12mo after signing |
 | Direct competitor in production, no recent deal found | **Warm** by default; angle = displace or expand |
 
-**Per signal:** headline (one line a rep could say), evidence (quotes + links), Devin use case (exact name from `use_cases.json`), who cares (→ contacts), strength (strong / medium; weak is dropped). **Undated evidence can never be strong** (validator caps it at medium).
+**Per signal:** headline (one line a rep could say), source label (`job_post` / `leader_hire` / `eng_blog` / `exec_statement` / `news_press` / `social_post` / `profile` / `other`), evidence (quotes + links), Devin use case (exact name from `use_cases.json`), who cares (→ contacts), tier (1 / 2 / 3).
 
 **Account verdict:** **Act now** / **Warm** / **Not now** (with what to watch for).
 
@@ -311,7 +313,7 @@ Full brief: <.docx download link>
 
 - The validated JSON in `briefs/` is the canonical record; Markdown, .docx and Slack are renders in code, never sources.
 - Draft claims: every prospect-specific claim in a draft must be listed with a verbatim quote, and each is verified (one failure blocks the draft); numbers, digits or words, must appear in the cited sources. A real quote can still fail to support its claim (run 3: "runs in a Bazel monorepo" cited to a quote about Cursor agents), so every capitalized term and number in a claim must also appear in its own quote (deterministic; exempt: prospect, contact, Devin, sentence-initial words; a small abbreviation map, PR ↔ pull request). Deliberately over-blocks. Residual limits: lowercase terms aren't checked ("monorepo"), and we can't prove every claim in the prose was listed. The rep sees each claim with its quote under the draft. **Production next step: an LLM judge (claim entailed by quote?) as a separate review pass, kept out of the deterministic validator.**
-- **Likely champion** is checkable: confirmed `ex_devin_customer` (profile history × `customers.json`); or a senior profile title (Manager+/Staff/Principal/Director/Head, including VP/C-level) plus a verified `public_pain` quote; or senior plus `hiring_manager`. `works_on_signal` is checkable (the person is in a strong signal's `who_cares`) but never earns the badge — supporting or hook only, same as `new_in_role` and `ai_appetite`. Honest limit on ex-customer: we cannot prove they personally ran Devin.
+- **Likely champion** is checkable: confirmed `ex_devin_customer` (profile history × `customers.json`); or a senior profile title (Manager+/Staff/Principal/Director/Head, including VP/C-level) plus a verified `public_pain` quote; or senior plus `hiring_manager`. `works_on_signal` is checkable (the person is in a tier-1 signal's `who_cares`) but never earns the badge — supporting or hook only, same as `new_in_role` and `ai_appetite`. Honest limit on ex-customer: we cannot prove they personally ran Devin.
 - Only the brief is validated. Agent prose outside it is unchecked, so the playbook forbids facts there and the Slack reply is the tool-rendered summary posted verbatim (in Devin this relies on the agent following the playbook; the CLI enforces it in code).
 
 ## Production notes (for write-up / Loom)
