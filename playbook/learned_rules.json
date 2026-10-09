@@ -10,5 +10,11 @@
   "scope": "global",
   "evidence": 1,
   "added": "2026-10-08"
+ },
+ {
+  "rule": "Cite one customer proof point with a number, matched to their situation (Litera 93% faster regression for test velocity; Itaú 6x faster migration for migrations). Second proof point allowed only as a supporting clause.",
+  "scope": "global",
+  "evidence": 1,
+  "added": "2026-10-08"
  }
 ]
