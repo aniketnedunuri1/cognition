@@ -130,6 +130,11 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
 - **Tier 2:** the pain is named and owned, and it isn't a corroborating-only source.
 - **Tier 3:** corroborating — IC job posts (the validator caps `job_post` signals here), generic AI statements, stack/funding.
 
+**Additional signals** (`additional_signals`, max 5): the lower-level items a rep would skim as "also happening" — a chip label, one headline, "posted Nd ago". Unlike `signals` they never drive the verdict and each item is only kept when its evidence is **dated within the last 14 days** (undated evidence is dropped — the card shows its age).
+- `label`: `hiring_alert` (a team is hiring), `tech_mention` (a named tool appeared in a JD or post), `headcount_growth`, `financial_event` (funding, earnings date), `news_mention`, `other`.
+- What belongs here, not in `signals`: a JD mentioning Datadog, "the exec team is growing", a Series E — the screenshots in the UI. If an item meets the five-part signal bar it goes in `signals`; this section is for everything fresher and weaker.
+- Never repeat a `signals` event here (the validator flags shared sources). No `who_cares`, no tier, no use case — one source each is fine.
+
 **Competitive context.** This is not a signal; it changes the verdict and the angle.
 
 | Situation | Treatment |
@@ -235,6 +240,8 @@ If `get_last_brief` returned a brief, report:
   signals: [{headline, type: SignalType,
              source: job_post|leader_hire|eng_blog|exec_statement|news_press|social_post|profile|other, horizon: tactical|strategic,
              evidence: [Evidence with quote], use_case, who_cares: [names], tier: 1|2|3}],
+  additional_signals: [{label: hiring_alert|tech_mention|headcount_growth|financial_event|news_mention|other,
+                        headline, evidence: [Evidence with quote]}],   // ≤14 days dated, max 5
   competitive_context: [{situation, value, evidence}],
   company_linkedin: [{value, kind: original|possible_repost|unknown, tags: [names], evidence}],
                                                     // posts that survived validation; a tag not in the

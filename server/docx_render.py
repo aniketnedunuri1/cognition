@@ -15,8 +15,8 @@ from docx.table import Table, _Cell
 from docx.text.paragraph import Paragraph
 
 from .briefs import (
-    LOW_CONFIDENCE, ROLE, VERDICT, _Sources, _dated, _facts,
-    _one_line, _plain, _url, card_people, champion_reason, sort_signals, wider_people,
+    ADD_LABELS, LOW_CONFIDENCE, ROLE, VERDICT, _Sources, _dated, _facts,
+    _one_line, _plain, _posted_ago, _url, card_people, champion_reason, sort_signals, wider_people,
     working_cell, working_fact,
 )
 from .cache import get_doc
@@ -38,6 +38,8 @@ ROLE_INK = {
 CHAMPION_INK = "047857"
 INCUMBENT_INK = "B91C1C"
 SIGNAL_INK = {1: "1D4ED8", 2: "64748B", 3: "94A3B8"}
+ADD_INK = {"hiring_alert": "1D4ED8", "tech_mention": "047857", "headcount_growth": "047857",
+           "financial_event": "B45309", "news_mention": "6D28D9", "other": "4B5563"}
 SOURCE_LABELS = {"job_post": "job post", "leader_hire": "leader hire", "eng_blog": "eng blog",
                  "exec_statement": "exec statement", "news_press": "news/press",
                  "social_post": "social post", "profile": "profile data", "other": "other"}
@@ -479,6 +481,25 @@ def _signals(doc: Document, b: dict, src: _Sources) -> None:
             _cite(q, src.cite([e]) + _dated(e))
         sp = doc.add_paragraph()
         sp.paragraph_format.space_after = Pt(6)
+    add = b.get("additional_signals") or []
+    if add:
+        _heading(doc, "Additional signals")
+        p = doc.add_paragraph()
+        p.paragraph_format.space_after = Pt(4)
+        _run(p, "Lower-level signals from the past two weeks.", size=8, italic=True, color=MUTED)
+        for a in add:
+            cell = _container(doc, SIGNAL_FILL)
+            lab = _p(cell, after=10)
+            _run(lab, ADD_LABELS.get(a["label"], a["label"]), size=8, bold=True,
+                 color=ADD_INK.get(a["label"], MUTED))
+            h = _p(cell, after=10)
+            _run(h, a["headline"], size=10, bold=True)
+            meta = _p(cell, after=20)
+            ago = _posted_ago(a)
+            _run(meta, f"Posted {ago}" if ago else "Posted", size=8, color=MUTED)
+            _cite(meta, src.cite(a["evidence"]))
+            sp = doc.add_paragraph()
+            sp.paragraph_format.space_after = Pt(4)
     if b["competitive_context"]:
         _heading(doc, "Competitive context")
         for c in b["competitive_context"]:

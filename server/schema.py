@@ -27,6 +27,11 @@ from .verify import normalize, verify_quote
 # older than SIGNAL_WARN_MONTHS is kept but marked stale in the brief.
 SIGNAL_MAX_MONTHS = {"tactical": 6, "strategic": 6}
 SIGNAL_WARN_MONTHS = 3
+# Additional signals: low-signal-density items (tech mentions, hiring alerts,
+# headcount growth, financial events). They only matter while fresh — dated
+# evidence ≤ ADD_SIGNAL_DAYS, cap ADD_SIGNAL_MAX.
+ADD_SIGNAL_DAYS = 14
+ADD_SIGNAL_MAX = 5
 
 # Hosts of company-issued documents (filings, press releases). Official only when
 # the document names the company; the company's own domain is always official.
@@ -104,6 +109,19 @@ class Signal(BaseModel):
     # Predictive value: 1 = a buying motion exists, 2 = the pain is named and
     # owned, 3 = corroborating only (never triggers the verdict alone).
     tier: Literal[1, 2, 3]
+
+
+AddSignalLabel = Literal["hiring_alert", "tech_mention", "headcount_growth",
+                         "financial_event", "news_mention", "other"]
+
+
+class AdditionalSignal(BaseModel):
+    """A lower-level, freshness-bound signal rendered as a compact card."""
+    label: AddSignalLabel
+    headline: str
+    evidence: list[Evidence] = Field(min_length=1)  # every item needs a quote
+    # Set by the validator: days since the newest dated evidence.
+    days_ago: int | None = None
 
 
 class CompetitiveItem(Fact):
@@ -205,6 +223,7 @@ class Brief(BaseModel):
     snapshot: Snapshot = Snapshot()
     engineering: Engineering = Engineering()
     signals: list[Signal] = []
+    additional_signals: list[AdditionalSignal] = []
     competitive_context: list[CompetitiveItem] = []
     company_linkedin: list[CompanyPost] = []
     people: list[Person] = []
@@ -313,7 +332,7 @@ class _Validator:
     # -- primitives --
 
     def evidence(self, items: list[Evidence], path: str, *, require_quote=False,
-                 max_months: int | None = None) -> list[Evidence]:
+                 max_months: int | None = None, max_days: int | None = None) -> list[Evidence]:
         kept = []
         for i, ev in enumerate(items):
             p = f"{path}[{i}]"
@@ -331,7 +350,14 @@ class _Validator:
                     continue
             d = self._date(ev, doc, p)
             ev.date = d.isoformat() if d else None
-            if max_months is not None:
+            if max_days is not None:
+                if d is None:
+                    self.drop(p, "additional signal evidence needs a dated source")
+                    continue
+                if (self.today - d).days > max_days:
+                    self.drop(p, f"source dated {d} is older than {max_days} days")
+                    continue
+            elif max_months is not None:
                 if d is None:
                     self.flags.append({"path": p, "flag": "publication date unknown"})
                 elif (months := _months_between(d, self.today)) > max_months:
@@ -504,6 +530,20 @@ class _Validator:
             s.who_cares = [n for n in s.who_cares if n in people]
         return s
 
+    def additional_signal(self, a: AdditionalSignal, path: str,
+                          signal_sources: set[str]) -> AdditionalSignal | None:
+        a.evidence = self.evidence(a.evidence, f"{path}.evidence", require_quote=True,
+                                   max_days=ADD_SIGNAL_DAYS)
+        if not a.evidence:
+            self.drop(path, "no valid evidence left")
+            return None
+        a.days_ago = min((self.today - date.fromisoformat(e.date)).days
+                         for e in a.evidence if e.date)
+        if {e.source_id for e in a.evidence} & signal_sources:
+            self.flags.append({"path": path,
+                               "flag": "shares a source with a top signal — the same event told twice"})
+        return a
+
 
 def _top_names(raw: dict) -> list[str]:
     names = []
@@ -564,6 +604,16 @@ def validate_brief(raw: dict, *, today: date | None = None,
 
     brief.signals = [s for i, x in _parse_list(raw.get("signals"), Signal, "signals", v)
                      if (s := v.signal(x, f"signals[{i}]", names))]
+    brief.additional_signals = [
+        a for i, x in _parse_list(raw.get("additional_signals"), AdditionalSignal,
+                                  "additional_signals", v)
+        if (a := v.additional_signal(x, f"additional_signals[{i}]",
+                                     {e.source_id for s in brief.signals for e in s.evidence}))]
+    brief.additional_signals.sort(key=lambda a: a.days_ago if a.days_ago is not None else ADD_SIGNAL_DAYS + 1)
+    if len(brief.additional_signals) > ADD_SIGNAL_MAX:
+        for a in brief.additional_signals[ADD_SIGNAL_MAX:]:
+            v.drop("additional_signals", f"over the {ADD_SIGNAL_MAX}-item cap: {a.headline[:60]!r}")
+        brief.additional_signals = brief.additional_signals[:ADD_SIGNAL_MAX]
     tier1_people = {n for s in brief.signals if s.tier == 1 for n in s.who_cares}
     for i, p in enumerate(brief.people):
         v.label(p, f"people[{i}]", tier1_people)

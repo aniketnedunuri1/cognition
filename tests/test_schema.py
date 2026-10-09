@@ -69,6 +69,37 @@ def test_signal_evidence_over_3_months_kept_but_flagged_stale():
     assert not any("may be outdated" in f["flag"] for f in report["flags"])
 
 
+def add_signal(src, label="tech_mention", quote="migrating our monolith from Java 8 to Java 17"):
+    return {"label": label, "headline": "Datadog in three new job posts",
+            "evidence": [{"source_id": src, "quote": quote}]}
+
+
+def test_additional_signals_require_dated_evidence_within_14_days():
+    fresh = web("https://brex.com/jobs/a", published="2026-10-05T00:00:00Z")
+    edge = web("https://brex.com/jobs/b", published="2026-09-23T00:00:00Z")   # exactly 14 days
+    old = web("https://brex.com/jobs/c", published="2026-09-01T00:00:00Z")
+    undated = web("https://brex.com/jobs/d", published=None)
+    brief, report = run({"additional_signals": [
+        add_signal(fresh), add_signal(edge, "hiring_alert"),
+        add_signal(old, "financial_event"), add_signal(undated, "news_mention")]})
+    kept = brief["additional_signals"]
+    assert [a["label"] for a in kept] == ["tech_mention", "hiring_alert"]
+    assert kept[0]["days_ago"] == 2 and kept[1]["days_ago"] == 14
+    reasons = " ".join(d["reason"] for d in report["dropped"])
+    assert "older than 14 days" in reasons and "needs a dated source" in reasons
+
+
+def test_additional_signals_capped_at_5_and_flag_shared_source():
+    src = web("https://brex.com/blog/shared", published="2026-10-01T00:00:00Z")
+    posts = [web(f"https://brex.com/jobs/{i}", published=f"2026-10-0{i}T00:00:00Z") for i in range(1, 7)]
+    brief, report = run({
+        "signals": [tier1_signal(src, [])],
+        "additional_signals": [add_signal(src)] + [add_signal(s) for s in posts]})
+    assert len(brief["additional_signals"]) == 5
+    assert any("shares a source with a top signal" in f["flag"] for f in report["flags"])
+    assert any("over the 5-item cap" in d["reason"] for d in report["dropped"])
+
+
 def test_company_linkedin_drops_tags_not_in_source():
     src = web("https://linkedin.com/posts/brexhq_launch-1")
     brief, report = run({"company_linkedin": [

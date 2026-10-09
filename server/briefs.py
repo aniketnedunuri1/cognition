@@ -32,6 +32,9 @@ KIND = {"hiring_manager": "hiring manager", "public_pain": "public talk about th
 SOURCE_LABELS = {"job_post": "job post", "leader_hire": "leader hire", "eng_blog": "eng blog",
                  "exec_statement": "exec statement", "news_press": "news/press",
                  "social_post": "social post", "profile": "profile data", "other": "other"}
+ADD_LABELS = {"hiring_alert": "Hiring alert", "tech_mention": "Tech mention",
+              "headcount_growth": "Headcount growth", "financial_event": "Financial event",
+              "news_mention": "News mention", "other": "Signal"}
 # Why someone was badged, in rep words (ex-Devin customer is the strongest reason).
 BADGE_REASON = {"ex_devin_customer": "ex-Devin customer", "hiring_manager": "hiring this work",
                 "public_pain": "talks publicly about the pain"}
@@ -304,6 +307,16 @@ def _quotes(src: _Sources, evidence: list[dict], dates: bool = False) -> list[st
             for e in evidence if e.get("quote")]
 
 
+def _posted_ago(a: dict) -> str:
+    d = a.get("days_ago")
+    if d is None:
+        dates = [e["date"] for e in a.get("evidence") or [] if e.get("date")]
+        if not dates:
+            return ""
+        d = (date.today() - date.fromisoformat(min(dates))).days
+    return "today" if d <= 0 else ("1d ago" if d == 1 else f"{d}d ago")
+
+
 def card_people(people: list[dict]) -> list[dict]:
     """Who-to-work cards (≤5). Legacy briefs without `featured` show everyone."""
     if any(p.get("featured") is not None for p in people):
@@ -376,6 +389,14 @@ def render_markdown(rec: dict) -> str:
         label = SOURCE_LABELS.get(s["source"], s["source"])
         L += [f"**{s['headline']}** — Tier {s['tier']} · {label} · {s['use_case']}{who}"] \
             + _quotes(src, s["evidence"], dates=True) + [""]
+    add = b.get("additional_signals") or []
+    if add:
+        L += ["### Additional signals", "", "*Lower-level signals from the past two weeks.*", ""]
+        for a in add:
+            ago = _posted_ago(a)
+            L += [f"- `{ADD_LABELS.get(a['label'], a['label'])}` **{a['headline']}** — "
+                  f"posted {ago} {src.cite(a['evidence'])}".rstrip()]
+        L.append("")
     if b["competitive_context"]:
         L += ["**Competitive context**", ""]
         L += [f"- {c['value']} ({c['situation'].replace('_', ' ')}) {src.cite(c['evidence'])}" for c in b["competitive_context"]]
