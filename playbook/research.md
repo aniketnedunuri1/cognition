@@ -196,7 +196,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
 - what not to say (incumbent, displace vs erase, no prior-job trivia)
 - whether the LinkedIn follow-up is actually sendable
 
-**Golden examples** from `get_playbook()` are for tone and shape only; never copy their facts.
+**Golden examples** from `get_playbook()` are for tone and shape only; never copy their facts, phrasing, openers, hypothesis lines or CTA wording. Two drafts in one brief must not reuse the same phrase from an example or from each other.
 
 **Never send.** Drafts go to the rep for approval.
 
