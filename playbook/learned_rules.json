@@ -16,5 +16,11 @@
   "scope": "global",
   "evidence": 1,
   "added": "2026-10-08"
+ },
+ {
+  "rule": "Close with a 20-minute ask paired with a concrete low-commitment next step (\"pick one service and walk through what that would look like\") and an easy timing question (\"this week or next?\").",
+  "scope": "global",
+  "evidence": 1,
+  "added": "2026-10-08"
  }
 ]
