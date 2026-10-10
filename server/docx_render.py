@@ -540,8 +540,9 @@ def _drafts(doc: Document, b: dict, src: _Sources) -> None:
         if d["low_confidence"]:
             w = _p(cell, after=40)
             _run(w, LOW_CONFIDENCE, size=9, italic=True, color="B45309")
+        _run(_p(cell, after=10), "Email", size=9, bold=True, color=MUTED)
         sub = _p(cell, after=20)
-        _run(sub, "Email — ", size=9, bold=True, color=MUTED)
+        _run(sub, "Subject: ", size=10, bold=True, color=MUTED)
         _run(sub, d["email"]["subject"], size=11, bold=True)
         for line in d["email"]["body"].splitlines() or [""]:
             bp = _p(cell, after=40)

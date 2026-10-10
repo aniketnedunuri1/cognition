@@ -547,7 +547,7 @@ def render_markdown(rec: dict) -> str:
         L += [f"### {d['name']}", ""]
         if d["low_confidence"]:
             L += [f"> ⚠️ {LOW_CONFIDENCE}", ""]
-        L += [f"**Email — {d['email']['subject']}**", "", d["email"]["body"], "",
+        L += ["**Email**", f"*Subject: {d['email']['subject']}*", "", d["email"]["body"], "",
               f"**LinkedIn connection note**", "", d["linkedin_note"], "",
               f"**LinkedIn follow-up**", "", d["linkedin_followup"], ""]
         if d.get("notes"):
