@@ -70,5 +70,11 @@
   "scope": "global",
   "evidence": 1,
   "added": "2026-10-10"
+ },
+ {
+  "rule": "Drafts citing a public stat or customer proof include the source link once (within the one-link cap), inline in the body as a URL — recipients can't click a citation number. Example: 'Litera reports 93% faster regression cycles' ends with the case-study URL.",
+  "scope": "global",
+  "evidence": 1,
+  "added": "2026-10-10"
  }
 ]
