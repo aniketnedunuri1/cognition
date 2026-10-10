@@ -507,6 +507,21 @@ def _reflow(html_body: str) -> str:
 
 
 _STAT = re.compile(r"~?\$?\d[\d,]*(?:\.\d+)?(?:%|x|k|m|b|bn)(?![\w%])", re.I)
+_URL = re.compile(r"https?://[^\s)<]+")
+
+
+def _stat_url(tok: str, text: str, claims: list[dict], blobs: dict, url_of) -> str | None:
+    """Source URL for a stat token in a draft, most explicit evidence first.
+    Several sources can contain the same number, so an ambiguous match gets no
+    link — a wrong source is worse than none."""
+    for sentence in re.split(r"(?<=[.!?])\s+", text):
+        if tok in sentence and (u := _URL.search(sentence)):
+            return u[0].rstrip(".,")
+    for c in claims:
+        if tok in (c.get("text") or "") + (c.get("quote") or "") and (u := url_of(c.get("source_id"))):
+            return u
+    urls = {url_of(sid) for sid, blob in blobs.items() if tok in blob} - {None}
+    return urls.pop() if len(urls) == 1 else None
 
 
 def _link_draft_stats(body_html: str, rec: dict) -> str:
@@ -529,14 +544,14 @@ def _link_draft_stats(body_html: str, rec: dict) -> str:
         if not d:
             continue
         block = parts[i]
-        sids = {c.get("source_id") for c in d.get("claims") or []} | \
-               {e.get("source_id") for e in d.get("built_from") or []}
+        claims = d.get("claims") or []
+        # ordered, not a set: several sources can contain the same stat token
+        sids = dict.fromkeys(e.get("source_id") for e in claims + (d.get("built_from") or []))
         docs = {sid: json.dumps(get_doc(sid) or {}) for sid in sids if sid}
         text = "\n".join([d["email"]["body"], d.get("linkedin_note") or "",
                           d.get("linkedin_followup") or ""])
         for tok in dict.fromkeys(_STAT.findall(text)):
-            url = next((_url(sid) for sid, blob in docs.items()
-                        if _url(sid) and tok in blob), None)
+            url = _stat_url(tok, text, claims, docs, _url)
             if not url:
                 continue
             m = re.search(rf"(?<![\w>\"'/]){re.escape(tok)}(?![\w<])", block)
@@ -545,7 +560,20 @@ def _link_draft_stats(body_html: str, rec: dict) -> str:
                          f'<a class="srclink" href="{html.escape(url)}" '
                          f'target="_blank" rel="noopener">{tok}</a>' + block[m.end():])
         parts[i] = block
-    return body_html[:sec] + "".join(parts) + tail
+    return body_html[:sec] + "".join(map(_fold_paren_urls, parts)) + tail
+
+
+_PAREN_URL = re.compile(r'([^<>.!?\s][^<>.!?]*?)\s*\(<a href="([^"]+)"[^>]*>\2</a>\)')
+
+
+def _fold_paren_urls(block: str) -> str:
+    """Drafts cite proof as "claim (url)". Drop the raw url when a stat already
+    links to it; otherwise move the link onto the claim clause itself."""
+    def fold(m: re.Match) -> str:
+        if f'class="srclink" href="{m[2]}"' in block:
+            return m[1]
+        return f'<a class="srclink" href="{m[2]}" target="_blank" rel="noopener">{m[1]}</a>'
+    return _PAREN_URL.sub(fold, block)
 
 
 def render_html(rec: dict, markdown: str, docx_href: str) -> str:
