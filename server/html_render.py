@@ -401,6 +401,7 @@ def render_html(rec: dict, markdown: str, docx_href: str) -> str:
   <select id="popTag">
     <option value="">Just this brief</option>
     <option value="applies always">Applies always</option>
+    <option value="keep this">Keep this (positive)</option>
   </select>
   <div class="row"><button id="popCancel">Cancel</button>
   <button id="popAdd" class="primary">Add comment</button></div>
