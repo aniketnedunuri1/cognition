@@ -2,75 +2,83 @@
  "comments": [
   {
    "id": "c1",
-   "processed": false,
+   "processed": true,
    "submitted_at": "2026-10-10T20:58:27+00:00",
    "section": "Drafted messages",
    "quote": "I'd guess the next question is which work agents should own beyond the editor.",
    "note": "I dont like the \"i'd guess\" phrasing - be more assertive, but not cocky.",
-   "tag": "applies always"
+   "tag": "applies always",
+   "processed_at": "2026-10-10T21:20:26+00:00"
   },
   {
    "id": "c2",
-   "processed": false,
+   "processed": true,
    "submitted_at": "2026-10-10T20:58:27+00:00",
    "section": "Drafted messages",
    "quote": "migrations, upgrades and backlog work nobody wants to babysit.",
    "note": "I dont like the \"3 list\" here - it's ai slop. We want to phrase it like an actual sentence.",
-   "tag": "applies always"
+   "tag": "applies always",
+   "processed_at": "2026-10-10T21:20:26+00:00"
   },
   {
    "id": "c3",
-   "processed": false,
+   "processed": true,
    "submitted_at": "2026-10-10T20:58:27+00:00",
    "section": "Drafted messages",
    "quote": "you're hiring an EM to lead the DevProd AI team.",
    "note": "instead of \"you're hiring\", if you see someone hiring you need to say \"I saw you're hiring\"",
-   "tag": "applies always"
+   "tag": "applies always",
+   "processed_at": "2026-10-10T21:20:26+00:00"
   },
   {
    "id": "c4",
-   "processed": false,
+   "processed": true,
    "submitted_at": "2026-10-10T20:58:27+00:00",
    "section": "Drafted messages",
    "quote": "governance: which classes of work go to which agent, who reviews the output, and how you measure whether it pays off.",
    "note": "remove the 3 list here again",
-   "tag": "applies always"
+   "tag": "applies always",
+   "processed_at": "2026-10-10T21:20:26+00:00"
   },
   {
    "id": "c5",
-   "processed": false,
+   "processed": true,
    "submitted_at": "2026-10-10T20:58:27+00:00",
    "section": "Drafted messages",
    "quote": "If 20 minutes on how others draw that line would help as you staff up DevProd AI, I'm happy to set it up.",
    "note": "Why are we saying all of this, just say can we set up 20 minutes to chat",
-   "tag": "applies always"
+   "tag": "applies always",
+   "processed_at": "2026-10-10T21:20:26+00:00"
   },
   {
    "id": "c6",
-   "processed": false,
+   "processed": true,
    "submitted_at": "2026-10-10T20:58:27+00:00",
    "section": "Drafted messages",
    "quote": "Would be glad to connect",
    "note": "say would love to connect, never would be glad to connect.",
-   "tag": "applies always"
+   "tag": "applies always",
+   "processed_at": "2026-10-10T21:20:26+00:00"
   },
   {
    "id": "c7",
-   "processed": false,
+   "processed": true,
    "submitted_at": "2026-10-10T20:58:27+00:00",
    "section": "Drafted messages",
    "quote": "Never frame Devin as a way to cut engineering cost; he explicitly rejects that",
    "note": "this should be number 1 on the send notes list. 1 and 2 sound more like descriptions, 3 is an actual valuable piece of feedback.",
-   "tag": "applies always"
+   "tag": "applies always",
+   "processed_at": "2026-10-10T21:20:26+00:00"
   },
   {
    "id": "c8",
-   "processed": false,
+   "processed": true,
    "submitted_at": "2026-10-10T20:58:27+00:00",
    "section": "Drafted messages",
    "quote": ": dependency bumps and schema-driven changes across services, done in its own sandbox with the build run before a PR reaches review",
    "note": "remove this 3 list again. we dont want lists of 3, proper sentences only",
-   "tag": "applies always"
+   "tag": "applies always",
+   "processed_at": "2026-10-10T21:20:26+00:00"
   }
  ]
 }
