@@ -171,6 +171,8 @@ details.refs summary { cursor:pointer; color:var(--mut); font-size:13px; }
 details.refs section { opacity:.75; font-size:13px; }
 /* annotations */
 ::selection { background:#fde68a; }
+mark.draft { background:#fef9c3; border-radius:2px; padding:0 1px;
+             outline:1px dashed #eab308; }
 mark.pending { background:#fde68a; border-radius:2px; padding:0 1px;
                box-shadow:0 0 0 1px #f59e0b inset; }
 mark.done { background:#bbf7d0; border-radius:2px; padding:0 1px; }
@@ -213,6 +215,18 @@ const list = document.getElementById('list');
 const status = document.getElementById('status');
 const submitBtn = document.getElementById('submitAll');
 let pendingRange = null;
+let draftMarks = [];
+
+function clearDraft() {
+  draftMarks.forEach(m => { m.outerHTML = m.innerHTML; });
+  draftMarks = [];
+}
+
+function hidePop() {
+  pop.style.display='none';
+  clearDraft();
+  pendingRange = null;
+}
 
 function sectionOf(node) {
   const el = node.nodeType === 3 ? node.parentElement : node;
@@ -223,8 +237,10 @@ function sectionOf(node) {
 document.addEventListener('mouseup', (e) => {
   if (pop.contains(e.target)) return;
   const sel = window.getSelection();
-  if (!sel || sel.isCollapsed || !report.contains(sel.anchorNode)) { pop.style.display='none'; return; }
+  if (!sel || sel.isCollapsed || !report.contains(sel.anchorNode)) { hidePop(); return; }
+  clearDraft();
   pendingRange = sel.getRangeAt(0).cloneRange();
+  draftMarks = highlightRange(pendingRange, 'draft');  // visible while the popover is open
   pop.style.display='block';
   pop.style.left = Math.min(e.pageX, window.innerWidth - 300) + 'px';
   pop.style.top = (e.pageY + 8) + 'px';
@@ -294,13 +310,16 @@ document.getElementById('popAdd').onclick = () => {
   if (!quote) { pop.style.display='none'; return; }
   const c = { section: sectionOf(pendingRange.startContainer), quote,
               note: popText.value.trim(), tag: popTag.value };
-  c.marks = highlightRange(pendingRange, 'pending');
+  c.marks = draftMarks;               // promote the visible draft highlight
+  draftMarks = [];
+  c.marks.forEach(m => m.className = 'pending');
   queue.push(c);
   window.getSelection().removeAllRanges();
   pop.style.display='none';
+  pendingRange = null;
   renderPanel();
 };
-document.getElementById('popCancel').onclick = () => { pop.style.display='none'; };
+document.getElementById('popCancel').onclick = hidePop;
 
 submitBtn.onclick = async () => {
   submitBtn.disabled = true;
