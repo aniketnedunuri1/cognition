@@ -375,7 +375,8 @@ def render_html(rec: dict, markdown: str, docx_href: str) -> str:
     """Full annotatable report page. Comments POST to <served path>/comments;
     docx_href adapts to served vs. local-file use."""
     b = rec["brief"]
-    body = _reflow(md_to_html(markdown))
+    # the page header covers the md's title + date preamble; skip them
+    body = _reflow(md_to_html(re.sub(r"\A# .*\n\*.*\*\n\n?", "", markdown)))
     return f"""<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
