@@ -248,6 +248,8 @@ const status = document.getElementById('status');
 const submitBtn = document.getElementById('submitAll');
 const repName = document.getElementById('repName');
 let pendingRange = null;
+let pendingQuote = '';
+let pendingSection = '';
 let draftMarks = [];
 
 function clearDraft() {
@@ -259,6 +261,7 @@ function hidePop() {
   pop.style.display='none';
   clearDraft();
   pendingRange = null;
+  pendingQuote = '';
 }
 
 function sectionOf(node) {
@@ -273,6 +276,10 @@ document.addEventListener('mouseup', (e) => {
   if (!sel || sel.isCollapsed || !report.contains(sel.anchorNode)) { hidePop(); return; }
   clearDraft();
   pendingRange = sel.getRangeAt(0).cloneRange();
+  // capture quote + section now: highlightRange mutates/splits the text nodes the
+  // range points at, so reading them later (at Add) comes back empty
+  pendingQuote = pendingRange.toString().trim();
+  pendingSection = sectionOf(pendingRange.startContainer);
   draftMarks = highlightRange(pendingRange, 'draft');  // visible while the popover is open
   pop.style.display='block';
   pop.style.left = Math.min(e.pageX, window.innerWidth - 300) + 'px';
@@ -339,9 +346,8 @@ function highlightRange(range, cls) {
 
 document.getElementById('popAdd').onclick = () => {
   if (!pendingRange) return;
-  const quote = pendingRange.toString().trim();
-  if (!quote) { pop.style.display='none'; return; }
-  const c = { section: sectionOf(pendingRange.startContainer), quote,
+  if (!pendingQuote) { pop.style.display='none'; return; }
+  const c = { section: pendingSection, quote: pendingQuote,
               note: popText.value.trim(), tag: popTag.value };
   c.marks = draftMarks;               // promote the visible draft highlight
   draftMarks = [];
@@ -350,6 +356,7 @@ document.getElementById('popAdd').onclick = () => {
   window.getSelection().removeAllRanges();
   pop.style.display='none';
   pendingRange = null;
+  pendingQuote = '';
   renderPanel();
 };
 document.getElementById('popCancel').onclick = hidePop;
