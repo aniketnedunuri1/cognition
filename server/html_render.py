@@ -31,6 +31,8 @@ _INLINE = [
 _BADGES = [
     (re.compile(r"\b(Tier \d|Warm lead)\b"), r'<span class="bdg tier">\1</span>'),
     (re.compile(r"\b(Champion|Incumbent owner)\b"), r'<span class="bdg champ">\1</span>'),
+    (re.compile(r"\b(Economic buyer|Technical evaluator|Gatekeeper|Parent-company approver)\b"),
+     lambda m: f'<span class="bdg role {_slug(m[1])}">{m[1]}</span>'),
     # strip the render's parens around status words — the badge replaces them
     (re.compile(r"\(\s*(verified)\s*\)"), r'<span class="bdg ver">\1</span>'),
     (re.compile(r"\(\s*(single source)\s*\)"), r'<span class="bdg warn">\1</span>'),
@@ -168,6 +170,11 @@ section.sec > h2 { display:inline-block; padding:2px 10px; border-radius:6px; }
 .bdg.champ { color:#1d4ed8; background:#dbeafe; }
 .bdg.warn { color:#b91c1c; background:#fee2e2; }
 .bdg.ver { color:#15803d; background:#dcfce7; }
+/* one hue per deal role (similarity) */
+.bdg.role-economic-buyer { color:#15803d; background:#dcfce7; }
+.bdg.role-technical-evaluator { color:#1d4ed8; background:#dbeafe; }
+.bdg.role-gatekeeper { color:#b45309; background:#fef3c7; }
+.bdg.role-parent-company-approver { color:#6d21a8; background:#f3e8ff; }
 /* nested lines (evidence, hooks) recede: figure/ground */
 ul ul { font-size:13px; color:#4b5563; }
 ul ul .bdg { background:none; box-shadow:inset 0 0 0 1px #c7cbd1; color:#6b7280;
