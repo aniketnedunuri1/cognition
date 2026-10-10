@@ -27,10 +27,19 @@ _INLINE = [
     (re.compile(r"\*([^*]+)\*"), r"<em>\1</em>"),
 ]
 
+# Inline badges: the brief's own status vocabulary gets one visual treatment each.
+_BADGES = [
+    (re.compile(r"\b(Tier \d)\b"), r'<span class="bdg tier">\1</span>'),
+    (re.compile(r"\b(Champion|Incumbent owner)\b"), r'<span class="bdg champ">\1</span>'),
+    (re.compile(r"\b(verified)\b"), r'<span class="bdg ver">\1</span>'),
+    (re.compile(r"\b(single source|may be outdated|Low-confidence draft)\b"),
+     r'<span class="bdg warn">\1</span>'),
+]
+
 
 def _inline(text: str) -> str:
     out = html.escape(text)
-    for pat, rep in _INLINE:
+    for pat, rep in _INLINE + _BADGES:
         out = pat.sub(rep, out)
     return out
 
@@ -134,19 +143,36 @@ td { border-bottom:1px solid var(--line); padding:6px 10px 6px 0; vertical-align
 td:first-child { color:var(--mut); white-space:nowrap; width:1%; }
 code { background:#f3f4f6; padding:1px 5px; border-radius:4px; font-size:13px; }
 a { color:#2563eb; }
-/* similarity: one accent hue per section category */
-.sec-verdict, .sec-since-last-run { border-left-color:#16a34a; }
+/* similarity: one accent hue per section category — chip + left border + faint card tint */
+section.sec > h2 { display:inline-block; padding:2px 10px; border-radius:6px; }
+.sec-verdict, .sec-since-last-run { border-left-color:#16a34a; background:#fbfefc; }
+.sec-verdict > h2, .sec-since-last-run > h2 { color:#15803d; background:#dcfce7; }
 .sec-intent-signals, .sec-additional-signals, .sec-competitive-context,
-.sec-company-linkedin { border-left-color:#d97706; }
+.sec-company-linkedin { border-left-color:#d97706; background:#fffdf9; }
+.sec-intent-signals > h2, .sec-additional-signals > h2,
+.sec-competitive-context > h2, .sec-company-linkedin > h2 { color:#b45309; background:#fef3c7; }
 .sec-who-to-work, .sec-recommended-entry-top-3, .sec-wider-buying-center,
-.sec-org-chart-sumble---inferred { border-left-color:#2563eb; }
-.sec-drafted-messages, .sec-abm-themes-assessment { border-left-color:#7c3aed; }
+.sec-org-chart-sumble---inferred { border-left-color:#2563eb; background:#fcfdff; }
+.sec-who-to-work > h2, .sec-recommended-entry-top-3 > h2,
+.sec-wider-buying-center > h2, .sec-org-chart-sumble---inferred > h2 {
+  color:#1d4ed8; background:#dbeafe; }
+.sec-drafted-messages, .sec-abm-themes-assessment { border-left-color:#7c3aed; background:#fefdff; }
+.sec-drafted-messages > h2, .sec-abm-themes-assessment > h2 { color:#6d21a8; background:#f3e8ff; }
+/* small inline badges */
+.bdg { display:inline-block; font-size:11px; font-weight:600; border-radius:4px;
+       padding:0 6px; vertical-align:1px; }
+.bdg.tier { color:#b45309; background:#fef3c7; }
+.bdg.champ { color:#1d4ed8; background:#dbeafe; }
+.bdg.warn { color:#b91c1c; background:#fee2e2; }
+.bdg.ver { color:#15803d; background:#dcfce7; }
 /* figure/ground: reference material recedes */
 details.refs { margin:20px 0; }
 details.refs summary { cursor:pointer; color:var(--mut); font-size:13px; }
 details.refs section { opacity:.75; font-size:13px; }
 /* annotations */
-mark.pending { background:#fde68a; border-radius:2px; padding:0 1px; }
+::selection { background:#fde68a; }
+mark.pending { background:#fde68a; border-radius:2px; padding:0 1px;
+               box-shadow:0 0 0 1px #f59e0b inset; }
 mark.done { background:#bbf7d0; border-radius:2px; padding:0 1px; }
 #pop { position:absolute; z-index:50; display:none; width:280px; background:#fff;
        border:1px solid var(--line); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,.12);
@@ -214,7 +240,9 @@ function renderPanel() {
     d.className='comment';
     const rm = document.createElement('button');
     rm.className='rm'; rm.textContent='✕';
-    rm.onclick = () => { queue.splice(i,1); if (c.mark) c.mark.outerHTML = c.mark.innerHTML; renderPanel(); };
+    rm.onclick = () => { queue.splice(i,1);
+      (c.marks||[]).forEach(m => { m.outerHTML = m.innerHTML; });
+      renderPanel(); };
     const q = document.createElement('q'); q.textContent = c.quote;
     const meta = document.createElement('div');
     meta.innerHTML = `<span class="sec-tag">${c.section||'—'}</span>` +
@@ -226,19 +254,47 @@ function renderPanel() {
   submitBtn.textContent = `Submit all feedback (${queue.length})`;
 }
 
+function highlightRange(range, cls) {
+  // wrap every text node the range touches — surroundContents alone fails on
+  // selections that span elements, which is most of them
+  const marks = [];
+  const wrap = (r) => {
+    const m = document.createElement('mark');
+    m.className = cls;
+    try { r.surroundContents(m); marks.push(m); } catch (_) {}
+  };
+  const walker = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_TEXT, {
+    acceptNode(n) {
+      if (!n.nodeValue.trim() || !range.intersectsNode(n)) return NodeFilter.FILTER_SKIP;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  if (!nodes.length) {
+    try {  // selection inside one text node
+      const r = range.cloneRange();
+      wrap(r);
+    } catch (_) {}
+    return marks;
+  }
+  nodes.forEach((n) => {
+    const r = document.createRange();
+    r.selectNodeContents(n);
+    if (n === range.startContainer) r.setStart(n, range.startOffset);
+    if (n === range.endContainer) r.setEnd(n, range.endOffset);
+    wrap(r);
+  });
+  return marks;
+}
+
 document.getElementById('popAdd').onclick = () => {
   if (!pendingRange) return;
   const quote = pendingRange.toString().trim();
   if (!quote) { pop.style.display='none'; return; }
   const c = { section: sectionOf(pendingRange.startContainer), quote,
               note: popText.value.trim(), tag: popTag.value };
-  try {  // wrap the selection so the rep sees what's covered; ranges across
-         // elements can throw — the comment is still stored either way
-    const mark = document.createElement('mark');
-    mark.className='pending';
-    pendingRange.surroundContents(mark);
-    c.mark = mark;
-  } catch (_) {}
+  c.marks = highlightRange(pendingRange, 'pending');
   queue.push(c);
   window.getSelection().removeAllRanges();
   pop.style.display='none';
@@ -256,7 +312,7 @@ submitBtn.onclick = async () => {
       body: JSON.stringify({comments})
     });
     if (!r.ok) throw new Error(await r.text());
-    queue.forEach(c => { if (c.mark) c.mark.className='done'; });
+    queue.forEach(c => { (c.marks||[]).forEach(m => m.className='done'); });
     queue.length = 0;
     renderPanel();
     status.textContent='Saved — thank you. The next brief run will pick these up.';
