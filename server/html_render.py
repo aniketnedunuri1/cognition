@@ -25,6 +25,8 @@ _INLINE = [
     (re.compile(r"\*\*([^*]+)\*\*"), r"<strong>\1</strong>"),
     (re.compile(r"`([^`]+)`"), r"<code>\1</code>"),
     (re.compile(r"\*([^*]+)\*"), r"<em>\1</em>"),
+    # citation markers [n] jump to the Sources list entry
+    (re.compile(r"(?<![\w/])\[(\d{1,2})\]"), r'<a class="cite" href="#src-\1">[\1]</a>'),
 ]
 
 # Inline badges: the brief's own status vocabulary gets one visual treatment each.
@@ -56,6 +58,7 @@ def md_to_html(md: str) -> str:
     """Convert the render_markdown subset to HTML. Sections split on ## headers."""
     out: list[str] = []
     in_section = False
+    sec = ""
     uls = 0
     in_table = False
 
@@ -76,8 +79,8 @@ def md_to_html(md: str) -> str:
             if level == 2:
                 if in_section:
                     out.append("</section>")
-                slug = _slug(title)
-                out.append(f'<section class="sec sec-{slug}" data-section="{html.escape(title)}">')
+                sec = _slug(title)
+                out.append(f'<section class="sec sec-{sec}" data-section="{html.escape(title)}">')
                 in_section = True
             out.append(f"<h{level}>{_inline(title)}</h{level}>")
         elif line.startswith("|") and line.endswith("|"):
@@ -110,7 +113,11 @@ def md_to_html(md: str) -> str:
             out.append(f'<p class="meta"><em>{_inline(m[1])}</em></p>')
         else:
             close_blocks()
-            out.append(f"<p>{_inline(line)}</p>")
+            # Sources entries are "N. [title](url) — ...": anchor them for [n] cites
+            if sec == "sources" and (n := re.match(r"^(\d{1,2})\. ", line)):
+                out.append(f'<p id="src-{n[1]}">{_inline(line)}</p>')
+            else:
+                out.append(f"<p>{_inline(line)}</p>")
 
     close_blocks()
     if in_section:
@@ -148,6 +155,9 @@ td { border-bottom:1px solid var(--line); padding:6px 10px 6px 0; vertical-align
 td:first-child { color:var(--mut); white-space:nowrap; width:1%; }
 code { background:#f3f4f6; padding:1px 5px; border-radius:4px; font-size:13px; }
 a { color:#2563eb; }
+a.cite { color:var(--mut); text-decoration:none; font-size:12px; vertical-align:1px; }
+a.cite:hover { color:#2563eb; text-decoration:underline; }
+details.refs p:target { background:#fef3c7; border-radius:4px; }
 /* similarity: one accent hue per section category — chip + left border + faint card tint */
 section.sec > h2 { display:inline-block; padding:2px 10px; border-radius:6px; }
 .sec-verdict, .sec-since-last-run { border-left-color:#16a34a; background:#fbfefc; }
@@ -336,6 +346,12 @@ document.getElementById('popAdd').onclick = () => {
   renderPanel();
 };
 document.getElementById('popCancel').onclick = hidePop;
+
+// citation links open the collapsed Sources block before jumping
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a.cite');
+  if (a) document.querySelectorAll('details.refs').forEach(d => d.open = true);
+});
 
 submitBtn.onclick = async () => {
   submitBtn.disabled = true;
