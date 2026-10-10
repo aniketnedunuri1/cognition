@@ -8,9 +8,11 @@ Needs [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 for you).
 
 ```bash
 uv sync                    # creates .venv with Python 3.12 + deps (incl. pytest)
-cp .env.example .env       # fill in ANTHROPIC_API_KEY, EXA_API_KEY, APOLLO_API_KEY
+cp .env.example .env       # fill in ANTHROPIC_API_KEY, EXA_API_KEY, APOLLO_API_KEY, SUMBLE_API_KEY
 uv run pytest              # no API calls
 ```
+
+For the learned-rule auto-promotion (`gh pr create` when ~3 reps converge on a rule), the GitHub CLI must be installed and authenticated (`brew install gh && gh auth login`). Without it, rule convergence just stays pending.
 
 ## Run it
 
@@ -59,6 +61,8 @@ HTTP mode also serves `GET /briefs/<token>/<file>.docx` and `GET /report/<token>
 
 ## Devin setup
 
+Prerequisite: the Devin Slack app must be installed in your Slack workspace and connected to your Devin organization, otherwise `@Devin` mentions won't trigger sessions.
+
 Devin talks to this server over Streamable HTTP (not stdio). A stdio server would run on Devin's ephemeral VM and lose briefs and learned rules when the session ends.
 
 ### 1. Start the public MCP URL
@@ -75,6 +79,8 @@ Copy from the script output:
 - **Header** — `Authorization: Bearer <MCP_AUTH_TOKEN>`
 
 `PUBLIC_BASE_URL` is the tunnel origin (no `/mcp`). Its hostname is added to FastMCP `allowed_hosts` / `allowed_origins` so Devin's requests are not rejected.
+
+Note: the quick tunnel URL is ephemeral — restarting `devin-http.sh` gives a new `trycloudflare.com` hostname, so you must update the MCP URL in the Devin UI each time. For a stable URL, use a named cloudflared tunnel instead.
 
 ### 2. Add the custom MCP in Devin
 
@@ -104,8 +110,11 @@ uv run python scripts/gen_devin_playbook.py --out
 
 In Devin, create one Playbook per macro and paste each generated text **after** playbook changes on this branch have landed (regenerate if `playbook/` changed).
 
-Slack:
+Slack (in any channel the Devin app is in):
 
 ```
 @Devin !account-research acme.com
+@Devin !account-research acme.com people        # one stage only
+@Devin !feedback acme.com "CTO email too long; lead with the peer metric"
+@Devin !refresh-positioning                      # or schedule it in Devin
 ```
