@@ -117,16 +117,18 @@ def test_since_last_run_diff(env):
 def test_feedback_rules_and_examples(tmp_path, monkeypatch):
     monkeypatch.setenv("PLAYBOOK_DIR", str(tmp_path))
     assert not feedback.add_playbook_rule("x", "persona:ceo")["ok"]
-    r = feedback.add_playbook_rule("Lead with the peer metric", "persona:economic_buyer")
-    assert r["confirmation"] == "Learned: Lead with the peer metric. Applies to: persona:economic_buyer."
-    assert feedback.add_playbook_rule("lead with the peer metric!", "persona:economic_buyer")["evidence"] == 2
-    r = feedback.add_playbook_rule("Lead with their signal", "persona:economic_buyer", replaces="Lead with the peer metric")
+    assert "rep is required" in feedback.add_playbook_rule("x", "global")["reason"]
+    r = feedback.add_playbook_rule("Lead with the peer metric", "persona:economic_buyer", rep="rep1")
+    assert r["confirmation"] == "Learned: Lead with the peer metric. Applies to: persona:economic_buyer — rep1's drafts only."
+    assert feedback.add_playbook_rule("lead with the peer metric!", "persona:economic_buyer", rep="rep1")["evidence"] == 2
+    r = feedback.add_playbook_rule("Lead with their signal", "persona:economic_buyer",
+                                   rep="rep1", replaces="Lead with the peer metric")
     assert r["replaced"] == "Lead with the peer metric"
-    assert [x["rule"] for x in feedback.get_playbook()["learned_rules"]] == ["Lead with their signal"]
-    assert "Lead with their signal" in (tmp_path / "learned_rules.md").read_text()
+    assert [x["rule"] for x in feedback.get_playbook("rep1")["rep_rules"]] == ["Lead with their signal"]
     for i in range(5):
-        feedback.add_golden_example("technical_evaluator", "email", f"m{i}", subject="s")
-    assert [e["message"] for e in feedback.get_playbook()["golden_examples"]["technical_evaluator/email"]] == ["m4", "m3", "m2"]
+        feedback.add_golden_example("technical_evaluator", "email", f"m{i}", subject="s", rep="rep1")
+    ex = feedback.get_playbook("rep1")["golden_examples"]["technical_evaluator/email"]
+    assert [e["message"] for e in ex] == ["m4", "m3", "m2"]
 
 
 
@@ -276,6 +278,43 @@ def test_company_linkedin_rendered_in_md_and_docx(env):
     assert "Announced the Java 17 migration" in md and "(company post · tags: Phil Burrows)" in md
     assert "possible repost" in md
     assert "Company LinkedIn" in _docx_text(out["saved"].removesuffix(".json") + ".docx")
+
+
+def test_rep_scoped_briefs_dont_collide(env):
+    blog, phil = env
+    today = date.today().isoformat()
+    a = briefs.save_brief("brex.com", brief(blog, phil), rep="aniket")
+    s = briefs.save_brief("brex.com", brief(blog, phil, signal=False), rep="sarah")
+    assert a["saved"].endswith(f"{today}.aniket.json") and s["saved"].endswith(f"{today}.sarah.json")
+    rec_a = json.loads((briefs.bdir() / "brex.com" / f"{today}.aniket.json").read_text())
+    assert rec_a["requested_by"] == "aniket"
+    # Sarah's same-day save didn't overwrite Aniket's, and tokens are per-rep
+    assert briefs.find_report(briefs._load_tokens()["brex.com/" + today + ".aniket"])
+    assert briefs.find_report(briefs._load_tokens()["brex.com/" + today + ".sarah"])
+    # since-last-run diffs against the most recent brief for the domain (any rep)
+    assert s["since_last_run"]["since"] == today
+    # a re-save by the same rep updates in place, no new file
+    briefs.save_brief("brex.com", brief(blog, phil), rep="aniket")
+    assert sorted(p.name for p in (briefs.bdir() / "brex.com").glob("*.json")) == [
+        f"{today}.aniket.json", f"{today}.sarah.json"]
+
+
+def test_comments_inherit_brief_rep(env, monkeypatch):
+    from starlette.testclient import TestClient
+    from server.app import build_server
+    blog, phil = env
+    briefs.save_brief("brex.com", brief(blog, phil), rep="aniket")
+    monkeypatch.setattr(briefs, "BASE_URL", "https://tunnel.example")
+    token = briefs._load_tokens()[f"brex.com/{date.today().isoformat()}.aniket"]
+    with TestClient(build_server("secret").http_app()) as client:
+        url = f"/report/{token}/comments"
+        r = client.post(url, json={"comments": [{"quote": "q", "note": "n"}]})
+        assert r.status_code == 200
+        # a different reviewer's "commenting as" overrides the brief owner
+        r = client.post(url, json={"rep": "manager", "comments": [{"quote": "q2", "note": "n2"}]})
+        assert r.status_code == 200
+    comments = briefs.get_brief_feedback("brex.com")["comments"]
+    assert [c["rep"] for c in comments] == ["aniket", "manager"]
 
 
 def test_draft_notes_and_skeleton_flag(env):

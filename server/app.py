@@ -184,12 +184,37 @@ def lint_message(channel: str, text: str, source_ids: list[str] | None = None,
 
 
 @_tool
-def save_brief(domain: str, brief: dict) -> dict:
+def whoami() -> dict:
+    """The rep identity for this session, for the `rep` argument on get_playbook,
+    add_playbook_rule, add_golden_example and save_brief. Decoded from the session's
+    OIDC identity token (requesting_user_email) when present, else the REP env var.
+    rep is None when identity can't be resolved — ask the rep for their Slack handle."""
+    import base64
+    import json as _json
+    for var in ("DEVIN_OIDC_TOKEN", "DEVIN_IDENTITY_TOKEN", "OIDC_TOKEN", "DEVIN_IDENTITY_JWT"):
+        token = os.environ.get(var)
+        if not token or token.count(".") != 2:
+            continue
+        try:
+            payload = _json.loads(base64.urlsafe_b64decode(token.split(".")[1] + "=="))
+        except Exception:
+            continue
+        email = payload.get("requesting_user_email") or payload.get("email")
+        if email:
+            return {"rep": feedback.rep_slug(email), "source": var}
+    rep = os.environ.get("REP") or os.environ.get("REP_ID")
+    return {"rep": feedback.rep_slug(rep), "source": "env" if rep else "none"}
+
+
+@_tool
+def save_brief(domain: str, brief: dict, rep: str | None = None) -> dict:
     """Validate and save the brief (shape: playbook Output contract). Returns the validator
     report (what was dropped and why), the since-last-run diff, the rendered brief_markdown,
     and the Slack summary (its "Full brief" is the .docx link). Fix drops with real evidence —
-    never by rewording — then save again. Post the final slack_summary verbatim."""
-    return briefs.save_brief(domain, brief)
+    never by rewording — then save again. Post the final slack_summary verbatim.
+    rep: the requesting rep's handle (from whoami) — scopes the file so two reps can
+    brief the same account the same day and tags their report comments."""
+    return briefs.save_brief(domain, brief, rep)
 
 
 @_tool
@@ -216,30 +241,41 @@ def mark_brief_feedback_processed(domain: str, comment_ids: list[str]) -> dict:
 
 
 @_tool
-def get_playbook() -> dict:
-    """Learned rules (apply all that match the stage and persona) and golden examples
-    (style references for drafting; never copy their facts)."""
-    return feedback.get_playbook()
+def get_playbook(rep: str | None = None) -> dict:
+    """Rules and golden examples for this run. Pass the rep's handle (whoami) so their
+    own rules are included. Layers: locked_rules (policy, never overridable) →
+    learned_rules (team defaults) → rep_rules (the rep's own, their drafts only).
+    Golden examples are style references for drafting; never copy their facts."""
+    return feedback.get_playbook(rep)
 
 
 @_tool
-def add_playbook_rule(rule: str, scope: str, replaces: str | None = None) -> dict:
+def add_playbook_rule(rule: str, scope: str, rep: str | None = None,
+                      replaces: str | None = None) -> dict:
     """Record a rule distilled from rep feedback. scope: "global" or "persona:<deal_role>".
-    Check get_playbook first: if it contradicts an existing rule, ask the rep, and pass
-    the superseded rule's text as `replaces` only if they say the new one wins.
+    `rep` is required — the sender's handle from whoami / the Slack trigger, never
+    self-declared in message text. The rule lands in their own layer (their drafts
+    only); anonymous writes are rejected. When several reps independently converge on
+    the same rule it is promoted to team defaults via a reviewed PR.
+    Check get_playbook first: if it contradicts one of that rep's own rules, ask them,
+    and pass the superseded rule's text as `replaces` only if they say the new one wins.
+    Contradicting a team default is fine — the rep's rule just wins for them. Locked
+    rules can't be replaced.
     Factual corrections are not rules — fix the brief instead."""
-    return feedback.add_playbook_rule(rule, scope, replaces)
+    return feedback.add_playbook_rule(rule, scope, rep, replaces)
 
 
 @_tool
-def add_golden_example(persona: str, channel: str, message: str, subject: str | None = None) -> dict:
+def add_golden_example(persona: str, channel: str, message: str, subject: str | None = None,
+                       rep: str | None = None) -> dict:
     """Store a rep-approved message as a style reference. persona: deal role;
-    channel: email | linkedin_note | linkedin_followup."""
-    return feedback.add_golden_example(persona, channel, message, subject)
+    channel: email | linkedin_note | linkedin_followup. `rep` is required — the
+    approving rep's handle; their examples become their own style references."""
+    return feedback.add_golden_example(persona, channel, message, subject, rep)
 
 
 TOOLS = [search_web, fetch_page, search_people, search_company_linkedin, get_company, get_jobs,
-         get_org_chart, get_tech_stack, verify_quotes,
+         get_org_chart, get_tech_stack, verify_quotes, whoami,
          get_positioning, match_customers, refresh_positioning, apply_knowledge_update,
          lint_message, save_brief, get_last_brief,
          get_playbook, add_playbook_rule, add_golden_example,
@@ -309,7 +345,7 @@ def build_server(auth_token: str | None = None, public_base_url: str | None = No
             assert isinstance(comments, list)
         except Exception:
             return PlainTextResponse("Bad request", status_code=400)
-        saved = briefs.save_comments(request.path_params["token"], comments)
+        saved = briefs.save_comments(request.path_params["token"], comments, body.get("rep"))
         if not saved:
             return PlainTextResponse("Not found", status_code=404)
         from starlette.responses import JSONResponse

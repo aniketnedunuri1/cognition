@@ -102,25 +102,32 @@ def diff_briefs(old: dict, new: dict) -> dict:
 
 # ---------- save / load ----------
 
-def save_brief(domain: str, brief: dict) -> dict:
+def save_brief(domain: str, brief: dict, rep: str | None = None) -> dict:
     """Validate, diff against the last run, and save. Returns the validator report,
-    the diff, and the Slack summary. Fix dropped items with real evidence, then save again."""
+    the diff, and the Slack summary. Fix dropped items with real evidence, then save again.
+    `rep` scopes the file to <date>.<rep>.json: two reps can run the same account the
+    same day without overwriting each other; a re-save by the same rep updates in place."""
+    from .feedback import rep_slug
     domain = normalize_domain(domain)
+    slug = rep_slug(rep)
     clean, report = validate_brief({**brief, "domain": domain}, use_cases=use_case_names())
     today = date.today().isoformat()
-    previous = [p for p in _saved(domain) if p.stem != today]
+    stem = f"{today}.{slug}" if slug else today
+    previous = [p for p in _saved(domain) if p.stem != stem]
     prev = json.loads(previous[-1].read_text()) if previous else None
     since = {"since": prev["date"], **diff_briefs(prev["brief"], clean)} if prev else None
 
-    out = bdir() / domain / f"{today}.json"
+    out = bdir() / domain / f"{stem}.json"
     # Download tokens live in a gitignored sidecar so committed briefs carry no secrets.
     tokens = _load_tokens()
-    token = tokens.get(f"{domain}/{today}") or secrets.token_urlsafe(16)
-    tokens[f"{domain}/{today}"] = token
+    token = tokens.get(f"{domain}/{stem}") or secrets.token_urlsafe(16)
+    tokens[f"{domain}/{stem}"] = token
     _tokens_path().parent.mkdir(parents=True, exist_ok=True)
     _tokens_path().write_text(json.dumps(tokens, indent=1))
-    record = {"domain": domain, "date": today, "saved_at": now_iso(), "brief": clean,
+    record = {"domain": domain, "date": today, "stem": stem, "saved_at": now_iso(), "brief": clean,
               "report": report, "since_last_run": since, "download_token": token}
+    if slug:
+        record["requested_by"] = slug
     out.parent.mkdir(parents=True, exist_ok=True)
     disk = {k: v for k, v in record.items() if k != "download_token"}
     out.write_text(json.dumps(disk, indent=1, ensure_ascii=False))
@@ -129,17 +136,23 @@ def save_brief(domain: str, brief: dict) -> dict:
     from .docx_render import brief_to_docx
     brief_to_docx(record, out.with_suffix(".docx"))
     from .html_render import render_html
-    docx_href = (f"/briefs/{token}/{domain}-{today}.docx" if BASE_URL else f"{today}.docx")
+    docx_href = (f"/briefs/{token}/{domain}-{stem}.docx" if BASE_URL else f"{stem}.docx")
     out.with_suffix(".html").write_text(render_html(record, markdown, docx_href))
     return {"saved": _rel(out), "report": report, "since_last_run": since,
             "brief_markdown": markdown, "slack_summary": render_slack(record)}
 
 
+def _stem(rec: dict) -> str:
+    """Filename stem for a record; pre-rep briefs have no `stem` key."""
+    return rec.get("stem") or rec["date"]
+
+
 def brief_link(rec: dict) -> str:
     """The .docx download link in HTTP mode; the local path otherwise."""
+    stem = _stem(rec)
     if BASE_URL and rec.get("download_token"):
-        return f"{BASE_URL.rstrip('/')}/briefs/{rec['download_token']}/{rec['domain']}-{rec['date']}.docx"
-    return _rel(bdir() / rec["domain"] / f"{rec['date']}.docx")
+        return f"{BASE_URL.rstrip('/')}/briefs/{rec['download_token']}/{rec['domain']}-{stem}.docx"
+    return _rel(bdir() / rec["domain"] / f"{stem}.docx")
 
 
 def _find_by_token(token: str) -> Path | None:
@@ -149,7 +162,8 @@ def _find_by_token(token: str) -> Path | None:
     for key, tok in _load_tokens().items():
         if hmac.compare_digest(tok, token):
             path = bdir() / key
-            return path if path.with_suffix(".json").exists() else None
+            # str + suffix: stems can carry a ".<rep>" suffix that with_suffix() would eat
+            return path if Path(str(path) + ".json").exists() else None
     return None
 
 
@@ -158,7 +172,7 @@ def find_download(token: str) -> Path | None:
     stem = _find_by_token(token)
     if not stem:
         return None
-    docx = stem.with_suffix(".docx")
+    docx = Path(str(stem) + ".docx")
     return docx if docx.exists() else None
 
 
@@ -166,14 +180,14 @@ def report_link(rec: dict) -> str:
     """The annotatable report URL in HTTP mode; the local .html path otherwise."""
     if BASE_URL and rec.get("download_token"):
         return f"{BASE_URL.rstrip('/')}/report/{rec['download_token']}"
-    return _rel(bdir() / rec["domain"] / f"{rec['date']}.html")
+    return _rel(bdir() / rec["domain"] / f"{_stem(rec)}.html")
 
 
 def find_report(token: str) -> Path | None:
     stem = _find_by_token(token)
     if not stem:
         return None
-    page = stem.with_suffix(".html")
+    page = Path(str(stem) + ".html")
     return page if page.exists() else None
 
 
@@ -189,22 +203,31 @@ def _write_json_atomic(path: Path, data: dict) -> None:
     tmp.replace(path)
 
 
-def save_comments(token: str, comments: list[dict]) -> dict | None:
-    """Append submitted report comments to the brief's <date>.comments.json.
-    Returns {domain, date, pending} or None for an unknown token."""
+def save_comments(token: str, comments: list[dict], rep: str | None = None) -> dict | None:
+    """Append submitted report comments to the brief's <stem>.comments.json.
+    Each comment is tagged with a rep: the explicit one (per-comment or form-level),
+    else the brief's requested_by. Returns {domain, date, pending} or None."""
+    from .feedback import rep_slug
     stem = _find_by_token(token)
     if not stem:
         return None
+    try:
+        owner = json.loads(Path(str(stem) + ".json").read_text()).get("requested_by")
+    except (OSError, json.JSONDecodeError):
+        owner = None
+    default_rep = rep_slug(rep) or owner
     path = _comments_file(stem)
     data = json.loads(path.read_text()) if path.exists() else {"comments": []}
     start = len(data["comments"])
     for i, c in enumerate(comments):
-        data["comments"].append({
-            "id": f"c{start + i + 1}", "processed": False, "submitted_at": now_iso(),
-            "section": str(c.get("section") or "")[:200],
-            "quote": str(c.get("quote") or "")[:4000],
-            "note": str(c.get("note") or "")[:2000],
-            "tag": str(c.get("tag") or "")[:100]})
+        entry = {"id": f"c{start + i + 1}", "processed": False, "submitted_at": now_iso(),
+                 "section": str(c.get("section") or "")[:200],
+                 "quote": str(c.get("quote") or "")[:4000],
+                 "note": str(c.get("note") or "")[:2000],
+                 "tag": str(c.get("tag") or "")[:100]}
+        if rep_slug(c.get("rep")) or default_rep:
+            entry["rep"] = rep_slug(c.get("rep")) or default_rep
+        data["comments"].append(entry)
     _write_json_atomic(path, data)
     pending = sum(1 for c in data["comments"] if not c["processed"])
     return {"domain": stem.parent.name, "date": stem.name, "saved": _rel(path),
@@ -270,11 +293,11 @@ def get_last_brief(domain: str) -> dict:
 
 
 def load_record(domain: str, day: str | None = None) -> tuple[Path, dict] | None:
-    files = [p for p in _saved(domain) if day is None or p.stem == day]
+    files = [p for p in _saved(domain) if day is None or p.stem == day or p.stem.startswith(day + ".")]
     if not files:
         return None
     rec = json.loads(files[-1].read_text())
-    rec["download_token"] = _load_tokens().get(f"{rec['domain']}/{rec['date']}")
+    rec["download_token"] = _load_tokens().get(f"{rec['domain']}/{_stem(rec)}")
     return files[-1], rec
 
 

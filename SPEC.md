@@ -247,11 +247,13 @@ Contact-level signals from #2 attach to both the person and the account.
 **Source rules** (enforced in `apply_knowledge_update`): core positioning only from Cognition-owned domains (cognition.ai, cognition.com, devin.ai) — a rewrite citing anything else is rejected. Third-party sources can add customers, never change the narrative or add use cases. `public_reference` is computed from the source domain, never set by the model. Every proof quote must verify, and the customer must be named in the page body (not just the title).
 
 **d. Learning from feedback**
-- Capture: rep edits (draft vs. sent diff), comments (Slack thread), approve/reject.
-- Distill into `playbook/learned_rules.md`: rule + scope (global / persona) + evidence count.
-- Approved messages → golden examples per persona (top few), used as few-shot.
-- Contradicts an existing rule → ask the rep, don't silently overwrite.
-- Agent confirms back: "Learned: X. Applies to: Y."
+- Capture: rep edits (draft vs. sent diff), comments (Slack thread + annotatable HTML report, each tagged with a rep), approve/reject. `whoami()` resolves the rep (session OIDC email, Slack handle fallback).
+- **Rules are layered, merged at read time** (`get_playbook(rep)`): `locked_rules.json` (policy set by the lead — never auto-send, no layoffs, no "Windsurf"; nobody can replace them) → `learned_rules.json` (team defaults) → `playbook/reps/<rep>.json` (the rep's own layer, their drafts only). Feedback lands in the rep's layer: at 50 SDRs one rep's preference can't change everyone's drafts, and cross-rep "contradictions" aren't conflicts — each lives in its own file.
+- A rule contradicting the *rep's own* rule → ask the rep, don't silently overwrite. Contradicting a team default is fine — the rep's rule wins for them.
+- **Promotion is the PR, not the person:** when ~3 distinct reps independently hold the same rule, the server opens a PR moving it into `learned_rules.json` (reps recorded as `sponsors`). The lead reviews; merging updates every rep's Devin. Rep-layer rules commit directly (their own file), team defaults only via reviewed promotion.
+- Approved messages → golden examples per persona (top few), rep-scoped the same way, used as few-shot.
+- Briefs are rep-scoped too: `briefs/<domain>/<date>.<rep>.json` records `requested_by` — same-day same-account runs don't collide, and report comments inherit the rep. Since-last-run still diffs against the most recent brief for the domain (any rep).
+- Agent confirms back: "Learned: X. Applies to: Y — <rep>'s drafts only."
 
 ---
 
@@ -321,7 +323,7 @@ Full brief (.docx): <.docx download link>
 
 - **Salesforce closed-won** replaces the public customer list: complete, includes non-public customers for internal champion tracking and broader peer matching.
 - **Reply / meeting outcomes** become the primary feedback signal (beyond edits).
-- **Per-rep rule scope**, promoted to global when several reps agree.
+- **Outcome-weighted rules** — per-rep scope and PR promotion exist today; next is promoting by reply/meeting rate rather than rep count.
 - **Scheduled runs** (Agent SDK, headless) for weekly "since last run" on the target list.
 - **Google Workspace:** a service account writes the same rendered brief into a shared team Drive folder as a Google Doc (no per-rep OAuth); the link replaces the .docx download.
 - **Data provider is swappable** — point at whatever Cognition already pays for (ZoomInfo, Sales Nav, etc.).

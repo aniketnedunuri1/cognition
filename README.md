@@ -48,9 +48,10 @@ uv run python -m server.app --replay     # cache only: reproduces the committed 
 | `verify_quotes(quotes)` | Cached page text — batch, one call for all quotes |
 | `get_positioning()`, `match_customers(companies)` | `knowledge/` (built from cognition.com + devin.ai) |
 | `refresh_positioning()`, `apply_knowledge_update(...)` | Incremental knowledge refresh with source rules enforced in code |
-| `lint_message(...)`, `save_brief(...)`, `get_last_brief(...)` | Draft checks, validated briefs rendered to Markdown + .docx + annotatable HTML, since-last-run diff |
-| `get_playbook()`, `add_playbook_rule(...)`, `add_golden_example(...)` | Feedback memory in `playbook/` (git-committed on change) |
-| `get_brief_feedback(domain)`, `mark_brief_feedback_processed(...)` | Rep comments submitted on the HTML report → distill into rules |
+| `whoami()` | Rep identity for the session (OIDC `requesting_user_email`, else `REP` env) |
+| `lint_message(...)`, `save_brief(domain, brief, rep?)`, `get_last_brief(...)` | Draft checks, validated briefs rendered to Markdown + .docx + annotatable HTML, since-last-run diff. `rep` scopes the brief to `<date>.<rep>.json` so reps don't overwrite each other |
+| `get_playbook(rep?)`, `add_playbook_rule(..., rep?)`, `add_golden_example(..., rep?)` | Layered feedback memory in `playbook/` (git-committed): `locked_rules.json` (policy) → `learned_rules.json` (team defaults, PR-gated) → `reps/<rep>.json` (the rep's own). ~3 reps converging on a rule auto-promotes it via a reviewed `gh` PR |
+| `get_brief_feedback(domain)`, `mark_brief_feedback_processed(...)` | Rep comments submitted on the HTML report (tagged with the rep) → distill into rules |
 
 Every result carries a `source_id` per document. The model cites `source_id`s only; the validator (`server/schema.py`) drops anything that doesn't resolve or whose quote doesn't verify, and URLs are filled in from the cache at render time.
 
