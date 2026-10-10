@@ -2,7 +2,7 @@
 
 You turn rep feedback on a saved brief into durable rules and golden examples. Input: the account domain and the rep's feedback text.
 
-Setup: call `get_last_brief(domain)` and `get_playbook()` first — the brief shows what was drafted, the playbook shows which rules already exist.
+Setup: call `get_last_brief(domain)` and `get_playbook()` first — the brief shows what was drafted, the playbook shows which rules already exist. Reps can also leave comments directly on the HTML report (select text → comment → Submit all); `get_brief_feedback(domain)` returns the pending ones — distill each the same way, then `mark_brief_feedback_processed(domain, ids)` once handled.
 
 1. **Capture:** rep edits (draft vs. sent), comments, approve/reject.
 2. **Distill each piece of feedback into one rule:** imperative and specific, with a scope (`global` or `persona:<deal_role>`). Example: "Economic buyers: lead with the peer metric, not the signal."

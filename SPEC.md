@@ -23,8 +23,8 @@ A wrong fact costs a rep more than a missing one. It burns credibility with the 
 ## User loop
 
 1. Rep: `@Devin research acme.com` in Slack (or `python agent.py research acme.com` locally).
-2. Agent runs company → people → signals and saves the validated brief; the server renders it to Markdown and .docx in code.
-3. Agent replies in thread with the tool-rendered summary + the brief's .docx download link.
+2. Agent runs company → people → signals and saves the validated brief; the server renders it to Markdown, .docx and an annotatable HTML report in code.
+3. Agent replies in thread with the tool-rendered summary + links to the report (commentable) and the .docx.
 4. Rep picks contacts (or accepts the suggested top 3).
 5. Agent drafts email + LinkedIn per contact, posts in thread.
 6. Rep edits / comments / approves.
@@ -89,9 +89,10 @@ The server owns all state (cache, briefs, learned rules, golden examples, knowle
 | `get_playbook()` / `add_playbook_rule(rule, scope)` | Feedback memory |
 | `add_golden_example(persona, message)` | Store approved messages |
 | `lint_message(channel, text, source_ids, subject?)` | Length, banned phrases, public_reference, no layoffs, no "Windsurf", no placeholders; every number must appear in the cited sources |
-| `save_brief(domain, brief_json)` / `get_last_brief(domain)` | Validate, persist, diff; renders `.md` + `.docx`; returns report + `brief_markdown` + Slack summary (with the brief link) |
+| `save_brief(domain, brief_json)` / `get_last_brief(domain)` | Validate, persist, diff; renders `.md` + `.docx` + `.html`; returns report + `brief_markdown` + Slack summary (with the report + docx links) |
+| `get_brief_feedback(domain)` / `mark_brief_feedback_processed(domain, ids)` | Pending rep comments submitted on the HTML report; mark once distilled |
 
-HTTP mode also serves `GET /briefs/<token>/<domain>-<date>.docx`: outside MCP auth (a rep clicks it in Slack), a random token per brief is the access control. `PUBLIC_BASE_URL` (the tunnel / host URL) is required with `--http`.
+HTTP mode also serves `GET /briefs/<token>/<domain>-<date>.docx` and `GET /report/<token>` + `POST /report/<token>/comments`: outside MCP auth (a rep clicks it in Slack), a random token per brief is the access control. `PUBLIC_BASE_URL` (the tunnel / host URL) is required with `--http`.
 
 ---
 
@@ -276,7 +277,8 @@ Start with:
  1. <Name>, <Title> — <why>
  2. ...
  3. ...
-Full brief: <.docx download link>
+Report (leave feedback): <HTML report link>
+Full brief (.docx): <.docx download link>
 ```
 
 **Brief** (AE packet = `.docx`; Slack summary = the SDR artifact; Markdown = the git-diffable twin of the same *content*, not the same visual). Rendered in code from the validated JSON. The `.docx` is designed from the record (not converted from Markdown). The model never writes or copies the rendered brief. No Google Docs: Devin's Drive connector needs Google's Drive MCP developer-preview enrollment + OAuth, not worth it for this. The CLI prints the local path; HTTP mode links the .docx.
@@ -292,7 +294,7 @@ Full brief: <.docx download link>
 10. **Wider buying center** (final page: compact table of every verified person, grouped by team)
 11. Sources (receding; not page one)
 
-**Source of truth:** `briefs/<domain>/<date>.json`; the `.md`, `.docx` and Slack summary are renders of it. The Slack reply is the tool-rendered `slack_summary`, posted verbatim; agent prose outside the brief/summary carries no facts (it isn't validated).
+**Source of truth:** `briefs/<domain>/<date>.json`; the `.md`, `.docx`, `.html` and Slack summary are renders of it. The Slack reply is the tool-rendered `slack_summary`, posted verbatim; agent prose outside the brief/summary carries no facts (it isn't validated).
 
 ---
 
@@ -310,7 +312,7 @@ Full brief: <.docx download link>
 
 ## Write-up notes
 
-- The validated JSON in `briefs/` is the canonical record; Markdown, .docx and Slack are renders in code, never sources.
+- The validated JSON in `briefs/` is the canonical record; Markdown, .docx, HTML and Slack are renders in code, never sources.
 - Draft claims: every prospect-specific claim in a draft must be listed with a verbatim quote, and each is verified (one failure blocks the draft); numbers, digits or words, must appear in the cited sources. A real quote can still fail to support its claim (run 3: "runs in a Bazel monorepo" cited to a quote about Cursor agents), so every capitalized term and number in a claim must also appear in its own quote (deterministic; exempt: prospect, contact, Devin, sentence-initial words; a small abbreviation map, PR ↔ pull request). Deliberately over-blocks. Residual limits: lowercase terms aren't checked ("monorepo"), and we can't prove every claim in the prose was listed. Claims live in the JSON but are not rendered in the brief. **Production next step: an LLM judge (claim entailed by quote?) as a separate review pass, kept out of the deterministic validator.**
 - **Champion** is checkable: confirmed `ex_devin_customer` (profile history × `customers.json`); or a senior profile title (Manager+/Staff/Principal/Director/Head, including VP/C-level) plus a verified `public_pain` quote; or senior plus `hiring_manager`. `works_on_signal` is checkable (the person is in a tier-1 signal's `who_cares`) but never earns the badge — supporting or hook only, same as `new_in_role` and `ai_appetite`. Honest limit on ex-customer: we cannot prove they personally ran Devin.
 - Only the brief is validated. Agent prose outside it is unchecked, so the playbook forbids facts there and the Slack reply is the tool-rendered summary posted verbatim (in Devin this relies on the agent following the playbook; the CLI enforces it in code).

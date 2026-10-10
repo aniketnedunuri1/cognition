@@ -12,8 +12,9 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 
 1. **Resolve the domain.** If given a name, `search_web("<name> official website")` and take the domain from the results. If two companies plausibly match, ask the rep.
 2. `get_playbook()`: apply every learned rule. Golden examples are style references for drafting.
-3. `get_last_brief(domain)`: if one exists, finish with a **Since last run** section (Stage 5).
-4. `get_positioning()`: load it once and reuse it for signal mapping and drafting.
+3. `get_brief_feedback(domain)`: distill any pending report comments into rules per the feedback playbook (`add_playbook_rule` for generalizable feedback; factual fixes are not rules), then `mark_brief_feedback_processed`. Do this before drafting so the new rules apply to this run.
+4. `get_last_brief(domain)`: if one exists, finish with a **Since last run** section (Stage 5).
+5. `get_positioning()`: load it once and reuse it for signal mapping and drafting.
 
 ---
 

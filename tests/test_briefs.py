@@ -151,7 +151,8 @@ def test_docx_and_download_link(env, monkeypatch):
     blog, phil = env
     out = briefs.save_brief("brex.com", brief(blog, phil))
     stem = out["saved"].removesuffix(".json")
-    assert out["slack_summary"].endswith(f"Full brief: {stem}.docx")  # CLI: local path
+    assert out["slack_summary"].endswith(f"Full brief (.docx): {stem}.docx")  # CLI: local path
+    assert out["slack_summary"].splitlines()[-2].endswith(f"{stem}.html")  # report link
     text = _docx_text(f"{stem}.docx")
     assert "Brex — account brief" in text and "Your Java 17 migration" in text and "Claims to check" not in text
     assert "Who to work" in text
@@ -168,6 +169,48 @@ def test_docx_and_download_link(env, monkeypatch):
         assert r.status_code == 200 and r.content[:2] == b"PK"  # a .docx, no bearer token needed
         assert client.get("/briefs/not-a-token/brex.com.docx").status_code == 404
         assert client.post("/mcp", json={}).status_code == 401  # the MCP endpoint still needs the token
+
+
+def test_html_report_and_comment_flow(env, monkeypatch):
+    from pathlib import Path
+    from starlette.testclient import TestClient
+    from server.app import build_server
+    blog, phil = env
+    out = briefs.save_brief("brex.com", brief(blog, phil))
+    stem = out["saved"].removesuffix(".json")
+    page = Path(f"{stem}.html").read_text()
+    assert 'id="report"' in page and "Submit all feedback" in page
+    assert 'data-section="Verdict"' in page and "Java 8 → 17 migration" in page
+    assert "Sources &amp; validator report" in page  # references recede into <details>
+
+    monkeypatch.setattr(briefs, "BASE_URL", "https://tunnel.example")
+    link = briefs.report_link(briefs.load_record("brex.com")[1])
+    assert link.startswith("https://tunnel.example/report/")
+
+    with TestClient(build_server("secret").http_app()) as client:
+        r = client.get(link.removeprefix("https://tunnel.example"))
+        assert r.status_code == 200 and b"Submit all feedback" in r.content
+        assert client.get("/report/not-a-token").status_code == 404
+
+        url = link.removeprefix("https://tunnel.example") + "/comments"
+        comment = {"section": "Verdict", "quote": "Java 17 migration underway",
+                   "note": "lead with the peer metric instead", "tag": "applies always"}
+        r = client.post(url, json={"comments": [comment]})
+        assert r.status_code == 200 and r.json()["pending"] == 1
+        assert client.post("/report/not-a-token/comments", json={"comments": []}).status_code == 404
+        assert client.post(url, data="not json").status_code == 400
+
+    fb = briefs.get_brief_feedback("brex.com")
+    assert fb["found"] and len(fb["comments"]) == 1
+    c = fb["comments"][0]
+    assert c["quote"] == "Java 17 migration underway" and c["note"].startswith("lead with")
+    assert c["brief_date"] == date.today().isoformat() and not c["processed"]
+
+    marked = briefs.mark_brief_feedback_processed("brex.com", [c["id"], "c999"])
+    assert marked["marked"] == [c["id"]] and marked["unknown_ids"] == ["c999"]
+    assert not briefs.get_brief_feedback("brex.com")["found"]
+    # comments files are not picked up as briefs
+    assert briefs.get_last_brief("brex.com")["date"] == date.today().isoformat()
 
 
 def test_render_fixes():

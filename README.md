@@ -15,7 +15,7 @@ uv run pytest              # no API calls
 ## Run it
 
 ```bash
-uv run python agent.py research acme.com              # brief → briefs/acme.com/<date>.{json,md,docx} + Slack summary
+uv run python agent.py research acme.com              # brief → briefs/acme.com/<date>.{json,md,docx,html} + Slack summary
 uv run python agent.py research acme.com --stage people
 uv run python agent.py feedback acme.com "CTO email too long; lead with the peer metric"
 uv run python agent.py research <demo-domain> --replay # reproduce the committed demo, no data API spend
@@ -48,12 +48,13 @@ uv run python -m server.app --replay     # cache only: reproduces the committed 
 | `verify_quotes(quotes)` | Cached page text — batch, one call for all quotes |
 | `get_positioning()`, `match_customers(companies)` | `knowledge/` (built from cognition.com + devin.ai) |
 | `refresh_positioning()`, `apply_knowledge_update(...)` | Incremental knowledge refresh with source rules enforced in code |
-| `lint_message(...)`, `save_brief(...)`, `get_last_brief(...)` | Draft checks, validated briefs rendered to Markdown + .docx, since-last-run diff |
+| `lint_message(...)`, `save_brief(...)`, `get_last_brief(...)` | Draft checks, validated briefs rendered to Markdown + .docx + annotatable HTML, since-last-run diff |
 | `get_playbook()`, `add_playbook_rule(...)`, `add_golden_example(...)` | Feedback memory in `playbook/` (git-committed on change) |
+| `get_brief_feedback(domain)`, `mark_brief_feedback_processed(...)` | Rep comments submitted on the HTML report → distill into rules |
 
 Every result carries a `source_id` per document. The model cites `source_id`s only; the validator (`server/schema.py`) drops anything that doesn't resolve or whose quote doesn't verify, and URLs are filled in from the cache at render time.
 
-HTTP mode also serves `GET /briefs/<token>/<file>.docx` (no bearer token: the random per-brief token is the access control); the MCP endpoint itself requires `MCP_AUTH_TOKEN`.
+HTTP mode also serves `GET /briefs/<token>/<file>.docx` and `GET /report/<token>` (no bearer token: the random per-brief token is the access control); the MCP endpoint itself requires `MCP_AUTH_TOKEN`. The report page lets a rep select text, leave comments, and submit them in one batch to `POST /report/<token>/comments`; they land in `briefs/<domain>/<date>.comments.json` for the next run to distill into rules.
 
 ## Devin setup
 
