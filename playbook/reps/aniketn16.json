@@ -17,6 +17,18 @@
    "scope": "global",
    "evidence": 1,
    "added": "2026-10-10"
+  },
+  {
+   "rule": "Write 'would love to connect', never 'would be glad to connect' (or 'glad to connect').",
+   "scope": "global",
+   "evidence": 1,
+   "added": "2026-10-10"
+  },
+  {
+   "rule": "Be assertive, not cocky: state the observation and the next step directly. Never hedge with 'I'd guess', 'my hypothesis is', 'probably' or 'tends to'. This overrides 'hedged hypotheses' in the email-shape rule.",
+   "scope": "global",
+   "evidence": 1,
+   "added": "2026-10-10"
   }
  ],
  "golden_examples": {}
