@@ -20,7 +20,7 @@ For the learned-rule auto-promotion (`gh pr create` when ~3 reps converge on a r
 uv run python agent.py research acme.com              # brief → briefs/acme.com/<date>.{json,md,docx,html} + Slack summary
 uv run python agent.py research acme.com --stage people
 uv run python agent.py feedback acme.com "CTO email too long; lead with the peer metric"
-uv run python agent.py research <demo-domain> --replay # reproduce the committed demo, no data API spend
+uv run python agent.py research acme.com --replay      # cache only, no API spend — needs a warm cache (i.e. a prior run of that account); fails on a fresh clone
 ```
 
 **Auth for the runner:** set `ANTHROPIC_API_KEY` in `.env` (recommended for reviewers). Alternative: if you're logged in to Claude Code (`claude` CLI), the runner uses that login and no key is needed.
@@ -34,7 +34,7 @@ The agent gets **only** this MCP server's tools (no built-in web search, no othe
 ```bash
 uv run python -m server.app              # stdio (local runner, Claude Code)
 uv run python -m server.app --http       # Streamable HTTP on :8765/mcp; needs MCP_AUTH_TOKEN + PUBLIC_BASE_URL
-uv run python -m server.app --replay     # cache only: reproduces the committed demo with no API spend
+uv run python -m server.app --replay     # cache only: serves prior cached calls with no API spend (cache/ is gitignored — warm it with a real run first)
 ```
 
 | Tool | Source |
