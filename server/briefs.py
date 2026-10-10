@@ -522,9 +522,8 @@ def render_markdown(rec: dict) -> str:
         tag = (" · ".join(badges) + " · ") if badges else ""
         ver = "verified" if p["verified"] else "single source"
         link = f" · [LinkedIn]({_url(p['profile_source_id'])})" if p.get("profile_source_id") else ""
-        team = f" · {p['team']}" if p.get("team") else ""
         role = ROLE.get(p["deal_role"], p["deal_role"])
-        L.append(f"- {tag}**{p['name']}** — *{p['title']}{team} · {role}* — {_plain(p['why'])} *({ver}){link}* {src.cite(p['evidence'])}")
+        L.append(f"- {tag}**{p['name']}** — *{p['title']} · {role}* — {_plain(p['why'])} *({ver}){link}* {src.cite(p['evidence'])}")
         # The line's label follows the person's outcome: champion evidence only on
         # champions, warm-lead evidence only on warm leads, else Supporting.
         qual = {"champion": {"ex_devin_customer"},
