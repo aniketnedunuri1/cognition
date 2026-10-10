@@ -58,5 +58,11 @@
   "scope": "persona:economic_buyer",
   "evidence": 1,
   "added": "2026-10-09"
+ },
+ {
+  "rule": "Person titles: use only the most recent experience entry — never older roles or a merged string. If the latest entry is an org/function name (e.g. 'Enterprise AI Platforms & Engineering Efficiency'), use the profile headline or the most recent real job title instead.",
+  "scope": "global",
+  "evidence": 1,
+  "added": "2026-10-10"
  }
 ]
