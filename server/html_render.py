@@ -228,6 +228,14 @@ button.primary { background:#1a1d21; color:#fff; border-color:#1a1d21; }
 .comment .sec-tag, .comment .tag-tag { display:inline-block; font-size:11px; color:var(--mut);
              background:#f3f4f6; border-radius:4px; padding:1px 6px; margin-right:4px; }
 .comment .rm { float:right; border:none; color:#b91c1c; padding:0; }
+/* copyable draft blocks */
+.cp { position:relative; border:1px dashed var(--line); border-radius:8px;
+      padding:10px 14px; margin:10px 0; }
+.cpbtn { position:absolute; top:8px; right:8px; font-size:11px; color:var(--mut);
+         background:#fff; }
+.cpbtn:hover { color:#1a1d21; border-color:#9ca3af; }
+.cpbtn.ok { color:#15803d; border-color:#86efac; background:#f0fdf4; font-weight:600; }
+.cp .cplabel { margin-top:0; }
 #repName { width:100%; margin-top:12px; box-sizing:border-box; }
 #submitAll { width:100%; margin-top:8px; }
 #status { font-size:12px; margin-top:8px; color:var(--mut); }
@@ -284,7 +292,7 @@ document.addEventListener('mouseup', (e) => {
   pop.style.display='block';
   pop.style.left = Math.min(e.pageX, window.innerWidth - 300) + 'px';
   pop.style.top = (e.pageY + 8) + 'px';
-  popText.value=''; popText.focus();
+  popText.value='';   // no autofocus: it would collapse the selection and break Cmd+C
 });
 
 function renderPanel() {
@@ -365,6 +373,103 @@ document.getElementById('popCancel').onclick = hidePop;
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a.cite');
   if (a) document.querySelectorAll('details.refs').forEach(d => d.open = true);
+});
+
+// drafted messages: group each labeled block (Email / LinkedIn note / follow-up)
+// into a .cp wrapper with a copy button, so reps can paste straight into email.
+document.querySelectorAll('.sec-drafted-messages').forEach(sec => {
+  const labels = { 'Email': 'Copy email',
+                   'LinkedIn connection note': 'Copy note',
+                   'LinkedIn follow-up': 'Copy follow-up' };
+  let group = null;
+  [...sec.children].forEach(el => {
+    if (el.matches('h3')) { group = null; return; }
+    // draft labels render as <p class="meta"><em><em>Label</em>… — the nested
+    // em marks a block boundary; anything else belongs to the open group
+    const inner = el.tagName === 'P' && el.querySelector('em em');
+    if (inner) {
+      const label = labels[inner.textContent.trim()];
+      group = null;   // unknown labels (e.g. rep-only "Send notes") end the group
+      if (label) {
+        group = document.createElement('div');
+        group.className = 'cp';
+        sec.insertBefore(group, el);
+        const btn = document.createElement('button');
+        btn.className = 'cpbtn'; btn.type = 'button';
+        btn.dataset.l = label; btn.textContent = label;
+        const g = group;               // capture now — `group` is reused per label
+        btn.onclick = () => copyGroup(g, btn);
+        group.appendChild(btn);
+        el.classList.add('cplabel');
+      }
+    }
+    if (group) group.appendChild(el);
+  });
+});
+
+async function copyGroup(g, btn) {
+  const c = g.cloneNode(true);
+  c.querySelectorAll('.cpbtn,.cplabel').forEach(n => n.remove());
+  // drop rep-only trailers that can trail into the last group of a draft
+  c.querySelectorAll('p > em:first-child').forEach(em => {
+    if (/^(Built from|Lint)\b/.test(em.textContent)) em.parentElement.remove();
+  });
+  // innerText needs layout: park the clone offscreen so paragraph breaks survive
+  c.style.cssText = 'position:fixed;left:-9999px;top:0';
+  document.body.appendChild(c);
+  const text = c.innerText.trim(), markup = c.innerHTML;
+  c.remove();
+  let copied = false;
+  try {
+    await navigator.clipboard.write([new ClipboardItem({
+      'text/plain': new Blob([text], {type:'text/plain'}),
+      'text/html': new Blob([markup], {type:'text/html'})
+    })]);
+    copied = true;
+  } catch (_) {}
+  if (!copied) {
+    // fallback that needs no clipboard permission: hide the chrome, select the
+    // block, and let the browser's own copy command carry the rich HTML
+    const hidden = [];
+    g.querySelectorAll('.cpbtn,.cplabel').forEach(n => {
+      hidden.push([n, n.style.display]); n.style.display = 'none';
+    });
+    const r = document.createRange();
+    r.selectNodeContents(g);
+    const sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(r);
+    try { copied = document.execCommand('copy'); } catch (_) {}
+    sel.removeAllRanges();
+    hidden.forEach(([n, d]) => { n.style.display = d; });
+  }
+  btn.classList.add('ok');
+  btn.textContent = '✓ Copied';
+  setTimeout(() => { btn.classList.remove('ok'); btn.textContent = btn.dataset.l; }, 1600);
+}
+
+// Cmd/Ctrl+C with no selection inside a draft block copies that whole block;
+// with a selection the browser's native copy already carries rich HTML.
+document.addEventListener('copy', (e) => {
+  const sel = window.getSelection();
+  if (!sel || !sel.isCollapsed || !report.contains(sel.anchorNode)) return;
+  const el = sel.anchorNode && sel.anchorNode.nodeType === 3
+    ? sel.anchorNode.parentElement : sel.anchorNode;
+  const g = el && el.closest('.cp');
+  if (!g) return;
+  const c = g.cloneNode(true);
+  c.querySelectorAll('.cpbtn,.cplabel').forEach(n => n.remove());
+  c.querySelectorAll('p > em:first-child').forEach(em => {
+    if (/^(Built from|Lint)\b/.test(em.textContent)) em.parentElement.remove();
+  });
+  c.style.cssText = 'position:fixed;left:-9999px;top:0';
+  document.body.appendChild(c);
+  e.clipboardData.setData('text/plain', c.innerText.trim());
+  e.clipboardData.setData('text/html', c.innerHTML);
+  c.remove();
+  e.preventDefault();
+  const b = g.querySelector('.cpbtn');   // same confirmation as the button
+  if (b) { b.classList.add('ok'); b.textContent = '✓ Copied';
+    setTimeout(() => { b.classList.remove('ok'); b.textContent = b.dataset.l; }, 1600); }
 });
 
 submitBtn.onclick = async () => {

@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capital One — account brief</title>
+<style>
+:root { --ink:#1a1d21; --mut:#6b7280; --line:#e5e7eb; --bg:#f7f7f5; --card:#fff; }
+* { box-sizing:border-box; }
+body { margin:0; font:15px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink); background:var(--bg); }
+.page { max-width:880px; margin:0 auto; padding:32px 20px 120px; }
+header.top { display:flex; flex-wrap:wrap; gap:12px; align-items:baseline;
+             justify-content:space-between; margin-bottom:24px; }
+header.top h1 { font-size:22px; margin:0; }
+header.top .sub { color:var(--mut); font-size:13px; }
+header.top .dl { font-size:13px; color:#2563eb; text-decoration:none; }
+/* common region: one card per section */
+section.sec { background:var(--card); border:1px solid var(--line); border-radius:10px;
+              padding:18px 22px; margin:20px 0; border-left:4px solid #d1d5db; }
+section.sec > h2 { margin:0 0 10px; font-size:15px; text-transform:uppercase;
+                   letter-spacing:.04em; color:var(--mut); }
+h3 { font-size:14px; margin:18px 0 6px; }
+p { margin:6px 0; }
+p.meta { color:var(--mut); font-size:13px; }
+ul { margin:6px 0; padding-left:22px; }
+li { margin:5px 0; }
+section.sec > ul > li + li { margin-top:12px; }  /* proximity: room between entities */
+ul ul { margin:2px 0; }
+blockquote { margin:6px 0 6px 2px; padding:6px 12px; border-left:3px solid #d1d5db;
+             color:#374151; background:#fafafa; border-radius:0 6px 6px 0; font-size:14px; }
+table { border-collapse:collapse; width:100%; margin:8px 0; font-size:14px; }
+td { border-bottom:1px solid var(--line); padding:6px 10px 6px 0; vertical-align:top; }
+td:first-child { color:var(--mut); white-space:nowrap; width:1%; }
+code { background:#f3f4f6; padding:1px 5px; border-radius:4px; font-size:13px; }
+a { color:#2563eb; }
+a.cite { color:var(--mut); text-decoration:none; font-size:12px; vertical-align:1px; }
+a.cite:hover { color:#2563eb; text-decoration:underline; }
+a.srclink { color:#2563eb; border-bottom:1px dotted #2563eb; text-decoration:none; }
+details.refs p:target { background:#fef3c7; border-radius:4px; }
+/* similarity: one accent hue per section category — chip + left border + faint card tint */
+section.sec > h2 { display:inline-block; padding:2px 10px; border-radius:6px; }
+.sec-verdict, .sec-since-last-run { border-left-color:#16a34a; background:#fbfefc; }
+.sec-verdict > h2, .sec-since-last-run > h2 { color:#15803d; background:#dcfce7; }
+.sec-intent-signals, .sec-additional-signals, .sec-competitive-context,
+.sec-company-linkedin { border-left-color:#d97706; background:#fffdf9; }
+.sec-intent-signals > h2, .sec-additional-signals > h2,
+.sec-competitive-context > h2, .sec-company-linkedin > h2 { color:#b45309; background:#fef3c7; }
+.sec-who-to-work, .sec-recommended-entry-top-3, .sec-wider-buying-center,
+.sec-org-chart-sumble---inferred { border-left-color:#2563eb; background:#fcfdff; }
+.sec-who-to-work > h2, .sec-recommended-entry-top-3 > h2,
+.sec-wider-buying-center > h2, .sec-org-chart-sumble---inferred > h2 {
+  color:#1d4ed8; background:#dbeafe; }
+.sec-drafted-messages, .sec-abm-themes-assessment { border-left-color:#7c3aed; background:#fefdff; }
+.sec-drafted-messages > h2, .sec-abm-themes-assessment > h2 { color:#6d21a8; background:#f3e8ff; }
+/* small inline badges */
+.bdg { display:inline-block; font-size:11px; font-weight:600; border-radius:4px;
+       padding:0 6px; vertical-align:1px; }
+.bdg.tier { color:#b45309; background:#fef3c7; }
+.bdg.champ { color:#1d4ed8; background:#dbeafe; }
+.bdg.warn { color:#b91c1c; background:#fee2e2; }
+.bdg.ver { color:#15803d; background:#dcfce7; }
+/* one hue per deal role (similarity) */
+.bdg.role.economic-buyer { color:#15803d; background:#dcfce7; }
+.bdg.role.technical-evaluator { color:#1d4ed8; background:#dbeafe; }
+.bdg.role.gatekeeper { color:#b45309; background:#fef3c7; }
+.bdg.role.parent-company-approver { color:#6d21a8; background:#f3e8ff; }
+/* nested lines (evidence, hooks) recede: figure/ground */
+ul ul { font-size:13px; color:#4b5563; }
+ul ul .bdg { background:none; box-shadow:inset 0 0 0 1px #c7cbd1; color:#6b7280;
+             font-weight:500; }
+ul ul li { margin:3px 0; }
+em .bdg { font-style:normal; }
+/* figure/ground: reference material recedes */
+details.refs { margin:20px 0; }
+details.refs summary { cursor:pointer; color:var(--mut); font-size:13px; }
+details.refs section { opacity:.75; font-size:13px; }
+/* annotations */
+::selection { background:#fde68a; }
+mark.draft { background:#fef9c3; border-radius:2px; padding:0 1px;
+             outline:1px dashed #eab308; }
+mark.pending { background:#fde68a; border-radius:2px; padding:0 1px;
+               box-shadow:0 0 0 1px #f59e0b inset; }
+mark.done { background:#bbf7d0; border-radius:2px; padding:0 1px; }
+#pop { position:absolute; z-index:50; display:none; width:280px; background:#fff;
+       border:1px solid var(--line); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,.12);
+       padding:10px; }
+#pop textarea { width:100%; height:64px; font:inherit; font-size:13px; resize:vertical;
+                border:1px solid var(--line); border-radius:6px; padding:6px; }
+#pop select { width:100%; margin:6px 0; font:inherit; font-size:13px; }
+#pop .row { display:flex; gap:8px; justify-content:flex-end; }
+button { font:inherit; font-size:13px; border:1px solid var(--line); border-radius:6px;
+         background:#fff; padding:5px 10px; cursor:pointer; }
+button.primary { background:#1a1d21; color:#fff; border-color:#1a1d21; }
+#panel { position:fixed; top:0; right:0; bottom:0; width:300px; background:#fff;
+         border-left:1px solid var(--line); padding:16px; overflow-y:auto; display:none; }
+#panel h2 { font-size:14px; margin:0 0 4px; }
+#panel .hint { color:var(--mut); font-size:12px; margin-bottom:12px; }
+.comment { border:1px solid var(--line); border-radius:8px; padding:10px; margin:8px 0;
+           font-size:13px; }
+.comment q { display:block; color:var(--mut); font-size:12px; margin-bottom:4px;
+             border-left:2px solid #fde68a; padding-left:6px; }
+.comment .sec-tag, .comment .tag-tag { display:inline-block; font-size:11px; color:var(--mut);
+             background:#f3f4f6; border-radius:4px; padding:1px 6px; margin-right:4px; }
+.comment .rm { float:right; border:none; color:#b91c1c; padding:0; }
+/* copyable draft blocks */
+.cp { position:relative; border:1px dashed var(--line); border-radius:8px;
+      padding:10px 14px; margin:10px 0; }
+.cpbtn { position:absolute; top:8px; right:8px; font-size:11px; color:var(--mut);
+         background:#fff; }
+.cpbtn:hover { color:#1a1d21; border-color:#9ca3af; }
+.cpbtn.ok { color:#15803d; border-color:#86efac; background:#f0fdf4; font-weight:600; }
+.cp .cplabel { margin-top:0; }
+#repName { width:100%; margin-top:12px; box-sizing:border-box; }
+#submitAll { width:100%; margin-top:8px; }
+#status { font-size:12px; margin-top:8px; color:var(--mut); }
+#status.err { color:#b91c1c; }
+body.has-panel .page { margin-right:320px; }
+#fab { position:fixed; right:16px; bottom:16px; box-shadow:0 4px 14px rgba(0,0,0,.15); }
+</style>
+</head><body>
+<div class="page">
+<header class="top">
+  <div>
+    <h1>Capital One — account brief</h1>
+    <div class="sub">2026-10-09 · capitalone.com ·
+      select any text to comment, then Submit all feedback</div>
+  </div>
+  <a class="dl" href="2026-10-09.docx">Download .docx</a>
+</header>
+<main id="report">
+<section class="sec sec-verdict" data-section="Verdict">
+<h2>Verdict</h2>
+<p><strong>Warm</strong> <em>(assessment)</em> — Claude Code is already in engineers&#x27; hands, so this is an expand motion: a new engineering-efficiency exec is measuring agent ROI while the CISO has committed to patching every vuln across 30k repos. <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-2">[2]</a><a class="cite" href="#src-3">[3]</a></p>
+<p>Watch for: Results of the Claude Code/Cursor ROI telemetry; the Discover back-book migration window (Q1 2027); any new coding-agent pilot or enterprise deal announced.</p>
+</section>
+<section class="sec sec-snapshot" data-section="Snapshot">
+<h2>Snapshot</h2>
+<table><tbody>
+<tr><td></td><td></td></tr>
+<tr><td>HQ</td><td>McLean, Virginia (Apollo) <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Founded</td><td>1994 (Apollo) <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Industry</td><td>Financial services (Apollo) <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Ownership</td><td>Public company (Apollo) <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Headcount</td><td>~79,000 employees <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Headcount growth</td><td>Apollo headcount growth data (see Apollo record) <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Revenue</td><td>revenue (see Apollo record) <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Sells to</td><td>Consumers, small businesses and commercial clients (Apollo description) <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Key products</td><td>Credit cards, checking and savings accounts, and auto financing <a class="cite" href="#src-5">[5]</a></td></tr>
+</tbody></table>
+</section>
+<section class="sec sec-engineering-priorities" data-section="Engineering &amp; priorities">
+<h2>Engineering &amp; priorities</h2>
+<ul>
+<li><strong>Engineering headcount:</strong> engineering department headcount (see Apollo record) <a class="cite" href="#src-4">[4]</a></li>
+<li><strong>Open eng roles:</strong> Apollo jobs feed lists 482 postings, 138 engineering-relevant titles (incl. AI enablement and agentic-technology roles) <a class="cite" href="#src-4">[4]</a></li>
+<li><strong>Tech stack:</strong> Enterprise testing platform runs on Kubernetes and Argo (eng blog); Sumble stack lookup unavailable this run <a class="cite" href="#src-6">[6]</a></li>
+<li><strong>AI dev tools:</strong> Claude Code given to engineers in February (former employee post) <a class="cite" href="#src-2">[2]</a>; AI-efficiency team tracks ROI of Claude Code and Cursor adoption <a class="cite" href="#src-1">[1]</a>; Apollo lists AI coding tools incl. Claude Code, Cursor, GitHub Copilot <a class="cite" href="#src-4">[4]</a></li>
+<li><strong>Eng blog / GitHub:</strong> Capital One Tech blog; open-sourced VulnHunter (agentic code-security tool) <a class="cite" href="#src-7">[7]</a>; Open-sourced Context Specs, a spec-driven development framework for agents <a class="cite" href="#src-8">[8]</a></li>
+<li><strong>AI posture:</strong> Eng leadership frames AI as an amplifier of existing dev-lifecycle strengths and weaknesses <a class="cite" href="#src-9">[9]</a>; AI-efficiency org sets guardrails on agentic behavior and code provenance <a class="cite" href="#src-1">[1]</a></li>
+<li><strong>What they care about:</strong> Discover technology migration: back book scheduled onto Capital One platform in Q1 2027 <a class="cite" href="#src-10">[10]</a>; Security commitment to scan all code and patch all vulns across 30k repos (third-party post quoting CISO call) <a class="cite" href="#src-3">[3]</a></li>
+<li><strong>Peers:</strong> Not found</li>
+</ul>
+</section>
+<section class="sec sec-intent-signals" data-section="Intent signals">
+<h2>Intent signals</h2>
+<p><strong>New AI engineering-efficiency exec tracks Claude Code and Cursor ROI</strong> — <span class="bdg tier">Tier 1</span> · profile data · Feature development capacity · Relevant for: Goutham Kadhaba</p>
+<p>  &gt; &quot;providing privacy-aware ROI insights on the adoption of Claude Code, Windsurf, and Cursor&quot; <a class="cite" href="#src-1">[1]</a> · 2026-08-29</p>
+<p>  &gt; &quot;Built analytics models correlating AI Density (AI vs. human code) directly with PR cycle times, code quality&quot; <a class="cite" href="#src-1">[1]</a> · 2026-08-29</p>
+<p><strong>DevEx engineer says AI exposes weak review and testing</strong> — <span class="bdg tier">Tier 2</span> · exec statement · Test generation &amp; QA · Relevant for: Max Kanat-Alexander</p>
+<p>  &gt; &quot;why AI amplifies both the strengths and weaknesses of the development lifecycle, and how teams should think differently about code review, quality, and testing&quot; <a class="cite" href="#src-9">[9]</a> · 2026-08-26</p>
+<p><strong>CISO wants every vuln patched across 30k repos</strong> — <span class="bdg tier">Tier 2</span> · exec statement · Vulnerability remediation · Relevant for: Mihir Vora</p>
+<p>  &gt; &quot;committed to scan 100% of their code, and patch 100% vulns, across 30k Repos&quot; <a class="cite" href="#src-3">[3]</a> · 2026-07-26</p>
+<p>  &gt; &quot;We were able to identify and remediate vulnerabilities across thousands of repositories, spanning tens of business areas, with speed and efficiency.&quot; <a class="cite" href="#src-7">[7]</a> · 2026-07-16</p>
+<p><strong>Discover back book moves onto Capital One tech by Q1 2027</strong> — <span class="bdg tier">Tier 2</span> · news/press · Code migration &amp; modernization · Relevant for: Jason Strle</p>
+<p>  &gt; &quot;full front-book migration targeted by the end of the third quarter of 2026 and the existing back book scheduled to reach the platform during the first quarter of 2027&quot; <a class="cite" href="#src-10">[10]</a> · 2026-07-22</p>
+<h3>Additional signals</h3>
+<p class="meta"><em>Lower-level signals from the past two weeks.</em></p>
+<ul>
+<li><code>News mention</code> <strong>Capital One Ventures invests in Socket for supply chain security</strong> — posted 8d ago <a class="cite" href="#src-11">[11]</a></li>
+</ul>
+<p class="meta"><em><em>Competitive context</em></em></p>
+<p>1. Claude Code rolled out to engineers in February; efficiency team now tracks Claude Code and Cursor ROI. Angle: expand into delegated backlog work the IDE tools do not cover. (competitor in production) <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-2">[2]</a></p>
+<p>2. GitHub Copilot training for engineers (copilot autocomplete) <a class="cite" href="#src-12">[12]</a></p>
+<p>3. In-house agentic tooling: VulnHunter for vuln find-and-fix (other) <a class="cite" href="#src-7">[7]</a></p>
+</section>
+<section class="sec sec-company-linkedin" data-section="Company LinkedIn">
+<h2>Company LinkedIn</h2>
+<ul>
+<li>Capital One Ventures investing in Socket for software supply chain security <em>(post)</em> <a class="cite" href="#src-11">[11]</a></li>
+</ul>
+<p>  &gt; &quot;Capital One Ventures is investing in the future of software supply chain security with Socket&quot; <a class="cite" href="#src-11">[11]</a></p>
+</section>
+<section class="sec sec-who-to-work" data-section="Who to work">
+<h2>Who to work</h2>
+<ul>
+<li><strong><span class="bdg champ">Incumbent owner</span></strong> · <strong>Goutham Kadhaba</strong> — <em>Senior Director — AI Telemetry &amp; Developer Experience · <span class="bdg role economic-buyer">Economic buyer</span></em> — Owns AI-augmented DevEx and measures Claude Code/Cursor ROI; incumbent owner, so pitch delegated work alongside, not instead. <em><span class="bdg warn">single source</span> · <a href="https://linkedin.com/in/gouthamkadhaba" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-1">[1]</a></li>
+<ul>
+<li>Supporting (new in role): In role about 4 months <a class="cite" href="#src-1">[1]</a></li>
+<li>Supporting (AI appetite): Owns AI coding tool ROI telemetry <a class="cite" href="#src-1">[1]</a></li>
+<li>Hook: Hiring Distinguished Engineers for enterprise cloud and AI <a class="cite" href="#src-13">[13]</a></li>
+</ul>
+<li><strong>Mihir Vora</strong> — <em>Senior Distinguished Engineer · <span class="bdg role technical-evaluator">Technical evaluator</span></em> — Platform engineer who argues for governance embedded in the pipeline; the vuln-remediation push lands on his platform. <em><span class="bdg warn">single source</span> · <a href="https://www.linkedin.com/in/mihirsvora" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-14">[14]</a></li>
+<ul>
+<li>Supporting (ex-Devin customer): Profile history includes a Devin customer (worked-at, not proof of use) <a class="cite" href="#src-14">[14]</a></li>
+<li>Hook: Wrote on embedding governance into the platform via automated guardrails <a class="cite" href="#src-15">[15]</a></li>
+</ul>
+<li><strong>Max Kanat-Alexander</strong> — <em>Executive Distinguished Engineer · <span class="bdg role technical-evaluator">Technical evaluator</span></em> — Public voice on AI readiness, code review and testing; keynoting on AI coding agents. <em><span class="bdg ver">verified</span></em> <a class="cite" href="#src-9">[9]</a><a class="cite" href="#src-16">[16]</a></li>
+<ul>
+<li>Supporting (public talk about the pain): Public statement on review and testing pain with AI <a class="cite" href="#src-9">[9]</a></li>
+<li>Hook: Keynote on code simplicity for AI coding agents <a class="cite" href="#src-17">[17]</a></li>
+</ul>
+<li><strong>Jennifer Honermann</strong> — <em>Vice President, Product Management Developer Experience · <span class="bdg role economic-buyer">Economic buyer</span></em> — Newly promoted DevEx product VP hiring product leaders for developer problems. <em><span class="bdg warn">single source</span> · <a href="https://linkedin.com/in/jennifer-honermann" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-18">[18]</a></li>
+<ul>
+<li>Supporting (new in role): Promoted to VP of Product Management <a class="cite" href="#src-19">[19]</a></li>
+<li>Hook: Hiring product leaders to solve developer problems <a class="cite" href="#src-19">[19]</a></li>
+</ul>
+<li><strong>Jason Strle</strong> — <em>EVP CIO Discover Technology · <span class="bdg role economic-buyer">Economic buyer</span></em> — Owns Discover technology during platform migration. <em><span class="bdg warn">single source</span> · <a href="https://linkedin.com/in/jason-strle" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-20">[20]</a></li>
+</ul>
+</section>
+<section class="sec sec-recommended-entry-top-3" data-section="Recommended entry: top 3">
+<h2>Recommended entry: top 3</h2>
+<p>1. <strong>Goutham Kadhaba</strong> — Owns AI-augmented DevEx and agent ROI telemetry; natural sponsor for an expand motion. <a class="cite" href="#src-1">[1]</a></p>
+<p>2. <strong>Mihir Vora</strong> — Platform engineer where vuln-remediation volume lands; Devin-customer history on profile. <a class="cite" href="#src-15">[15]</a></p>
+<p>3. <strong>Max Kanat-Alexander</strong> — Publicly names review and testing as where AI gains stall. <a class="cite" href="#src-9">[9]</a></p>
+</section>
+<section class="sec sec-drafted-messages" data-section="Drafted messages">
+<h2>Drafted messages</h2>
+<p class="meta"><em>Drafts for rep review. Never auto-sent.</em></p>
+<h3>Goutham Kadhaba</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Capital One</em></p>
+<p>Hi Goutham,</p>
+<p>Your team built analytics correlating AI-written code with PR cycle times and code quality, which probably makes you the person deciding which work goes to agents next.</p>
+<p>My guess is the interactive tools cover the inner loop well, and the open question is the delegated backlog nobody sits in an IDE for. Devin works those tasks in its own environment and returns a PR, so the output lands inside the provenance guardrails you&#x27;re already setting. Citi rolled it out to 40,000 developers.</p>
+<p>Would a 20-minute look at how other banks govern that split be useful?</p>
+<p>Best,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Goutham, saw you took on enterprise AI platforms and engineering efficiency for BankTech. I work with banks on which engineering work goes to autonomous agents and how to govern it. Would be glad to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Goutham. One thing I keep hearing from bank engineering leaders: once interactive coding tools are everywhere, how do you decide which work moves to agents that run without someone in the IDE? Your telemetry on AI-written code versus PR cycle times looks like exactly the data to answer that. The banks we work with tend to start with backlog work that has clear pass/fail checks, like vulnerability fixes and framework upgrades. Open to a short call later this month?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li><span class="bdg champ">Incumbent owner</span> of Claude Code/Cursor ROI: position Devin as delegated work alongside, never a replacement</li>
+<li>Strategy owner: governance framing, no product tour</li>
+<li>Do not name the other tools in outreach</li>
+<li>LinkedIn follow-up is sendable after he accepts</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-21">[21]</a></p>
+<h3>Mihir Vora</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Capital One</em></p>
+<p>Hi Mihir,</p>
+<p>Security has committed to patching every vulnerability across <a class="srclink" href="https://www.linkedin.com/posts/gamielgran_is-ai-changing-how-we-think-about-technical-activity-7487220827973668864-J2Hw" target="_blank" rel="noopener">30k</a> repos, and your argument for embedding governance in the platform instead of ticket approvals puts the pipeline right where that commitment gets kept or missed.</p>
+<p>Devin picks up a finding, writes the fix in its own sandbox, runs your checks and opens a PR that clears the same automated guardrails as any engineer&#x27;s change. Itaú reports <a class="srclink" href="https://devin.ai/customers/itau" target="_blank" rel="noopener">70%</a> of its security vulnerabilities remediated automatically.</p>
+<p>Open to 20 minutes on how that would sit in your pipeline?</p>
+<p>Best,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Mihir, liked your take on putting governance into the platform with automated guardrails instead of ticket approvals. I spend a lot of time with platform teams wiring agent-written fixes through those same checks. Would like to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Mihir. With the goal of patching every vuln across 30k repos, I&#x27;d guess remediation volume hits your pipelines before it hits any engineer. The pattern that works for platform teams: the agent writes the fix, the platform&#x27;s own policy checks decide whether it merges, and humans only review what fails. That keeps your guardrail model intact rather than adding a new approval queue. If useful, I can walk you through one remediation run end to end. Any week better than others?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li><span class="bdg role technical-evaluator">Technical evaluator</span>: how it runs on his pipeline, not the exec pitch</li>
+<li>Profile shows a Devin customer in his history; do not mention prior employer</li>
+<li>Vuln goal comes from a third-party post quoting a CISO call; keep it as paraphrase</li>
+<li>LinkedIn follow-up is sendable</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-3">[3]</a><a class="cite" href="#src-15">[15]</a><a class="cite" href="#src-22">[22]</a></p>
+<h3>Max Kanat-Alexander</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Capital One</em></p>
+<p>Hi Max,</p>
+<p>On the Engineering Enablement episode you made the case that AI amplifies whatever the lifecycle already does well or badly, so teams stuck waiting on reviews or fighting poor tooling get little from faster code generation.</p>
+<p>If that holds, the leverage is in the unglamorous part of the loop. Devin can take a service with thin coverage, write the missing tests in its own environment, and open a PR your reviewers judge like any other. Litera reports <a class="srclink" href="https://devin.ai/customers/litera" target="_blank" rel="noopener">93%</a> faster regression cycles.</p>
+<p>Worth a short call to pick one service and see what comes back?</p>
+<p>Best,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Max, your keynote on applying code simplicity to AI coding agents is close to the problem I work on: keeping agent-written code reviewable. Would be glad to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Max. Your point that clearly expressing requirements and giving feedback are becoming core engineering skills with coding agents matches what we see: the teams getting value write tight task specs and let the agent run the build and tests before anyone reviews. I&#x27;d value 20 minutes on where you think delegated agents break down in a large codebase, and I can share what we&#x27;ve learned from test-generation work in return.</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li><span class="bdg role technical-evaluator">Technical evaluator</span> and public voice on DevEx: lead with his own argument, paraphrased</li>
+<li>Keep it practitioner level, no exec framing</li>
+<li>LinkedIn follow-up is sendable</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-9">[9]</a><a class="cite" href="#src-17">[17]</a><a class="cite" href="#src-23">[23]</a></p>
+<h3>Jennifer Honermann</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Capital One</em></p>
+<p>Hi Jennifer,</p>
+<p>Congrats on the move to VP of Product Management. You mentioned hiring product leaders to solve developer problems, which suggests the developer experience roadmap is about to grow.</p>
+<p>One item I&#x27;d expect on it soon: with engineers already using agentic coding tools, deciding which chores should run as delegated work instead of interactive sessions. Devin takes a migration or upgrade ticket, runs it in its own environment and returns a reviewable PR. Nubank reports an <a class="srclink" href="https://devin.ai/customers/nubank/" target="_blank" rel="noopener">8x</a> engineering time efficiency gain.</p>
+<p>Could we find 15 minutes in the next couple of weeks?</p>
+<p>Best,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Jennifer, congrats on the promotion after 15 years at Capital One. I work with developer experience teams on which engineering chores to hand to autonomous agents. Would be glad to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Jennifer. Since you&#x27;re building out a product team for developer problems, one pattern from other large engineering orgs: the first agent use cases that stick have a clear definition of done, like dependency upgrades, test backfills and security fixes, because the pipeline can judge the result. Product tends to own picking that list more than engineering does. If helpful, I can share how a couple of banks scoped theirs. Is a short call this month realistic?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li>New VP and hiring: frame as roadmap input, not a tool pitch</li>
+<li>Engineers already have agentic coding tools; do not ask if they have tried agents</li>
+<li>LinkedIn follow-up is sendable</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-2">[2]</a><a class="cite" href="#src-19">[19]</a><a class="cite" href="#src-24">[24]</a></p>
+<h3>Jason Strle</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Capital One</em></p>
+<p>Hi Jason,</p>
+<p>With half of new Discover originations already on Capital One technology and the back book scheduled for the first quarter of 2027, the hardest migration waves are the ones still ahead.</p>
+<p>Those waves usually hide a long tail of service rewrites, interface changes and test updates that compete with roadmap work for the same engineers. Devin takes that remainder as scoped, reviewable PRs so your teams set direction instead of grinding through conversions. Itaú ran a .NET to Java migration of 59 services <a class="srclink" href="https://devin.ai/customers/itau" target="_blank" rel="noopener">6x</a> faster with it.</p>
+<p>Open to a short call on how the remaining waves could be split?</p>
+<p>Best,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Jason, I work with bank technology leaders on large platform migrations, where autonomous agents take on the conversion backlog. Would be glad to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Jason. Integrations like Discover tend to leave a long remainder after the headline cutover: retiring duplicate services, updating interfaces and rebuilding the tests that prove nothing broke. That work is well defined, which is why it suits delegation to agents that open PRs your engineers review. If it would help planning for the back book move, I can share how other banks sequenced that remainder work. Would a brief conversation in the coming weeks make sense?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li><span class="bdg role economic-buyer">Economic buyer</span> for Discover technology: mandate plus proof, no product tour</li>
+<li>Exec unlikely to read LinkedIn; email first, LinkedIn note optional</li>
+<li>No personal hook found; anchored on the Discover migration signal</li>
+<li>Do not mention synergy dollar targets</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-10">[10]</a><a class="cite" href="#src-22">[22]</a></p>
+</section>
+<section class="sec sec-abm-themes-assessment" data-section="ABM themes *(assessment)*">
+<h2>ABM themes <em>(assessment)</em></h2>
+<ul>
+<li>Patch every vuln across 30k repos: agent-written fixes through existing pipeline guardrails. <a class="cite" href="#src-3">[3]</a></li>
+<li>Beyond the IDE: delegated, governed agent work measured by the same AI-ROI telemetry. <a class="cite" href="#src-1">[1]</a></li>
+<li>Discover integration: migration remainder work before the Q1 2027 back-book move. <a class="cite" href="#src-10">[10]</a></li>
+</ul>
+</section>
+<section class="sec sec-wider-buying-center" data-section="Wider buying center">
+<h2>Wider buying center</h2>
+<table><tbody>
+<tr><td>Name</td><td>Title</td><td>Team</td><td>Deal role</td><td>LinkedIn</td></tr>
+<tr><td>Chris Nims</td><td>Chief Information Security Officer</td><td>Cybersecurity</td><td><span class="bdg role gatekeeper">Gatekeeper</span></td><td>—</td></tr>
+<tr><td>Max Kanat-Alexander</td><td>Executive Distinguished Engineer</td><td>Developer productivity</td><td><span class="bdg role technical-evaluator">Technical evaluator</span></td><td>—</td></tr>
+</tbody></table>
+</section>
+<section class="sec sec-org-chart-sumble-inferred" data-section="Org chart *(Sumble — inferred)*">
+<h2>Org chart <em>(Sumble — inferred)</em></h2>
+<p>Not found</p>
+</section>
+<details class="refs"><summary>Sources &amp; validator report</summary><section class="sec sec-sources" data-section="Sources">
+<h2>Sources</h2>
+<p id="src-1">1. <a href="https://linkedin.com/in/gouthamkadhaba" target="_blank" rel="noopener">Goutham Kadhaba</a> — published 2026-08-29, retrieved 2026-10-09</p>
+<p id="src-2">2. <a href="https://www.linkedin.com/posts/cstyler_june-is-my-last-month-at-capital-one-i-had-activity-7473845407794552833-m9ck" target="_blank" rel="noopener">Chris Tyler&#x27;s Post - LinkedIn</a> — published 2026-06-19, retrieved 2026-10-09</p>
+<p id="src-3">3. <a href="https://www.linkedin.com/posts/gamielgran_is-ai-changing-how-we-think-about-technical-activity-7487220827973668864-J2Hw" target="_blank" rel="noopener">Is AI changing how we think about technical debt? Going forward:</a> — published 2026-07-26, retrieved 2026-10-09</p>
+<p id="src-4">4. Apollo — Apollo organization record: Capital One (retrieved 2026-10-09)</p>
+<p id="src-5">5. <a href="https://www.capitalone.com" target="_blank" rel="noopener">Capital One | Credit Cards, Checking, Savings &amp; Auto Loans</a> — retrieved 2026-10-09</p>
+<p id="src-6">6. <a href="https://devfeed.tech/articles/scaling-enterprise-testing-on-kubernetes-with-argo-42802" target="_blank" rel="noopener">Scaling Enterprise Testing on Kubernetes with Argo · DevFeed</a> — published 2026-09-18, retrieved 2026-10-09</p>
+<p id="src-7">7. <a href="https://www.capitalone.com/tech/open-source/announcing-vulnhunter/" target="_blank" rel="noopener">VulnHunter: an open-source, agentic AI code security tool | Capital One Tech</a> — published 2026-07-16, retrieved 2026-10-09</p>
+<p id="src-8">8. <a href="https://www.capitalone.com/tech/open-source/open-source-context-specs/" target="_blank" rel="noopener">New Open-Source Context Specs Released | Capital One Tech</a> — published 2026-06-24, retrieved 2026-10-09</p>
+<p id="src-9">9. <a href="https://newsletter.getdx.com/p/how-capital-one-assesses-ai-readiness" target="_blank" rel="noopener">How Capital One assesses AI readiness - by Brian Houck</a> — published 2026-08-26, retrieved 2026-10-09</p>
+<p id="src-10">10. <a href="https://business-news-today.com/capital-ones-2-5bn-discover-payoff-is-advancing-but-the-hardest-migration-waves-start-now/" target="_blank" rel="noopener">Capital One’s $2.5bn Discover payoff is advancing, but the hardest</a> — published 2026-07-22, retrieved 2026-10-09</p>
+<p id="src-11">11. <a href="https://www.linkedin.com/posts/capital-one_strengthening-open-source-security-with-socket-activity-7511425236567871488-lJy6" target="_blank" rel="noopener">Securing open source software will become increasingly important as the volume and pace of software development continue to accelerate with the rise of AI-powered coding. Here’s why Capital One Ventures is investing …</a> — published 2026-10-01, retrieved 2026-10-09</p>
+<p id="src-12">12. <a href="https://linkedin.com/in/chriskohlbeck" target="_blank" rel="noopener">Chris Kohlbeck</a> — published 2026-09-05, retrieved 2026-10-09</p>
+<p id="src-13">13. <a href="https://www.linkedin.com/posts/gouthamkadhaba_capitalone-capitalonejobs-distinguishedengineer-activity-7500279077564682240-9Dly" target="_blank" rel="noopener">I am hiring for 2 leadership roles - Visionary Distinguished Engineers to join Capital One and drive executive-level technical strategy for our enterprise cloud and AI ecosystems! 🚀</a> — published 2026-08-31, retrieved 2026-10-09</p>
+<p id="src-14">14. <a href="https://www.linkedin.com/in/mihirsvora" target="_blank" rel="noopener">Mihir Vora</a> — published 2026-09-07, retrieved 2026-10-09</p>
+<p id="src-15">15. <a href="https://www.linkedin.com/feed/update/urn:li:activity:7420136927477055488" target="_blank" rel="noopener">🚦 What if better governance actually made developers move faster?</a> — published 2026-01-22, retrieved 2026-10-09</p>
+<p id="src-16">16. <a href="https://www.linkedin.com/posts/dcstateofthestack_were-excited-to-share-our-first-keynote-activity-7462562826000379905-oxO7" target="_blank" rel="noopener">We&#x27;re excited to share our first keynote speaker: Max Kanat-Alexander!</a> — published 2026-05-19, retrieved 2026-10-09</p>
+<p id="src-17">17. <a href="https://www.linkedin.com/posts/dcstateofthestack_dc-state-of-the-stack-2026-activity-7487492539588046849-fpcL" target="_blank" rel="noopener">Keynote speaker Max Kanat-Alexander (Executive Distinguished Engineer, Capital One) will present &quot;Code Simplicity Applied to AI Coding Agents.&quot; With leadership roles at Bugzilla, Google, and LinkedIn and books including Code Simplicity, Max …</a> — published 2026-07-27, retrieved 2026-10-09</p>
+<p id="src-18">18. <a href="https://linkedin.com/in/jennifer-honermann" target="_blank" rel="noopener">jennifer honermann</a> — published 2026-09-22, retrieved 2026-10-09</p>
+<p id="src-19">19. <a href="https://www.linkedin.com/posts/jennifer-honermann_sr-director-product-management-developer-activity-7500660627330203648-NjSs" target="_blank" rel="noopener">This summer marked 15 years at Capital One, and I&#x27;m taking a moment to reflect on a big shift alongside it: I&#x27;ve been promoted to VP of Product Management.</a> — published 2026-09-01, retrieved 2026-10-09</p>
+<p id="src-20">20. <a href="https://linkedin.com/in/jason-strle" target="_blank" rel="noopener">Jason Strle</a> — published 2026-08-24, retrieved 2026-10-09</p>
+<p id="src-21">21. <a href="https://devin.ai/financial-services" target="_blank" rel="noopener">Modernizing financial services with autonomous AI engineers</a> — retrieved 2026-10-07</p>
+<p id="src-22">22. <a href="https://devin.ai/customers/itau" target="_blank" rel="noopener">Customers | Itaú - Devin</a> — retrieved 2026-10-07</p>
+<p id="src-23">23. <a href="https://devin.ai/customers/litera" target="_blank" rel="noopener">Customers | Litera | Devin</a> — published 2026-07-10, retrieved 2026-10-07</p>
+<p id="src-24">24. <a href="https://devin.ai/customers/nubank/" target="_blank" rel="noopener">Customers | Nubank | Devin</a> — published 2026-06-20, retrieved 2026-10-07</p>
+<p class="meta"><em>Validator: 0 unsupported item(s) dropped, 1 flag(s).</em></p>
+</section></details>
+</main>
+</div>
+<div id="pop">
+  <textarea id="popText" placeholder="Comment on this selection…"></textarea>
+  <select id="popTag">
+    <option value="">Just this brief</option>
+    <option value="applies always">Applies always</option>
+    <option value="keep this">Keep this (positive)</option>
+  </select>
+  <div class="row"><button id="popCancel">Cancel</button>
+  <button id="popAdd" class="primary">Add comment</button></div>
+</div>
+<aside id="panel">
+  <h2>Your feedback</h2>
+  <div class="hint">Queued comments. Nothing is saved until you submit.</div>
+  <div id="list"></div>
+  <input id="repName" placeholder="Your handle (optional — defaults to the requester)">
+  <button id="submitAll" class="primary">Submit all feedback (0)</button>
+  <div id="status"></div>
+</aside>
+<script>
+const queue = [];
+const report = document.getElementById('report');
+const pop = document.getElementById('pop');
+const popText = document.getElementById('popText');
+const popTag = document.getElementById('popTag');
+const panel = document.getElementById('panel');
+const list = document.getElementById('list');
+const status = document.getElementById('status');
+const submitBtn = document.getElementById('submitAll');
+const repName = document.getElementById('repName');
+let pendingRange = null;
+let pendingQuote = '';
+let pendingSection = '';
+let draftMarks = [];
+
+function clearDraft() {
+  draftMarks.forEach(m => { m.outerHTML = m.innerHTML; });
+  draftMarks = [];
+}
+
+function hidePop() {
+  pop.style.display='none';
+  clearDraft();
+  pendingRange = null;
+  pendingQuote = '';
+}
+
+function sectionOf(node) {
+  const el = node.nodeType === 3 ? node.parentElement : node;
+  const sec = el && el.closest('section.sec');
+  return sec ? sec.dataset.section : '';
+}
+
+document.addEventListener('mouseup', (e) => {
+  if (pop.contains(e.target)) return;
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed || !report.contains(sel.anchorNode)) { hidePop(); return; }
+  clearDraft();
+  pendingRange = sel.getRangeAt(0).cloneRange();
+  // capture quote + section now: highlightRange mutates/splits the text nodes the
+  // range points at, so reading them later (at Add) comes back empty
+  pendingQuote = pendingRange.toString().trim();
+  pendingSection = sectionOf(pendingRange.startContainer);
+  draftMarks = highlightRange(pendingRange, 'draft');  // visible while the popover is open
+  pop.style.display='block';
+  pop.style.left = Math.min(e.pageX, window.innerWidth - 300) + 'px';
+  pop.style.top = (e.pageY + 8) + 'px';
+  popText.value='';   // no autofocus: it would collapse the selection and break Cmd+C
+});
+
+function renderPanel() {
+  panel.style.display = queue.length ? 'block' : 'none';
+  document.body.classList.toggle('has-panel', !!queue.length);
+  list.innerHTML='';
+  queue.forEach((c, i) => {
+    const d = document.createElement('div');
+    d.className='comment';
+    const rm = document.createElement('button');
+    rm.className='rm'; rm.textContent='✕';
+    rm.onclick = () => { queue.splice(i,1);
+      (c.marks||[]).forEach(m => { m.outerHTML = m.innerHTML; });
+      renderPanel(); };
+    const q = document.createElement('q'); q.textContent = c.quote;
+    const meta = document.createElement('div');
+    meta.innerHTML = `<span class="sec-tag">${c.section||'—'}</span>` +
+      (c.tag ? `<span class="tag-tag">${c.tag}</span>` : '');
+    const n = document.createElement('div'); n.textContent = c.note;
+    d.append(rm, q, meta, n);
+    list.appendChild(d);
+  });
+  submitBtn.textContent = `Submit all feedback (${queue.length})`;
+}
+
+function highlightRange(range, cls) {
+  // wrap every text node the range touches — surroundContents alone fails on
+  // selections that span elements, which is most of them
+  const marks = [];
+  const wrap = (r) => {
+    const m = document.createElement('mark');
+    m.className = cls;
+    try { r.surroundContents(m); marks.push(m); } catch (_) {}
+  };
+  const walker = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_TEXT, {
+    acceptNode(n) {
+      if (!n.nodeValue.trim() || !range.intersectsNode(n)) return NodeFilter.FILTER_SKIP;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  if (!nodes.length) {
+    try {  // selection inside one text node
+      const r = range.cloneRange();
+      wrap(r);
+    } catch (_) {}
+    return marks;
+  }
+  nodes.forEach((n) => {
+    const r = document.createRange();
+    r.selectNodeContents(n);
+    if (n === range.startContainer) r.setStart(n, range.startOffset);
+    if (n === range.endContainer) r.setEnd(n, range.endOffset);
+    wrap(r);
+  });
+  return marks;
+}
+
+document.getElementById('popAdd').onclick = () => {
+  if (!pendingRange) return;
+  if (!pendingQuote) { pop.style.display='none'; return; }
+  const c = { section: pendingSection, quote: pendingQuote,
+              note: popText.value.trim(), tag: popTag.value };
+  c.marks = draftMarks;               // promote the visible draft highlight
+  draftMarks = [];
+  c.marks.forEach(m => m.className = 'pending');
+  queue.push(c);
+  window.getSelection().removeAllRanges();
+  pop.style.display='none';
+  pendingRange = null;
+  pendingQuote = '';
+  renderPanel();
+};
+document.getElementById('popCancel').onclick = hidePop;
+
+// citation links open the collapsed Sources block before jumping
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a.cite');
+  if (a) document.querySelectorAll('details.refs').forEach(d => d.open = true);
+});
+
+// drafted messages: group each labeled block (Email / LinkedIn note / follow-up)
+// into a .cp wrapper with a copy button, so reps can paste straight into email.
+document.querySelectorAll('.sec-drafted-messages').forEach(sec => {
+  const labels = { 'Email': 'Copy email',
+                   'LinkedIn connection note': 'Copy note',
+                   'LinkedIn follow-up': 'Copy follow-up' };
+  let group = null;
+  [...sec.children].forEach(el => {
+    if (el.matches('h3')) { group = null; return; }
+    // draft labels render as <p class="meta"><em><em>Label</em>… — the nested
+    // em marks a block boundary; anything else belongs to the open group
+    const inner = el.tagName === 'P' && el.querySelector('em em');
+    if (inner) {
+      const label = labels[inner.textContent.trim()];
+      group = null;   // unknown labels (e.g. rep-only "Send notes") end the group
+      if (label) {
+        group = document.createElement('div');
+        group.className = 'cp';
+        sec.insertBefore(group, el);
+        const btn = document.createElement('button');
+        btn.className = 'cpbtn'; btn.type = 'button';
+        btn.dataset.l = label; btn.textContent = label;
+        const g = group;               // capture now — `group` is reused per label
+        btn.onclick = () => copyGroup(g, btn);
+        group.appendChild(btn);
+        el.classList.add('cplabel');
+      }
+    }
+    if (group) group.appendChild(el);
+  });
+});
+
+async function copyGroup(g, btn) {
+  const c = g.cloneNode(true);
+  c.querySelectorAll('.cpbtn,.cplabel').forEach(n => n.remove());
+  // drop rep-only trailers that can trail into the last group of a draft
+  c.querySelectorAll('p > em:first-child').forEach(em => {
+    if (/^(Built from|Lint)/.test(em.textContent)) em.parentElement.remove();
+  });
+  // innerText needs layout: park the clone offscreen so paragraph breaks survive
+  c.style.cssText = 'position:fixed;left:-9999px;top:0';
+  document.body.appendChild(c);
+  const text = c.innerText.trim(), markup = c.innerHTML;
+  c.remove();
+  let copied = false;
+  try {
+    await navigator.clipboard.write([new ClipboardItem({
+      'text/plain': new Blob([text], {type:'text/plain'}),
+      'text/html': new Blob([markup], {type:'text/html'})
+    })]);
+    copied = true;
+  } catch (_) {}
+  if (!copied) {
+    // fallback that needs no clipboard permission: hide the chrome, select the
+    // block, and let the browser's own copy command carry the rich HTML
+    const hidden = [];
+    g.querySelectorAll('.cpbtn,.cplabel').forEach(n => {
+      hidden.push([n, n.style.display]); n.style.display = 'none';
+    });
+    const r = document.createRange();
+    r.selectNodeContents(g);
+    const sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(r);
+    try { copied = document.execCommand('copy'); } catch (_) {}
+    sel.removeAllRanges();
+    hidden.forEach(([n, d]) => { n.style.display = d; });
+  }
+  btn.classList.add('ok');
+  btn.textContent = '✓ Copied';
+  setTimeout(() => { btn.classList.remove('ok'); btn.textContent = btn.dataset.l; }, 1600);
+}
+
+// Cmd/Ctrl+C with no selection inside a draft block copies that whole block;
+// with a selection the browser's native copy already carries rich HTML.
+document.addEventListener('copy', (e) => {
+  const sel = window.getSelection();
+  if (!sel || !sel.isCollapsed || !report.contains(sel.anchorNode)) return;
+  const el = sel.anchorNode && sel.anchorNode.nodeType === 3
+    ? sel.anchorNode.parentElement : sel.anchorNode;
+  const g = el && el.closest('.cp');
+  if (!g) return;
+  const c = g.cloneNode(true);
+  c.querySelectorAll('.cpbtn,.cplabel').forEach(n => n.remove());
+  c.querySelectorAll('p > em:first-child').forEach(em => {
+    if (/^(Built from|Lint)/.test(em.textContent)) em.parentElement.remove();
+  });
+  c.style.cssText = 'position:fixed;left:-9999px;top:0';
+  document.body.appendChild(c);
+  e.clipboardData.setData('text/plain', c.innerText.trim());
+  e.clipboardData.setData('text/html', c.innerHTML);
+  c.remove();
+  e.preventDefault();
+  const b = g.querySelector('.cpbtn');   // same confirmation as the button
+  if (b) { b.classList.add('ok'); b.textContent = '✓ Copied';
+    setTimeout(() => { b.classList.remove('ok'); b.textContent = b.dataset.l; }, 1600); }
+});
+
+submitBtn.onclick = async () => {
+  submitBtn.disabled = true;
+  status.className=''; status.textContent='Submitting…';
+  const comments = queue.map(({section, quote, note, tag}) => ({section, quote, note, tag}));
+  try {
+    const r = await fetch(location.pathname.replace(/\/$/,'') + '/comments', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({comments, rep: repName && repName.value.trim() || null})
+    });
+    if (!r.ok) throw new Error(await r.text());
+    queue.forEach(c => { (c.marks||[]).forEach(m => m.className='done'); });
+    queue.length = 0;
+    renderPanel();
+    status.textContent='Saved — thank you. The next brief run will pick these up.';
+  } catch (e) {
+    status.className='err';
+    status.textContent='Could not save — your comments are still queued. Click Submit to retry.';
+  } finally {
+    submitBtn.disabled = false;
+  }
+};
+</script>
+</body></html>

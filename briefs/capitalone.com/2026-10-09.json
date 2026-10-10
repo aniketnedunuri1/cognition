@@ -1,0 +1,1331 @@
+{
+ "domain": "capitalone.com",
+ "date": "2026-10-09",
+ "saved_at": "2026-10-09T20:16:02+00:00",
+ "brief": {
+  "domain": "capitalone.com",
+  "company_name": "Capital One",
+  "verdict": {
+   "verdict": "warm",
+   "why_now": "Claude Code is already in engineers' hands, so this is an expand motion: a new engineering-efficiency exec is measuring agent ROI while the CISO has committed to patching every vuln across 30k repos.",
+   "based_on": [
+    {
+     "source_id": "src_2cdd8e5334",
+     "quote": "providing privacy-aware ROI insights on the adoption of Claude Code, Windsurf, and Cursor",
+     "date_quote": null,
+     "date": "2026-08-29",
+     "stale": null
+    },
+    {
+     "source_id": "src_d2b37e5ba7",
+     "quote": "Engineers received access to Claude Code in February",
+     "date_quote": null,
+     "date": "2026-06-19",
+     "stale": null
+    },
+    {
+     "source_id": "src_ee74f36621",
+     "quote": "committed to scan 100% of their code, and patch 100% vulns, across 30k Repos",
+     "date_quote": null,
+     "date": "2026-07-26",
+     "stale": null
+    }
+   ],
+   "watch_for": "Results of the Claude Code/Cursor ROI telemetry; the Discover back-book migration window (Q1 2027); any new coding-agent pilot or enterprise deal announced."
+  },
+  "snapshot": {
+   "hq": [
+    {
+     "value": "McLean, Virginia (Apollo)",
+     "evidence": [
+      {
+       "source_id": "src_097d749473",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "founded": [
+    {
+     "value": "1994 (Apollo)",
+     "evidence": [
+      {
+       "source_id": "src_097d749473",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "industry": [
+    {
+     "value": "Financial services (Apollo)",
+     "evidence": [
+      {
+       "source_id": "src_097d749473",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "ownership": [
+    {
+     "value": "Public company (Apollo)",
+     "evidence": [
+      {
+       "source_id": "src_097d749473",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "parent_company": [],
+   "headcount": [
+    {
+     "value": "Apollo reports ~79,000 employees",
+     "evidence": [
+      {
+       "source_id": "src_097d749473",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "headcount_growth": [
+    {
+     "value": "Apollo headcount growth data (see Apollo record)",
+     "evidence": [
+      {
+       "source_id": "src_097d749473",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "revenue": [
+    {
+     "value": "Apollo reports revenue (see Apollo record)",
+     "evidence": [
+      {
+       "source_id": "src_097d749473",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "funding": [],
+   "sells_to": [
+    {
+     "value": "Consumers, small businesses and commercial clients (Apollo description)",
+     "evidence": [
+      {
+       "source_id": "src_097d749473",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "products": [
+    {
+     "value": "Credit cards, checking and savings accounts, and auto financing",
+     "evidence": [
+      {
+       "source_id": "src_66a786c2e0",
+       "quote": "Find the right card for you, anytime.",
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ]
+  },
+  "engineering": {
+   "eng_headcount": [
+    {
+     "value": "Apollo reports engineering department headcount (see Apollo record)",
+     "evidence": [
+      {
+       "source_id": "src_097d749473",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "open_eng_roles": [
+    {
+     "value": "Apollo jobs feed lists 482 postings, 138 engineering-relevant titles (incl. AI enablement and agentic-technology roles)",
+     "evidence": [
+      {
+       "source_id": "src_097d749473",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "tech_stack": [
+    {
+     "value": "Enterprise testing platform runs on Kubernetes and Argo (eng blog); Sumble stack lookup unavailable this run",
+     "evidence": [
+      {
+       "source_id": "src_485afe35db",
+       "quote": "rebuilt enterprise testing platform, which uses Kubernetes and open-source Argo ecosystem projects",
+       "date_quote": null,
+       "date": "2026-09-18",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "ai_dev_tools": [
+    {
+     "value": "Claude Code given to engineers in February (former employee post)",
+     "evidence": [
+      {
+       "source_id": "src_d2b37e5ba7",
+       "quote": "Engineers received access to Claude Code in February",
+       "date_quote": null,
+       "date": "2026-06-19",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "AI-efficiency team tracks ROI of Claude Code and Cursor adoption",
+     "evidence": [
+      {
+       "source_id": "src_2cdd8e5334",
+       "quote": "providing privacy-aware ROI insights on the adoption of Claude Code, Windsurf, and Cursor",
+       "date_quote": null,
+       "date": "2026-08-29",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "Apollo lists AI coding tools incl. Claude Code, Cursor, GitHub Copilot",
+     "evidence": [
+      {
+       "source_id": "src_097d749473",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "eng_blog_and_github": [
+    {
+     "value": "Capital One Tech blog; open-sourced VulnHunter (agentic code-security tool)",
+     "evidence": [
+      {
+       "source_id": "src_47c4d524e9",
+       "quote": "We were able to identify and remediate vulnerabilities across thousands of repositories, spanning tens of business areas, with speed and efficiency.",
+       "date_quote": null,
+       "date": "2026-07-16",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "Open-sourced Context Specs, a spec-driven development framework for agents",
+     "evidence": [
+      {
+       "source_id": "src_e015b3b5ad",
+       "quote": "Capital One is open-sourcing Context Specs, a framework for spec-driven development (SDD)",
+       "date_quote": null,
+       "date": "2026-06-24",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "ai_posture": [
+    {
+     "value": "Eng leadership frames AI as an amplifier of existing dev-lifecycle strengths and weaknesses",
+     "evidence": [
+      {
+       "source_id": "src_afd139db7b",
+       "quote": "why AI amplifies both the strengths and weaknesses of the development lifecycle, and how teams should think differently about code review, quality, and testing",
+       "date_quote": null,
+       "date": "2026-08-26",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "AI-efficiency org sets guardrails on agentic behavior and code provenance",
+     "evidence": [
+      {
+       "source_id": "src_2cdd8e5334",
+       "quote": "establishing real-time guardrails around agentic behavior, code provenance, and compliance drift",
+       "date_quote": null,
+       "date": "2026-08-29",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "priorities": [
+    {
+     "value": "Discover technology migration: back book scheduled onto Capital One platform in Q1 2027",
+     "evidence": [
+      {
+       "source_id": "src_d066a5c9f2",
+       "quote": "full front-book migration targeted by the end of the third quarter of 2026 and the existing back book scheduled to reach the platform during the first quarter of 2027",
+       "date_quote": null,
+       "date": "2026-07-22",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "Security commitment to scan all code and patch all vulns across 30k repos (third-party post quoting CISO call)",
+     "evidence": [
+      {
+       "source_id": "src_ee74f36621",
+       "quote": "committed to scan 100% of their code, and patch 100% vulns, across 30k Repos",
+       "date_quote": null,
+       "date": "2026-07-26",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "peers": []
+  },
+  "signals": [
+   {
+    "headline": "New AI engineering-efficiency exec tracks Claude Code and Cursor ROI",
+    "type": "ai_mandate",
+    "source": "profile",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_2cdd8e5334",
+      "quote": "providing privacy-aware ROI insights on the adoption of Claude Code, Windsurf, and Cursor",
+      "date_quote": null,
+      "date": "2026-08-29",
+      "stale": null
+     },
+     {
+      "source_id": "src_2cdd8e5334",
+      "quote": "Built analytics models correlating AI Density (AI vs. human code) directly with PR cycle times, code quality",
+      "date_quote": null,
+      "date": "2026-08-29",
+      "stale": null
+     }
+    ],
+    "use_case": "Feature development capacity",
+    "who_cares": [
+     "Goutham Kadhaba"
+    ],
+    "tier": 1
+   },
+   {
+    "headline": "CISO wants every vuln patched across 30k repos",
+    "type": "quality_security",
+    "source": "exec_statement",
+    "horizon": "strategic",
+    "evidence": [
+     {
+      "source_id": "src_ee74f36621",
+      "quote": "committed to scan 100% of their code, and patch 100% vulns, across 30k Repos",
+      "date_quote": null,
+      "date": "2026-07-26",
+      "stale": null
+     },
+     {
+      "source_id": "src_47c4d524e9",
+      "quote": "We were able to identify and remediate vulnerabilities across thousands of repositories, spanning tens of business areas, with speed and efficiency.",
+      "date_quote": null,
+      "date": "2026-07-16",
+      "stale": null
+     }
+    ],
+    "use_case": "Vulnerability remediation",
+    "who_cares": [
+     "Mihir Vora"
+    ],
+    "tier": 2
+   },
+   {
+    "headline": "DevEx engineer says AI exposes weak review and testing",
+    "type": "quality_security",
+    "source": "exec_statement",
+    "horizon": "strategic",
+    "evidence": [
+     {
+      "source_id": "src_afd139db7b",
+      "quote": "why AI amplifies both the strengths and weaknesses of the development lifecycle, and how teams should think differently about code review, quality, and testing",
+      "date_quote": null,
+      "date": "2026-08-26",
+      "stale": null
+     }
+    ],
+    "use_case": "Test generation & QA",
+    "who_cares": [
+     "Max Kanat-Alexander"
+    ],
+    "tier": 2
+   },
+   {
+    "headline": "Discover back book moves onto Capital One tech by Q1 2027",
+    "type": "migration",
+    "source": "news_press",
+    "horizon": "strategic",
+    "evidence": [
+     {
+      "source_id": "src_d066a5c9f2",
+      "quote": "full front-book migration targeted by the end of the third quarter of 2026 and the existing back book scheduled to reach the platform during the first quarter of 2027",
+      "date_quote": null,
+      "date": "2026-07-22",
+      "stale": null
+     }
+    ],
+    "use_case": "Code migration & modernization",
+    "who_cares": [
+     "Jason Strle"
+    ],
+    "tier": 2
+   }
+  ],
+  "additional_signals": [
+   {
+    "label": "news_mention",
+    "headline": "Capital One Ventures invests in Socket for supply chain security",
+    "evidence": [
+     {
+      "source_id": "src_74f3f4ba69",
+      "quote": "Capital One Ventures is investing in the future of software supply chain security with Socket",
+      "date_quote": null,
+      "date": "2026-10-01",
+      "stale": null
+     }
+    ],
+    "days_ago": 8
+   }
+  ],
+  "competitive_context": [
+   {
+    "value": "Claude Code rolled out to engineers in February; efficiency team now tracks Claude Code and Cursor ROI. Angle: expand into delegated backlog work the IDE tools do not cover.",
+    "evidence": [
+     {
+      "source_id": "src_d2b37e5ba7",
+      "quote": "Engineers received access to Claude Code in February",
+      "date_quote": null,
+      "date": "2026-06-19",
+      "stale": null
+     },
+     {
+      "source_id": "src_2cdd8e5334",
+      "quote": "providing privacy-aware ROI insights on the adoption of Claude Code, Windsurf, and Cursor",
+      "date_quote": null,
+      "date": "2026-08-29",
+      "stale": null
+     }
+    ],
+    "situation": "competitor_in_production"
+   },
+   {
+    "value": "GitHub Copilot training for engineers",
+    "evidence": [
+     {
+      "source_id": "src_ba5ec0a2cd",
+      "quote": "training over 1,500+ engineers on AI-assisted development (GitHub Copilot)",
+      "date_quote": null,
+      "date": "2026-09-05",
+      "stale": null
+     }
+    ],
+    "situation": "copilot_autocomplete"
+   },
+   {
+    "value": "In-house agentic tooling: VulnHunter for vuln find-and-fix",
+    "evidence": [
+     {
+      "source_id": "src_47c4d524e9",
+      "quote": "We were able to identify and remediate vulnerabilities across thousands of repositories, spanning tens of business areas, with speed and efficiency.",
+      "date_quote": null,
+      "date": "2026-07-16",
+      "stale": null
+     }
+    ],
+    "situation": "other"
+   }
+  ],
+  "company_linkedin": [
+   {
+    "value": "Capital One Ventures investing in Socket for software supply chain security",
+    "evidence": [
+     {
+      "source_id": "src_74f3f4ba69",
+      "quote": "Capital One Ventures is investing in the future of software supply chain security with Socket",
+      "date_quote": null,
+      "date": "2026-10-01",
+      "stale": null
+     }
+    ],
+    "kind": "unknown",
+    "tags": []
+   }
+  ],
+  "people": [
+   {
+    "name": "Goutham Kadhaba",
+    "title": "Senior Director — AI Telemetry & Developer Experience",
+    "deal_role": "economic_buyer",
+    "team": "BankTech enterprise AI scaling and AI-augmented DevEx",
+    "why": "Owns AI-augmented DevEx and measures Claude Code/Cursor ROI; incumbent owner, so pitch delegated work alongside, not instead.",
+    "evidence": [
+     {
+      "source_id": "src_2cdd8e5334",
+      "quote": "Accountable executive for BankTech’s enterprise-wide AI scaling",
+      "date_quote": null,
+      "date": "2026-08-29",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "In role about 4 months",
+      "evidence": [
+       {
+        "source_id": "src_2cdd8e5334",
+        "quote": "Jun 2026 - Present",
+        "date_quote": null,
+        "date": "2026-08-29",
+        "stale": null
+       }
+      ],
+      "kind": "new_in_role"
+     },
+     {
+      "value": "Owns AI coding tool ROI telemetry",
+      "evidence": [
+       {
+        "source_id": "src_2cdd8e5334",
+        "quote": "providing privacy-aware ROI insights on the adoption of Claude Code, Windsurf, and Cursor",
+        "date_quote": null,
+        "date": "2026-08-29",
+        "stale": null
+       }
+      ],
+      "kind": "ai_appetite"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Hiring Distinguished Engineers for enterprise cloud and AI",
+      "evidence": [
+       {
+        "source_id": "src_bdda5750dd",
+        "quote": "I am hiring for 2 leadership roles - Visionary Distinguished Engineers to join Capital One",
+        "date_quote": null,
+        "date": "2026-08-31",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": true,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_2cdd8e5334",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Mihir Vora",
+    "title": "Senior Distinguished Engineer",
+    "deal_role": "technical_evaluator",
+    "team": "CI/CD platform engineering and DevSecOps",
+    "why": "Platform engineer who argues for governance embedded in the pipeline; the vuln-remediation push lands on his platform.",
+    "evidence": [
+     {
+      "source_id": "src_159a3cfeca",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-07",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Profile history includes a Devin customer (worked-at, not proof of use)",
+      "evidence": [
+       {
+        "source_id": "src_159a3cfeca",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-09-07",
+        "stale": null
+       }
+      ],
+      "kind": "ex_devin_customer"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Wrote on embedding governance into the platform via automated guardrails",
+      "evidence": [
+       {
+        "source_id": "src_1e4740b28b",
+        "quote": "they embed it directly into the platform with automated, predictable guardrails instead of ticket-driven approvals",
+        "date_quote": null,
+        "date": "2026-01-22",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "likely_champion",
+    "featured": true,
+    "profile_source_id": "src_159a3cfeca",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Max Kanat-Alexander",
+    "title": "Executive Distinguished Engineer",
+    "deal_role": "technical_evaluator",
+    "team": "Developer productivity",
+    "why": "Public voice on AI readiness, code review and testing; keynoting on AI coding agents.",
+    "evidence": [
+     {
+      "source_id": "src_71b8f3b792",
+      "quote": "Max is the Executive Distinguished Engineer at Capital One focused on developer productivity.",
+      "date_quote": null,
+      "date": "2026-05-19",
+      "stale": null
+     },
+     {
+      "source_id": "src_afd139db7b",
+      "quote": "why AI amplifies both the strengths and weaknesses of the development lifecycle, and how teams should think differently about code review, quality, and testing",
+      "date_quote": null,
+      "date": "2026-08-26",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Public statement on review and testing pain with AI",
+      "evidence": [
+       {
+        "source_id": "src_afd139db7b",
+        "quote": "why AI amplifies both the strengths and weaknesses of the development lifecycle, and how teams should think differently about code review, quality, and testing",
+        "date_quote": null,
+        "date": "2026-08-26",
+        "stale": null
+       }
+      ],
+      "kind": "public_pain"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Keynote on code simplicity for AI coding agents",
+      "evidence": [
+       {
+        "source_id": "src_8cea908cd8",
+        "quote": "Code Simplicity Applied to AI Coding Agents",
+        "date_quote": null,
+        "date": "2026-07-27",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": true,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": null,
+    "current_basis": "two_sources"
+   },
+   {
+    "name": "Jennifer Honermann",
+    "title": "Vice President, Product Management Developer Experience",
+    "deal_role": "economic_buyer",
+    "team": "Developer Experience product",
+    "why": "Newly promoted DevEx product VP hiring product leaders for developer problems.",
+    "evidence": [
+     {
+      "source_id": "src_ef99bed64d",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-22",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Promoted to VP of Product Management",
+      "evidence": [
+       {
+        "source_id": "src_81aeb17f2a",
+        "quote": "I've been promoted to VP of Product Management",
+        "date_quote": null,
+        "date": "2026-09-01",
+        "stale": null
+       }
+      ],
+      "kind": "new_in_role"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Hiring product leaders to solve developer problems",
+      "evidence": [
+       {
+        "source_id": "src_81aeb17f2a",
+        "quote": "I'm hiring for a number of product leaders that are passionate about solving developer problems",
+        "date_quote": null,
+        "date": "2026-09-01",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_ef99bed64d",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Sandy Sen",
+    "title": "Senior Director, Software Engineering",
+    "deal_role": "technical_evaluator",
+    "team": "Developer Experience, DevOps CI/CD platform",
+    "why": "DevEx CI/CD platform owner per profile.",
+    "evidence": [
+     {
+      "source_id": "src_20f6c645a9",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-06",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_20f6c645a9",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Jared Sheehan",
+    "title": "Vice President, Product Management, Developer Experience",
+    "deal_role": "economic_buyer",
+    "team": "Developer Experience product",
+    "why": "DevEx product VP.",
+    "evidence": [
+     {
+      "source_id": "src_bf5c1517f3",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-24",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_bf5c1517f3",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Jason Strle",
+    "title": "EVP CIO Discover Technology",
+    "deal_role": "economic_buyer",
+    "team": "Discover Technology",
+    "why": "Owns Discover technology during platform migration.",
+    "evidence": [
+     {
+      "source_id": "src_cf8a484509",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-08-24",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_cf8a484509",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Mark Mathewson",
+    "title": "Executive Vice President & CIO - Retail, Commercial, Emerging Merchant",
+    "deal_role": "economic_buyer",
+    "team": "CIO organization",
+    "why": "BU CIO, likely budget owner.",
+    "evidence": [
+     {
+      "source_id": "src_928f98ec04",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-24",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_928f98ec04",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Arjun Dugal",
+    "title": "EVP and CIO, Capital One Consumer and Business Cards",
+    "deal_role": "economic_buyer",
+    "team": "Consumer and Business Cards technology",
+    "why": "BU CIO, likely budget owner.",
+    "evidence": [
+     {
+      "source_id": "src_87aa6d86f1",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-21",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_87aa6d86f1",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Abhijit Bose",
+    "title": "Senior Vice President, Head of Enterprise AI and ML Platforms",
+    "deal_role": "economic_buyer",
+    "team": "Enterprise AI and ML Platforms",
+    "why": "Owns enterprise AI platforms.",
+    "evidence": [
+     {
+      "source_id": "src_cf2162e9d0",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-25",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_cf2162e9d0",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Chris Nims",
+    "title": "Chief Information Security Officer",
+    "deal_role": "gatekeeper",
+    "team": "Cybersecurity",
+    "why": "CISO; security approver and owner of the vuln-patching commitment.",
+    "evidence": [
+     {
+      "source_id": "src_89e18e3ed2",
+      "quote": "Chris Nims is the Chief Information Security Officer (CISO) for Capital One",
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     },
+     {
+      "source_id": "src_d7dd18e51c",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-07-16",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": true,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": null,
+    "current_basis": "two_sources"
+   },
+   {
+    "name": "Wayne R.",
+    "title": "CISO - Financial Services",
+    "deal_role": "gatekeeper",
+    "team": "Security",
+    "why": "Security approver.",
+    "evidence": [
+     {
+      "source_id": "src_f6afbf916e",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-18",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_f6afbf916e",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Ben Lamm",
+    "title": "VP, Global Procurement and Supply Chain",
+    "deal_role": "gatekeeper",
+    "team": "Procurement",
+    "why": "Procurement approver.",
+    "evidence": [
+     {
+      "source_id": "src_1f49a1893f",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-26",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_1f49a1893f",
+    "current_basis": "profile"
+   }
+  ],
+  "top_contacts": [
+   {
+    "name": "Goutham Kadhaba",
+    "why": {
+     "text": "Owns AI-augmented DevEx and agent ROI telemetry; natural sponsor for an expand motion.",
+     "based_on": [
+      {
+       "source_id": "src_2cdd8e5334",
+       "quote": "providing privacy-aware ROI insights on the adoption of Claude Code, Windsurf, and Cursor",
+       "date_quote": null,
+       "date": "2026-08-29",
+       "stale": null
+      }
+     ]
+    }
+   },
+   {
+    "name": "Mihir Vora",
+    "why": {
+     "text": "Platform engineer where vuln-remediation volume lands; Devin-customer history on profile.",
+     "based_on": [
+      {
+       "source_id": "src_1e4740b28b",
+       "quote": "they embed it directly into the platform with automated, predictable guardrails instead of ticket-driven approvals",
+       "date_quote": null,
+       "date": "2026-01-22",
+       "stale": null
+      }
+     ]
+    }
+   },
+   {
+    "name": "Max Kanat-Alexander",
+    "why": {
+     "text": "Publicly names review and testing as where AI gains stall.",
+     "based_on": [
+      {
+       "source_id": "src_afd139db7b",
+       "quote": "why AI amplifies both the strengths and weaknesses of the development lifecycle, and how teams should think differently about code review, quality, and testing",
+       "date_quote": null,
+       "date": "2026-08-26",
+       "stale": null
+      }
+     ]
+    }
+   }
+  ],
+  "org_chart": null,
+  "abm_themes": [
+   {
+    "text": "Patch every vuln across 30k repos: agent-written fixes through existing pipeline guardrails.",
+    "based_on": [
+     {
+      "source_id": "src_ee74f36621",
+      "quote": "committed to scan 100% of their code, and patch 100% vulns, across 30k Repos",
+      "date_quote": null,
+      "date": "2026-07-26",
+      "stale": null
+     }
+    ]
+   },
+   {
+    "text": "Beyond the IDE: delegated, governed agent work measured by the same AI-ROI telemetry.",
+    "based_on": [
+     {
+      "source_id": "src_2cdd8e5334",
+      "quote": "providing privacy-aware ROI insights on the adoption of Claude Code, Windsurf, and Cursor",
+      "date_quote": null,
+      "date": "2026-08-29",
+      "stale": null
+     }
+    ]
+   },
+   {
+    "text": "Discover integration: migration remainder work before the Q1 2027 back-book move.",
+    "based_on": [
+     {
+      "source_id": "src_d066a5c9f2",
+      "quote": "full front-book migration targeted by the end of the third quarter of 2026 and the existing back book scheduled to reach the platform during the first quarter of 2027",
+      "date_quote": null,
+      "date": "2026-07-22",
+      "stale": null
+     }
+    ]
+   }
+  ],
+  "drafts": [
+   {
+    "name": "Goutham Kadhaba",
+    "email": {
+     "subject": "Cognition <> Capital One",
+     "body": "Hi Goutham,\n\nYour team built analytics correlating AI-written code with PR cycle times and code quality, which probably makes you the person deciding which work goes to agents next.\n\nMy guess is the interactive tools cover the inner loop well, and the open question is the delegated backlog nobody sits in an IDE for. Devin works those tasks in its own environment and returns a PR, so the output lands inside the provenance guardrails you're already setting. Citi rolled it out to 40,000 developers.\n\nWould a 20-minute look at how other banks govern that split be useful?\n\nBest,"
+    },
+    "linkedin_note": "Hi Goutham, saw you took on enterprise AI platforms and engineering efficiency for BankTech. I work with banks on which engineering work goes to autonomous agents and how to govern it. Would be glad to connect.",
+    "linkedin_followup": "Thanks for connecting, Goutham. One thing I keep hearing from bank engineering leaders: once interactive coding tools are everywhere, how do you decide which work moves to agents that run without someone in the IDE? Your telemetry on AI-written code versus PR cycle times looks like exactly the data to answer that. The banks we work with tend to start with backlog work that has clear pass/fail checks, like vulnerability fixes and framework upgrades. Open to a short call later this month?",
+    "built_from": [
+     {
+      "source_id": "src_2cdd8e5334",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-08-29",
+      "stale": null
+     },
+     {
+      "source_id": "src_84d58730f4",
+      "quote": null,
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Your team built analytics correlating AI-written code with PR cycle times and code quality",
+      "source_id": "src_2cdd8e5334",
+      "quote": "Built analytics models correlating AI Density (AI vs. human code) directly with PR cycle times, code quality"
+     },
+     {
+      "text": "provenance guardrails you are already setting",
+      "source_id": "src_2cdd8e5334",
+      "quote": "establishing real-time guardrails around agentic behavior, code provenance, and compliance drift"
+     },
+     {
+      "text": "enterprise AI platforms and engineering efficiency",
+      "source_id": "src_2cdd8e5334",
+      "quote": "Enterprise AI Platforms & Engineering Efficiency"
+     },
+     {
+      "text": "for BankTech",
+      "source_id": "src_2cdd8e5334",
+      "quote": "Accountable executive for BankTech’s enterprise-wide AI scaling"
+     }
+    ],
+    "notes": "- Incumbent owner of Claude Code/Cursor ROI: position Devin as delegated work alongside, never a replacement\n- Strategy owner: governance framing, no product tour\n- Do not name the other tools in outreach\n- LinkedIn follow-up is sendable after he accepts",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Mihir Vora",
+    "email": {
+     "subject": "Cognition <> Capital One",
+     "body": "Hi Mihir,\n\nSecurity has committed to patching every vulnerability across 30k repos, and your argument for embedding governance in the platform instead of ticket approvals puts the pipeline right where that commitment gets kept or missed.\n\nDevin picks up a finding, writes the fix in its own sandbox, runs your checks and opens a PR that clears the same automated guardrails as any engineer's change. Itaú reports 70% of its security vulnerabilities remediated automatically.\n\nOpen to 20 minutes on how that would sit in your pipeline?\n\nBest,"
+    },
+    "linkedin_note": "Hi Mihir, liked your take on putting governance into the platform with automated guardrails instead of ticket approvals. I spend a lot of time with platform teams wiring agent-written fixes through those same checks. Would like to connect.",
+    "linkedin_followup": "Thanks for connecting, Mihir. With the goal of patching every vuln across 30k repos, I'd guess remediation volume hits your pipelines before it hits any engineer. The pattern that works for platform teams: the agent writes the fix, the platform's own policy checks decide whether it merges, and humans only review what fails. That keeps your guardrail model intact rather than adding a new approval queue. If useful, I can walk you through one remediation run end to end. Any week better than others?",
+    "built_from": [
+     {
+      "source_id": "src_ee74f36621",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-07-26",
+      "stale": null
+     },
+     {
+      "source_id": "src_1e4740b28b",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-01-22",
+      "stale": null
+     },
+     {
+      "source_id": "src_5903e45c48",
+      "quote": null,
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Security has committed to patching every vulnerability across 30k repos",
+      "source_id": "src_ee74f36621",
+      "quote": "committed to scan 100% of their code, and patch 100% vulns, across 30k Repos"
+     },
+     {
+      "text": "embedding governance in the platform instead of ticket approvals",
+      "source_id": "src_1e4740b28b",
+      "quote": "they embed it directly into the platform with automated, predictable guardrails instead of ticket-driven approvals"
+     }
+    ],
+    "notes": "- Technical evaluator: how it runs on his pipeline, not the exec pitch\n- Profile shows a Devin customer in his history; do not mention prior employer\n- Vuln goal comes from a third-party post quoting a CISO call; keep it as paraphrase\n- LinkedIn follow-up is sendable",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Max Kanat-Alexander",
+    "email": {
+     "subject": "Cognition <> Capital One",
+     "body": "Hi Max,\n\nOn the Engineering Enablement episode you made the case that AI amplifies whatever the lifecycle already does well or badly, so teams stuck waiting on reviews or fighting poor tooling get little from faster code generation.\n\nIf that holds, the leverage is in the unglamorous part of the loop. Devin can take a service with thin coverage, write the missing tests in its own environment, and open a PR your reviewers judge like any other. Litera reports 93% faster regression cycles.\n\nWorth a short call to pick one service and see what comes back?\n\nBest,"
+    },
+    "linkedin_note": "Hi Max, your keynote on applying code simplicity to AI coding agents is close to the problem I work on: keeping agent-written code reviewable. Would be glad to connect.",
+    "linkedin_followup": "Thanks for connecting, Max. Your point that clearly expressing requirements and giving feedback are becoming core engineering skills with coding agents matches what we see: the teams getting value write tight task specs and let the agent run the build and tests before anyone reviews. I'd value 20 minutes on where you think delegated agents break down in a large codebase, and I can share what we've learned from test-generation work in return.",
+    "built_from": [
+     {
+      "source_id": "src_afd139db7b",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-08-26",
+      "stale": null
+     },
+     {
+      "source_id": "src_8cea908cd8",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-07-27",
+      "stale": null
+     },
+     {
+      "source_id": "src_a49527cfb2",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-07-10",
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "On the Engineering Enablement episode",
+      "source_id": "src_afd139db7b",
+      "quote": "In this episode of Engineering Enablement"
+     },
+     {
+      "text": "AI amplifies whatever the lifecycle already does well or badly",
+      "source_id": "src_afd139db7b",
+      "quote": "why AI amplifies both the strengths and weaknesses of the development lifecycle, and how teams should think differently about code review, quality, and testing"
+     },
+     {
+      "text": "teams stuck waiting on reviews or fighting poor tooling get little from faster code generation",
+      "source_id": "src_afd139db7b",
+      "quote": "If engineers spend significant time navigating broken processes, waiting for reviews, or dealing with poor tooling, accelerating code generation only addresses a small part of their work."
+     },
+     {
+      "text": "your keynote on applying code simplicity to AI coding agents",
+      "source_id": "src_8cea908cd8",
+      "quote": "Code Simplicity Applied to AI Coding Agents"
+     },
+     {
+      "text": "clearly expressing requirements and giving feedback are becoming core engineering skills with coding agents",
+      "source_id": "src_afd139db7b",
+      "quote": "Clearly expressing requirements and providing feedback are becoming increasingly important engineering skills"
+     }
+    ],
+    "notes": "- Technical evaluator and public voice on DevEx: lead with his own argument, paraphrased\n- Keep it practitioner level, no exec framing\n- LinkedIn follow-up is sendable",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Jennifer Honermann",
+    "email": {
+     "subject": "Cognition <> Capital One",
+     "body": "Hi Jennifer,\n\nCongrats on the move to VP of Product Management. You mentioned hiring product leaders to solve developer problems, which suggests the developer experience roadmap is about to grow.\n\nOne item I'd expect on it soon: with engineers already using agentic coding tools, deciding which chores should run as delegated work instead of interactive sessions. Devin takes a migration or upgrade ticket, runs it in its own environment and returns a reviewable PR. Nubank reports an 8x engineering time efficiency gain.\n\nCould we find 15 minutes in the next couple of weeks?\n\nBest,"
+    },
+    "linkedin_note": "Hi Jennifer, congrats on the promotion after 15 years at Capital One. I work with developer experience teams on which engineering chores to hand to autonomous agents. Would be glad to connect.",
+    "linkedin_followup": "Thanks for connecting, Jennifer. Since you're building out a product team for developer problems, one pattern from other large engineering orgs: the first agent use cases that stick have a clear definition of done, like dependency upgrades, test backfills and security fixes, because the pipeline can judge the result. Product tends to own picking that list more than engineering does. If helpful, I can share how a couple of banks scoped theirs. Is a short call this month realistic?",
+    "built_from": [
+     {
+      "source_id": "src_81aeb17f2a",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-01",
+      "stale": null
+     },
+     {
+      "source_id": "src_d2b37e5ba7",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-06-19",
+      "stale": null
+     },
+     {
+      "source_id": "src_c667764b4e",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-06-20",
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Congrats on the move to VP of Product Management",
+      "source_id": "src_81aeb17f2a",
+      "quote": "I've been promoted to VP of Product Management"
+     },
+     {
+      "text": "hiring product leaders to solve developer problems",
+      "source_id": "src_81aeb17f2a",
+      "quote": "I'm hiring for a number of product leaders that are passionate about solving developer problems"
+     },
+     {
+      "text": "engineers already using agentic coding tools",
+      "source_id": "src_d2b37e5ba7",
+      "quote": "during the rollout of agentic coding solutions"
+     },
+     {
+      "text": "after 15 years at Capital One",
+      "source_id": "src_81aeb17f2a",
+      "quote": "This summer marked 15 years at Capital One"
+     }
+    ],
+    "notes": "- New VP and hiring: frame as roadmap input, not a tool pitch\n- Engineers already have agentic coding tools; do not ask if they have tried agents\n- LinkedIn follow-up is sendable",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Jason Strle",
+    "email": {
+     "subject": "Cognition <> Capital One",
+     "body": "Hi Jason,\n\nWith half of new Discover originations already on Capital One technology and the back book scheduled for the first quarter of 2027, the hardest migration waves are the ones still ahead.\n\nThose waves usually hide a long tail of service rewrites, interface changes and test updates that compete with roadmap work for the same engineers. Devin takes that remainder as scoped, reviewable PRs so your teams set direction instead of grinding through conversions. Itaú ran a .NET to Java migration of 59 services 6x faster with it.\n\nOpen to a short call on how the remaining waves could be split?\n\nBest,"
+    },
+    "linkedin_note": "Hi Jason, I work with bank technology leaders on large platform migrations, where autonomous agents take on the conversion backlog. Would be glad to connect.",
+    "linkedin_followup": "Thanks for connecting, Jason. Integrations like Discover tend to leave a long remainder after the headline cutover: retiring duplicate services, updating interfaces and rebuilding the tests that prove nothing broke. That work is well defined, which is why it suits delegation to agents that open PRs your engineers review. If it would help planning for the back book move, I can share how other banks sequenced that remainder work. Would a brief conversation in the coming weeks make sense?",
+    "built_from": [
+     {
+      "source_id": "src_d066a5c9f2",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-07-22",
+      "stale": null
+     },
+     {
+      "source_id": "src_5903e45c48",
+      "quote": null,
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "half of new Discover originations already on Capital One technology",
+      "source_id": "src_d066a5c9f2",
+      "quote": "Capital One has moved half of new Discover originations onto its technology platform"
+     },
+     {
+      "text": "the back book scheduled for the first quarter of 2027",
+      "source_id": "src_d066a5c9f2",
+      "quote": "full front-book migration targeted by the end of the third quarter of 2026 and the existing back book scheduled to reach the platform during the first quarter of 2027"
+     },
+     {
+      "text": "the hardest migration waves are the ones still ahead",
+      "source_id": "src_d066a5c9f2",
+      "quote": "the hardest migration waves start now"
+     },
+     {
+      "text": "Integrations like Discover",
+      "source_id": "src_d066a5c9f2",
+      "quote": "Capital One advances its Discover technology migration toward full front-book conversion by Q3"
+     }
+    ],
+    "notes": "- Economic buyer for Discover technology: mandate plus proof, no product tour\n- Exec unlikely to read LinkedIn; email first, LinkedIn note optional\n- No personal hook found; anchored on the Discover migration signal\n- Do not mention synergy dollar targets",
+    "low_confidence": false,
+    "lint": []
+   }
+  ]
+ },
+ "report": {
+  "dropped_count": 0,
+  "dropped": [],
+  "flags": [
+   {
+    "path": "org_chart",
+    "flag": "no org chart — get_org_chart(domain, people) is required once per account"
+   }
+  ]
+ },
+ "since_last_run": null
+}

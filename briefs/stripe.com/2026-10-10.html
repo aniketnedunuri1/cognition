@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stripe — account brief</title>
+<style>
+:root { --ink:#1a1d21; --mut:#6b7280; --line:#e5e7eb; --bg:#f7f7f5; --card:#fff; }
+* { box-sizing:border-box; }
+body { margin:0; font:15px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink); background:var(--bg); }
+.page { max-width:880px; margin:0 auto; padding:32px 20px 120px; }
+header.top { display:flex; flex-wrap:wrap; gap:12px; align-items:baseline;
+             justify-content:space-between; margin-bottom:24px; }
+header.top h1 { font-size:22px; margin:0; }
+header.top .sub { color:var(--mut); font-size:13px; }
+header.top .dl { font-size:13px; color:#2563eb; text-decoration:none; }
+/* common region: one card per section */
+section.sec { background:var(--card); border:1px solid var(--line); border-radius:10px;
+              padding:18px 22px; margin:20px 0; border-left:4px solid #d1d5db; }
+section.sec > h2 { margin:0 0 10px; font-size:15px; text-transform:uppercase;
+                   letter-spacing:.04em; color:var(--mut); }
+h3 { font-size:14px; margin:18px 0 6px; }
+p { margin:6px 0; }
+p.meta { color:var(--mut); font-size:13px; }
+ul { margin:6px 0; padding-left:22px; }
+li { margin:5px 0; }
+section.sec > ul > li + li { margin-top:12px; }  /* proximity: room between entities */
+ul ul { margin:2px 0; }
+blockquote { margin:6px 0 6px 2px; padding:6px 12px; border-left:3px solid #d1d5db;
+             color:#374151; background:#fafafa; border-radius:0 6px 6px 0; font-size:14px; }
+table { border-collapse:collapse; width:100%; margin:8px 0; font-size:14px; }
+td { border-bottom:1px solid var(--line); padding:6px 10px 6px 0; vertical-align:top; }
+td:first-child { color:var(--mut); white-space:nowrap; width:1%; }
+code { background:#f3f4f6; padding:1px 5px; border-radius:4px; font-size:13px; }
+a { color:#2563eb; }
+a.cite { color:var(--mut); text-decoration:none; font-size:12px; vertical-align:1px; }
+a.cite:hover { color:#2563eb; text-decoration:underline; }
+a.srclink { color:#2563eb; border-bottom:1px dotted #2563eb; text-decoration:none; }
+details.refs p:target { background:#fef3c7; border-radius:4px; }
+/* similarity: one accent hue per section category — chip + left border + faint card tint */
+section.sec > h2 { display:inline-block; padding:2px 10px; border-radius:6px; }
+.sec-verdict, .sec-since-last-run { border-left-color:#16a34a; background:#fbfefc; }
+.sec-verdict > h2, .sec-since-last-run > h2 { color:#15803d; background:#dcfce7; }
+.sec-intent-signals, .sec-additional-signals, .sec-competitive-context,
+.sec-company-linkedin { border-left-color:#d97706; background:#fffdf9; }
+.sec-intent-signals > h2, .sec-additional-signals > h2,
+.sec-competitive-context > h2, .sec-company-linkedin > h2 { color:#b45309; background:#fef3c7; }
+.sec-who-to-work, .sec-recommended-entry-top-3, .sec-wider-buying-center,
+.sec-org-chart-sumble---inferred { border-left-color:#2563eb; background:#fcfdff; }
+.sec-who-to-work > h2, .sec-recommended-entry-top-3 > h2,
+.sec-wider-buying-center > h2, .sec-org-chart-sumble---inferred > h2 {
+  color:#1d4ed8; background:#dbeafe; }
+.sec-drafted-messages, .sec-abm-themes-assessment { border-left-color:#7c3aed; background:#fefdff; }
+.sec-drafted-messages > h2, .sec-abm-themes-assessment > h2 { color:#6d21a8; background:#f3e8ff; }
+/* small inline badges */
+.bdg { display:inline-block; font-size:11px; font-weight:600; border-radius:4px;
+       padding:0 6px; vertical-align:1px; }
+.bdg.tier { color:#b45309; background:#fef3c7; }
+.bdg.champ { color:#1d4ed8; background:#dbeafe; }
+.bdg.warn { color:#b91c1c; background:#fee2e2; }
+.bdg.ver { color:#15803d; background:#dcfce7; }
+/* one hue per deal role (similarity) */
+.bdg.role.economic-buyer { color:#15803d; background:#dcfce7; }
+.bdg.role.technical-evaluator { color:#1d4ed8; background:#dbeafe; }
+.bdg.role.gatekeeper { color:#b45309; background:#fef3c7; }
+.bdg.role.parent-company-approver { color:#6d21a8; background:#f3e8ff; }
+/* nested lines (evidence, hooks) recede: figure/ground */
+ul ul { font-size:13px; color:#4b5563; }
+ul ul .bdg { background:none; box-shadow:inset 0 0 0 1px #c7cbd1; color:#6b7280;
+             font-weight:500; }
+ul ul li { margin:3px 0; }
+em .bdg { font-style:normal; }
+/* figure/ground: reference material recedes */
+details.refs { margin:20px 0; }
+details.refs summary { cursor:pointer; color:var(--mut); font-size:13px; }
+details.refs section { opacity:.75; font-size:13px; }
+/* annotations */
+::selection { background:#fde68a; }
+mark.draft { background:#fef9c3; border-radius:2px; padding:0 1px;
+             outline:1px dashed #eab308; }
+mark.pending { background:#fde68a; border-radius:2px; padding:0 1px;
+               box-shadow:0 0 0 1px #f59e0b inset; }
+mark.done { background:#bbf7d0; border-radius:2px; padding:0 1px; }
+#pop { position:absolute; z-index:50; display:none; width:280px; background:#fff;
+       border:1px solid var(--line); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,.12);
+       padding:10px; }
+#pop textarea { width:100%; height:64px; font:inherit; font-size:13px; resize:vertical;
+                border:1px solid var(--line); border-radius:6px; padding:6px; }
+#pop select { width:100%; margin:6px 0; font:inherit; font-size:13px; }
+#pop .row { display:flex; gap:8px; justify-content:flex-end; }
+button { font:inherit; font-size:13px; border:1px solid var(--line); border-radius:6px;
+         background:#fff; padding:5px 10px; cursor:pointer; }
+button.primary { background:#1a1d21; color:#fff; border-color:#1a1d21; }
+#panel { position:fixed; top:0; right:0; bottom:0; width:300px; background:#fff;
+         border-left:1px solid var(--line); padding:16px; overflow-y:auto; display:none; }
+#panel h2 { font-size:14px; margin:0 0 4px; }
+#panel .hint { color:var(--mut); font-size:12px; margin-bottom:12px; }
+.comment { border:1px solid var(--line); border-radius:8px; padding:10px; margin:8px 0;
+           font-size:13px; }
+.comment q { display:block; color:var(--mut); font-size:12px; margin-bottom:4px;
+             border-left:2px solid #fde68a; padding-left:6px; }
+.comment .sec-tag, .comment .tag-tag { display:inline-block; font-size:11px; color:var(--mut);
+             background:#f3f4f6; border-radius:4px; padding:1px 6px; margin-right:4px; }
+.comment .rm { float:right; border:none; color:#b91c1c; padding:0; }
+/* copyable draft blocks */
+.cp { position:relative; border:1px dashed var(--line); border-radius:8px;
+      padding:10px 14px; margin:10px 0; }
+.cpbtn { position:absolute; top:8px; right:8px; font-size:11px; color:var(--mut);
+         background:#fff; }
+.cpbtn:hover { color:#1a1d21; border-color:#9ca3af; }
+.cpbtn.ok { color:#15803d; border-color:#86efac; background:#f0fdf4; font-weight:600; }
+.cp .cplabel { margin-top:0; }
+#repName { width:100%; margin-top:12px; box-sizing:border-box; }
+#submitAll { width:100%; margin-top:8px; }
+#status { font-size:12px; margin-top:8px; color:var(--mut); }
+#status.err { color:#b91c1c; }
+body.has-panel .page { margin-right:320px; }
+#fab { position:fixed; right:16px; bottom:16px; box-shadow:0 4px 14px rgba(0,0,0,.15); }
+</style>
+</head><body>
+<div class="page">
+<header class="top">
+  <div>
+    <h1>Stripe — account brief</h1>
+    <div class="sub">2026-10-10 · stripe.com ·
+      select any text to comment, then Submit all feedback</div>
+  </div>
+  <a class="dl" href="/briefs/AEfhIfCJnd-MNAJIC8vzMg/stripe.com-2026-10-10.docx">Download .docx</a>
+</header>
+<main id="report">
+<section class="sec sec-verdict" data-section="Verdict">
+<h2>Verdict</h2>
+<p><strong>Warm</strong> <em>(assessment)</em> — Claude Code and Stripe&#x27;s in-house Minions agents are already in production, so this is an expand motion: leadership says the jump in merged code is stressing every system, and a brand-new DevProd AI team is staffing up now. <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-2">[2]</a><a class="cite" href="#src-3">[3]</a></p>
+<p>Watch for: Who lands the DevProd AI EM role, any public eval write-up of tools beyond Claude Code and Minions, and what Thomas Welfley changes in his first quarter running Developer Infrastructure.</p>
+</section>
+<section class="sec sec-snapshot" data-section="Snapshot">
+<h2>Snapshot</h2>
+<table><tbody>
+<tr><td></td><td></td></tr>
+<tr><td>HQ</td><td>HQ in South San Francisco, California <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Founded</td><td>founded in 2010 <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Industry</td><td>Apollo classifies Stripe as information technology &amp; services <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Ownership</td><td>Privately held <a class="cite" href="#src-5">[5]</a></td></tr>
+<tr><td>Headcount</td><td>~9,400 employees <a class="cite" href="#src-4">[4]</a><a class="cite" href="#src-6">[6]</a></td></tr>
+<tr><td>Headcount growth</td><td>+19.9% headcount growth over 12 months (+7.6% over 6 months) <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Revenue</td><td>~$6.9B annual revenue <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Funding</td><td>$9.4B total funding <a class="cite" href="#src-4">[4]</a></td></tr>
+<tr><td>Sells to</td><td>Businesses from startups to large enterprises; Stripe says it powers more than 5 million businesses directly or via platforms <a class="cite" href="#src-7">[7]</a><a class="cite" href="#src-8">[8]</a></td></tr>
+<tr><td>Key products</td><td>Payments (online and in person), billing, card issuing, stablecoin and crypto money movement, and embedded payments for platforms <a class="cite" href="#src-8">[8]</a></td></tr>
+</tbody></table>
+</section>
+<section class="sec sec-engineering-priorities" data-section="Engineering &amp; priorities">
+<h2>Engineering &amp; priorities</h2>
+<ul>
+<li><strong>Engineering headcount:</strong> ~4,301 in engineering <a class="cite" href="#src-4">[4]</a>; Anthropic&#x27;s case study counts 1,370 engineers using Claude Code <a class="cite" href="#src-1">[1]</a></li>
+<li><strong>Open eng roles:</strong> Apollo lists 62 engineering-relevant open titles, including Engineering Manager, Developer Productivity AI and Internal Product Engineer, Developer Productivity AI <a class="cite" href="#src-9">[9]</a><a class="cite" href="#src-10">[10]</a></li>
+<li><strong>Tech stack:</strong> Ruby monorepo of ~50M lines (Stripe eng blog) <a class="cite" href="#src-11">[11]</a>; Scala and Java (Anthropic case study describes a Scala-to-Java migration) <a class="cite" href="#src-1">[1]</a>; Go (developer productivity team for Go, per a Stripe EM&#x27;s profile) <a class="cite" href="#src-12">[12]</a></li>
+<li><strong>AI dev tools:</strong> Claude Code deployed company-wide via a zero-configuration enterprise binary (Anthropic case study) <a class="cite" href="#src-1">[1]</a>; Minions: in-house unattended coding agents built on a fork of Block&#x27;s goose <a class="cite" href="#src-13">[13]</a><a class="cite" href="#src-14">[14]</a>; Apollo lists Cursor among AI coding tools <a class="cite" href="#src-4">[4]</a></li>
+<li><strong>Eng blog / GitHub:</strong> Engineering blog at stripe.dev <a class="cite" href="#src-15">[15]</a>; GitHub org github.com/stripe with 100 public repos <a class="cite" href="#src-16">[16]</a></li>
+<li><strong>AI posture:</strong> President Will Gaybrick (a16z, Aug 2026): agent productivity is a reason to build more, not to cut cost <a class="cite" href="#src-2">[2]</a>; CEO Patrick Collison (Sep 2026): about 55% of PRs start as a prompt to Minions <a class="cite" href="#src-17">[17]</a>; Stripe DevProd engineer (May 2026 talk): 91% of engineers write code with AI tools daily <a class="cite" href="#src-18">[18]</a></li>
+<li><strong>What they care about:</strong> Reliability and quality obligations sit alongside AI adoption <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-18">[18]</a></li>
+<li><strong>Peers:</strong> Adyen, PayPal and Checkout.com (payments press comparisons); none matched as public Devin customers <a class="cite" href="#src-19">[19]</a></li>
+</ul>
+</section>
+<section class="sec sec-intent-signals" data-section="Intent signals">
+<h2>Intent signals</h2>
+<p><strong>New DevProd AI team is hiring an EM to automate engineering work</strong> — <span class="bdg tier">Tier 2</span> · leader hire · Feature development capacity · Relevant for: Shepherd Walker</p>
+<p>  &gt; &quot;We are a brand new team working quickly to accelerate Stripe&#x27;s engineering productivity by effectively deploying LLM agents and tools to automate large swaths of the engineering workflow&quot; <a class="cite" href="#src-3">[3]</a> · 2026-08-20</p>
+<p>  &gt; &quot;You will build the next generation of internal AI coding tools and platforms&quot; <a class="cite" href="#src-10">[10]</a> · 2026-10-08</p>
+<p><strong>Payment method factory moved ten legacy integrations to the modern stack</strong> — <span class="bdg tier">Tier 2</span> · eng blog · Code migration &amp; modernization</p>
+<p>  &gt; &quot;migrated ten existing integrations to our modern stack&quot; <a class="cite" href="#src-20">[20]</a> · date unknown</p>
+<p>  &gt; &quot;Stripe’s Payment Method Factory: Orchestrating agents for repeated, custom integrations — September 30, 2026&quot; <a class="cite" href="#src-15">[15]</a> · 2026-09-30 (dated by &quot;Stripe’s Payment Method Factory: Orchestrating agents for repeated, custom integrations — September 30, 2026&quot;)</p>
+<p>  &gt; &quot;Payment method integrations--125 and counting for Stripe--are a mix of routine and highly custom.&quot; <a class="cite" href="#src-21">[21]</a> · 2026-10-01</p>
+<p><strong>Gaybrick says the jump in merged code is stressing every system</strong> — <span class="bdg tier">Tier 2</span> · exec statement · Code review · Relevant for: William Gaybrick</p>
+<p>  &gt; &quot;we are merging so much more code than last year and is stressing every system&quot; <a class="cite" href="#src-2">[2]</a> · 2026-08-17</p>
+<p><strong>Payments EM replays historical transactions to test major migrations</strong> — <span class="bdg tier">Tier 3</span> · exec statement · Test generation &amp; QA</p>
+<p>  &gt; &quot;This allows Stripe to validate major migrations with far more confidence and speed than a traditional shadow-rollout&quot; <a class="cite" href="#src-22">[22]</a> · 2026-08-26</p>
+<h3>Additional signals</h3>
+<p class="meta"><em>Lower-level signals from the past two weeks.</em></p>
+<ul>
+<li><code>Financial event</code> <strong>Stripe agreed to buy small-business lender Parafin</strong> — posted 9d ago <a class="cite" href="#src-23">[23]</a></li>
+</ul>
+<p class="meta"><em><em>Competitive context</em></em></p>
+<p>1. Claude Code is deployed to all engineers via a signed zero-configuration binary, and Minions orchestrate Claude Code on throwaway VMs. Angle: expand into work their rollout doesn&#x27;t cover, never displace. (competitor in production) <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-17">[17]</a></p>
+<p>2. In-house agent platform: Minions, built by the DevProd team, produce over a thousand merged PRs a week. The DevProd AI org is both the likely evaluator and the incumbent owner. (other) <a class="cite" href="#src-13">[13]</a><a class="cite" href="#src-24">[24]</a></p>
+<p>3. Stripe was an early tester of Anthropic&#x27;s Claude Fable 5 model for a codebase-wide Ruby migration (vendor-reported). (other) <a class="cite" href="#src-25">[25]</a></p>
+</section>
+<section class="sec sec-company-linkedin" data-section="Company LinkedIn">
+<h2>Company LinkedIn</h2>
+<ul>
+<li>Stripe opened the call for speaker proposals for Sessions 2027 in San Francisco <em>(post)</em> <a class="cite" href="#src-26">[26]</a></li>
+</ul>
+<p>  &gt; &quot;Stripe is now accepting proposals for our Sessions 2027 event.&quot; <a class="cite" href="#src-26">[26]</a></p>
+<p>  &gt; &quot;Submit a proposal to speak at Sessions in San Francisco, May 4–6, 2027.&quot; <a class="cite" href="#src-26">[26]</a></p>
+</section>
+<section class="sec sec-who-to-work" data-section="Who to work">
+<h2>Who to work</h2>
+<ul>
+<li><strong>Thomas Welfley</strong> — <em>Head of Developer Infrastructure · <span class="bdg role economic-buyer">Economic buyer</span></em> — Two months into running Developer Infrastructure; Anthropic&#x27;s case study credits Stripe&#x27;s developer infrastructure team with the Claude Code rollout, so tooling decisions likely sit with this org. <em><span class="bdg warn">single source</span> · <a href="https://www.linkedin.com/in/welfley" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-27">[27]</a></li>
+<ul>
+<li>Supporting (new in role): New in role (2 months) <a class="cite" href="#src-27">[27]</a></li>
+<li>Hook: Took over Developer Infrastructure (Developer Productivity, Service Infrastructure, Observability) two months ago <a class="cite" href="#src-27">[27]</a></li>
+</ul>
+<li><strong><span class="bdg tier">Warm lead</span> (hiring this work)</strong> · <strong><span class="bdg champ">Incumbent owner</span></strong> · <strong>Shepherd Walker</strong> — <em>Head of Eng - DevProd AI and Dev Info · <span class="bdg role economic-buyer">Economic buyer</span></em> — His team built Minions and he is hiring the EM for the new DevProd AI team: the owner of Stripe&#x27;s agent strategy, and the incumbent owner. <em><span class="bdg warn">single source</span> · <a href="https://linkedin.com/in/shep-walker" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-28">[28]</a></li>
+<ul>
+<li><span class="bdg tier">Warm lead</span> (hiring manager): Named hiring manager for the DevProd AI EM role <a class="cite" href="#src-29">[29]</a></li>
+<li>Hook: Posted that his team built Minions, Stripe&#x27;s asynchronous coding agents <a class="cite" href="#src-24">[24]</a></li>
+</ul>
+<li><strong>James Curtin</strong> — <em>Head of Development Tooling and Environments · <span class="bdg role technical-evaluator">Technical evaluator</span></em> — Leads ~35 engineers who own Stripe&#x27;s inner development and test loop: the right evaluator for agent-written tests running in Stripe&#x27;s environments. <em><span class="bdg warn">single source</span> · <a href="https://linkedin.com/in/jameswcurtin" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-30">[30]</a></li>
+<ul>
+<li>Hook: Owns the inner dev and test loop for all Stripe engineers <a class="cite" href="#src-30">[30]</a></li>
+</ul>
+<li><strong><span class="bdg tier">Warm lead</span> (talks publicly about the pain)</strong> · <strong>William Gaybrick</strong> — <em>President, Product &amp; Business · <span class="bdg role economic-buyer">Economic buyer</span></em> — Exec sponsor: publicly frames agent productivity as a reason to build more and names the merge load as a strain. <em><span class="bdg warn">single source</span> · <a href="https://www.linkedin.com/in/william-gaybrick-5730347" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-31">[31]</a></li>
+<ul>
+<li><span class="bdg tier">Warm lead</span> (public talk about the pain): Public statement that merged code volume is stressing every system <a class="cite" href="#src-2">[2]</a></li>
+<li>Hook: a16z conversation on Stripe and agentic coding (Aug 2026) <a class="cite" href="#src-32">[32]</a></li>
+</ul>
+<li><strong>Adam Findley</strong> — <em>Senior Engineering Manager · <span class="bdg role technical-evaluator">Technical evaluator</span></em> — Runs developer productivity for Go and Schemas and has led AI-agent tooling work. <em><span class="bdg warn">single source</span> · <a href="https://www.linkedin.com/in/adamfindley" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-12">[12]</a></li>
+<ul>
+<li>Hook: Led AI-agent tooling that cut build failures and CI/CD cost about 30% each (own profile) <a class="cite" href="#src-12">[12]</a></li>
+</ul>
+</ul>
+</section>
+<section class="sec sec-recommended-entry-top-3" data-section="Recommended entry: top 3">
+<h2>Recommended entry: top 3</h2>
+<p>1. <strong>Thomas Welfley</strong> — New head of the org Anthropic credits with the Claude Code rollout; a new leader is the natural moment to set what agents own next. <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-27">[27]</a></p>
+<p>2. <strong>Shepherd Walker</strong> — Owns Minions and is staffing the new DevProd AI team; he decides what gets built in-house versus routed to another agent. <span class="bdg champ">Incumbent owner</span>, so lead with expansion. <a class="cite" href="#src-24">[24]</a><a class="cite" href="#src-29">[29]</a></p>
+<p>3. <strong>William Gaybrick</strong> — Exec sponsor whose public framing (build more, merge load is a strain) gives the top-down reason to add capacity. <a class="cite" href="#src-2">[2]</a></p>
+</section>
+<section class="sec sec-drafted-messages" data-section="Drafted messages">
+<h2>Drafted messages</h2>
+<p class="meta"><em>Drafts for rep review. Never auto-sent.</em></p>
+<h3>Thomas Welfley</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Stripe</em></p>
+<p>Hi Thomas,</p>
+<p>Congrats on taking over Developer Infrastructure. Stripe already has Claude Code set up on every developer&#x27;s machine, so I&#x27;d guess the next question is which work agents should own beyond the editor.</p>
+<p>That&#x27;s where Devin tends to land: it picks up a scoped ticket, runs the tests in its own sandbox and opens a PR for your engineers to review. On migration work, Nubank reports an <a class="srclink" href="https://devin.ai/customers/nubank/" target="_blank" rel="noopener">8x</a> engineering time efficiency gain (<a href="https://devin.ai/customers/nubank/" target="_blank" rel="noopener">https://devin.ai/customers/nubank/</a>).</p>
+<p>Would a short call sometime this week or next be useful to map where that could sit next to what you already run?</p>
+<p>Best,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Thomas, congrats on the move to Head of Developer Infrastructure at Stripe. I work with platform teams deciding which engineering work to hand to agents next, and would be glad to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Thomas. With Claude Code already set up on every developer&#x27;s machine at Stripe, the question I hear from infra leaders is what comes after the editor: migrations, upgrades and backlog work nobody wants to babysit. Devin takes a scoped ticket, works in its own sandbox and hands back a PR with tests run. If it helps as you plan your first quarter, I can walk you through how other platform teams split that work between in-house tools and an agent. Open to a short call?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li>New in role: lead with what his org owns next, not with what it already shipped</li>
+<li>Claude Code is in production; frame Devin as expansion, never a swap</li>
+<li>Do not mention his predecessor&#x27;s departure</li>
+<li>LinkedIn follow-up is sendable once he accepts</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-27">[27]</a><a class="cite" href="#src-33">[33]</a></p>
+<h3>Shepherd Walker</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Stripe</em></p>
+<p>Hi Shepherd,</p>
+<p>Minions now sit behind a big share of Stripe&#x27;s pull requests, and you&#x27;re hiring an EM to lead the DevProd AI team. So the question on your desk is probably less whether agents work and more which work goes to which agent.</p>
+<p>My hypothesis is that there is a long tail of cross-repo upgrades and cleanup worth routing to a second agent instead of building harness support for each case. Devin takes that kind of ticket from Slack or Jira and returns a review-ready PR. At EBANX, <a class="srclink" href="https://devin.ai/customers/ebanx" target="_blank" rel="noopener">92%</a> of merged PRs are authored by Devin (<a href="https://devin.ai/customers/ebanx" target="_blank" rel="noopener">https://devin.ai/customers/ebanx</a>).</p>
+<p>Open to 20 minutes on how teams with their own agent platform draw that line?</p>
+<p>Thanks,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Shepherd, the Minions write-ups are some of the most useful material out there on running unattended agents in a large codebase. I work on agent rollouts with platform teams and would like to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Shepherd. Once a team owns its own agent platform, my conversations tend to be about governance: which classes of work go to which agent, who reviews the output, and how you measure whether it pays off. Some teams in that spot use Devin for categories they would rather not build harness support for, like large upgrades or long-running cleanup. If 20 minutes on how others draw that line would help as you staff up DevProd AI, I&#x27;m happy to set it up.</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li><span class="bdg champ">Incumbent owner</span>: his team built Minions, so pitch expansion around it, never replacement</li>
+<li>Strategy owner: keep it at routing and governance, no feature tour</li>
+<li>Do not ask whether they have tried agents</li>
+<li>LinkedIn follow-up is sendable</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-13">[13]</a><a class="cite" href="#src-17">[17]</a><a class="cite" href="#src-29">[29]</a><a class="cite" href="#src-34">[34]</a></p>
+<h3>James Curtin</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Stripe</em></p>
+<p>Hi James,</p>
+<p>Your org owns the inner development and test loop at Stripe, and with Selective Test Execution on a <a class="srclink" href="https://stripe.dev/blog/selective-test-execution-at-stripe-fast-ci-for-a-50m-line-ruby-monorepo" target="_blank" rel="noopener">50M</a>-line Ruby monorepo, CI speed looks well covered. What tends to stay stuck in codebases that size is the list of services with thin tests.</p>
+<p>Devin works in its own environment, writes the missing tests against the existing suite and opens a PR your engineers review like any other change. Litera reports <a class="srclink" href="https://devin.ai/customers/litera" target="_blank" rel="noopener">93%</a> faster regression cycles after rolling it out (<a href="https://devin.ai/customers/litera" target="_blank" rel="noopener">https://devin.ai/customers/litera</a>).</p>
+<p>Would a short session on what that looks like for one service in your monorepo be worth it? Any day this week or next works for me.</p>
+<p>Cheers,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi James, I&#x27;ve been reading Stripe&#x27;s write-up on Selective Test Execution and how your team keeps the dev and test loop fast. I work with dev tooling teams on agent-written tests and would like to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, James. One pattern I see in large monorepos: the test loop gets fast, but the backlog of services with thin coverage stays put because nobody owns writing those tests. Devin can take that list, write tests against the existing suite in its own environment and open PRs your engineers review like any other change. If you have a service with known gaps, I&#x27;d be glad to show what a first pass looks like on it. Does a short call make sense?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li><span class="bdg role technical-evaluator">Technical evaluator</span>: talk about how it runs in his environments and test loop</li>
+<li>Claude Code and Minions are in production; position tests as remainder work they do not cover</li>
+<li>No pricing or exec framing</li>
+<li>LinkedIn follow-up is sendable</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-11">[11]</a><a class="cite" href="#src-30">[30]</a><a class="cite" href="#src-35">[35]</a></p>
+<h3>William Gaybrick</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Stripe</em></p>
+<p>Hi Will,</p>
+<p>Your point on a16z that Stripe is merging far more code than last year, and that it is stressing every system, stuck with me. Most companies treat agent output as a cost lever; you framed it as a reason to build everything.</p>
+<p>If that is the bet, the pressure moves to the work around shipping: upgrades, cleanup and backlog that grows with every new product. That is the work Devin takes off a team&#x27;s plate. Ramp says Devin fixes tens of thousands of hours of technical debt (<a href="https://devin.ai/customers/ramp/" target="_blank" rel="noopener">https://devin.ai/customers/ramp/</a>).</p>
+<p>Would a 20 minute conversation with your developer productivity leads be worth setting up?</p>
+<p>Regards,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Will, enjoyed your a16z conversation on Stripe and agentic coding. Would be glad to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Will. The short version of why I reached out: if Stripe keeps choosing to build more rather than cut, the work around shipping (upgrades, cleanup, backlog) grows with every product line, and that is work an agent can take off your platform teams without changing how they review code. Ramp uses Devin on exactly that kind of technical debt. If useful, I would suggest a short call with whoever owns developer productivity, with you involved only as needed.</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li>Exec sponsor: mandate plus proof plus one ask, no product tour</li>
+<li>Email is the primary channel; LinkedIn note is a light touch only</li>
+<li>Never frame Devin as a way to cut engineering cost; he explicitly rejects that</li>
+<li>Follow-up is sendable but low priority</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-2">[2]</a><a class="cite" href="#src-32">[32]</a><a class="cite" href="#src-36">[36]</a></p>
+<h3>Adam Findley</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Stripe</em></p>
+<p>Hi Adam,</p>
+<p>You lead developer productivity for Go and Schemas at Stripe, and the AI-agent tooling you led cut build failures and CI/CD cost by about <a class="srclink" href="https://www.linkedin.com/in/adamfindley" target="_blank" rel="noopener">30%</a> each. That is a team that already knows where agents pay off.</p>
+<p>Devin could take the next layer of that work: dependency bumps and schema-driven changes across services, done in its own sandbox with the build run before a PR reaches review. Itaú reports a <a class="srclink" href="https://devin.ai/customers/itau" target="_blank" rel="noopener">6x</a> faster .NET to Java migration of 59 services (<a href="https://devin.ai/customers/itau" target="_blank" rel="noopener">https://devin.ai/customers/itau</a>).</p>
+<p>Is it worth a 20 minute look at one repo together?</p>
+<p>Best regards,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Adam, your note on agent tooling that cut build failures at Stripe caught my eye. I work with developer productivity teams on where coding agents fit next and would be glad to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Adam. Teams that have already wired agents into build and CI usually find the next bottleneck is the change work itself: library upgrades, schema changes rippling across services, and cleanup nobody schedules. Devin picks up that kind of ticket, works in an isolated environment, runs the build and tests, and opens a PR for normal review. If you have an upgrade or schema migration sitting in the backlog, I&#x27;d be glad to walk through how a first run on it would look. Worth a short call?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li><span class="bdg role technical-evaluator">Technical evaluator</span>: hook is his own profile line on agent tooling results, so keep it about his stack</li>
+<li>Claude Code and Minions are in production; position as next-layer work, never replacement</li>
+<li>Hook comes from his profile, not a post; keep the tone light</li>
+<li>LinkedIn follow-up is sendable</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-12">[12]</a><a class="cite" href="#src-37">[37]</a></p>
+</section>
+<section class="sec sec-abm-themes-assessment" data-section="ABM themes *(assessment)*">
+<h2>ABM themes <em>(assessment)</em></h2>
+<ul>
+<li>Build more, not less: position Devin as added capacity for the work around shipping that grows with every new product. <a class="cite" href="#src-2">[2]</a></li>
+<li>Second agent for an agent-native org: route long-tail migrations and upgrades to Devin alongside Claude Code and Minions, never as a replacement. <a class="cite" href="#src-17">[17]</a><a class="cite" href="#src-20">[20]</a></li>
+<li>Reliability first: lead with sandboxed execution and human-reviewed PRs, matching Stripe&#x27;s stated reliability and security bar. <a class="cite" href="#src-18">[18]</a></li>
+</ul>
+</section>
+<section class="sec sec-wider-buying-center" data-section="Wider buying center">
+<h2>Wider buying center</h2>
+<p>Not found</p>
+</section>
+<section class="sec sec-org-chart-sumble-inferred" data-section="Org chart *(Sumble — inferred)*">
+<h2>Org chart <em>(Sumble — inferred)</em></h2>
+<p>Not found</p>
+</section>
+<details class="refs"><summary>Sources &amp; validator report</summary><section class="sec sec-sources" data-section="Sources">
+<h2>Sources</h2>
+<p id="src-1">1. <a href="https://claude.com/customers/stripe" target="_blank" rel="noopener">Stripe Claude Code case study | Claude by Anthropic</a> — retrieved 2026-10-10</p>
+<p id="src-2">2. <a href="https://exa.ai/library/podcast/r7x133l7946/episode/gbfx4xrhjvx" target="_blank" rel="noopener">Stripe’s AI Strategy: Build More, Not Less</a> — published 2026-08-17, retrieved 2026-10-10</p>
+<p id="src-3">3. <a href="https://careerbyte.fast-page.org/remote-jobs/engineering-manager-developer-productivity-ai" target="_blank" rel="noopener">Engineering Manager, Developer Productivity AI | Careerbyte</a> — published 2026-08-20, retrieved 2026-10-10</p>
+<p id="src-4">4. Apollo — Apollo organization record: Stripe (retrieved 2026-10-10)</p>
+<p id="src-5">5. <a href="https://derrick-app.com/company/stripe" target="_blank" rel="noopener">Stripe Company Profile: HQ, Leadership, Tech &amp; Key Facts</a> — retrieved 2026-10-10</p>
+<p id="src-6">6. <a href="https://www.reveliolabs.com/companies/stripe/employees" target="_blank" rel="noopener">Stripe Number of Employees 2026 | Employee Count &amp; Headcount Data | Revelio Labs</a> — published 2026-08-31, retrieved 2026-10-10</p>
+<p id="src-7">7. <a href="https://assets.stripeassets.com/fzn2n1nzq965/IpU9Th5UvfMD586WbQ5om/6526df9ce888411cf12f843328386698/Stripe-annual-letter-2025-mobile.pdf" target="_blank" rel="noopener">All in all, 2025 was a strong year for the internet economy, and we’re delighted to see so many of Stripe’s customers do so well</a> — retrieved 2026-10-10</p>
+<p id="src-8">8. <a href="https://stripe.com" target="_blank" rel="noopener">Stripe | Financial Infrastructure to Grow Your Revenue</a> — retrieved 2026-10-10</p>
+<p id="src-9">9. <a href="https://www.linkedin.com/jobs/view/4392006647/" target="_blank" rel="noopener">User Interface Manager Jobs in United States (4,000+ Open Roles) | LinkedIn</a> — published 2026-09-14, retrieved 2026-10-10</p>
+<p id="src-10">10. <a href="https://ca.linkedin.com/jobs/view/internal-product-engineer-developer-productivity-ai-at-stripe-4477469252" target="_blank" rel="noopener">Stripe hiring Internal Product Engineer, Developer Productivity AI in Toronto, Ontario, Canada | LinkedIn</a> — published 2026-10-08, retrieved 2026-10-10</p>
+<p id="src-11">11. <a href="https://stripe.dev/blog/selective-test-execution-at-stripe-fast-ci-for-a-50m-line-ruby-monorepo" target="_blank" rel="noopener">https://stripe.dev/blog/selective-test-execution-at-stripe-fast-ci-for-a-50m-line-ruby-monorepo</a> — retrieved 2026-10-10</p>
+<p id="src-12">12. <a href="https://www.linkedin.com/in/adamfindley" target="_blank" rel="noopener">Adam Findley</a> — published 2026-10-06, retrieved 2026-10-10</p>
+<p id="src-13">13. <a href="https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents" target="_blank" rel="noopener">https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents</a> — retrieved 2026-10-10</p>
+<p id="src-14">14. <a href="https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2" target="_blank" rel="noopener">Minions: Stripe’s one-shot, end-to-end coding agents—Part 2</a> — retrieved 2026-10-10</p>
+<p id="src-15">15. <a href="https://stripe.dev/blog" target="_blank" rel="noopener">Stripe Dot Dev — Blog</a> — retrieved 2026-10-10</p>
+<p id="src-16">16. <a href="https://github.com/stripe" target="_blank" rel="noopener">Stripe</a> — retrieved 2026-10-10</p>
+<p id="src-17">17. <a href="https://ulisten.ai/channels/claude/patrick-collison-on-claude-code-at-stripe_S_lzYIvtEaQ/details" target="_blank" rel="noopener">Patrick Collison on Claude Code at Stripe · Details</a> — published 2026-09-24, retrieved 2026-10-10</p>
+<p id="src-18">18. <a href="https://www.youtube.com/watch?v=WW-549L6L50" target="_blank" rel="noopener">Building autonomous coding agents at Stripe</a> — published 2026-05-26, retrieved 2026-10-10</p>
+<p id="src-19">19. <a href="https://midrocket.com/en/guides/payment-gateway-comparison/" target="_blank" rel="noopener">Payment Gateway Comparison 2026 — Midrocket</a> — published 2026-02-04, retrieved 2026-10-10</p>
+<p id="src-20">20. <a href="https://stripe.dev/blog/stripes-payment-method-factory-orchestrating-agents-for-repeated-custom-integrations" target="_blank" rel="noopener">Stripe’s Payment Method Factory: Orchestrating agents for repeated, custom integrations</a> — retrieved 2026-10-10</p>
+<p id="src-21">21. <a href="https://www.linkedin.com/feed/update/urn:li:activity:7511501887716679681" target="_blank" rel="noopener">Stripe is putting agents into software &quot;factories&quot;--giving them hardened prompts, sandboxing them, and iterating as you learn. All the things you&#x27;d do with humans in a factory.</a> — published 2026-10-01, retrieved 2026-10-10</p>
+<p id="src-22">22. <a href="https://se-radio.net/2026/08/se-radio-735-vivek-yadav-on-regression-testing-microservices/" target="_blank" rel="noopener">SE Radio 735: Vivek Yadav on Regression Testing Microservices – Software Engineering Radio</a> — published 2026-08-26, retrieved 2026-10-10</p>
+<p id="src-23">23. <a href="https://www.linkedin.com/posts/joel-lewis-3631492a1_stripe-to-buy-parafin-to-scale-embedded-finance-activity-7511423337433128960-qfpP" target="_blank" rel="noopener">Stripe is buying Parafin, a company the wasn&#x27;t on my radar until it was announced.</a> — published 2026-10-01, retrieved 2026-10-10</p>
+<p id="src-24">24. <a href="https://www.linkedin.com/posts/shep-walker_minions-stripes-one-shot-end-to-end-coding-activity-7426783288750411776-XaHV" target="_blank" rel="noopener">My team at Stripe built out a tool we call Minions - asynchronous coding agents built on Stripe&#x27;s developer infrastructure to accelerate dev velocity. We launched it in mid-September and it now …</a> — published 2026-02-10, retrieved 2026-10-10</p>
+<p id="src-25">25. <a href="https://claude5.ai/news/stripe-claude-fable-5-50-million-line-migration-one-day" target="_blank" rel="noopener">Stripe: Fable 5 Did a 50M-Line Ruby Migration in One Day | Claude 5 on OtterMind</a> — published 2026-06-09, retrieved 2026-10-10</p>
+<p id="src-26">26. <a href="https://www.linkedin.com/feed/update/urn:li:activity:7501386630797144066" target="_blank" rel="noopener">Stripe is now accepting proposals for our Sessions 2027 event. If you have real insights and a point of view worth sharing on stage, we want to hear from you.</a> — published 2026-09-03, retrieved 2026-10-10</p>
+<p id="src-27">27. <a href="https://www.linkedin.com/in/welfley" target="_blank" rel="noopener">Thomas Welfley - Engineering Leader and Software ... - LinkedIn</a> — published 2026-09-26, retrieved 2026-10-10</p>
+<p id="src-28">28. <a href="https://linkedin.com/in/shep-walker" target="_blank" rel="noopener">shepherd walker</a> — published 2026-09-04, retrieved 2026-10-10</p>
+<p id="src-29">29. <a href="https://www.linkedin.com/posts/shep-walker_engineering-manager-developer-productivity-activity-7450553488587108352-3Bpo" target="_blank" rel="noopener">Hey folks! I&#x27;m hiring for a very exciting role! I&#x27;m looking for a scrappy, extremely product driven EM to lead the DevProd AI team. | Shepherd Walker</a> — published 2026-04-16, retrieved 2026-10-10</p>
+<p id="src-30">30. <a href="https://linkedin.com/in/jameswcurtin" target="_blank" rel="noopener">James Curtin</a> — published 2026-09-14, retrieved 2026-10-10</p>
+<p id="src-31">31. <a href="https://www.linkedin.com/in/william-gaybrick-5730347" target="_blank" rel="noopener">William Gaybrick</a> — published 2026-09-24, retrieved 2026-10-10</p>
+<p id="src-32">32. <a href="https://www.linkedin.com/posts/william-gaybrick-5730347_i-sat-down-with-david-george-at-a16z-to-talk-activity-7495244937278627840-3VOL" target="_blank" rel="noopener">I sat down with David George at a16z to talk about all things Stripe and agentic coding as plastic injection molding in the 1940s. You&#x27;ll have to let me know if the …</a> — published 2026-08-17, retrieved 2026-10-10</p>
+<p id="src-33">33. <a href="https://devin.ai/customers/nubank/" target="_blank" rel="noopener">Customers | Nubank | Devin</a> — published 2026-06-20, retrieved 2026-10-07</p>
+<p id="src-34">34. <a href="https://devin.ai/customers/ebanx" target="_blank" rel="noopener">EBANX: From one engineer&#x27;s evaluation to 92% of merged PRs</a> — retrieved 2026-10-07</p>
+<p id="src-35">35. <a href="https://devin.ai/customers/litera" target="_blank" rel="noopener">Customers | Litera | Devin</a> — published 2026-07-10, retrieved 2026-10-07</p>
+<p id="src-36">36. <a href="https://devin.ai/customers/ramp/" target="_blank" rel="noopener">Customers | Ramp | Devin</a> — published 2025-03-25, retrieved 2026-10-07</p>
+<p id="src-37">37. <a href="https://devin.ai/customers/itau" target="_blank" rel="noopener">Customers | Itaú - Devin</a> — retrieved 2026-10-07</p>
+<p class="meta"><em>Validator: 0 unsupported item(s) dropped, 2 flag(s).</em></p>
+</section></details>
+</main>
+</div>
+<div id="pop">
+  <textarea id="popText" placeholder="Comment on this selection…"></textarea>
+  <select id="popTag">
+    <option value="">Just this brief</option>
+    <option value="applies always">Applies always</option>
+    <option value="keep this">Keep this (positive)</option>
+  </select>
+  <div class="row"><button id="popCancel">Cancel</button>
+  <button id="popAdd" class="primary">Add comment</button></div>
+</div>
+<aside id="panel">
+  <h2>Your feedback</h2>
+  <div class="hint">Queued comments. Nothing is saved until you submit.</div>
+  <div id="list"></div>
+  <input id="repName" placeholder="Your handle (optional — defaults to the requester)">
+  <button id="submitAll" class="primary">Submit all feedback (0)</button>
+  <div id="status"></div>
+</aside>
+<script>
+const queue = [];
+const report = document.getElementById('report');
+const pop = document.getElementById('pop');
+const popText = document.getElementById('popText');
+const popTag = document.getElementById('popTag');
+const panel = document.getElementById('panel');
+const list = document.getElementById('list');
+const status = document.getElementById('status');
+const submitBtn = document.getElementById('submitAll');
+const repName = document.getElementById('repName');
+let pendingRange = null;
+let pendingQuote = '';
+let pendingSection = '';
+let draftMarks = [];
+
+function clearDraft() {
+  draftMarks.forEach(m => { m.outerHTML = m.innerHTML; });
+  draftMarks = [];
+}
+
+function hidePop() {
+  pop.style.display='none';
+  clearDraft();
+  pendingRange = null;
+  pendingQuote = '';
+}
+
+function sectionOf(node) {
+  const el = node.nodeType === 3 ? node.parentElement : node;
+  const sec = el && el.closest('section.sec');
+  return sec ? sec.dataset.section : '';
+}
+
+document.addEventListener('mouseup', (e) => {
+  if (pop.contains(e.target)) return;
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed || !report.contains(sel.anchorNode)) { hidePop(); return; }
+  clearDraft();
+  pendingRange = sel.getRangeAt(0).cloneRange();
+  // capture quote + section now: highlightRange mutates/splits the text nodes the
+  // range points at, so reading them later (at Add) comes back empty
+  pendingQuote = pendingRange.toString().trim();
+  pendingSection = sectionOf(pendingRange.startContainer);
+  draftMarks = highlightRange(pendingRange, 'draft');  // visible while the popover is open
+  pop.style.display='block';
+  pop.style.left = Math.min(e.pageX, window.innerWidth - 300) + 'px';
+  pop.style.top = (e.pageY + 8) + 'px';
+  popText.value='';   // no autofocus: it would collapse the selection and break Cmd+C
+});
+
+function renderPanel() {
+  panel.style.display = queue.length ? 'block' : 'none';
+  document.body.classList.toggle('has-panel', !!queue.length);
+  list.innerHTML='';
+  queue.forEach((c, i) => {
+    const d = document.createElement('div');
+    d.className='comment';
+    const rm = document.createElement('button');
+    rm.className='rm'; rm.textContent='✕';
+    rm.onclick = () => { queue.splice(i,1);
+      (c.marks||[]).forEach(m => { m.outerHTML = m.innerHTML; });
+      renderPanel(); };
+    const q = document.createElement('q'); q.textContent = c.quote;
+    const meta = document.createElement('div');
+    meta.innerHTML = `<span class="sec-tag">${c.section||'—'}</span>` +
+      (c.tag ? `<span class="tag-tag">${c.tag}</span>` : '');
+    const n = document.createElement('div'); n.textContent = c.note;
+    d.append(rm, q, meta, n);
+    list.appendChild(d);
+  });
+  submitBtn.textContent = `Submit all feedback (${queue.length})`;
+}
+
+function highlightRange(range, cls) {
+  // wrap every text node the range touches — surroundContents alone fails on
+  // selections that span elements, which is most of them
+  const marks = [];
+  const wrap = (r) => {
+    const m = document.createElement('mark');
+    m.className = cls;
+    try { r.surroundContents(m); marks.push(m); } catch (_) {}
+  };
+  const walker = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_TEXT, {
+    acceptNode(n) {
+      if (!n.nodeValue.trim() || !range.intersectsNode(n)) return NodeFilter.FILTER_SKIP;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  if (!nodes.length) {
+    try {  // selection inside one text node
+      const r = range.cloneRange();
+      wrap(r);
+    } catch (_) {}
+    return marks;
+  }
+  nodes.forEach((n) => {
+    const r = document.createRange();
+    r.selectNodeContents(n);
+    if (n === range.startContainer) r.setStart(n, range.startOffset);
+    if (n === range.endContainer) r.setEnd(n, range.endOffset);
+    wrap(r);
+  });
+  return marks;
+}
+
+document.getElementById('popAdd').onclick = () => {
+  if (!pendingRange) return;
+  if (!pendingQuote) { pop.style.display='none'; return; }
+  const c = { section: pendingSection, quote: pendingQuote,
+              note: popText.value.trim(), tag: popTag.value };
+  c.marks = draftMarks;               // promote the visible draft highlight
+  draftMarks = [];
+  c.marks.forEach(m => m.className = 'pending');
+  queue.push(c);
+  window.getSelection().removeAllRanges();
+  pop.style.display='none';
+  pendingRange = null;
+  pendingQuote = '';
+  renderPanel();
+};
+document.getElementById('popCancel').onclick = hidePop;
+
+// citation links open the collapsed Sources block before jumping
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a.cite');
+  if (a) document.querySelectorAll('details.refs').forEach(d => d.open = true);
+});
+
+// drafted messages: group each labeled block (Email / LinkedIn note / follow-up)
+// into a .cp wrapper with a copy button, so reps can paste straight into email.
+document.querySelectorAll('.sec-drafted-messages').forEach(sec => {
+  const labels = { 'Email': 'Copy email',
+                   'LinkedIn connection note': 'Copy note',
+                   'LinkedIn follow-up': 'Copy follow-up' };
+  let group = null;
+  [...sec.children].forEach(el => {
+    if (el.matches('h3')) { group = null; return; }
+    // draft labels render as <p class="meta"><em><em>Label</em>… — the nested
+    // em marks a block boundary; anything else belongs to the open group
+    const inner = el.tagName === 'P' && el.querySelector('em em');
+    if (inner) {
+      const label = labels[inner.textContent.trim()];
+      group = null;   // unknown labels (e.g. rep-only "Send notes") end the group
+      if (label) {
+        group = document.createElement('div');
+        group.className = 'cp';
+        sec.insertBefore(group, el);
+        const btn = document.createElement('button');
+        btn.className = 'cpbtn'; btn.type = 'button';
+        btn.dataset.l = label; btn.textContent = label;
+        const g = group;               // capture now — `group` is reused per label
+        btn.onclick = () => copyGroup(g, btn);
+        group.appendChild(btn);
+        el.classList.add('cplabel');
+      }
+    }
+    if (group) group.appendChild(el);
+  });
+});
+
+async function copyGroup(g, btn) {
+  const c = g.cloneNode(true);
+  c.querySelectorAll('.cpbtn,.cplabel').forEach(n => n.remove());
+  // drop rep-only trailers that can trail into the last group of a draft
+  c.querySelectorAll('p > em:first-child').forEach(em => {
+    if (/^(Built from|Lint)/.test(em.textContent)) em.parentElement.remove();
+  });
+  // innerText needs layout: park the clone offscreen so paragraph breaks survive
+  c.style.cssText = 'position:fixed;left:-9999px;top:0';
+  document.body.appendChild(c);
+  const text = c.innerText.trim(), markup = c.innerHTML;
+  c.remove();
+  let copied = false;
+  try {
+    await navigator.clipboard.write([new ClipboardItem({
+      'text/plain': new Blob([text], {type:'text/plain'}),
+      'text/html': new Blob([markup], {type:'text/html'})
+    })]);
+    copied = true;
+  } catch (_) {}
+  if (!copied) {
+    // fallback that needs no clipboard permission: hide the chrome, select the
+    // block, and let the browser's own copy command carry the rich HTML
+    const hidden = [];
+    g.querySelectorAll('.cpbtn,.cplabel').forEach(n => {
+      hidden.push([n, n.style.display]); n.style.display = 'none';
+    });
+    const r = document.createRange();
+    r.selectNodeContents(g);
+    const sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(r);
+    try { copied = document.execCommand('copy'); } catch (_) {}
+    sel.removeAllRanges();
+    hidden.forEach(([n, d]) => { n.style.display = d; });
+  }
+  btn.classList.add('ok');
+  btn.textContent = '✓ Copied';
+  setTimeout(() => { btn.classList.remove('ok'); btn.textContent = btn.dataset.l; }, 1600);
+}
+
+// Cmd/Ctrl+C with no selection inside a draft block copies that whole block;
+// with a selection the browser's native copy already carries rich HTML.
+document.addEventListener('copy', (e) => {
+  const sel = window.getSelection();
+  if (!sel || !sel.isCollapsed || !report.contains(sel.anchorNode)) return;
+  const el = sel.anchorNode && sel.anchorNode.nodeType === 3
+    ? sel.anchorNode.parentElement : sel.anchorNode;
+  const g = el && el.closest('.cp');
+  if (!g) return;
+  const c = g.cloneNode(true);
+  c.querySelectorAll('.cpbtn,.cplabel').forEach(n => n.remove());
+  c.querySelectorAll('p > em:first-child').forEach(em => {
+    if (/^(Built from|Lint)/.test(em.textContent)) em.parentElement.remove();
+  });
+  c.style.cssText = 'position:fixed;left:-9999px;top:0';
+  document.body.appendChild(c);
+  e.clipboardData.setData('text/plain', c.innerText.trim());
+  e.clipboardData.setData('text/html', c.innerHTML);
+  c.remove();
+  e.preventDefault();
+  const b = g.querySelector('.cpbtn');   // same confirmation as the button
+  if (b) { b.classList.add('ok'); b.textContent = '✓ Copied';
+    setTimeout(() => { b.classList.remove('ok'); b.textContent = b.dataset.l; }, 1600); }
+});
+
+submitBtn.onclick = async () => {
+  submitBtn.disabled = true;
+  status.className=''; status.textContent='Submitting…';
+  const comments = queue.map(({section, quote, note, tag}) => ({section, quote, note, tag}));
+  try {
+    const r = await fetch(location.pathname.replace(/\/$/,'') + '/comments', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({comments, rep: repName && repName.value.trim() || null})
+    });
+    if (!r.ok) throw new Error(await r.text());
+    queue.forEach(c => { (c.marks||[]).forEach(m => m.className='done'); });
+    queue.length = 0;
+    renderPanel();
+    status.textContent='Saved — thank you. The next brief run will pick these up.';
+  } catch (e) {
+    status.className='err';
+    status.textContent='Could not save — your comments are still queued. Click Submit to retry.';
+  } finally {
+    submitBtn.disabled = false;
+  }
+};
+</script>
+</body></html>
