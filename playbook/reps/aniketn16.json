@@ -1,0 +1,23 @@
+{
+ "rules": [
+  {
+   "rule": "Never write lists of three in drafts (A, B and C, or a colon followed by three items). Write it as a plain sentence that names one or two concrete things.",
+   "scope": "global",
+   "evidence": 1,
+   "added": "2026-10-10"
+  },
+  {
+   "rule": "Send notes: the first line is the most important warning about what not to say (e.g. never frame Devin as cutting cost when they reject that). Cut lines that only describe the role or angle.",
+   "scope": "global",
+   "evidence": 1,
+   "added": "2026-10-10"
+  },
+  {
+   "rule": "When a draft references a job post or hiring, say 'I saw you're hiring...', never a bare 'you're hiring...'.",
+   "scope": "global",
+   "evidence": 1,
+   "added": "2026-10-10"
+  }
+ ],
+ "golden_examples": {}
+}
