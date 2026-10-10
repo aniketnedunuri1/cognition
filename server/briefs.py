@@ -8,6 +8,7 @@ the model. In HTTP mode the .docx is served at an unguessable per-brief link.
 from __future__ import annotations
 
 import hmac
+import importlib
 import json
 import os
 import re
@@ -133,11 +134,13 @@ def save_brief(domain: str, brief: dict, rep: str | None = None) -> dict:
     out.write_text(json.dumps(disk, indent=1, ensure_ascii=False))
     markdown = render_markdown(record)
     out.with_suffix(".md").write_text(markdown)
-    from .docx_render import brief_to_docx
-    brief_to_docx(record, out.with_suffix(".docx"))
-    from .html_render import render_html
+    # reload per save: the long-running HTTP server otherwise keeps rendering with
+    # whatever renderer code it started with
+    from . import docx_render, html_render
+    importlib.reload(docx_render).brief_to_docx(record, out.with_suffix(".docx"))
     docx_href = (f"/briefs/{token}/{domain}-{stem}.docx" if BASE_URL else f"{stem}.docx")
-    out.with_suffix(".html").write_text(render_html(record, markdown, docx_href))
+    out.with_suffix(".html").write_text(
+        importlib.reload(html_render).render_html(record, markdown, docx_href))
     return {"saved": _rel(out), "report": report, "since_last_run": since,
             "brief_markdown": markdown, "slack_summary": render_slack(record)}
 
