@@ -31,8 +31,10 @@ _INLINE = [
 _BADGES = [
     (re.compile(r"\b(Tier \d)\b"), r'<span class="bdg tier">\1</span>'),
     (re.compile(r"\b(Champion|Incumbent owner)\b"), r'<span class="bdg champ">\1</span>'),
-    (re.compile(r"\b(verified)\b"), r'<span class="bdg ver">\1</span>'),
-    (re.compile(r"\b(single source|may be outdated|Low-confidence draft)\b"),
+    # strip the render's parens around status words — the badge replaces them
+    (re.compile(r"\(\s*(verified)\s*\)"), r'<span class="bdg ver">\1</span>'),
+    (re.compile(r"\(\s*(single source)\s*\)"), r'<span class="bdg warn">\1</span>'),
+    (re.compile(r"\b(may be outdated|Low-confidence draft)\b"),
      r'<span class="bdg warn">\1</span>'),
 ]
 
@@ -135,6 +137,7 @@ p { margin:6px 0; }
 p.meta { color:var(--mut); font-size:13px; }
 ul { margin:6px 0; padding-left:22px; }
 li { margin:5px 0; }
+section.sec > ul > li + li { margin-top:12px; }  /* proximity: room between entities */
 ul ul { margin:2px 0; }
 blockquote { margin:6px 0 6px 2px; padding:6px 12px; border-left:3px solid #d1d5db;
              color:#374151; background:#fafafa; border-radius:0 6px 6px 0; font-size:14px; }
@@ -165,6 +168,12 @@ section.sec > h2 { display:inline-block; padding:2px 10px; border-radius:6px; }
 .bdg.champ { color:#1d4ed8; background:#dbeafe; }
 .bdg.warn { color:#b91c1c; background:#fee2e2; }
 .bdg.ver { color:#15803d; background:#dcfce7; }
+/* nested lines (evidence, hooks) recede: figure/ground */
+ul ul { font-size:13px; color:#4b5563; }
+ul ul .bdg { background:none; box-shadow:inset 0 0 0 1px #c7cbd1; color:#6b7280;
+             font-weight:500; }
+ul ul li { margin:3px 0; }
+em .bdg { font-style:normal; }
 /* figure/ground: reference material recedes */
 details.refs { margin:20px 0; }
 details.refs summary { cursor:pointer; color:var(--mut); font-size:13px; }
