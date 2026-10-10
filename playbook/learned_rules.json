@@ -64,5 +64,11 @@
   "scope": "global",
   "evidence": 1,
   "added": "2026-10-10"
+ },
+ {
+  "rule": "Outreach timing asks: never 'in the next couple weeks' — say 'sometime this week or next' (the lint blocks 'next couple weeks', 'couple of weeks', 'next few weeks', 'coming weeks')",
+  "scope": "global",
+  "evidence": 1,
+  "added": "2026-10-10"
  }
 ]
