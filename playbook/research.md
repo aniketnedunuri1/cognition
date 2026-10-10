@@ -177,6 +177,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
 1. **Peer proof comes first:** a peer that is a public Devin customer → "Teams at <peer> use Devin for <use case>", using that customer's proof quote and metric.
 2. Otherwise, use-case proof from a public customer in the same industry or with the same problem.
 3. Proof is never framed as fear of missing out.
+4. A draft citing a public stat or customer proof carries the source URL once, inline in the body (within the one-link cap) — the recipient can't click a citation number.
 
 **Never:**
 - mention layoffs

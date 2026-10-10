@@ -22,6 +22,9 @@ import re
 _INLINE = [
     (re.compile(r"\[([^\]]+)\]\((https?://[^)\s]+)\)"),
      r'<a href="\2" target="_blank" rel="noopener">\1</a>'),
+    # bare URLs in draft bodies become clickable links
+    (re.compile(r"(?<![\"'=>/])(https?://[^\s<)]+)"),
+     r'<a href="\1" target="_blank" rel="noopener">\1</a>'),
     (re.compile(r"\*\*([^*]+)\*\*"), r"<strong>\1</strong>"),
     (re.compile(r"`([^`]+)`"), r"<code>\1</code>"),
     (re.compile(r"\*([^*]+)\*"), r"<em>\1</em>"),
