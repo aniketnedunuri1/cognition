@@ -38,8 +38,6 @@ ADD_LABELS = {"hiring_alert": "Hiring alert", "tech_mention": "Tech mention",
 # Why someone was badged, in rep words (ex-Devin customer is the strongest reason).
 BADGE_REASON = {"ex_devin_customer": "ex-Devin customer", "hiring_manager": "hiring this work",
                 "public_pain": "talks publicly about the pain"}
-# Only these kinds make someone a champion; the rest are supporting context.
-CHAMPION_KINDS = set(BADGE_REASON)
 
 
 def champion_reason(p: dict) -> str:
@@ -515,9 +513,10 @@ def render_markdown(rec: dict) -> str:
         L += ["Not found", ""]
     for p in cards:
         badges = []
-        if p["label"] == "champion":
+        if p["label"] in ("champion", "warm_lead"):
             r = champion_reason(p)
-            badges.append(f"**Champion{f' ({r})' if r else ''}**")
+            name = "Champion" if p["label"] == "champion" else "Warm lead"
+            badges.append(f"**{name}{f' ({r})' if r else ''}**")
         if p.get("incumbent_owner"):
             badges.append("**Incumbent owner**")
         tag = (" · ".join(badges) + " · ") if badges else ""
@@ -526,8 +525,13 @@ def render_markdown(rec: dict) -> str:
         team = f" · {p['team']}" if p.get("team") else ""
         role = ROLE.get(p["deal_role"], p["deal_role"])
         L.append(f"- {tag}**{p['name']}** — *{p['title']}{team} · {role}* — {_plain(p['why'])} *({ver}){link}* {src.cite(p['evidence'])}")
+        # The line's label follows the person's outcome: champion evidence only on
+        # champions, warm-lead evidence only on warm leads, else Supporting.
+        qual = {"champion": {"ex_devin_customer"},
+                "warm_lead": {"public_pain", "hiring_manager"}}.get(p["label"], set())
+        names = {"champion": "Champion evidence", "warm_lead": "Warm lead"}
         for f in p["champion_evidence"]:
-            label = "Champion evidence" if f["kind"] in CHAMPION_KINDS else "Supporting"
+            label = names.get(p["label"], "Supporting") if f["kind"] in qual else "Supporting"
             L.append(f"  - {label} ({KIND[f['kind']]}): {f['value']} {src.cite(f['evidence'])}")
         L += [f"  - Hook: {f['value']} {src.cite(f['evidence'])}" for f in p["hooks"]]
         if p.get("reporting_line"):

@@ -36,6 +36,7 @@ ROLE_INK = {
     "gatekeeper": "4B5563", "parent_org_approver": "9A3412",
 }
 CHAMPION_INK = "047857"
+WARM_INK = "B45309"
 INCUMBENT_INK = "B91C1C"
 SIGNAL_INK = {1: "1D4ED8", 2: "64748B", 3: "94A3B8"}
 ADD_INK = {"hiring_alert": "1D4ED8", "tech_mention": "047857", "headcount_growth": "047857",
@@ -431,9 +432,11 @@ def _person_card(cell: _Cell, p: dict, src: _Sources) -> None:
     badges = _p(cell, after=20)
     role = p["deal_role"]
     _run(badges, ROLE.get(role, role), size=8, bold=True, color=ROLE_INK.get(role, INK))
-    if p["label"] == "champion":
+    if p["label"] in ("champion", "warm_lead"):
         r = champion_reason(p)
-        _run(badges, f"   Champion{f' — {r}' if r else ''}", size=8, bold=True, color=CHAMPION_INK)
+        name, ink = ("Champion", CHAMPION_INK) if p["label"] == "champion" \
+            else ("Warm lead", WARM_INK)
+        _run(badges, f"   {name}{f' — {r}' if r else ''}", size=8, bold=True, color=ink)
     if p.get("incumbent_owner"):
         _run(badges, "   Incumbent owner", size=8, bold=True, color=INCUMBENT_INK)
     why = _p(cell, after=20)

@@ -29,7 +29,7 @@ _INLINE = [
 
 # Inline badges: the brief's own status vocabulary gets one visual treatment each.
 _BADGES = [
-    (re.compile(r"\b(Tier \d)\b"), r'<span class="bdg tier">\1</span>'),
+    (re.compile(r"\b(Tier \d|Warm lead)\b"), r'<span class="bdg tier">\1</span>'),
     (re.compile(r"\b(Champion|Incumbent owner)\b"), r'<span class="bdg champ">\1</span>'),
     # strip the render's parens around status words — the badge replaces them
     (re.compile(r"\(\s*(verified)\s*\)"), r'<span class="bdg ver">\1</span>'),
