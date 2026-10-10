@@ -22,7 +22,8 @@ BANNED = ["hope this finds you well", "hope you're well", "hope you are well", "
           "revolutionize", "revolutionary", "game-changer", "game changer", "synergy", "circle back",
           "touch base", "just following up", "just checking in", "cutting-edge", "best-in-class",
           "world-class", "replace your engineers", "replace engineers", "replacing engineers",
-          "compare notes", "comparing notes"]
+          "compare notes", "comparing notes",
+          "next couple weeks", "couple of weeks", "next few weeks", "coming weeks"]
 LAYOFFS = re.compile(r"\blay ?offs?\b|\blaid off\b|\bjob cuts\b|\breduction in force\b|\bdownsiz|"
                      r"\bheadcount reduction|\bRIF\b", re.I)
 PLACEHOLDER = re.compile(r"\[[^\]]{1,40}\]|\{\{?[^}]{0,40}\}?\}|<[a-z_ ]{2,30}>", re.I)
