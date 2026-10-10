@@ -202,7 +202,9 @@ def get_last_brief(domain: str) -> dict:
 def get_brief_feedback(domain: str) -> dict:
     """Unprocessed rep comments left on the HTML report (oldest brief first). Call at
     Stage 0 before drafting: distill each into a rule via add_playbook_rule (generalizable)
-    or treat as a data fix (factual correction), then mark_brief_feedback_processed."""
+    or treat as a data fix (factual correction), then mark_brief_feedback_processed.
+    Comment tags: "applies always" hints at a global rule; "keep this" is approval —
+    a keep-doing rule or add_golden_example when the highlight covers a whole message."""
     return briefs.get_brief_feedback(domain)
 
 

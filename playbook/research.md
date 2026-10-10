@@ -57,11 +57,9 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
    - `is_current: true` → keep.
    - `false` or `"unknown"` → list only with an official company source (their site, a filing, a press release) or a second independent source.
    - A former employee is never listed as current.
-3. **Champion evidence.** Each item has a `kind`. The validator sets the label *Champion* when any of these hold:
-   - `ex_devin_customer`: from `ex_devin_customers` in `search_people` (matched in code; the validator re-checks the profile history). We cannot prove they personally ran Devin — only that they worked at a Devin customer. Name the customer to the rep only if `public_reference` is true.
-   - Senior title **and** `public_pain`: profile title is Manager+/Staff/Principal/Director/Head (or VP/C-level), plus a **verified quote** about the exact pain (migrations, tech debt, test coverage, DX). No quote → not this path.
-   - Senior title **and** `hiring_manager`: named hiring manager on a relevant engineering job post (`fetch_page` on the post).
-   - Supporting or hook only (never the badge):
+3. **Champion evidence.** Each item has a `kind`. The validator sets the label *Champion* only for `ex_devin_customer` — matched from `ex_devin_customers` in `search_people` (the validator re-checks the profile history). Champion means prior Devin exposure: worked at a Devin customer, used or advocated Devin. We cannot prove they personally ran Devin — only that they worked at a Devin customer. Name the customer to the rep only if `public_reference` is true.
+   - **Warm lead** (a strong signal, *not* a champion): senior title (Manager+/Staff/Principal/Director/Head or VP/C-level) **and** `public_pain` with a verified quote about the exact pain (migrations, tech debt, test coverage, DX) — no quote → not this path — **or** senior title **and** `hiring_manager` (named hiring manager on a relevant eng job post; `fetch_page` on the post).
+   - Supporting or hook only (never a badge):
      - `works_on_signal`: on the team behind a **tier-1** signal and listed in its `who_cares`. If they aren't, the validator keeps it as a hook.
      - `new_in_role`: `months_in_role` ≤ 6
      - `ai_appetite`: posts about AI coding tools, or an AI-enablement title. An AI title is not a champion.
@@ -179,6 +177,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
 1. **Peer proof comes first:** a peer that is a public Devin customer → "Teams at <peer> use Devin for <use case>", using that customer's proof quote and metric.
 2. Otherwise, use-case proof from a public customer in the same industry or with the same problem.
 3. Proof is never framed as fear of missing out.
+4. A draft citing a public stat or customer proof carries the source URL once, inline in the body (within the one-link cap) — the recipient can't click a citation number.
 
 **Never:**
 - mention layoffs

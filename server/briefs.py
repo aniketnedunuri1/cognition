@@ -27,8 +27,8 @@ ROLE = {"economic_buyer": "Economic buyer",
         "parent_org_approver": "Parent-company approver"}
 LOW_CONFIDENCE = "Low-confidence draft: no personal signal or hook found."
 KIND = {"hiring_manager": "hiring manager", "public_pain": "public talk about the pain",
-        "ex_devin_customer": "ex-Devin customer", "works_on_signal": "works on a tier-1 signal (supporting)",
-        "new_in_role": "new in role (supporting)", "ai_appetite": "AI appetite (supporting)"}
+        "ex_devin_customer": "ex-Devin customer", "works_on_signal": "works on a tier-1 signal",
+        "new_in_role": "new in role", "ai_appetite": "AI appetite"}
 SOURCE_LABELS = {"job_post": "job post", "leader_hire": "leader hire", "eng_blog": "eng blog",
                  "exec_statement": "exec statement", "news_press": "news/press",
                  "social_post": "social post", "profile": "profile data", "other": "other"}
@@ -513,18 +513,25 @@ def render_markdown(rec: dict) -> str:
         L += ["Not found", ""]
     for p in cards:
         badges = []
-        if p["label"] == "champion":
+        if p["label"] in ("champion", "warm_lead"):
             r = champion_reason(p)
-            badges.append(f"**Champion{f' ({r})' if r else ''}**")
+            name = "Champion" if p["label"] == "champion" else "Warm lead"
+            badges.append(f"**{name}{f' ({r})' if r else ''}**")
         if p.get("incumbent_owner"):
             badges.append("**Incumbent owner**")
         tag = (" · ".join(badges) + " · ") if badges else ""
         ver = "verified" if p["verified"] else "single source"
         link = f" · [LinkedIn]({_url(p['profile_source_id'])})" if p.get("profile_source_id") else ""
-        team = f" · {p['team']}" if p.get("team") else ""
         role = ROLE.get(p["deal_role"], p["deal_role"])
-        L.append(f"- {tag}**{p['name']}**, {p['title']}{team} · {role} — {_plain(p['why'])} *({ver}){link}* {src.cite(p['evidence'])}")
-        L += [f"  - Champion evidence ({KIND[f['kind']]}): {f['value']} {src.cite(f['evidence'])}" for f in p["champion_evidence"]]
+        L.append(f"- {tag}**{p['name']}** — *{p['title']} · {role}* — {_plain(p['why'])} *({ver}){link}* {src.cite(p['evidence'])}")
+        # The line's label follows the person's outcome: champion evidence only on
+        # champions, warm-lead evidence only on warm leads, else Supporting.
+        qual = {"champion": {"ex_devin_customer"},
+                "warm_lead": {"public_pain", "hiring_manager"}}.get(p["label"], set())
+        names = {"champion": "Champion evidence", "warm_lead": "Warm lead"}
+        for f in p["champion_evidence"]:
+            label = names.get(p["label"], "Supporting") if f["kind"] in qual else "Supporting"
+            L.append(f"  - {label} ({KIND[f['kind']]}): {f['value']} {src.cite(f['evidence'])}")
         L += [f"  - Hook: {f['value']} {src.cite(f['evidence'])}" for f in p["hooks"]]
         if p.get("reporting_line"):
             L.append(f"  - Reporting line (as stated): {p['reporting_line']['value']} {src.cite(p['reporting_line']['evidence'])}")
@@ -540,7 +547,7 @@ def render_markdown(rec: dict) -> str:
         L += [f"### {d['name']}", ""]
         if d["low_confidence"]:
             L += [f"> ⚠️ {LOW_CONFIDENCE}", ""]
-        L += [f"**Email — {d['email']['subject']}**", "", d["email"]["body"], "",
+        L += ["**Email**", f"*Subject: {d['email']['subject']}*", "", d["email"]["body"], "",
               f"**LinkedIn connection note**", "", d["linkedin_note"], "",
               f"**LinkedIn follow-up**", "", d["linkedin_followup"], ""]
         if d.get("notes"):

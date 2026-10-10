@@ -166,7 +166,7 @@ class Person(BaseModel):
     incumbent_owner: bool = False
     # Set by the validator, never by the model:
     verified: bool | None = None
-    label: Literal["champion", "candidate"] | None = None
+    label: Literal["champion", "warm_lead", "candidate"] | None = None
     featured: bool | None = None  # Who-to-work card (cap applies here only)
     profile_source_id: str | None = None
     current_basis: Literal["profile", "official_source", "two_sources"] | None = None
@@ -466,9 +466,11 @@ class _Validator:
         return bool(SENIOR_TITLE.search(p.title or ""))
 
     def label(self, p: Person, path: str, tier1_signal_people: set[str]) -> None:
-        """Champion = ex-Devin-customer, or senior + verified public_pain quote,
-        or senior + named hiring manager. works_on_signal / new_in_role / ai_appetite
-        never earn the badge. works_on_signal not in a tier-1 signal's who_cares → hook."""
+        """Champion = ex-Devin-customer only (Devin usage/advocacy). Warm lead =
+        senior + verified public_pain quote, or senior + named hiring manager —
+        a strong signal but not a champion. works_on_signal / new_in_role /
+        ai_appetite never earn a badge. works_on_signal not in a tier-1 signal's
+        who_cares → hook."""
         for i, c in enumerate(list(p.champion_evidence)):
             if c.kind != "works_on_signal":
                 continue
@@ -482,8 +484,13 @@ class _Validator:
         pain = any(c.kind == "public_pain" and any(e.quote for e in c.evidence) for c in p.champion_evidence)
         hiring = any(c.kind == "hiring_manager" for c in p.champion_evidence)
         senior = self._senior(p)
-        qualifies = ex or (senior and pain) or (senior and hiring)
-        p.label = "champion" if qualifies and p.deal_role in BADGE_ROLES else "candidate"
+        role_ok = p.deal_role in BADGE_ROLES
+        if ex and role_ok:
+            p.label = "champion"
+        elif (senior and (pain or hiring)) and role_ok:
+            p.label = "warm_lead"
+        else:
+            p.label = "candidate"
 
     def company_post(self, c: CompanyPost, path: str) -> CompanyPost | None:
         if not (c := self.fact(c, path)):
@@ -561,9 +568,11 @@ def _person_rank(p: Person, top: list[str], who: set[str], index: int) -> tuple:
         return (0, top.index(p.name), verified, index)
     if p.label == "champion":
         return (1, 0, verified, index)
-    if p.incumbent_owner or p.hooks or p.champion_evidence or p.name in who:
+    if p.label == "warm_lead":
         return (2, 0, verified, index)
-    return (3, 0, verified, index)
+    if p.incumbent_owner or p.hooks or p.champion_evidence or p.name in who:
+        return (3, 0, verified, index)
+    return (4, 0, verified, index)
 
 
 _GREETING = re.compile(r"^(?:hi|hey|hello|dear)?\s*[\w.'’-]+(?:\s[\w.'’-]+)?,?\s*", re.I)
