@@ -17,6 +17,7 @@ distill into playbook rules. Pending comments highlight yellow, submitted green.
 from __future__ import annotations
 
 import html
+import json
 import re
 
 _INLINE = [
@@ -160,6 +161,7 @@ code { background:#f3f4f6; padding:1px 5px; border-radius:4px; font-size:13px; }
 a { color:#2563eb; }
 a.cite { color:var(--mut); text-decoration:none; font-size:12px; vertical-align:1px; }
 a.cite:hover { color:#2563eb; text-decoration:underline; }
+a.srclink { color:#2563eb; border-bottom:1px dotted #2563eb; text-decoration:none; }
 details.refs p:target { background:#fef3c7; border-radius:4px; }
 /* similarity: one accent hue per section category — chip + left border + faint card tint */
 section.sec > h2 { display:inline-block; padding:2px 10px; border-radius:6px; }
@@ -390,12 +392,54 @@ def _reflow(html_body: str) -> str:
         sep + tail + "</details>"
 
 
+_STAT = re.compile(r"~?\$?\d[\d,]*(?:\.\d+)?(?:%|x|k|m|b|bn)(?![\w%])", re.I)
+
+
+def _link_draft_stats(body_html: str, rec: dict) -> str:
+    """Hyperlink each stat token in a draft to the cited source whose document
+    contains it (claims and built_from cover proof metrics too). Report-only —
+    the .docx/.md stay plain."""
+    from .briefs import _url
+    from .cache import get_doc
+
+    sec = body_html.find("sec-drafted-messages")
+    if sec < 0:
+        return body_html
+    end = body_html.find("</section>", sec)
+    seg, tail = body_html[sec:end], body_html[end:]
+    drafts = {d["name"]: d for d in rec["brief"].get("drafts") or []}
+    parts = re.split(r"(<h3>.*?</h3>)", seg)
+    for i in range(2, len(parts), 2):
+        name = re.sub(r"<[^>]+>", "", parts[i - 1]).strip()
+        d = drafts.get(name)
+        if not d:
+            continue
+        block = parts[i]
+        sids = {c.get("source_id") for c in d.get("claims") or []} | \
+               {e.get("source_id") for e in d.get("built_from") or []}
+        docs = {sid: json.dumps(get_doc(sid) or {}) for sid in sids if sid}
+        text = "\n".join([d["email"]["body"], d.get("linkedin_note") or "",
+                          d.get("linkedin_followup") or ""])
+        for tok in dict.fromkeys(_STAT.findall(text)):
+            url = next((_url(sid) for sid, blob in docs.items()
+                        if _url(sid) and tok in blob), None)
+            if not url:
+                continue
+            m = re.search(rf"(?<![\w>\"'/]){re.escape(tok)}(?![\w<])", block)
+            if m:
+                block = (block[:m.start()] +
+                         f'<a class="srclink" href="{html.escape(url)}" '
+                         f'target="_blank" rel="noopener">{tok}</a>' + block[m.end():])
+        parts[i] = block
+    return body_html[:sec] + "".join(parts) + tail
+
+
 def render_html(rec: dict, markdown: str, docx_href: str) -> str:
     """Full annotatable report page. Comments POST to <served path>/comments;
     docx_href adapts to served vs. local-file use."""
     b = rec["brief"]
     # the page header covers the md's title + date preamble; skip them
-    body = _reflow(md_to_html(re.sub(r"\A# .*\n\*.*\*\n\n?", "", markdown)))
+    body = _link_draft_stats(_reflow(md_to_html(re.sub(r"\A# .*\n\*.*\*\n\n?", "", markdown))), rec)
     return f"""<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
