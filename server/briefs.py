@@ -65,7 +65,8 @@ def bdir() -> Path:
 
 
 def _saved(domain: str) -> list[Path]:
-    return sorted((bdir() / normalize_domain(domain)).glob("*.json"))
+    return sorted(p for p in (bdir() / normalize_domain(domain)).glob("*.json")
+                  if not p.name.endswith(".comments.json"))
 
 
 def _tokens_path() -> Path:
@@ -127,6 +128,9 @@ def save_brief(domain: str, brief: dict) -> dict:
     out.with_suffix(".md").write_text(markdown)
     from .docx_render import brief_to_docx
     brief_to_docx(record, out.with_suffix(".docx"))
+    from .html_render import render_html
+    docx_href = (f"/briefs/{token}/{domain}-{today}.docx" if BASE_URL else f"{today}.docx")
+    out.with_suffix(".html").write_text(render_html(record, markdown, docx_href))
     return {"saved": _rel(out), "report": report, "since_last_run": since,
             "brief_markdown": markdown, "slack_summary": render_slack(record)}
 
@@ -138,15 +142,103 @@ def brief_link(rec: dict) -> str:
     return _rel(bdir() / rec["domain"] / f"{rec['date']}.docx")
 
 
-def find_download(token: str) -> Path | None:
-    """The .docx for a download token, if any brief has it."""
+def _find_by_token(token: str) -> Path | None:
+    """The brief record path (sans suffix) for a download token, else None."""
     if not token:
         return None
     for key, tok in _load_tokens().items():
         if hmac.compare_digest(tok, token):
-            docx = (bdir() / key).with_suffix(".docx")
-            return docx if docx.exists() else None
+            path = bdir() / key
+            return path if path.with_suffix(".json").exists() else None
     return None
+
+
+def find_download(token: str) -> Path | None:
+    """The .docx for a download token, if any brief has it."""
+    stem = _find_by_token(token)
+    if not stem:
+        return None
+    docx = stem.with_suffix(".docx")
+    return docx if docx.exists() else None
+
+
+def report_link(rec: dict) -> str:
+    """The annotatable report URL in HTTP mode; the local .html path otherwise."""
+    if BASE_URL and rec.get("download_token"):
+        return f"{BASE_URL.rstrip('/')}/report/{rec['download_token']}"
+    return _rel(bdir() / rec["domain"] / f"{rec['date']}.html")
+
+
+def find_report(token: str) -> Path | None:
+    stem = _find_by_token(token)
+    if not stem:
+        return None
+    page = stem.with_suffix(".html")
+    return page if page.exists() else None
+
+
+# ---------- rep feedback on the HTML report ----------
+
+def _comments_file(stem: Path) -> Path:
+    return stem.parent / f"{stem.name}.comments.json"
+
+
+def _write_json_atomic(path: Path, data: dict) -> None:
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n")
+    tmp.replace(path)
+
+
+def save_comments(token: str, comments: list[dict]) -> dict | None:
+    """Append submitted report comments to the brief's <date>.comments.json.
+    Returns {domain, date, pending} or None for an unknown token."""
+    stem = _find_by_token(token)
+    if not stem:
+        return None
+    path = _comments_file(stem)
+    data = json.loads(path.read_text()) if path.exists() else {"comments": []}
+    start = len(data["comments"])
+    for i, c in enumerate(comments):
+        data["comments"].append({
+            "id": f"c{start + i + 1}", "processed": False, "submitted_at": now_iso(),
+            "section": str(c.get("section") or "")[:200],
+            "quote": str(c.get("quote") or "")[:4000],
+            "note": str(c.get("note") or "")[:2000],
+            "tag": str(c.get("tag") or "")[:100]})
+    _write_json_atomic(path, data)
+    pending = sum(1 for c in data["comments"] if not c["processed"])
+    return {"domain": stem.parent.name, "date": stem.name, "saved": _rel(path),
+            "added": len(comments), "pending": pending}
+
+
+def get_brief_feedback(domain: str) -> dict:
+    """Unprocessed report comments for a domain, oldest brief first."""
+    domain = normalize_domain(domain)
+    pending = []
+    for path in sorted((bdir() / domain).glob("*.comments.json")):
+        data = json.loads(path.read_text())
+        pending += [{"brief_date": path.name.removesuffix(".comments.json"), **c}
+                    for c in data["comments"] if not c["processed"]]
+    return {"found": bool(pending), "domain": domain, "comments": pending}
+
+
+def mark_brief_feedback_processed(domain: str, comment_ids: list[str]) -> dict:
+    """Mark report comments processed after they've been distilled (or judged
+    non-rule feedback). Returns the ids actually marked."""
+    domain = normalize_domain(domain)
+    ids, marked = set(comment_ids), []
+    for path in sorted((bdir() / domain).glob("*.comments.json")):
+        data = json.loads(path.read_text())
+        changed = False
+        for c in data["comments"]:
+            if c["id"] in ids and not c["processed"]:
+                c["processed"] = True
+                c["processed_at"] = now_iso()
+                marked.append(c["id"])
+                changed = True
+        if changed:
+            _write_json_atomic(path, data)
+    return {"marked": marked, "unknown_ids": sorted(ids - set(marked))}
 
 
 def _rel(path: Path) -> str:
@@ -515,5 +607,6 @@ def render_slack(rec: dict) -> str:
         L.append("Start with:")
         L += [f" {i}. {t['name']}, {titles.get(t['name'], '')} — {_plain(t['why']['text'])}"
               for i, t in enumerate(b["top_contacts"], 1)]
-    L.append(f"Full brief: {brief_link(rec)}")
+    L.append(f"Report (leave feedback): {report_link(rec)}")
+    L.append(f"Full brief (.docx): {brief_link(rec)}")
     return "\n".join(L)

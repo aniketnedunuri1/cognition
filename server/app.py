@@ -199,6 +199,21 @@ def get_last_brief(domain: str) -> dict:
 
 
 @_tool
+def get_brief_feedback(domain: str) -> dict:
+    """Unprocessed rep comments left on the HTML report (oldest brief first). Call at
+    Stage 0 before drafting: distill each into a rule via add_playbook_rule (generalizable)
+    or treat as a data fix (factual correction), then mark_brief_feedback_processed."""
+    return briefs.get_brief_feedback(domain)
+
+
+@_tool
+def mark_brief_feedback_processed(domain: str, comment_ids: list[str]) -> dict:
+    """Mark report comments handled after distilling each into a rule or judging it a
+    factual fix / non-rule feedback. Only mark ids you have actually dealt with."""
+    return briefs.mark_brief_feedback_processed(domain, comment_ids)
+
+
+@_tool
 def get_playbook() -> dict:
     """Learned rules (apply all that match the stage and persona) and golden examples
     (style references for drafting; never copy their facts)."""
@@ -225,7 +240,8 @@ TOOLS = [search_web, fetch_page, search_people, search_company_linkedin, get_com
          get_org_chart, get_tech_stack, verify_quotes,
          get_positioning, match_customers, refresh_positioning, apply_knowledge_update,
          lint_message, save_brief, get_last_brief,
-         get_playbook, add_playbook_rule, add_golden_example]
+         get_playbook, add_playbook_rule, add_golden_example,
+         get_brief_feedback, mark_brief_feedback_processed]
 
 
 def public_host_origin(public_base_url: str) -> tuple[list[str], list[str]]:
@@ -274,6 +290,28 @@ def build_server(auth_token: str | None = None, public_base_url: str | None = No
         if not path:
             return PlainTextResponse("Not found", status_code=404)
         return FileResponse(path, filename=f"{path.parent.name}-{path.stem}.docx", media_type=DOCX)
+
+    # The annotatable report. Same token access control as the .docx link.
+    @mcp.custom_route("/report/{token}", methods=["GET"], include_in_schema=False)
+    async def view_report(request: Request) -> Response:
+        path = briefs.find_report(request.path_params["token"])
+        if not path:
+            return PlainTextResponse("Not found", status_code=404)
+        return FileResponse(path, media_type="text/html")
+
+    @mcp.custom_route("/report/{token}/comments", methods=["POST"], include_in_schema=False)
+    async def report_comments(request: Request) -> Response:
+        try:
+            body = await request.json()
+            comments = body.get("comments")
+            assert isinstance(comments, list)
+        except Exception:
+            return PlainTextResponse("Bad request", status_code=400)
+        saved = briefs.save_comments(request.path_params["token"], comments)
+        if not saved:
+            return PlainTextResponse("Not found", status_code=404)
+        from starlette.responses import JSONResponse
+        return JSONResponse(saved)
 
     if public_base_url:
         _allow_public_host(mcp, public_base_url)
