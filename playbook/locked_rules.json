@@ -1,0 +1,18 @@
+[
+ {
+  "rule": "Never send, schedule or auto-send any outreach — drafts only, a human sends.",
+  "scope": "global"
+ },
+ {
+  "rule": "Never name a customer whose public_reference is false in outreach copy.",
+  "scope": "global"
+ },
+ {
+  "rule": "Never mention layoffs in outreach, and never write 'Windsurf' — the product is Devin.",
+  "scope": "global"
+ },
+ {
+  "rule": "Never invent a person, source, number or quote. 'Not found' beats a guess.",
+  "scope": "global"
+ }
+]

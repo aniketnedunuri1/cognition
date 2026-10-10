@@ -11,10 +11,11 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 ## Stage 0: Setup
 
 1. **Resolve the domain.** If given a name, `search_web("<name> official website")` and take the domain from the results. If two companies plausibly match, ask the rep.
-2. `get_playbook()`: apply every learned rule. Golden examples are style references for drafting.
-3. `get_brief_feedback(domain)`: distill any pending report comments into rules per the feedback playbook (`add_playbook_rule` for generalizable feedback; factual fixes are not rules), then `mark_brief_feedback_processed`. Do this before drafting so the new rules apply to this run.
-4. `get_last_brief(domain)`: if one exists, finish with a **Since last run** section (Stage 5).
-5. `get_positioning()`: load it once and reuse it for signal mapping and drafting.
+2. **Resolve the rep.** `whoami()` gives the requesting rep's handle; if it can't, use the Slack handle of whoever triggered the session (ask if unclear). Pass it as `rep` to `get_playbook`, `save_brief` and every feedback tool for the rest of the run.
+3. `get_playbook(rep)`: apply every rule in order — `locked_rules` (never overridable), `learned_rules` (team defaults), `rep_rules` (the rep's own). Golden examples are style references for drafting.
+4. `get_brief_feedback(domain)`: distill any pending report comments into rules per the feedback playbook (`add_playbook_rule` for generalizable feedback — pass the comment's `rep`, not yours; factual fixes are not rules), then `mark_brief_feedback_processed`. Do this before drafting so the new rules apply to this run.
+5. `get_last_brief(domain)`: if one exists, finish with a **Since last run** section (Stage 5). The last brief may be another rep's — that's expected: it keeps two reps from repeating work.
+6. `get_positioning()`: load it once and reuse it for signal mapping and drafting.
 
 ---
 
@@ -220,7 +221,7 @@ If `get_last_brief` returned a brief, report:
 
 ## Output contract
 
-**1. Brief:** call `save_brief(domain, brief)` with this shape. Everything cites `source_id`s; the validator fills in `verified`, `label`, `featured`, `current_basis` and `profile_source_id` itself. A field that breaks the schema is dropped whole, so check these before the first save:
+**1. Brief:** call `save_brief(domain, brief, rep)` — pass the rep from Stage 0 so the brief is theirs (report comments inherit it) and re-runs update their own file. With this shape: Everything cites `source_id`s; the validator fills in `verified`, `label`, `featured`, `current_basis` and `profile_source_id` itself. A field that breaks the schema is dropped whole, so check these before the first save:
 - Every `snapshot` and `engineering` field is a **list** of Facts, even with one fact (`hq: [Fact]`, never `hq: Fact`).
 - `drafts[].notes` is one string, not a list.
 - `people[].title` is copied exactly from the profile's current title.

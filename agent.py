@@ -57,17 +57,20 @@ def server_config(args) -> dict:
 
 
 def prompt_for(args) -> str:
+    rep = (f"You are serving rep '{args.rep}'. Pass rep='{args.rep}' to whoami-independent "
+           f"tools: get_playbook, save_brief, add_playbook_rule, add_golden_example.\n\n"
+           if getattr(args, "rep", None) else "")
     if args.command == "research":
         if args.stage:
-            return (f"Account: {args.domain}. Run Stage 0, then only the `{args.stage}` stage of the playbook. "
+            return (rep + f"Account: {args.domain}. Run Stage 0, then only the `{args.stage}` stage of the playbook. "
                     f"Then get_last_brief({args.domain}): if a brief exists, merge your output into it — "
                     f"replace the `{args.stage}` section(s), keep every other section as returned, recompute "
                     f"the verdict when signals or people changed — and save_brief the merged brief, fixing "
                     f"what the validator dropped. If no brief exists, report the result to the rep instead.")
-        return (f"Account: {args.domain}. Run Stages 0-4 of the playbook, then save_brief, fix what the "
+        return (rep + f"Account: {args.domain}. Run Stages 0-4 of the playbook, then save_brief, fix what the "
                 f"validator dropped with real evidence, and save again.")
     if args.command == "feedback":
-        return (f"Rep feedback on the {args.domain} brief:\n\n{args.text}\n\n"
+        return (rep + f"Rep feedback on the {args.domain} brief:\n\n{args.text}\n\n"
                 f"Run the feedback procedure in your playbook (get_last_brief and get_playbook first).")
     return "Run the 'Maintaining positioning' procedure from the playbook until refresh_positioning returns no items."
 
@@ -144,6 +147,7 @@ def main() -> int:
         p.add_argument("--replay", action="store_true", help="cache only, no data API calls")
         p.add_argument("--server-url", help="shared HTTP MCP server (needs MCP_AUTH_TOKEN)")
         p.add_argument("--max-turns", type=int, default=150)
+        p.add_argument("--rep", help="the rep this run is for (their rules apply; briefs/comments are theirs)")
         p.add_argument("-v", "--verbose", action="store_true", help="print the agent's narration")
     return asyncio.run(run(ap.parse_args()))
 

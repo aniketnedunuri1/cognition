@@ -228,7 +228,8 @@ button.primary { background:#1a1d21; color:#fff; border-color:#1a1d21; }
 .comment .sec-tag, .comment .tag-tag { display:inline-block; font-size:11px; color:var(--mut);
              background:#f3f4f6; border-radius:4px; padding:1px 6px; margin-right:4px; }
 .comment .rm { float:right; border:none; color:#b91c1c; padding:0; }
-#submitAll { width:100%; margin-top:12px; }
+#repName { width:100%; margin-top:12px; box-sizing:border-box; }
+#submitAll { width:100%; margin-top:8px; }
 #status { font-size:12px; margin-top:8px; color:var(--mut); }
 #status.err { color:#b91c1c; }
 body.has-panel .page { margin-right:320px; }
@@ -245,6 +246,7 @@ const panel = document.getElementById('panel');
 const list = document.getElementById('list');
 const status = document.getElementById('status');
 const submitBtn = document.getElementById('submitAll');
+const repName = document.getElementById('repName');
 let pendingRange = null;
 let draftMarks = [];
 
@@ -365,7 +367,7 @@ submitBtn.onclick = async () => {
   try {
     const r = await fetch(location.pathname.replace(/\\/$/,'') + '/comments', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({comments})
+      body: JSON.stringify({comments, rep: repName && repName.value.trim() || null})
     });
     if (!r.ok) throw new Error(await r.text());
     queue.forEach(c => { (c.marks||[]).forEach(m => m.className='done'); });
@@ -473,6 +475,7 @@ def render_html(rec: dict, markdown: str, docx_href: str) -> str:
   <h2>Your feedback</h2>
   <div class="hint">Queued comments. Nothing is saved until you submit.</div>
   <div id="list"></div>
+  <input id="repName" placeholder="Your handle (optional — defaults to the requester)">
   <button id="submitAll" class="primary">Submit all feedback (0)</button>
   <div id="status"></div>
 </aside>
