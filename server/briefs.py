@@ -27,8 +27,8 @@ ROLE = {"economic_buyer": "Economic buyer",
         "parent_org_approver": "Parent-company approver"}
 LOW_CONFIDENCE = "Low-confidence draft: no personal signal or hook found."
 KIND = {"hiring_manager": "hiring manager", "public_pain": "public talk about the pain",
-        "ex_devin_customer": "ex-Devin customer", "works_on_signal": "works on a tier-1 signal (supporting)",
-        "new_in_role": "new in role (supporting)", "ai_appetite": "AI appetite (supporting)"}
+        "ex_devin_customer": "ex-Devin customer", "works_on_signal": "works on a tier-1 signal",
+        "new_in_role": "new in role", "ai_appetite": "AI appetite"}
 SOURCE_LABELS = {"job_post": "job post", "leader_hire": "leader hire", "eng_blog": "eng blog",
                  "exec_statement": "exec statement", "news_press": "news/press",
                  "social_post": "social post", "profile": "profile data", "other": "other"}
@@ -38,6 +38,8 @@ ADD_LABELS = {"hiring_alert": "Hiring alert", "tech_mention": "Tech mention",
 # Why someone was badged, in rep words (ex-Devin customer is the strongest reason).
 BADGE_REASON = {"ex_devin_customer": "ex-Devin customer", "hiring_manager": "hiring this work",
                 "public_pain": "talks publicly about the pain"}
+# Only these kinds make someone a champion; the rest are supporting context.
+CHAMPION_KINDS = set(BADGE_REASON)
 
 
 def champion_reason(p: dict) -> str:
@@ -523,8 +525,10 @@ def render_markdown(rec: dict) -> str:
         link = f" · [LinkedIn]({_url(p['profile_source_id'])})" if p.get("profile_source_id") else ""
         team = f" · {p['team']}" if p.get("team") else ""
         role = ROLE.get(p["deal_role"], p["deal_role"])
-        L.append(f"- {tag}**{p['name']}**, {p['title']}{team} · {role} — {_plain(p['why'])} *({ver}){link}* {src.cite(p['evidence'])}")
-        L += [f"  - Champion evidence ({KIND[f['kind']]}): {f['value']} {src.cite(f['evidence'])}" for f in p["champion_evidence"]]
+        L.append(f"- {tag}**{p['name']}** — *{p['title']}{team} · {role}* — {_plain(p['why'])} *({ver}){link}* {src.cite(p['evidence'])}")
+        for f in p["champion_evidence"]:
+            label = "Champion evidence" if f["kind"] in CHAMPION_KINDS else "Supporting"
+            L.append(f"  - {label} ({KIND[f['kind']]}): {f['value']} {src.cite(f['evidence'])}")
         L += [f"  - Hook: {f['value']} {src.cite(f['evidence'])}" for f in p["hooks"]]
         if p.get("reporting_line"):
             L.append(f"  - Reporting line (as stated): {p['reporting_line']['value']} {src.cite(p['reporting_line']['evidence'])}")
