@@ -35,7 +35,7 @@ _INLINE = [
 
 # Inline badges: the brief's own status vocabulary gets one visual treatment each.
 _BADGES = [
-    (re.compile(r"\b(Tier \d|Warm lead)\b"), r'<span class="bdg tier">\1</span>'),
+    (re.compile(r"\b(Tier \d|Strong signal)\b"), r'<span class="bdg tier">\1</span>'),
     (re.compile(r"\b(Champion|Incumbent owner)\b"), r'<span class="bdg champ">\1</span>'),
     (re.compile(r"\b(Economic buyer|Technical evaluator|Gatekeeper|Parent-company approver)\b"),
      lambda m: f'<span class="bdg role {_slug(m[1])}">{m[1]}</span>'),

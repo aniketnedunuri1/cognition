@@ -432,10 +432,10 @@ def _person_card(cell: _Cell, p: dict, src: _Sources) -> None:
     badges = _p(cell, after=20)
     role = p["deal_role"]
     _run(badges, ROLE.get(role, role), size=8, bold=True, color=ROLE_INK.get(role, INK))
-    if p["label"] in ("champion", "warm_lead"):
+    if p["label"] in ("champion", "strong_signal"):
         r = champion_reason(p)
         name, ink = ("Champion", CHAMPION_INK) if p["label"] == "champion" \
-            else ("Warm lead", WARM_INK)
+            else ("Strong signal", WARM_INK)
         _run(badges, f"   {name}{f' — {r}' if r else ''}", size=8, bold=True, color=ink)
     if p.get("incumbent_owner"):
         _run(badges, "   Incumbent owner", size=8, bold=True, color=INCUMBENT_INK)

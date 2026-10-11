@@ -45,7 +45,7 @@ Write for a rep with five minutes: short, specific, sourced. Not finding somethi
 | Technical evaluator | Staff/Principal Engineer, Architect; Head/Director of Platform, Developer Productivity, DevEx, Engineering Enablement; EMs running migrations |
 | Gatekeeper (named, not targeted) | CISO, Head of Security, Procurement |
 
-Two different labels, don't blur them: **`deal_role` is their seat in the deal** — who they are, how you'd approach them. **Champion** is a badge the validator sets when there's evidence they'll push for Devin internally (ex-Devin customer; senior + verified public-pain quote; senior + named hiring manager). The badge only renders on economic buyer / technical evaluator cards — a gatekeeper's or approver's supporting evidence stays a line under their name, never the badge. `incumbent_owner` is a risk flag layered on top of any role.
+Two different labels, don't blur them: **`deal_role` is their seat in the deal** — who they are, how you'd approach them. **Champion** is a badge the validator sets on ex-Devin customers — evidence they'll push for Devin internally. **Strong signal** is the lesser badge for senior + verified public-pain quote or senior + named hiring manager. Badges only render on economic buyer / technical evaluator cards — a gatekeeper's or approver's supporting evidence stays a line under their name, never the badge. `incumbent_owner` is a risk flag layered on top of any role.
 
 **Entry point by Apollo total headcount.** Bands only set the *order* of the top 3; search every role at every size.
 - **Under 200:** CTO or founder (plus an eng lead if found). 1–2 threads max.
@@ -59,7 +59,7 @@ Two different labels, don't blur them: **`deal_role` is their seat in the deal**
    - `false` or `"unknown"` → list only with an official company source (their site, a filing, a press release) or a second independent source.
    - A former employee is never listed as current.
 3. **Champion evidence.** Each item has a `kind`. The validator sets the label *Champion* only for `ex_devin_customer` — matched from `ex_devin_customers` in `search_people` (the validator re-checks the profile history). Champion means prior Devin exposure: worked at a Devin customer, used or advocated Devin. We cannot prove they personally ran Devin — only that they worked at a Devin customer. Name the customer to the rep only if `public_reference` is true.
-   - **Warm lead** (a strong signal, *not* a champion): senior title (Manager+/Staff/Principal/Director/Head or VP/C-level) **and** `public_pain` with a verified quote about the exact pain (migrations, tech debt, test coverage, DX) — no quote → not this path — **or** senior title **and** `hiring_manager` (named hiring manager on a relevant eng job post; `fetch_page` on the post).
+   - **Strong signal** (evidence of intent, *not* a champion): senior title (Manager+/Staff/Principal/Director/Head or VP/C-level) **and** `public_pain` with a verified quote about the exact pain (migrations, tech debt, test coverage, DX) — no quote → not this path — **or** senior title **and** `hiring_manager` (named hiring manager on a relevant eng job post; `fetch_page` on the post).
    - Supporting or hook only (never a badge):
      - `works_on_signal`: on the team behind a **tier-1** signal and listed in its `who_cares`. If they aren't, the validator keeps it as a hook.
      - `new_in_role`: `months_in_role` ≤ 6

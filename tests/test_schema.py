@@ -143,7 +143,7 @@ def test_people_rules(stub):
     assert names == ["Phil Burrows", "Phil Burrows"]
     first, second = brief["people"]
     assert first["verified"] is False and first["label"] == "candidate"
-    assert second["verified"] is True and second["label"] == "warm_lead"  # senior Head + public_pain quote
+    assert second["verified"] is True and second["label"] == "strong_signal"  # senior Head + public_pain quote
     assert first["featured"] is True and second["featured"] is True
     assert first["profile_source_id"] == ids["Phil Burrows"]
     reasons = " ".join(d["reason"] for d in report["dropped"])
@@ -259,9 +259,9 @@ def test_champion_label_needs_strong_evidence(stub):
     phil = lambda *ev: person("Phil Burrows", ids["Phil Burrows"], champion_evidence=list(ev))
     label = lambda raw: run(raw)[0]["people"][0]["label"]
     assert label({"people": [phil(champ("new_in_role", blog), champ("ai_appetite", blog))]}) == "candidate"
-    # Senior Head of Platform + hiring_manager or public_pain quote → warm lead.
-    assert label({"people": [phil(champ("hiring_manager", blog))]}) == "warm_lead"
-    assert label({"people": [phil(champ("public_pain", blog))]}) == "warm_lead"
+    # Senior Head of Platform + hiring_manager or public_pain quote → strong signal.
+    assert label({"people": [phil(champ("hiring_manager", blog))]}) == "strong_signal"
+    assert label({"people": [phil(champ("public_pain", blog))]}) == "strong_signal"
     # No quote on public_pain: not the badge path, even if senior.
     assert label({"people": [phil({"kind": "public_pain", "value": "talked DX",
                                    "evidence": [{"source_id": blog}]})]}) == "candidate"

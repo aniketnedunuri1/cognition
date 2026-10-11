@@ -777,7 +777,7 @@
     "reporting_line": null,
     "incumbent_owner": true,
     "verified": false,
-    "label": "warm_lead",
+    "label": "strong_signal",
     "featured": true,
     "profile_source_id": "src_4d81441381",
     "current_basis": "profile"
@@ -867,7 +867,7 @@
     "reporting_line": null,
     "incumbent_owner": false,
     "verified": false,
-    "label": "warm_lead",
+    "label": "strong_signal",
     "featured": true,
     "profile_source_id": "src_412d4648db",
     "current_basis": "profile"

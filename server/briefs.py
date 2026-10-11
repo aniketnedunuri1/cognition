@@ -539,9 +539,9 @@ def render_markdown(rec: dict) -> str:
         L += ["Not found", ""]
     for p in cards:
         badges = []
-        if p["label"] in ("champion", "warm_lead"):
+        if p["label"] in ("champion", "strong_signal"):
             r = champion_reason(p)
-            name = "Champion" if p["label"] == "champion" else "Warm lead"
+            name = "Champion" if p["label"] == "champion" else "Strong signal"
             badges.append(f"**{name}{f' ({r})' if r else ''}**")
         if p.get("incumbent_owner"):
             badges.append("**Incumbent owner**")
@@ -551,10 +551,10 @@ def render_markdown(rec: dict) -> str:
         role = ROLE.get(p["deal_role"], p["deal_role"])
         L.append(f"- {tag}**{p['name']}** — *{p['title']} · {role}* — {_plain(p['why'])} *({ver}){link}* {src.cite(p['evidence'])}")
         # The line's label follows the person's outcome: champion evidence only on
-        # champions, warm-lead evidence only on warm leads, else Supporting.
+        # champions, strong-signal evidence only on strong signals, else Supporting.
         qual = {"champion": {"ex_devin_customer"},
-                "warm_lead": {"public_pain", "hiring_manager"}}.get(p["label"], set())
-        names = {"champion": "Champion evidence", "warm_lead": "Warm lead"}
+                "strong_signal": {"public_pain", "hiring_manager"}}.get(p["label"], set())
+        names = {"champion": "Champion evidence", "strong_signal": "Strong signal"}
         for f in p["champion_evidence"]:
             label = names.get(p["label"], "Supporting") if f["kind"] in qual else "Supporting"
             L.append(f"  - {label} ({KIND[f['kind']]}): {f['value']} {src.cite(f['evidence'])}")

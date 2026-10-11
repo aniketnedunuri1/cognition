@@ -142,17 +142,19 @@ HTTP mode also serves `GET /briefs/<token>/<domain>-<date>.docx` and `GET /repor
 3. **Company LinkedIn activity** via `search_company_linkedin` (Exa only — no LinkedIn scraping, no session, no unofficial API): recent company posts when Exa indexed them, best-effort tagged names and reposts from snippet language. Rendered as a "Company LinkedIn" section. A tag becomes a person's hook only when the quote verifies and the person is listed under the normal current-role rules; a tag or repost alone is never a signal. Nothing indexed → "Not found", no placeholder.
 
 **Finding champions** (evidence, not titles)
-**Champion** if any of:
+**Champion** if:
 1. **Ex-employee of a Devin customer** (profile history × customers.json). We cannot prove they personally ran Devin, only that they worked at a Devin customer. Do not invent "used Devin" from an AI title.
-2. **Senior title** (Manager+/Staff/Principal/Director/Head, including VP/C-level) **and** a verified public quote about the exact pain (migrations, tech debt, test coverage, DX)
-3. **Senior title** **and** named hiring manager on a relevant job post
+
+**Strong signal** (evidence of intent, not a champion) if either:
+1. **Senior title** (Manager+/Staff/Principal/Director/Head, including VP/C-level) **and** a verified public quote about the exact pain (migrations, tech debt, test coverage, DX)
+2. **Senior title** **and** named hiring manager on a relevant job post
 
 Supporting or hook only (never the badge):
 - `works_on_signal` — on the team behind a tier-1 signal (`who_cares`)
 - New in role (<6 months, from profile start date)
 - AI appetite (posts about Copilot/Cursor, AI enablement title)
 
-Labels: **Champion** vs. **Candidate**.
+Labels: **Champion** vs. **Strong signal** vs. **Candidate**.
 
 **Incumbent owner:** someone rolling out or expanding Cursor, Claude Code, Copilot coding agent, or an in-house agent platform. That is a displace/expand risk, not a champion. They can hold both badges (ex-Devin-customer *and* incumbent owner). Copy must not pitch "have you tried agents?"
 
