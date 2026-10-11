@@ -14,52 +14,9 @@ uv run pytest              # no API calls
 
 For the learned-rule auto-promotion (`gh pr create` when ~3 reps converge on a rule), the GitHub CLI must be installed and authenticated (`brew install gh && gh auth login`). Without it, rule convergence just stays pending.
 
-## Run it
+## Run it in Slack (Devin-managed agent)
 
-```bash
-uv run python agent.py research acme.com              # brief → briefs/acme.com/<date>.{json,md,docx,html} + Slack summary
-uv run python agent.py research acme.com --stage people
-uv run python agent.py feedback acme.com "CTO email too long; lead with the peer metric"
-uv run python agent.py research acme.com --replay      # cache only, no API spend — needs a warm cache (i.e. a prior run of that account); fails on a fresh clone
-```
-
-**Auth for the runner:** set `ANTHROPIC_API_KEY` in `.env` (recommended for reviewers). Alternative: if you're logged in to Claude Code (`claude` CLI), the runner uses that login and no key is needed.
-
-The agent gets **only** this MCP server's tools (no built-in web search, no other MCP servers), so every fact has to come through a cited tool call. The CLI prints the Slack summary exactly as the tool rendered it from the validated brief; the agent's own prose is shown only with `-v`, labeled unvalidated.
-
-**Output:** the validated brief is written to `briefs/<domain>/<date>.json` (source of truth) and rendered in code to `.md` and `.docx`; the model never touches the rendered content. The CLI prints the Slack summary with the local `.docx` path. In HTTP mode (Devin), "Full brief" is a download link served by the same server at an unguessable per-brief path.
-
-## MCP server
-
-```bash
-uv run python -m server.app              # stdio (local runner, Claude Code)
-uv run python -m server.app --http       # Streamable HTTP on :8765/mcp; needs MCP_AUTH_TOKEN + PUBLIC_BASE_URL
-uv run python -m server.app --replay     # cache only: serves prior cached calls with no API spend (cache/ is gitignored — warm it with a real run first)
-```
-
-| Tool | Source |
-|---|---|
-| `get_company(domain)` | Apollo org enrichment (Free plan) |
-| `get_jobs(domain)` | Apollo job postings, deduped by title |
-| `search_web(query, since?, include_domains?)` | Exa search (`include_domains=["linkedin.com"]` for posts/talks) |
-| `fetch_page(url_or_source_id)` | Exa contents |
-| `search_people(company, roles)` | Exa people search |
-| `search_company_linkedin(company, domain?, linkedin_slug?, since?)` | Exa search on `linkedin.com/posts|company/<slug>` path prefixes: indexed company posts, best-effort tags/reposts from snippets (no scraping, no feed guarantee) |
-| `get_org_chart(domain, people?)` | Sumble inferred org chart: sourced people → inferred manager + direct reports (labeled inference; ~50–100 credits/account) |
-| `get_tech_stack(domain)` | Sumble confirmed-used tech stack verified via job posts, grouped by business function — preferred over Apollo's website-tag hint |
-| `verify_quotes(quotes)` | Cached page text — batch, one call for all quotes |
-| `get_positioning()`, `match_customers(companies)` | `knowledge/` (built from cognition.com + devin.ai) |
-| `refresh_positioning()`, `apply_knowledge_update(...)` | Incremental knowledge refresh with source rules enforced in code |
-| `whoami()` | Rep identity for the session (OIDC `requesting_user_email`, else `REP` env) |
-| `lint_message(...)`, `save_brief(domain, brief, rep?)`, `get_last_brief(...)` | Draft checks, validated briefs rendered to Markdown + .docx + annotatable HTML, since-last-run diff. `rep` scopes the brief to `<date>.<rep>.json` so reps don't overwrite each other |
-| `get_playbook(rep?)`, `add_playbook_rule(..., rep?)`, `add_golden_example(..., rep?)` | Layered feedback memory in `playbook/` (git-committed): `locked_rules.json` (policy) → `learned_rules.json` (team defaults, PR-gated) → `reps/<rep>.json` (the rep's own). ~3 reps converging on a rule auto-promotes it via a reviewed `gh` PR |
-| `get_brief_feedback(domain)`, `mark_brief_feedback_processed(...)` | Rep comments submitted on the HTML report (tagged with the rep) → distill into rules |
-
-Every result carries a `source_id` per document. The model cites `source_id`s only; the validator (`server/schema.py`) drops anything that doesn't resolve or whose quote doesn't verify, and URLs are filled in from the cache at render time.
-
-HTTP mode also serves `GET /briefs/<token>/<file>.docx` and `GET /report/<token>` (no bearer token: the random per-brief token is the access control); the MCP endpoint itself requires `MCP_AUTH_TOKEN`. The report page lets a rep select text, leave comments, and submit them in one batch to `POST /report/<token>/comments`; they land in `briefs/<domain>/<date>.comments.json` for the next run to distill into rules.
-
-## Devin setup
+The primary way reps use this: `@Devin !account-research acme.com` in any Slack channel the Devin app is in. Devin runs the playbook in a session and does all of its work through this MCP server.
 
 Prerequisite: the Devin Slack app must be installed in your Slack workspace and connected to your Devin organization, otherwise `@Devin` mentions won't trigger sessions.
 
@@ -118,3 +75,48 @@ Slack (in any channel the Devin app is in):
 @Devin !feedback acme.com "CTO email too long; lead with the peer metric"
 @Devin !refresh-positioning                      # or schedule it in Devin
 ```
+
+## Run it locally
+
+```bash
+uv run python agent.py research acme.com              # brief → briefs/acme.com/<date>.{json,md,docx,html} + Slack summary
+uv run python agent.py research acme.com --stage people
+uv run python agent.py feedback acme.com "CTO email too long; lead with the peer metric"
+uv run python agent.py research acme.com --replay      # cache only, no API spend — needs a warm cache (i.e. a prior run of that account); fails on a fresh clone
+```
+
+**Auth for the runner:** set `ANTHROPIC_API_KEY` in `.env` (recommended for reviewers). Alternative: if you're logged in to Claude Code (`claude` CLI), the runner uses that login and no key is needed.
+
+The agent gets **only** this MCP server's tools (no built-in web search, no other MCP servers), so every fact has to come through a cited tool call. The CLI prints the Slack summary exactly as the tool rendered it from the validated brief; the agent's own prose is shown only with `-v`, labeled unvalidated.
+
+**Output:** the validated brief is written to `briefs/<domain>/<date>.json` (source of truth) and rendered in code to `.md` and `.docx`; the model never touches the rendered content. The CLI prints the Slack summary with the local `.docx` path. In HTTP mode (Devin), "Full brief" is a download link served by the same server at an unguessable per-brief path.
+
+## MCP server
+
+```bash
+uv run python -m server.app              # stdio (local runner, Claude Code)
+uv run python -m server.app --http       # Streamable HTTP on :8765/mcp; needs MCP_AUTH_TOKEN + PUBLIC_BASE_URL
+uv run python -m server.app --replay     # cache only: serves prior cached calls with no API spend (cache/ is gitignored — warm it with a real run first)
+```
+
+| Tool | Source |
+|---|---|
+| `get_company(domain)` | Apollo org enrichment (Free plan) |
+| `get_jobs(domain)` | Apollo job postings, deduped by title |
+| `search_web(query, since?, include_domains?)` | Exa search (`include_domains=["linkedin.com"]` for posts/talks) |
+| `fetch_page(url_or_source_id)` | Exa contents |
+| `search_people(company, roles)` | Exa people search |
+| `search_company_linkedin(company, domain?, linkedin_slug?, since?)` | Exa search on `linkedin.com/posts|company/<slug>` path prefixes: indexed company posts, best-effort tags/reposts from snippets (no scraping, no feed guarantee) |
+| `get_org_chart(domain, people?)` | Sumble inferred org chart: sourced people → inferred manager + direct reports (labeled inference; ~50–100 credits/account) |
+| `get_tech_stack(domain)` | Sumble confirmed-used tech stack verified via job posts, grouped by business function — preferred over Apollo's website-tag hint |
+| `verify_quotes(quotes)` | Cached page text — batch, one call for all quotes |
+| `get_positioning()`, `match_customers(companies)` | `knowledge/` (built from cognition.com + devin.ai) |
+| `refresh_positioning()`, `apply_knowledge_update(...)` | Incremental knowledge refresh with source rules enforced in code |
+| `whoami()` | Rep identity for the session (OIDC `requesting_user_email`, else `REP` env) |
+| `lint_message(...)`, `save_brief(domain, brief, rep?)`, `get_last_brief(...)` | Draft checks, validated briefs rendered to Markdown + .docx + annotatable HTML, since-last-run diff. `rep` scopes the brief to `<date>.<rep>.json` so reps don't overwrite each other |
+| `get_playbook(rep?)`, `add_playbook_rule(..., rep?)`, `add_golden_example(..., rep?)` | Layered feedback memory in `playbook/` (git-committed): `locked_rules.json` (policy) → `learned_rules.json` (team defaults, PR-gated) → `reps/<rep>.json` (the rep's own). ~3 reps converging on a rule auto-promotes it via a reviewed `gh` PR |
+| `get_brief_feedback(domain)`, `mark_brief_feedback_processed(...)` | Rep comments submitted on the HTML report (tagged with the rep) → distill into rules |
+
+Every result carries a `source_id` per document. The model cites `source_id`s only; the validator (`server/schema.py`) drops anything that doesn't resolve or whose quote doesn't verify, and URLs are filled in from the cache at render time.
+
+HTTP mode also serves `GET /briefs/<token>/<file>.docx` and `GET /report/<token>` (no bearer token: the random per-brief token is the access control); the MCP endpoint itself requires `MCP_AUTH_TOKEN`. The report page lets a rep select text, leave comments, and submit them in one batch to `POST /report/<token>/comments`; they land in `briefs/<domain>/<date>.comments.json` for the next run to distill into rules.
