@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlassian — account brief</title>
+<style>
+:root { --ink:#1a1d21; --mut:#6b7280; --line:#e5e7eb; --bg:#f7f7f5; --card:#fff; }
+* { box-sizing:border-box; }
+body { margin:0; font:15px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink); background:var(--bg); }
+.page { max-width:880px; margin:0 auto; padding:32px 20px 120px; }
+header.top { display:flex; flex-wrap:wrap; gap:12px; align-items:baseline;
+             justify-content:space-between; margin-bottom:24px; }
+header.top h1 { font-size:22px; margin:0; }
+header.top .sub { color:var(--mut); font-size:13px; }
+header.top .dl { font-size:13px; color:#2563eb; text-decoration:none; }
+/* common region: one card per section */
+section.sec { background:var(--card); border:1px solid var(--line); border-radius:10px;
+              padding:18px 22px; margin:20px 0; border-left:4px solid #d1d5db; }
+section.sec > h2 { margin:0 0 10px; font-size:15px; text-transform:uppercase;
+                   letter-spacing:.04em; color:var(--mut); }
+h3 { font-size:14px; margin:18px 0 6px; }
+p { margin:6px 0; }
+p.meta { color:var(--mut); font-size:13px; }
+ul { margin:6px 0; padding-left:22px; }
+li { margin:5px 0; }
+section.sec > ul > li + li { margin-top:12px; }  /* proximity: room between entities */
+ul ul { margin:2px 0; }
+blockquote { margin:6px 0 6px 2px; padding:6px 12px; border-left:3px solid #d1d5db;
+             color:#374151; background:#fafafa; border-radius:0 6px 6px 0; font-size:14px; }
+table { border-collapse:collapse; width:100%; margin:8px 0; font-size:14px; }
+td { border-bottom:1px solid var(--line); padding:6px 10px 6px 0; vertical-align:top; }
+td:first-child { color:var(--mut); white-space:nowrap; width:1%; }
+code { background:#f3f4f6; padding:1px 5px; border-radius:4px; font-size:13px; }
+a { color:#2563eb; }
+a.cite { color:var(--mut); text-decoration:none; font-size:12px; vertical-align:1px; }
+a.cite:hover { color:#2563eb; text-decoration:underline; }
+a.srclink { color:#2563eb; border-bottom:1px dotted #2563eb; text-decoration:none; }
+details.refs p:target { background:#fef3c7; border-radius:4px; }
+/* similarity: one accent hue per section category — chip + left border + faint card tint */
+section.sec > h2 { display:inline-block; padding:2px 10px; border-radius:6px; }
+.sec-verdict, .sec-since-last-run { border-left-color:#16a34a; background:#fbfefc; }
+.sec-verdict > h2, .sec-since-last-run > h2 { color:#15803d; background:#dcfce7; }
+.sec-intent-signals, .sec-additional-signals, .sec-competitive-context,
+.sec-company-linkedin { border-left-color:#d97706; background:#fffdf9; }
+.sec-intent-signals > h2, .sec-additional-signals > h2,
+.sec-competitive-context > h2, .sec-company-linkedin > h2 { color:#b45309; background:#fef3c7; }
+.sec-who-to-work, .sec-recommended-entry-top-3, .sec-wider-buying-center,
+.sec-org-chart-sumble---inferred { border-left-color:#2563eb; background:#fcfdff; }
+.sec-who-to-work > h2, .sec-recommended-entry-top-3 > h2,
+.sec-wider-buying-center > h2, .sec-org-chart-sumble---inferred > h2 {
+  color:#1d4ed8; background:#dbeafe; }
+.sec-drafted-messages, .sec-abm-themes-assessment { border-left-color:#7c3aed; background:#fefdff; }
+.sec-drafted-messages > h2, .sec-abm-themes-assessment > h2 { color:#6d21a8; background:#f3e8ff; }
+/* small inline badges */
+.bdg { display:inline-block; font-size:11px; font-weight:600; border-radius:4px;
+       padding:0 6px; vertical-align:1px; }
+.bdg.tier { color:#b45309; background:#fef3c7; }
+.bdg.champ { color:#1d4ed8; background:#dbeafe; }
+.bdg.warn { color:#b91c1c; background:#fee2e2; }
+.bdg.ver { color:#15803d; background:#dcfce7; }
+/* one hue per deal role (similarity) */
+.bdg.role.economic-buyer { color:#15803d; background:#dcfce7; }
+.bdg.role.technical-evaluator { color:#1d4ed8; background:#dbeafe; }
+.bdg.role.gatekeeper { color:#b45309; background:#fef3c7; }
+.bdg.role.parent-company-approver { color:#6d21a8; background:#f3e8ff; }
+/* nested lines (evidence, hooks) recede: figure/ground */
+ul ul { font-size:13px; color:#4b5563; }
+ul ul .bdg { background:none; box-shadow:inset 0 0 0 1px #c7cbd1; color:#6b7280;
+             font-weight:500; }
+ul ul li { margin:3px 0; }
+em .bdg { font-style:normal; }
+/* figure/ground: reference material recedes */
+details.refs { margin:20px 0; }
+details.refs summary { cursor:pointer; color:var(--mut); font-size:13px; }
+details.refs section { opacity:.75; font-size:13px; }
+/* annotations */
+::selection { background:#fde68a; }
+mark.draft { background:#fef9c3; border-radius:2px; padding:0 1px;
+             outline:1px dashed #eab308; }
+mark.pending { background:#fde68a; border-radius:2px; padding:0 1px;
+               box-shadow:0 0 0 1px #f59e0b inset; }
+mark.done { background:#bbf7d0; border-radius:2px; padding:0 1px; }
+#pop { position:absolute; z-index:50; display:none; width:280px; background:#fff;
+       border:1px solid var(--line); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,.12);
+       padding:10px; }
+#pop textarea { width:100%; height:64px; font:inherit; font-size:13px; resize:vertical;
+                border:1px solid var(--line); border-radius:6px; padding:6px; }
+#pop select { width:100%; margin:6px 0; font:inherit; font-size:13px; }
+#pop .row { display:flex; gap:8px; justify-content:flex-end; }
+button { font:inherit; font-size:13px; border:1px solid var(--line); border-radius:6px;
+         background:#fff; padding:5px 10px; cursor:pointer; }
+button.primary { background:#1a1d21; color:#fff; border-color:#1a1d21; }
+#panel { position:fixed; top:0; right:0; bottom:0; width:300px; background:#fff;
+         border-left:1px solid var(--line); padding:16px; overflow-y:auto; display:none; }
+#panel h2 { font-size:14px; margin:0 0 4px; }
+#panel .hint { color:var(--mut); font-size:12px; margin-bottom:12px; }
+.comment { border:1px solid var(--line); border-radius:8px; padding:10px; margin:8px 0;
+           font-size:13px; }
+.comment q { display:block; color:var(--mut); font-size:12px; margin-bottom:4px;
+             border-left:2px solid #fde68a; padding-left:6px; }
+.comment .sec-tag, .comment .tag-tag { display:inline-block; font-size:11px; color:var(--mut);
+             background:#f3f4f6; border-radius:4px; padding:1px 6px; margin-right:4px; }
+.comment .rm { float:right; border:none; color:#b91c1c; padding:0; }
+/* copyable draft blocks */
+.cp { position:relative; border:1px dashed var(--line); border-radius:8px;
+      padding:10px 14px; margin:10px 0; }
+.cpbtn { position:absolute; top:8px; right:8px; font-size:11px; color:var(--mut);
+         background:#fff; }
+.cpbtn:hover { color:#1a1d21; border-color:#9ca3af; }
+.cpbtn.ok { color:#15803d; border-color:#86efac; background:#f0fdf4; font-weight:600; }
+.cp .cplabel { margin-top:0; }
+#repName { width:100%; margin-top:12px; box-sizing:border-box; }
+#submitAll { width:100%; margin-top:8px; }
+#status { font-size:12px; margin-top:8px; color:var(--mut); }
+#status.err { color:#b91c1c; }
+body.has-panel .page { margin-right:320px; }
+#fab { position:fixed; right:16px; bottom:16px; box-shadow:0 4px 14px rgba(0,0,0,.15); }
+</style>
+</head><body>
+<div class="page">
+<header class="top">
+  <div>
+    <h1>Atlassian — account brief</h1>
+    <div class="sub">2026-10-11 · atlassian.com ·
+      select any text to comment, then Submit all feedback</div>
+  </div>
+  <a class="dl" href="/briefs/01cK0mN2XSCXq5wrOqPs7w/atlassian.com-2026-10-11.aniketn16.docx">Download .docx</a>
+</header>
+<main id="report">
+<section class="sec sec-verdict" data-section="Verdict">
+<h2>Verdict</h2>
+<p><strong>Warm</strong> <em>(assessment)</em> — Atlassian&#x27;s own eng teams publish agent-run maintenance work (chores, vulns, migrations), but they run their in-house coding agent Rovo Dev, so the angle is expand alongside it. <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-2">[2]</a><a class="cite" href="#src-3">[3]</a><a class="cite" href="#src-4">[4]</a></p>
+<p>Watch for: A published gap in Rovo Dev coverage, a new DevProd or AI-enablement leader, or Jira adding more third-party coding agents.</p>
+</section>
+<section class="sec sec-snapshot" data-section="Snapshot">
+<h2>Snapshot</h2>
+<table><tbody>
+<tr><td></td><td></td></tr>
+<tr><td>HQ</td><td>HQ in Sydney, New South Wales, Australia <a class="cite" href="#src-5">[5]</a></td></tr>
+<tr><td>Founded</td><td>founded 2002 <a class="cite" href="#src-5">[5]</a></td></tr>
+<tr><td>Industry</td><td>information technology &amp; services <a class="cite" href="#src-5">[5]</a></td></tr>
+<tr><td>Ownership</td><td>public, NASDAQ: TEAM <a class="cite" href="#src-5">[5]</a></td></tr>
+<tr><td>Headcount</td><td>~14,000 employees <a class="cite" href="#src-5">[5]</a><a class="cite" href="#src-6">[6]</a></td></tr>
+<tr><td>Headcount growth</td><td>+1.4% (6 mo), +1.9% (12 mo), +18.3% (24 mo) <a class="cite" href="#src-5">[5]</a></td></tr>
+<tr><td>Revenue</td><td>~$6.6B revenue <a class="cite" href="#src-5">[5]</a></td></tr>
+<tr><td>Sells to</td><td>Software, IT and business teams; teams and AI agents work together in Jira <a class="cite" href="#src-7">[7]</a></td></tr>
+<tr><td>Key products</td><td>Jira, Confluence, Loom, Rovo <a class="cite" href="#src-7">[7]</a></td></tr>
+</tbody></table>
+</section>
+<section class="sec sec-engineering-priorities" data-section="Engineering &amp; priorities">
+<h2>Engineering &amp; priorities</h2>
+<ul>
+<li><strong>Engineering headcount:</strong> ~8,020 engineering employees <a class="cite" href="#src-5">[5]</a></li>
+<li><strong>Open eng roles:</strong> Apollo lists open engineering roles such as Senior Backend Software Engineer <a class="cite" href="#src-8">[8]</a></li>
+<li><strong>Tech stack:</strong> Sumble (job posts): Golang, Java, Python, AWS (EC2, EKS), Kafka, Splunk, OpenTelemetry, Databricks <a class="cite" href="#src-9">[9]</a></li>
+<li><strong>AI dev tools:</strong> In-house coding agent Rovo Dev used internally (Rovo Dev cohort) <a class="cite" href="#src-4">[4]</a>; Rovo Dev Code Reviewer deployed across 1,900+ internal repos <a class="cite" href="#src-10">[10]</a>; Apollo website tags hint at GitHub Copilot and Cursor (hint only, unconfirmed) <a class="cite" href="#src-5">[5]</a></li>
+<li><strong>Eng blog / GitHub:</strong> Inside Atlassian engineering posts on agent-run chores, vuln pipelines and Rovo Dev migrations <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-2">[2]</a><a class="cite" href="#src-3">[3]</a></li>
+<li><strong>AI posture:</strong> Shareholder letter frames context, not models, as the moat <a class="cite" href="#src-11">[11]</a>; CTO: coding isn&#x27;t the bottleneck anymore <a class="cite" href="#src-12">[12]</a></li>
+<li><strong>What they care about:</strong> AI-native SDLC: 94% of eng leaders use AI, 6% can scale and govern it <a class="cite" href="#src-13">[13]</a></li>
+<li><strong>Peers:</strong> Owler lists Asana, ServiceNow, Microsoft, GitLab, monday.com <a class="cite" href="#src-14">[14]</a></li>
+</ul>
+</section>
+<section class="sec sec-intent-signals" data-section="Intent signals">
+<h2>Intent signals</h2>
+<p><strong>Two engineering heads previously worked at Devin customer Infosys</strong> — <span class="bdg tier">Tier 1</span> · profile data · Tech debt &amp; maintenance · Relevant for: Suresh Kumar Khemka, Pushyami G.</p>
+<p>  &gt; &quot;Head of Engineering - Compute Platform @Atlassian&quot; <a class="cite" href="#src-15">[15]</a> · 2026-10-03</p>
+<p>  &gt; &quot;Set OKRs , roadmap and direction for Jira frontend platform teams to improve product performance and developer productivity.&quot; <a class="cite" href="#src-16">[16]</a> · 2026-10-06</p>
+<p><strong>Bitbucket team turned routine vuln fixes into agent pipelines</strong> — <span class="bdg tier">Tier 2</span> · eng blog · Vulnerability remediation · Relevant for: Hari L, David B. Cross</p>
+<p>  &gt; &quot;Routine vulnerability fixes are rarely difficult in isolation. The interruption that they cause is the problem&quot; <a class="cite" href="#src-2">[2]</a> · 2026-08-31</p>
+<p><strong>Jira team automated flaky tests and old feature flags with agents</strong> — <span class="bdg tier">Tier 2</span> · eng blog · Tech debt &amp; maintenance · Relevant for: Saran Rajendran, Pushyami G., Hari L</p>
+<p>  &gt; &quot;So far, it’s responsible for more than 500 merged PRs in the past 70 days.&quot; <a class="cite" href="#src-1">[1]</a> · 2026-06-01 ⚠️ <span class="bdg warn">may be outdated</span></p>
+<p>  &gt; &quot;This includes work like cleaning up old feature flags, chasing flaky tests, fixing identified vulnerabilities, addressing accessibility issues, and chipping away at a long tail of bugs.&quot; <a class="cite" href="#src-1">[1]</a> · 2026-06-01 ⚠️ <span class="bdg warn">may be outdated</span></p>
+<p><strong>Frontend platform moved styled-components to Compiled with an agent</strong> — <span class="bdg tier">Tier 2</span> · eng blog · Code migration &amp; modernization · Relevant for: Pushyami G.</p>
+<p>  &gt; &quot;The experiment to migrate <code>styled-components</code> to <code>@compiled css-in-js</code> resulted in migrating majority of usages&quot; <a class="cite" href="#src-3">[3]</a> · 2026-04-16 ⚠️ <span class="bdg warn">may be outdated</span></p>
+<h3>Additional signals</h3>
+<p class="meta"><em>Lower-level signals from the past two weeks.</em></p>
+<ul>
+<li><code>News mention</code> <strong>Atlassian launched AI-native SDLC tooling on Oct 7</strong> — posted 4d ago <a class="cite" href="#src-13">[13]</a></li>
+<li><code>News mention</code> <strong>Atlassian and OpenAI partnership announced Oct 6</strong> — posted 5d ago <a class="cite" href="#src-17">[17]</a></li>
+</ul>
+<p class="meta"><em><em>Competitive context</em></em></p>
+<p>1. Atlassian runs its own coding agent, Rovo Dev, internally (cohort study, code reviewer on 1,900+ repos, vuln pipelines). Expand alongside, never displace. (competitor in production) <a class="cite" href="#src-4">[4]</a><a class="cite" href="#src-10">[10]</a></p>
+<p>2. Jira deep-links to six coding agents including Claude Code, Cursor, GitHub Copilot and OpenAI Codex (product integration, not proof of internal use) (other) <a class="cite" href="#src-18">[18]</a></p>
+</section>
+<section class="sec sec-company-linkedin" data-section="Company LinkedIn">
+<h2>Company LinkedIn</h2>
+<ul>
+<li>94% of engineering organizations have adopted AI, but only 6% have systems for it <em>(company post)</em> <a class="cite" href="#src-19">[19]</a></li>
+</ul>
+<p>  &gt; &quot;94% of engineering organizations have adopted AI. But only 6% have&quot; <a class="cite" href="#src-19">[19]</a></p>
+</section>
+<section class="sec sec-who-to-work" data-section="Who to work">
+<h2>Who to work</h2>
+<ul>
+<li><strong>Taroon Mandhana</strong> — <em>Chief Technology Officer · <span class="bdg role economic-buyer">Economic buyer</span></em> — Exec sponsor; publicly argues coding is no longer the bottleneck <em><span class="bdg warn">single source</span> · <a href="https://www.linkedin.com/in/taroonm" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-20">[20]</a></li>
+<ul>
+<li>Hook: Said on the Mainstage that coding isn&#x27;t the bottleneck anymore, alignment is <a class="cite" href="#src-12">[12]</a></li>
+</ul>
+<li><strong><span class="bdg champ">Champion</span> (ex-Devin customer)</strong> · <strong>Suresh Kumar Khemka</strong> — <em>Head of Engineering · <span class="bdg role technical-evaluator">Technical evaluator</span></em> — Platform/DevEx head at a Devin-customer alum; entry point for the over-2,000 band <em><span class="bdg warn">single source</span> · <a href="https://linkedin.com/in/sureshkhemka" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-15">[15]</a></li>
+<ul>
+<li><span class="bdg champ">Champion</span> evidence (ex-Devin customer): Previously worked at Infosys, a public Devin customer (worked-at, not proof of personal Devin use) <a class="cite" href="#src-15">[15]</a></li>
+<li>Hook: Spoke on a KubeCon + CloudNativeCon India 2026 panel <a class="cite" href="#src-21">[21]</a></li>
+</ul>
+<li><strong>Hari L</strong> — <em>Head of Engineering · <span class="bdg role technical-evaluator">Technical evaluator</span></em> — Owns developer infrastructure, where maintenance and vuln pipelines run <em><span class="bdg warn">single source</span> · <a href="https://linkedin.com/in/harikrisl" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-22">[22]</a></li>
+<ul>
+<li>Hook: Guest on the Engineered by Atlassian podcast as Head of Engineering, Dev Infra <a class="cite" href="#src-23">[23]</a></li>
+</ul>
+<li><strong><span class="bdg champ">Champion</span> (ex-Devin customer)</strong> · <strong>Pushyami G.</strong> — <em>Head of Engineering (Acting) · <span class="bdg role technical-evaluator">Technical evaluator</span></em> — Owns Jira frontend platform direction and developer productivity; frontend migration is live work <em><span class="bdg warn">single source</span> · <a href="https://linkedin.com/in/pushyamigali" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-16">[16]</a></li>
+<ul>
+<li><span class="bdg champ">Champion</span> evidence (ex-Devin customer): Previously worked at Infosys, a public Devin customer (worked-at, not proof of personal Devin use) <a class="cite" href="#src-16">[16]</a></li>
+<li>Hook: Sets OKRs and roadmap for Jira frontend platform teams on performance and developer productivity <a class="cite" href="#src-16">[16]</a></li>
+</ul>
+<li><strong><span class="bdg champ">Champion</span> (ex-Devin customer)</strong> · <strong>Saran Rajendran</strong> — <em>Head of Engineering · <span class="bdg role technical-evaluator">Technical evaluator</span></em> — Leads Jira Platform, the org behind the agent-run chores work <em><span class="bdg warn">single source</span> · <a href="https://linkedin.com/in/saravanakumarrajendran" target="_blank" rel="noopener">LinkedIn</a></em> <a class="cite" href="#src-24">[24]</a></li>
+<ul>
+<li><span class="bdg champ">Champion</span> evidence (ex-Devin customer): Previously worked at Cisco, a public Devin customer (worked-at, not proof of personal Devin use) <a class="cite" href="#src-24">[24]</a></li>
+<li>Hook: Head of Engineering for Jira Platform <a class="cite" href="#src-24">[24]</a></li>
+</ul>
+</ul>
+</section>
+<section class="sec sec-recommended-entry-top-3" data-section="Recommended entry: top 3">
+<h2>Recommended entry: top 3</h2>
+<p>1. <strong>Suresh Kumar Khemka</strong> — Platform/DevEx head (over-2,000 entry point) and an Infosys alum <a class="cite" href="#src-15">[15]</a><a class="cite" href="#src-21">[21]</a></p>
+<p>2. <strong>Hari L</strong> — Dev Infra owner, closest to vuln and maintenance pipelines <a class="cite" href="#src-2">[2]</a><a class="cite" href="#src-23">[23]</a></p>
+<p>3. <strong>Taroon Mandhana</strong> — CTO as exec sponsor; publicly says coding isn&#x27;t the bottleneck <a class="cite" href="#src-12">[12]</a></p>
+</section>
+<section class="sec sec-drafted-messages" data-section="Drafted messages">
+<h2>Drafted messages</h2>
+<p class="meta"><em>Drafts for rep review. Never auto-sent.</em></p>
+<h3>Taroon Mandhana</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Atlassian</em></p>
+<p>Hi Taroon,</p>
+<p>Your Mainstage point that coding isn&#x27;t the bottleneck anymore stuck with me. If alignment is the real constraint, then the execution work your engineers still carry by hand is the cost worth removing.</p>
+<p>Devin is an autonomous software engineer. Your engineers stay the architects and set direction, and Devin takes delegated tickets through to a pull request they review. FE fundinfo reports a <a class="srclink" href="https://devin.ai/customers/fefundinfo" target="_blank" rel="noopener">10%</a> immediate increase in engineering capacity with Devin.</p>
+<p>Would you be open to a 20 minute call to see where that fits next to the agent work your teams already run?</p>
+<p>Best,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Taroon, your Mainstage case that alignment, not coding, is now the bottleneck matches how we built Devin. Engineers set direction, and Devin hands back a reviewed PR for each delegated ticket. Would love to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Taroon. Atlassian&#x27;s own study found <a class="srclink" href="https://www.atlassian.com/blog/company-news/team26-europe-ai-sdlc" target="_blank" rel="noopener">94%</a> of engineering leaders say their teams already use AI, yet only <a class="srclink" href="https://www.atlassian.com/blog/company-news/team26-europe-ai-sdlc" target="_blank" rel="noopener">6%</a> have the systems to scale and govern it. That gap is where Devin earns its place. Every task Devin takes on starts as a ticket and comes back as a pull request with a reviewer attached, so governance stays inside the workflow you already have. Happy to show how other large engineering orgs set that up next to in-house agents. Open to a short call?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li>Do not pitch &quot;have you tried agents?&quot; or displacing Rovo Dev; Atlassian builds and runs its own coding agent, so position Devin alongside it.</li>
+<li>Exec sponsor angle: his public alignment thesis plus a capacity proof point; no product tour.</li>
+<li>No peer proof available (no peer is a public Devin customer); proof is use-case level.</li>
+<li>Never mention the March CTO transition or workforce reductions.</li>
+<li>LinkedIn follow-up is sendable after he accepts.</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-4">[4]</a><a class="cite" href="#src-12">[12]</a><a class="cite" href="#src-13">[13]</a><a class="cite" href="#src-25">[25]</a></p>
+<h3>Suresh Kumar Khemka</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Atlassian</em></p>
+<p>Hi Suresh,</p>
+<p>Saw that you spoke on a KubeCon panel. Running the Compute Platform group means a steady queue of upgrade and migration tickets that are repetitive but still need careful review.</p>
+<p>Devin works those tickets the way an engineer would. It runs your build and tests in its own environment, then opens a pull request for your team to approve. Nubank used Devin on a large migration and reported an <a class="srclink" href="https://devin.ai/customers/nubank/" target="_blank" rel="noopener">8x</a> engineering time efficiency gain.</p>
+<p>Would it be worth 20 minutes to map one platform migration on your backlog to a Devin pilot?</p>
+<p>Best,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Suresh, enjoyed seeing your KubeCon panel. I work with platform teams that use Devin to take repetitive upgrade and migration tickets all the way to a reviewed PR. Would love to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Suresh. One idea for Compute Platform: pick a single migration your team keeps deferring and let Devin run it as parallel sessions, each one a separate pull request your engineers review and merge. It plugs into the CI you already have, so your review bar does not change. If the first batch merges cleanly, you have a repeatable path for the rest of that backlog. I can walk you through how teams scope the first pilot. Open to a short call?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li>Do not claim he used Devin at Infosys; worked-at is not used, and leave prior-employer trivia out of LinkedIn.</li>
+<li><span class="bdg role technical-evaluator">Technical evaluator</span> angle: how Devin runs on a platform team&#x27;s stack and CI, not the CTO pitch.</li>
+<li>Atlassian runs Rovo Dev internally; frame Devin as extra capacity, not a replacement.</li>
+<li>LinkedIn follow-up is sendable after he accepts.</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-15">[15]</a><a class="cite" href="#src-21">[21]</a><a class="cite" href="#src-26">[26]</a></p>
+<h3>Hari L</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Atlassian</em></p>
+<p>Hi Hari,</p>
+<p>A recent Atlassian engineering post on vulnerability fixes put it well: routine fixes are rarely difficult in isolation, the interruption they cause is the problem. That handoff cost lands on whoever owns developer infrastructure.</p>
+<p>Devin takes those tickets end to end, from tracing the dependency to opening the pull request, then hands the change back for review. Itaú reports <a class="srclink" href="https://devin.ai/customers/itau" target="_blank" rel="noopener">70%</a> of security vulnerabilities automatically remediated with Devin.</p>
+<p>Worth 20 minutes to see how it would sit next to the pipelines you already run?</p>
+<p>Best,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Hari, enjoyed your Engineered by Atlassian podcast episode as head of Dev Infra. I help teams use Devin to take routine dependency and security tickets through to reviewed PRs. Would love to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Hari. The angle I would suggest for an infra org is the overflow: the dependency bumps and cleanup tickets that sit in a queue because nobody wants to pick them up. Devin works them in parallel and opens pull requests that land in the same review flow your engineers use today. No new pipeline is required. If useful, I can show how teams set a weekly cleanup quota and track merge rate. Open to a short call?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li>Do not suggest replacing the Agentic Pipelines work; Atlassian already runs Rovo Dev for vuln fixes, so pitch the remainder and overflow.</li>
+<li><span class="bdg role technical-evaluator">Technical evaluator</span> angle: fit with existing CI and review flow.</li>
+<li>Hari L&#x27;s surname appears as Lingamagunta in the podcast host&#x27;s post; confirm before sending.</li>
+<li>LinkedIn follow-up is sendable after he accepts.</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-2">[2]</a><a class="cite" href="#src-23">[23]</a><a class="cite" href="#src-27">[27]</a></p>
+<h3>Pushyami G.</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Atlassian</em></p>
+<p>Hi Pushyami,</p>
+<p>You set the roadmap for Jira frontend platform teams on performance and developer productivity, and Atlassian&#x27;s frontend platform engineers have written about using an agent to migrate off styled-components. That post noted the hard part was tricky edge cases where codemods couldn&#x27;t update them.</p>
+<p>Devin is built for that remainder. It works each change in its own session and opens a pull request once your tests pass. Evinova reports <a class="srclink" href="https://devin.ai/customers/evinova" target="_blank" rel="noopener">3x</a> faster code migrations with Devin.</p>
+<p>Open to a 20 minute call on whether your remaining migration work is a fit?</p>
+<p>Best,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Pushyami, I follow the Jira frontend platform work on performance and developer productivity. I help teams hand Devin the long tail of migration and cleanup tickets, each one landing as a PR for review. Would love to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Pushyami. A thought for frontend platform teams: once a library migration is mostly done, the leftovers stall because each one needs real judgment. Devin is useful exactly there. It reads the surrounding component before making the change, and it hands back a pull request with its reasoning written up. A good first test is one stuck slice of the backlog. Happy to share how that pilot gets scoped. Worth a short call?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li>Do not frame this as redoing the Rovo Dev migration; pitch the remainder that is still open.</li>
+<li>Do not mention her prior employer; worked-at is not proof she used Devin.</li>
+<li><span class="bdg role technical-evaluator">Technical evaluator</span> angle on her frontend platform remit.</li>
+<li>The migration post is about 6 months old; check current status before sending.</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-3">[3]</a><a class="cite" href="#src-16">[16]</a><a class="cite" href="#src-28">[28]</a></p>
+<h3>Saran Rajendran</h3>
+<p class="meta"><em><em>Email</em></em></p>
+<p class="meta"><em>Subject: Cognition &lt;&gt; Atlassian</em></p>
+<p>Hi Saran,</p>
+<p>The Jira team&#x27;s agent system for engineering chores has more than 500 merged PRs in the past 70 days, covering work like old feature flags and flaky tests. That is strong evidence the long tail can be delegated.</p>
+<p>Devin can extend that to chores that need more context than a single work item prompt, such as multi-repo changes or bugs that need a reproduction first. <a class="srclink" href="https://devin.ai/customers/ramp/" target="_blank" rel="noopener">Ramp says Devin fixes tens of thousands of hours of technical debt</a>.</p>
+<p>Would it be worth 20 minutes to see where Devin fits next to your current setup?</p>
+<p>Best,</p>
+<p class="meta"><em><em>LinkedIn connection note</em></em></p>
+<p>Hi Saran, the Jira chores system built on agents is one of the clearest examples of delegated maintenance I have seen. I help teams use Devin for the harder tickets in that long tail. Would love to connect.</p>
+<p class="meta"><em><em>LinkedIn follow-up</em></em></p>
+<p>Thanks for connecting, Saran. Since you lead Jira Platform, one place Devin helps is the tickets that bounce off simpler automation because they need a reproduction or changes across more than one repo. Devin works those in its own environment and opens a pull request your engineers review, so the bar stays where you set it. If useful, I can share how teams pick the first batch of tickets and track merge rate. Open to a short call?</p>
+<p class="meta"><em><em>Send notes</em><em> </em>(rep only — never sent)</em></p>
+<ul>
+<li>Do not say &quot;throw away&quot; the chores system; Atlassian runs Rovo Dev, so join the next wave of harder tickets.</li>
+<li>Do not mention his prior employer; worked-at is not proof he used Devin.</li>
+<li>Chores post is about 4 months old; still the freshest evidence for this team.</li>
+<li>LinkedIn follow-up is sendable after he accepts.</li>
+</ul>
+<p><em>Built from:</em> <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-24">[24]</a><a class="cite" href="#src-29">[29]</a></p>
+</section>
+<section class="sec sec-abm-themes-assessment" data-section="ABM themes *(assessment)*">
+<h2>ABM themes <em>(assessment)</em></h2>
+<ul>
+<li>Long-tail maintenance: Atlassian already proved agents clear chores; Devin takes the backlog Rovo Dev doesn&#x27;t cover <a class="cite" href="#src-1">[1]</a><a class="cite" href="#src-4">[4]</a></li>
+<li>Security debt: routine vuln fixes as delegated, review-ready PRs <a class="cite" href="#src-2">[2]</a></li>
+<li>Large migrations: frontend library moves done by agents with engineer review <a class="cite" href="#src-3">[3]</a></li>
+</ul>
+</section>
+<section class="sec sec-wider-buying-center" data-section="Wider buying center">
+<h2>Wider buying center</h2>
+<p>Not found</p>
+</section>
+<section class="sec sec-org-chart-sumble-inferred" data-section="Org chart *(Sumble — inferred)*">
+<h2>Org chart <em>(Sumble — inferred)</em></h2>
+<p class="meta"><em>Atlassian — reporting lines inferred by Sumble, not confirmed. (0.x) is Sumble&#x27;s inference confidence.</em></p>
+<ul>
+<li><strong>Taroon Mandhana</strong>, Chief Technology Officer <em>(economic buyer)</em> · <a href="https://www.linkedin.com/in/taroonm" target="_blank" rel="noopener">LinkedIn</a></li>
+<ul>
+<li>Kang Li — Head of Engineering (0.4) · <a href="https://www.linkedin.com/in/likang" target="_blank" rel="noopener">LinkedIn</a></li>
+<li>Jianshu Ji — Head of Engineering (0.4) · <a href="https://www.linkedin.com/in/jianshu-ji-778b39118" target="_blank" rel="noopener">LinkedIn</a></li>
+<li>Dan Wu — Head of Engineering (0.4) · <a href="https://www.linkedin.com/in/dan-wu-21014025" target="_blank" rel="noopener">LinkedIn</a></li>
+</ul>
+<li><strong>Derek Cheng</strong>, SVP Engineering <em>(economic buyer)</em> · <a href="https://www.linkedin.com/in/derek-cheng-93813422" target="_blank" rel="noopener">LinkedIn</a></li>
+<li><strong>Guihong Cao</strong>, Senior Vice President of Engineering <em>(economic buyer)</em> · <a href="https://www.linkedin.com/in/guihong-cao-2828855" target="_blank" rel="noopener">LinkedIn</a></li>
+<ul>
+<li>Govi Bacthavachalu — VP | Head of Engineering (0.6) · <a href="https://www.linkedin.com/in/govi-bacthavachalu-b5ab95" target="_blank" rel="noopener">LinkedIn</a></li>
+<li>Kahren Tevosyan — VP | Head of Engineering (0.6) · <a href="https://www.linkedin.com/in/kahren-tevosyan-48227214" target="_blank" rel="noopener">LinkedIn</a></li>
+<li>Ram Singh — VP | Head of Engineering (0.6) · <a href="https://www.linkedin.com/in/ram-singh-009b151" target="_blank" rel="noopener">LinkedIn</a></li>
+<li>Kaustav Das — Head of Engineering (0.6) · <a href="https://www.linkedin.com/in/kaustav-das-ai" target="_blank" rel="noopener">LinkedIn</a></li>
+<li>Arthur Chen — Head of Engineering (0.6) · <a href="https://www.linkedin.com/in/arthurchen" target="_blank" rel="noopener">LinkedIn</a></li>
+</ul>
+<li><strong>Tamar Yehoshua</strong>, Chief Product and AI Officer <em>(influencer)</em> · <a href="https://www.linkedin.com/in/tamar-yehoshua-886217" target="_blank" rel="noopener">LinkedIn</a></li>
+<ul>
+<li>Reid Maker — VP of AI Experiences (0.5) · <a href="https://www.linkedin.com/in/reidmaker" target="_blank" rel="noopener">LinkedIn</a></li>
+<li>Brendan Haire — VP Engineering of AI Platform and AI Chat/Agents (0.5) · <a href="https://www.linkedin.com/in/brendanhaire" target="_blank" rel="noopener">LinkedIn</a></li>
+<li>Vish Agashe — SVP Data (0.4) · <a href="https://www.linkedin.com/in/vishagashe" target="_blank" rel="noopener">LinkedIn</a></li>
+</ul>
+</ul>
+<p class="meta"><em>No Sumble match for: Suresh Kumar Khemka, Pushyami G., Hari L, Saran Rajendran, Pablo Ganga, Jakub Telicki, Suzie Prince, Rebecca Fitzhugh, Ilia Fainshtroy, David B. Cross, Karen Webley, Sisi Zhang (no inferred reports available).</em></p>
+</section>
+<details class="refs"><summary>Sources &amp; validator report</summary><section class="sec sec-sources" data-section="Sources">
+<h2>Sources</h2>
+<p id="src-1">1. <a href="https://www.atlassian.com/blog/development/ai-agents-jira-engineering-maintenance" target="_blank" rel="noopener">How We Cut up to 80% of Engineering “Chores” Using AI Agents in Jira - Inside Atlassian</a> — published 2026-06-01, retrieved 2026-10-11</p>
+<p id="src-2">2. <a href="https://www.atlassian.com/blog/bitbucket/vulnerability-fixes-with-agentic-pipelines" target="_blank" rel="noopener">How we made vulnerability fixes review-ready with Agentic Pipelines - Inside Atlassian</a> — published 2026-08-31, retrieved 2026-10-11</p>
+<p id="src-3">3. <a href="https://www.atlassian.com/blog/development/rovo-dev-frontend-platform-engineering" target="_blank" rel="noopener">Rovo Dev in Frontend Platform Engineering - AI for small tasks, AI for big tasks - Inside Atlassian</a> — published 2026-04-16, retrieved 2026-10-11</p>
+<p id="src-4">4. <a href="https://www.atlassian.com/blog/ai-at-work/ai-native-sdlc-paying-off-per-developer-per-week" target="_blank" rel="noopener">The AI-native SDLC is paying off: 19% more PRs and 2–3 hours saved per developer per week - Inside Atlassian</a> — published 2026-06-01, retrieved 2026-10-11</p>
+<p id="src-5">5. Apollo — Apollo organization record: Atlassian (retrieved 2026-10-11)</p>
+<p id="src-6">6. [Consolidated Modern Slavery Statement FY26 [FINAL, Pending Date of Signature]](<a href="https://modernslaveryregister.gov.au/statements/gXOtl9EZxxQwXF8/pdf/" target="_blank" rel="noopener">https://modernslaveryregister.gov.au/statements/gXOtl9EZxxQwXF8/pdf/</a>) — retrieved 2026-10-11</p>
+<p id="src-7">7. <a href="https://www.atlassian.com" target="_blank" rel="noopener">Collaboration software for software, IT and business teams | Atlassian</a> — retrieved 2026-10-11</p>
+<p id="src-8">8. <a href="https://www.atlassian.com/company/careers/details/25558" target="_blank" rel="noopener">Senior Backend Software Engineer</a> — published 2026-10-10, retrieved 2026-10-11</p>
+<p id="src-9">9. Sumble — Sumble confirmed tech stack: Atlassian (retrieved 2026-10-11)</p>
+<p id="src-10">10. <a href="https://dl.acm.org/doi/full/10.1145/3786583.3786851" target="_blank" rel="noopener">https://dl.acm.org/doi/full/10.1145/3786583.3786851</a> — published 2026-07-11, retrieved 2026-10-11</p>
+<p id="src-11">11. <a href="https://www.atlassian.com/blog/company-news/shareholder-letter-q4fy26" target="_blank" rel="noopener">Our Q4 FY26 letter to shareholders - Inside Atlassian</a> — published 2026-08-06, retrieved 2026-10-11</p>
+<p id="src-12">12. <a href="https://www.linkedin.com/posts/wearedevelopers%2Eorg_wearedevs-wwc26-activity-7480981211683815424-tS40" target="_blank" rel="noopener">Alignment Is the New Bottleneck.</a> — published 2026-07-09, retrieved 2026-10-11</p>
+<p id="src-13">13. <a href="https://www.atlassian.com/blog/company-news/team26-europe-ai-sdlc" target="_blank" rel="noopener">Atlassian brings the AI-native SDLC from playbook to production - Inside Atlassian</a> — published 2026-10-07, retrieved 2026-10-11</p>
+<p id="src-14">14. <a href="https://www.owler.com/company/atlassian/competitors" target="_blank" rel="noopener">Atlassian Competitors and Alternatives - Owler</a> — published 2026-07-20, retrieved 2026-10-11</p>
+<p id="src-15">15. <a href="https://linkedin.com/in/sureshkhemka" target="_blank" rel="noopener">Suresh Kumar Khemka</a> — published 2026-10-03, retrieved 2026-10-11</p>
+<p id="src-16">16. <a href="https://linkedin.com/in/pushyamigali" target="_blank" rel="noopener">Pushyami G.</a> — published 2026-10-06, retrieved 2026-10-11</p>
+<p id="src-17">17. <a href="https://www.atlassian.com/blog/company-news/atlassian-openai-strategic-partnership" target="_blank" rel="noopener">Grounding Frontier Intelligence in Enterprise Context - Inside Atlassian</a> — published 2026-10-06, retrieved 2026-10-11</p>
+<p id="src-18">18. <a href="https://www.atlassian.com/blog/development/deeplink-to-your-ai-coding-tool-from-jira" target="_blank" rel="noopener">Deeplink to your AI coding tool from Jira - Inside Atlassian</a> — published 2026-06-16, retrieved 2026-10-11</p>
+<p id="src-19">19. <a href="https://linkedin.com/company/atlassian" target="_blank" rel="noopener">Atlassian</a> — retrieved 2026-10-11</p>
+<p id="src-20">20. <a href="https://www.linkedin.com/in/taroonm" target="_blank" rel="noopener">Taroon Mandhana - CTO, AI &amp; Teamwork at Atlassian, Ex- ...</a> — published 2026-10-06, retrieved 2026-10-11</p>
+<p id="src-21">21. <a href="https://www.linkedin.com/posts/sureshkhemka_kubecon-kubeconindia-kubernetes-activity-7473618744687345664-Za8j" target="_blank" rel="noopener">From KubeCon stage to a 600-meter sprint at the airport — yesterday was eventful.</a> — published 2026-06-19, retrieved 2026-10-11</p>
+<p id="src-22">22. <a href="https://linkedin.com/in/harikrisl" target="_blank" rel="noopener">Hari L</a> — published 2026-09-20, retrieved 2026-10-11</p>
+<p id="src-23">23. <a href="https://www.linkedin.com/posts/shubham541994_deep-dive-into-dev-infra-activity-7459953349551894528-e7P-" target="_blank" rel="noopener">🎙️ Excited to host Hari Lingamagunta, Head of Engineering, Dev Infra at Atlassian, on our latest episode of the Engineered by Atlassian podcast! | Shubham Gupta</a> — published 2026-05-12, retrieved 2026-10-11</p>
+<p id="src-24">24. <a href="https://linkedin.com/in/saravanakumarrajendran" target="_blank" rel="noopener">Saran Rajendran</a> — published 2026-09-26, retrieved 2026-10-11</p>
+<p id="src-25">25. <a href="https://devin.ai/customers/fefundinfo" target="_blank" rel="noopener">Customers | FE fundinfo | Devin</a> — published 2026-05-31, retrieved 2026-10-07</p>
+<p id="src-26">26. <a href="https://devin.ai/customers/nubank/" target="_blank" rel="noopener">Customers | Nubank | Devin</a> — published 2026-06-20, retrieved 2026-10-07</p>
+<p id="src-27">27. <a href="https://devin.ai/customers/itau" target="_blank" rel="noopener">Customers | Itaú - Devin</a> — retrieved 2026-10-07</p>
+<p id="src-28">28. <a href="https://devin.ai/customers/evinova" target="_blank" rel="noopener">Customers | Evinova | Devin</a> — published 2026-07-02, retrieved 2026-10-07</p>
+<p id="src-29">29. <a href="https://devin.ai/customers/ramp/" target="_blank" rel="noopener">Customers | Ramp | Devin</a> — published 2025-03-25, retrieved 2026-10-07</p>
+<p class="meta"><em>Validator: 0 unsupported item(s) dropped, 3 flag(s).</em></p>
+</section></details>
+</main>
+</div>
+<div id="pop">
+  <textarea id="popText" placeholder="Comment on this selection…"></textarea>
+  <select id="popTag">
+    <option value="">Just this brief</option>
+    <option value="applies always">Applies always</option>
+    <option value="keep this">Keep this (positive)</option>
+  </select>
+  <div class="row"><button id="popCancel">Cancel</button>
+  <button id="popAdd" class="primary">Add comment</button></div>
+</div>
+<aside id="panel">
+  <h2>Your feedback</h2>
+  <div class="hint">Queued comments. Nothing is saved until you submit.</div>
+  <div id="list"></div>
+  <input id="repName" placeholder="Your handle (optional — defaults to the requester)">
+  <button id="submitAll" class="primary">Submit all feedback (0)</button>
+  <div id="status"></div>
+</aside>
+<script>
+const queue = [];
+const report = document.getElementById('report');
+const pop = document.getElementById('pop');
+const popText = document.getElementById('popText');
+const popTag = document.getElementById('popTag');
+const panel = document.getElementById('panel');
+const list = document.getElementById('list');
+const status = document.getElementById('status');
+const submitBtn = document.getElementById('submitAll');
+const repName = document.getElementById('repName');
+let pendingRange = null;
+let pendingQuote = '';
+let pendingSection = '';
+let draftMarks = [];
+
+function clearDraft() {
+  draftMarks.forEach(m => { m.outerHTML = m.innerHTML; });
+  draftMarks = [];
+}
+
+function hidePop() {
+  pop.style.display='none';
+  clearDraft();
+  pendingRange = null;
+  pendingQuote = '';
+}
+
+function sectionOf(node) {
+  const el = node.nodeType === 3 ? node.parentElement : node;
+  const sec = el && el.closest('section.sec');
+  return sec ? sec.dataset.section : '';
+}
+
+document.addEventListener('mouseup', (e) => {
+  if (pop.contains(e.target)) return;
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed || !report.contains(sel.anchorNode)) { hidePop(); return; }
+  clearDraft();
+  pendingRange = sel.getRangeAt(0).cloneRange();
+  // capture quote + section now: highlightRange mutates/splits the text nodes the
+  // range points at, so reading them later (at Add) comes back empty
+  pendingQuote = pendingRange.toString().trim();
+  pendingSection = sectionOf(pendingRange.startContainer);
+  draftMarks = highlightRange(pendingRange, 'draft');  // visible while the popover is open
+  pop.style.display='block';
+  pop.style.left = Math.min(e.pageX, window.innerWidth - 300) + 'px';
+  pop.style.top = (e.pageY + 8) + 'px';
+  popText.value='';   // no autofocus: it would collapse the selection and break Cmd+C
+});
+
+function renderPanel() {
+  panel.style.display = queue.length ? 'block' : 'none';
+  document.body.classList.toggle('has-panel', !!queue.length);
+  list.innerHTML='';
+  queue.forEach((c, i) => {
+    const d = document.createElement('div');
+    d.className='comment';
+    const rm = document.createElement('button');
+    rm.className='rm'; rm.textContent='✕';
+    rm.onclick = () => { queue.splice(i,1);
+      (c.marks||[]).forEach(m => { m.outerHTML = m.innerHTML; });
+      renderPanel(); };
+    const q = document.createElement('q'); q.textContent = c.quote;
+    const meta = document.createElement('div');
+    meta.innerHTML = `<span class="sec-tag">${c.section||'—'}</span>` +
+      (c.tag ? `<span class="tag-tag">${c.tag}</span>` : '');
+    const n = document.createElement('div'); n.textContent = c.note;
+    d.append(rm, q, meta, n);
+    list.appendChild(d);
+  });
+  submitBtn.textContent = `Submit all feedback (${queue.length})`;
+}
+
+function highlightRange(range, cls) {
+  // wrap every text node the range touches — surroundContents alone fails on
+  // selections that span elements, which is most of them
+  const marks = [];
+  const wrap = (r) => {
+    const m = document.createElement('mark');
+    m.className = cls;
+    try { r.surroundContents(m); marks.push(m); } catch (_) {}
+  };
+  const walker = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_TEXT, {
+    acceptNode(n) {
+      if (!n.nodeValue.trim() || !range.intersectsNode(n)) return NodeFilter.FILTER_SKIP;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  if (!nodes.length) {
+    try {  // selection inside one text node
+      const r = range.cloneRange();
+      wrap(r);
+    } catch (_) {}
+    return marks;
+  }
+  nodes.forEach((n) => {
+    const r = document.createRange();
+    r.selectNodeContents(n);
+    if (n === range.startContainer) r.setStart(n, range.startOffset);
+    if (n === range.endContainer) r.setEnd(n, range.endOffset);
+    wrap(r);
+  });
+  return marks;
+}
+
+document.getElementById('popAdd').onclick = () => {
+  if (!pendingRange) return;
+  if (!pendingQuote) { pop.style.display='none'; return; }
+  const c = { section: pendingSection, quote: pendingQuote,
+              note: popText.value.trim(), tag: popTag.value };
+  c.marks = draftMarks;               // promote the visible draft highlight
+  draftMarks = [];
+  c.marks.forEach(m => m.className = 'pending');
+  queue.push(c);
+  window.getSelection().removeAllRanges();
+  pop.style.display='none';
+  pendingRange = null;
+  pendingQuote = '';
+  renderPanel();
+};
+document.getElementById('popCancel').onclick = hidePop;
+
+// citation links open the collapsed Sources block before jumping
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a.cite');
+  if (a) document.querySelectorAll('details.refs').forEach(d => d.open = true);
+});
+
+// drafted messages: group each labeled block (Email / LinkedIn note / follow-up)
+// into a .cp wrapper with a copy button, so reps can paste straight into email.
+document.querySelectorAll('.sec-drafted-messages').forEach(sec => {
+  const labels = { 'Email': 'Copy email',
+                   'LinkedIn connection note': 'Copy note',
+                   'LinkedIn follow-up': 'Copy follow-up' };
+  let group = null;
+  [...sec.children].forEach(el => {
+    if (el.matches('h3')) { group = null; return; }
+    // draft labels render as <p class="meta"><em><em>Label</em>… — the nested
+    // em marks a block boundary; anything else belongs to the open group
+    const inner = el.tagName === 'P' && el.querySelector('em em');
+    if (inner) {
+      const label = labels[inner.textContent.trim()];
+      group = null;   // unknown labels (e.g. rep-only "Send notes") end the group
+      if (label) {
+        group = document.createElement('div');
+        group.className = 'cp';
+        sec.insertBefore(group, el);
+        const btn = document.createElement('button');
+        btn.className = 'cpbtn'; btn.type = 'button';
+        btn.dataset.l = label; btn.textContent = label;
+        const g = group;               // capture now — `group` is reused per label
+        btn.onclick = () => copyGroup(g, btn);
+        group.appendChild(btn);
+        el.classList.add('cplabel');
+      }
+    }
+    if (group) group.appendChild(el);
+  });
+});
+
+async function copyGroup(g, btn) {
+  const c = g.cloneNode(true);
+  c.querySelectorAll('.cpbtn,.cplabel').forEach(n => n.remove());
+  // drop rep-only trailers that can trail into the last group of a draft
+  c.querySelectorAll('p > em:first-child').forEach(em => {
+    if (/^(Built from|Lint)/.test(em.textContent)) em.parentElement.remove();
+  });
+  // innerText needs layout: park the clone offscreen so paragraph breaks survive
+  c.style.cssText = 'position:fixed;left:-9999px;top:0';
+  document.body.appendChild(c);
+  const text = c.innerText.trim(), markup = c.innerHTML;
+  c.remove();
+  let copied = false;
+  try {
+    await navigator.clipboard.write([new ClipboardItem({
+      'text/plain': new Blob([text], {type:'text/plain'}),
+      'text/html': new Blob([markup], {type:'text/html'})
+    })]);
+    copied = true;
+  } catch (_) {}
+  if (!copied) {
+    // fallback that needs no clipboard permission: hide the chrome, select the
+    // block, and let the browser's own copy command carry the rich HTML
+    const hidden = [];
+    g.querySelectorAll('.cpbtn,.cplabel').forEach(n => {
+      hidden.push([n, n.style.display]); n.style.display = 'none';
+    });
+    const r = document.createRange();
+    r.selectNodeContents(g);
+    const sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(r);
+    try { copied = document.execCommand('copy'); } catch (_) {}
+    sel.removeAllRanges();
+    hidden.forEach(([n, d]) => { n.style.display = d; });
+  }
+  btn.classList.add('ok');
+  btn.textContent = '✓ Copied';
+  setTimeout(() => { btn.classList.remove('ok'); btn.textContent = btn.dataset.l; }, 1600);
+}
+
+// Cmd/Ctrl+C with no selection inside a draft block copies that whole block;
+// with a selection the browser's native copy already carries rich HTML.
+document.addEventListener('copy', (e) => {
+  const sel = window.getSelection();
+  if (!sel || !sel.isCollapsed || !report.contains(sel.anchorNode)) return;
+  const el = sel.anchorNode && sel.anchorNode.nodeType === 3
+    ? sel.anchorNode.parentElement : sel.anchorNode;
+  const g = el && el.closest('.cp');
+  if (!g) return;
+  const c = g.cloneNode(true);
+  c.querySelectorAll('.cpbtn,.cplabel').forEach(n => n.remove());
+  c.querySelectorAll('p > em:first-child').forEach(em => {
+    if (/^(Built from|Lint)/.test(em.textContent)) em.parentElement.remove();
+  });
+  c.style.cssText = 'position:fixed;left:-9999px;top:0';
+  document.body.appendChild(c);
+  e.clipboardData.setData('text/plain', c.innerText.trim());
+  e.clipboardData.setData('text/html', c.innerHTML);
+  c.remove();
+  e.preventDefault();
+  const b = g.querySelector('.cpbtn');   // same confirmation as the button
+  if (b) { b.classList.add('ok'); b.textContent = '✓ Copied';
+    setTimeout(() => { b.classList.remove('ok'); b.textContent = b.dataset.l; }, 1600); }
+});
+
+submitBtn.onclick = async () => {
+  submitBtn.disabled = true;
+  status.className=''; status.textContent='Submitting…';
+  const comments = queue.map(({section, quote, note, tag}) => ({section, quote, note, tag}));
+  try {
+    const r = await fetch(location.pathname.replace(/\/$/,'') + '/comments', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({comments, rep: repName && repName.value.trim() || null})
+    });
+    if (!r.ok) throw new Error(await r.text());
+    queue.forEach(c => { (c.marks||[]).forEach(m => m.className='done'); });
+    queue.length = 0;
+    renderPanel();
+    status.textContent='Saved — thank you. The next brief run will pick these up.';
+  } catch (e) {
+    status.className='err';
+    status.textContent='Could not save — your comments are still queued. Click Submit to retry.';
+  } finally {
+    submitBtn.disabled = false;
+  }
+};
+</script>
+</body></html>

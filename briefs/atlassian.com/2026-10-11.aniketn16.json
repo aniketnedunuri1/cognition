@@ -1,0 +1,1487 @@
+{
+ "domain": "atlassian.com",
+ "date": "2026-10-11",
+ "stem": "2026-10-11.aniketn16",
+ "saved_at": "2026-10-11T17:26:55+00:00",
+ "brief": {
+  "domain": "atlassian.com",
+  "company_name": "Atlassian",
+  "verdict": {
+   "verdict": "warm",
+   "why_now": "Atlassian's own eng teams publish agent-run maintenance work (chores, vulns, migrations), but they run their in-house coding agent Rovo Dev, so the angle is expand alongside it.",
+   "based_on": [
+    {
+     "source_id": "src_db30516f9a",
+     "quote": "So far, it’s responsible for more than 500 merged PRs in the past 70 days.",
+     "date_quote": null,
+     "date": "2026-06-01",
+     "stale": null
+    },
+    {
+     "source_id": "src_f969c53f3d",
+     "quote": "Routine vulnerability fixes are rarely difficult in isolation. The interruption that they cause is the problem",
+     "date_quote": null,
+     "date": "2026-08-31",
+     "stale": null
+    },
+    {
+     "source_id": "src_9011f02b6c",
+     "quote": "The experiment to migrate `styled-components` to `@compiled css-in-js` resulted in migrating majority of usages",
+     "date_quote": null,
+     "date": "2026-04-16",
+     "stale": null
+    },
+    {
+     "source_id": "src_0afe869dbc",
+     "quote": "used our Rovo Dev cohort to test it",
+     "date_quote": null,
+     "date": "2026-06-01",
+     "stale": null
+    }
+   ],
+   "watch_for": "A published gap in Rovo Dev coverage, a new DevProd or AI-enablement leader, or Jira adding more third-party coding agents."
+  },
+  "snapshot": {
+   "hq": [
+    {
+     "value": "Apollo reports HQ in Sydney, New South Wales, Australia",
+     "evidence": [
+      {
+       "source_id": "src_083a54b8da",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "founded": [
+    {
+     "value": "Apollo reports founded 2002",
+     "evidence": [
+      {
+       "source_id": "src_083a54b8da",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "industry": [
+    {
+     "value": "Apollo reports information technology & services",
+     "evidence": [
+      {
+       "source_id": "src_083a54b8da",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "ownership": [
+    {
+     "value": "Apollo reports public, NASDAQ: TEAM",
+     "evidence": [
+      {
+       "source_id": "src_083a54b8da",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "parent_company": [],
+   "headcount": [
+    {
+     "value": "Apollo reports ~14,000 employees",
+     "evidence": [
+      {
+       "source_id": "src_083a54b8da",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "Annual report: 13,301 full-time employees as of June 30, 2026",
+     "evidence": [
+      {
+       "source_id": "src_494b9b7abb",
+       "quote": "we had 13,301 full-time employees",
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "headcount_growth": [
+    {
+     "value": "Apollo reports +1.4% (6 mo), +1.9% (12 mo), +18.3% (24 mo)",
+     "evidence": [
+      {
+       "source_id": "src_083a54b8da",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "revenue": [
+    {
+     "value": "Apollo reports ~$6.6B revenue",
+     "evidence": [
+      {
+       "source_id": "src_083a54b8da",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "FY2026 revenue $6,572 million, up 26%",
+     "evidence": [
+      {
+       "source_id": "src_30ff0856d8",
+       "quote": "Total revenue was $6,572 million for fiscal year 2026, up 26% from $5,215 million for fiscal year 2025.",
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "funding": [],
+   "sells_to": [
+    {
+     "value": "Software, IT and business teams; teams and AI agents work together in Jira",
+     "evidence": [
+      {
+       "source_id": "src_844e3a65e0",
+       "quote": "In Jira, teams and AI agents plan, execute, and deliver outcomes together.",
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "products": [
+    {
+     "value": "Jira, Confluence, Loom, Rovo",
+     "evidence": [
+      {
+       "source_id": "src_844e3a65e0",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ]
+  },
+  "engineering": {
+   "eng_headcount": [
+    {
+     "value": "Apollo reports ~8,020 engineering employees",
+     "evidence": [
+      {
+       "source_id": "src_083a54b8da",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "open_eng_roles": [
+    {
+     "value": "Apollo lists open engineering roles such as Senior Backend Software Engineer",
+     "evidence": [
+      {
+       "source_id": "src_6233c1a3f1",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-10-10",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "tech_stack": [
+    {
+     "value": "Sumble (job posts): Golang, Java, Python, AWS (EC2, EKS), Kafka, Splunk, OpenTelemetry, Databricks",
+     "evidence": [
+      {
+       "source_id": "src_5efe7a6975",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "ai_dev_tools": [
+    {
+     "value": "In-house coding agent Rovo Dev used internally (Rovo Dev cohort)",
+     "evidence": [
+      {
+       "source_id": "src_0afe869dbc",
+       "quote": "used our Rovo Dev cohort to test it",
+       "date_quote": null,
+       "date": "2026-06-01",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "Rovo Dev Code Reviewer deployed across 1,900+ internal repos",
+     "evidence": [
+      {
+       "source_id": "src_70dcaf468a",
+       "quote": "deployed across more than 1,900 Atlassian’s source code repositories",
+       "date_quote": null,
+       "date": "2026-07-11",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "Apollo website tags hint at GitHub Copilot and Cursor (hint only, unconfirmed)",
+     "evidence": [
+      {
+       "source_id": "src_083a54b8da",
+       "quote": null,
+       "date_quote": null,
+       "date": null,
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "eng_blog_and_github": [
+    {
+     "value": "Inside Atlassian engineering posts on agent-run chores, vuln pipelines and Rovo Dev migrations",
+     "evidence": [
+      {
+       "source_id": "src_db30516f9a",
+       "quote": "So far, it’s responsible for more than 500 merged PRs in the past 70 days.",
+       "date_quote": null,
+       "date": "2026-06-01",
+       "stale": null
+      },
+      {
+       "source_id": "src_f969c53f3d",
+       "quote": "Routine vulnerability fixes are rarely difficult in isolation. The interruption that they cause is the problem",
+       "date_quote": null,
+       "date": "2026-08-31",
+       "stale": null
+      },
+      {
+       "source_id": "src_9011f02b6c",
+       "quote": "The experiment to migrate `styled-components` to `@compiled css-in-js` resulted in migrating majority of usages",
+       "date_quote": null,
+       "date": "2026-04-16",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "ai_posture": [
+    {
+     "value": "Shareholder letter frames context, not models, as the moat",
+     "evidence": [
+      {
+       "source_id": "src_4f232beb91",
+       "quote": "Context is much harder for organizations to build. And it cannot be hired.",
+       "date_quote": null,
+       "date": "2026-08-06",
+       "stale": null
+      }
+     ]
+    },
+    {
+     "value": "CTO: coding isn't the bottleneck anymore",
+     "evidence": [
+      {
+       "source_id": "src_5731b8a0ae",
+       "quote": "Coding isn't the bottleneck anymore.",
+       "date_quote": null,
+       "date": "2026-07-09",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "priorities": [
+    {
+     "value": "AI-native SDLC: 94% of eng leaders use AI, 6% can scale and govern it",
+     "evidence": [
+      {
+       "source_id": "src_0e5258e70c",
+       "quote": "94% of engineering leaders said their teams are already using AI, yet only 6% said they have the systems to scale and govern it",
+       "date_quote": null,
+       "date": "2026-10-07",
+       "stale": null
+      }
+     ]
+    }
+   ],
+   "peers": [
+    {
+     "value": "Owler lists Asana, ServiceNow, Microsoft, GitLab, monday.com",
+     "evidence": [
+      {
+       "source_id": "src_cdda0c7c15",
+       "quote": "Atlassian's top 13 competitors are Asana, ServiceNow, Microsoft, IBM, Gitlab, PagerDuty, Freshworks, BMC, Alphabet, monday.com, Smartsheet, Notion and Wrike.",
+       "date_quote": null,
+       "date": "2026-07-20",
+       "stale": null
+      }
+     ]
+    }
+   ]
+  },
+  "signals": [
+   {
+    "headline": "Jira team automated flaky tests and old feature flags with agents",
+    "type": "tech_debt",
+    "source": "eng_blog",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_db30516f9a",
+      "quote": "So far, it’s responsible for more than 500 merged PRs in the past 70 days.",
+      "date_quote": null,
+      "date": "2026-06-01",
+      "stale": true
+     },
+     {
+      "source_id": "src_db30516f9a",
+      "quote": "This includes work like cleaning up old feature flags, chasing flaky tests, fixing identified vulnerabilities, addressing accessibility issues, and chipping away at a long tail of bugs.",
+      "date_quote": null,
+      "date": "2026-06-01",
+      "stale": true
+     }
+    ],
+    "use_case": "Tech debt & maintenance",
+    "who_cares": [
+     "Saran Rajendran",
+     "Pushyami G.",
+     "Hari L"
+    ],
+    "tier": 2
+   },
+   {
+    "headline": "Bitbucket team turned routine vuln fixes into agent pipelines",
+    "type": "quality_security",
+    "source": "eng_blog",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_f969c53f3d",
+      "quote": "Routine vulnerability fixes are rarely difficult in isolation. The interruption that they cause is the problem",
+      "date_quote": null,
+      "date": "2026-08-31",
+      "stale": null
+     }
+    ],
+    "use_case": "Vulnerability remediation",
+    "who_cares": [
+     "Hari L",
+     "David B. Cross"
+    ],
+    "tier": 2
+   },
+   {
+    "headline": "Frontend platform moved styled-components to Compiled with an agent",
+    "type": "migration",
+    "source": "eng_blog",
+    "horizon": "tactical",
+    "evidence": [
+     {
+      "source_id": "src_9011f02b6c",
+      "quote": "The experiment to migrate `styled-components` to `@compiled css-in-js` resulted in migrating majority of usages",
+      "date_quote": null,
+      "date": "2026-04-16",
+      "stale": true
+     }
+    ],
+    "use_case": "Code migration & modernization",
+    "who_cares": [
+     "Pushyami G."
+    ],
+    "tier": 2
+   },
+   {
+    "headline": "Two engineering heads previously worked at Devin customer Infosys",
+    "type": "leadership_change",
+    "source": "profile",
+    "horizon": "strategic",
+    "evidence": [
+     {
+      "source_id": "src_9a500dad61",
+      "quote": "Head of Engineering - Compute Platform @Atlassian",
+      "date_quote": null,
+      "date": "2026-10-03",
+      "stale": null
+     },
+     {
+      "source_id": "src_4c22768e22",
+      "quote": "Set OKRs , roadmap and direction for Jira frontend platform teams to improve product performance and developer productivity.",
+      "date_quote": null,
+      "date": "2026-10-06",
+      "stale": null
+     }
+    ],
+    "use_case": "Tech debt & maintenance",
+    "who_cares": [
+     "Suresh Kumar Khemka",
+     "Pushyami G."
+    ],
+    "tier": 1
+   }
+  ],
+  "additional_signals": [
+   {
+    "label": "news_mention",
+    "headline": "Atlassian launched AI-native SDLC tooling on Oct 7",
+    "evidence": [
+     {
+      "source_id": "src_0e5258e70c",
+      "quote": "94% of engineering leaders said their teams are already using AI, yet only 6% said they have the systems to scale and govern it",
+      "date_quote": null,
+      "date": "2026-10-07",
+      "stale": null
+     }
+    ],
+    "days_ago": 4
+   },
+   {
+    "label": "news_mention",
+    "headline": "Atlassian and OpenAI partnership announced Oct 6",
+    "evidence": [
+     {
+      "source_id": "src_dcbb3949dd",
+      "quote": "How Atlassian and OpenAI are connecting AI to how teams actually plan, build, and deliver",
+      "date_quote": null,
+      "date": "2026-10-06",
+      "stale": null
+     }
+    ],
+    "days_ago": 5
+   }
+  ],
+  "competitive_context": [
+   {
+    "value": "Atlassian runs its own coding agent, Rovo Dev, internally (cohort study, code reviewer on 1,900+ repos, vuln pipelines). Expand alongside, never displace.",
+    "evidence": [
+     {
+      "source_id": "src_0afe869dbc",
+      "quote": "used our Rovo Dev cohort to test it",
+      "date_quote": null,
+      "date": "2026-06-01",
+      "stale": null
+     },
+     {
+      "source_id": "src_70dcaf468a",
+      "quote": "deployed across more than 1,900 Atlassian’s source code repositories",
+      "date_quote": null,
+      "date": "2026-07-11",
+      "stale": null
+     }
+    ],
+    "situation": "competitor_in_production"
+   },
+   {
+    "value": "Jira deep-links to six coding agents including Claude Code, Cursor, GitHub Copilot and OpenAI Codex (product integration, not proof of internal use)",
+    "evidence": [
+     {
+      "source_id": "src_5f62c7c879",
+      "quote": "At launch, Jira supports six coding agents",
+      "date_quote": null,
+      "date": "2026-06-16",
+      "stale": null
+     }
+    ],
+    "situation": "other"
+   }
+  ],
+  "company_linkedin": [
+   {
+    "value": "94% of engineering organizations have adopted AI, but only 6% have systems for it",
+    "evidence": [
+     {
+      "source_id": "src_a7b01fd841",
+      "quote": "94% of engineering organizations have adopted AI. But only 6% have",
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     }
+    ],
+    "kind": "original",
+    "tags": []
+   }
+  ],
+  "people": [
+   {
+    "name": "Taroon Mandhana",
+    "title": "Chief Technology Officer",
+    "deal_role": "economic_buyer",
+    "team": "AI and Teamwork",
+    "why": "Exec sponsor; publicly argues coding is no longer the bottleneck",
+    "evidence": [
+     {
+      "source_id": "src_ec35543f16",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-06",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [
+     {
+      "value": "Said on the Mainstage that coding isn't the bottleneck anymore, alignment is",
+      "evidence": [
+       {
+        "source_id": "src_5731b8a0ae",
+        "quote": "Coding isn't the bottleneck anymore.",
+        "date_quote": null,
+        "date": "2026-07-09",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_ec35543f16",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Suresh Kumar Khemka",
+    "title": "Head of Engineering",
+    "deal_role": "technical_evaluator",
+    "team": "Compute Platform (Platform Engineering, SRE, DevEx)",
+    "why": "Platform/DevEx head at a Devin-customer alum; entry point for the over-2,000 band",
+    "evidence": [
+     {
+      "source_id": "src_9a500dad61",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-03",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Previously worked at Infosys, a public Devin customer (worked-at, not proof of personal Devin use)",
+      "evidence": [
+       {
+        "source_id": "src_9a500dad61",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-10-03",
+        "stale": null
+       }
+      ],
+      "kind": "ex_devin_customer"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Spoke on a KubeCon + CloudNativeCon India 2026 panel",
+      "evidence": [
+       {
+        "source_id": "src_60e203593f",
+        "quote": "spoke at KubeCon + CloudNativeCon India 2026 in Mumbai",
+        "date_quote": null,
+        "date": "2026-06-19",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "champion",
+    "featured": true,
+    "profile_source_id": "src_9a500dad61",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Hari L",
+    "title": "Head of Engineering",
+    "deal_role": "technical_evaluator",
+    "team": "Dev Infra",
+    "why": "Owns developer infrastructure, where maintenance and vuln pipelines run",
+    "evidence": [
+     {
+      "source_id": "src_d5ccd39ac7",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-20",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [
+     {
+      "value": "Guest on the Engineered by Atlassian podcast as Head of Engineering, Dev Infra",
+      "evidence": [
+       {
+        "source_id": "src_5271759038",
+        "quote": "Excited to host Hari Lingamagunta, Head of Engineering, Dev Infra at Atlassian",
+        "date_quote": null,
+        "date": "2026-05-12",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": true,
+    "profile_source_id": "src_d5ccd39ac7",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Pushyami G.",
+    "title": "Head of Engineering (Acting)",
+    "deal_role": "technical_evaluator",
+    "team": "Jira frontend platform",
+    "why": "Owns Jira frontend platform direction and developer productivity; frontend migration is live work",
+    "evidence": [
+     {
+      "source_id": "src_4c22768e22",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-06",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Previously worked at Infosys, a public Devin customer (worked-at, not proof of personal Devin use)",
+      "evidence": [
+       {
+        "source_id": "src_4c22768e22",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-10-06",
+        "stale": null
+       }
+      ],
+      "kind": "ex_devin_customer"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Sets OKRs and roadmap for Jira frontend platform teams on performance and developer productivity",
+      "evidence": [
+       {
+        "source_id": "src_4c22768e22",
+        "quote": "Set OKRs , roadmap and direction for Jira frontend platform teams to improve product performance and developer productivity.",
+        "date_quote": null,
+        "date": "2026-10-06",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "champion",
+    "featured": true,
+    "profile_source_id": "src_4c22768e22",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Saran Rajendran",
+    "title": "Head of Engineering",
+    "deal_role": "technical_evaluator",
+    "team": "Jira Platform",
+    "why": "Leads Jira Platform, the org behind the agent-run chores work",
+    "evidence": [
+     {
+      "source_id": "src_7122611c18",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-26",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Previously worked at Cisco, a public Devin customer (worked-at, not proof of personal Devin use)",
+      "evidence": [
+       {
+        "source_id": "src_7122611c18",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-09-26",
+        "stale": null
+       }
+      ],
+      "kind": "ex_devin_customer"
+     }
+    ],
+    "hooks": [
+     {
+      "value": "Head of Engineering for Jira Platform",
+      "evidence": [
+       {
+        "source_id": "src_7122611c18",
+        "quote": "Head of Engineering for Jira Platform",
+        "date_quote": null,
+        "date": "2026-09-26",
+        "stale": null
+       }
+      ]
+     }
+    ],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "champion",
+    "featured": true,
+    "profile_source_id": "src_7122611c18",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Pablo Ganga",
+    "title": "Director, Head of Engineering - Growth",
+    "deal_role": "technical_evaluator",
+    "team": "Growth",
+    "why": "Growth engineering head; Devin-customer alum",
+    "evidence": [
+     {
+      "source_id": "src_65cd05bce7",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-07",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Previously worked at Citi, a public Devin customer (worked-at, not proof of personal Devin use)",
+      "evidence": [
+       {
+        "source_id": "src_65cd05bce7",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-10-07",
+        "stale": null
+       }
+      ],
+      "kind": "ex_devin_customer"
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "champion",
+    "featured": false,
+    "profile_source_id": "src_65cd05bce7",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Jakub Telicki",
+    "title": "Principal Engineer | Architect",
+    "deal_role": "technical_evaluator",
+    "team": "",
+    "why": "Principal architect; Devin-customer alum",
+    "evidence": [
+     {
+      "source_id": "src_e81446856d",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-07",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [
+     {
+      "value": "Previously worked at Comarch, a public Devin customer (worked-at, not proof of personal Devin use)",
+      "evidence": [
+       {
+        "source_id": "src_e81446856d",
+        "quote": null,
+        "date_quote": null,
+        "date": "2026-10-07",
+        "stale": null
+       }
+      ],
+      "kind": "ex_devin_customer"
+     }
+    ],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "champion",
+    "featured": false,
+    "profile_source_id": "src_e81446856d",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Derek Cheng",
+    "title": "SVP Engineering",
+    "deal_role": "economic_buyer",
+    "team": "",
+    "why": "BU SVP of Engineering",
+    "evidence": [
+     {
+      "source_id": "src_eff56b30e1",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-06",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_eff56b30e1",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Guihong Cao",
+    "title": "Senior Vice President of Engineering",
+    "deal_role": "economic_buyer",
+    "team": "Atlassian AI",
+    "why": "Leads Atlassian AI engineering",
+    "evidence": [
+     {
+      "source_id": "src_756a6cc7c6",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-03",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_756a6cc7c6",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Suzie Prince",
+    "title": "Head of Product, Developer Productivity",
+    "deal_role": "technical_evaluator",
+    "team": "Developer Productivity",
+    "why": "Product owner for developer productivity",
+    "evidence": [
+     {
+      "source_id": "src_52f0fd874c",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-06",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_52f0fd874c",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Rebecca Fitzhugh",
+    "title": "Lead Principal Software Engineer",
+    "deal_role": "technical_evaluator",
+    "team": "",
+    "why": "Senior IC on developer productivity",
+    "evidence": [
+     {
+      "source_id": "src_56598e531b",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-06",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_56598e531b",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Ilia Fainshtroy",
+    "title": "Head of Engineering, Confluence Cloud",
+    "deal_role": "technical_evaluator",
+    "team": "Confluence Cloud",
+    "why": "BU engineering head",
+    "evidence": [
+     {
+      "source_id": "src_94f671c8e0",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-04",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_94f671c8e0",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Bevan Blackie",
+    "title": "Head of Engineering - Jira",
+    "deal_role": "technical_evaluator",
+    "team": "Jira",
+    "why": "BU engineering head",
+    "evidence": [
+     {
+      "source_id": "src_0709e00809",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-07",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_0709e00809",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Pulkit Bhavsar",
+    "title": "Head of Engineering, Jira Platform",
+    "deal_role": "technical_evaluator",
+    "team": "Jira Platform",
+    "why": "BU engineering head",
+    "evidence": [
+     {
+      "source_id": "src_574bc94b2b",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-05",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_574bc94b2b",
+    "current_basis": "profile"
+   },
+   {
+    "name": "David B. Cross",
+    "title": "Chief Information Security Officer",
+    "deal_role": "gatekeeper",
+    "team": "Security",
+    "why": "Security approver",
+    "evidence": [
+     {
+      "source_id": "src_71e7c8d6df",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-26",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_71e7c8d6df",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Karen Webley",
+    "title": "Head of Sourcing and Procurement",
+    "deal_role": "gatekeeper",
+    "team": "Procurement",
+    "why": "Procurement approver",
+    "evidence": [
+     {
+      "source_id": "src_18bbc516e1",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-09-10",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_18bbc516e1",
+    "current_basis": "profile"
+   },
+   {
+    "name": "Sisi Zhang",
+    "title": "Head of Sourcing, Technology Procurement",
+    "deal_role": "gatekeeper",
+    "team": "Procurement",
+    "why": "Technology procurement",
+    "evidence": [
+     {
+      "source_id": "src_af5a04e09a",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-10-06",
+      "stale": null
+     }
+    ],
+    "champion_evidence": [],
+    "hooks": [],
+    "reporting_line": null,
+    "incumbent_owner": false,
+    "verified": false,
+    "label": "candidate",
+    "featured": false,
+    "profile_source_id": "src_af5a04e09a",
+    "current_basis": "profile"
+   }
+  ],
+  "top_contacts": [
+   {
+    "name": "Suresh Kumar Khemka",
+    "why": {
+     "text": "Platform/DevEx head (over-2,000 entry point) and an Infosys alum",
+     "based_on": [
+      {
+       "source_id": "src_9a500dad61",
+       "quote": null,
+       "date_quote": null,
+       "date": "2026-10-03",
+       "stale": null
+      },
+      {
+       "source_id": "src_60e203593f",
+       "quote": "spoke at KubeCon + CloudNativeCon India 2026 in Mumbai",
+       "date_quote": null,
+       "date": "2026-06-19",
+       "stale": null
+      }
+     ]
+    }
+   },
+   {
+    "name": "Hari L",
+    "why": {
+     "text": "Dev Infra owner, closest to vuln and maintenance pipelines",
+     "based_on": [
+      {
+       "source_id": "src_5271759038",
+       "quote": "Excited to host Hari Lingamagunta, Head of Engineering, Dev Infra at Atlassian",
+       "date_quote": null,
+       "date": "2026-05-12",
+       "stale": null
+      },
+      {
+       "source_id": "src_f969c53f3d",
+       "quote": "Routine vulnerability fixes are rarely difficult in isolation. The interruption that they cause is the problem",
+       "date_quote": null,
+       "date": "2026-08-31",
+       "stale": null
+      }
+     ]
+    }
+   },
+   {
+    "name": "Taroon Mandhana",
+    "why": {
+     "text": "CTO as exec sponsor; publicly says coding isn't the bottleneck",
+     "based_on": [
+      {
+       "source_id": "src_5731b8a0ae",
+       "quote": "Coding isn't the bottleneck anymore.",
+       "date_quote": null,
+       "date": "2026-07-09",
+       "stale": null
+      }
+     ]
+    }
+   }
+  ],
+  "org_chart": "src_474f5b412d",
+  "abm_themes": [
+   {
+    "text": "Long-tail maintenance: Atlassian already proved agents clear chores; Devin takes the backlog Rovo Dev doesn't cover",
+    "based_on": [
+     {
+      "source_id": "src_db30516f9a",
+      "quote": "So far, it’s responsible for more than 500 merged PRs in the past 70 days.",
+      "date_quote": null,
+      "date": "2026-06-01",
+      "stale": null
+     },
+     {
+      "source_id": "src_0afe869dbc",
+      "quote": "used our Rovo Dev cohort to test it",
+      "date_quote": null,
+      "date": "2026-06-01",
+      "stale": null
+     }
+    ]
+   },
+   {
+    "text": "Security debt: routine vuln fixes as delegated, review-ready PRs",
+    "based_on": [
+     {
+      "source_id": "src_f969c53f3d",
+      "quote": "Routine vulnerability fixes are rarely difficult in isolation. The interruption that they cause is the problem",
+      "date_quote": null,
+      "date": "2026-08-31",
+      "stale": null
+     }
+    ]
+   },
+   {
+    "text": "Large migrations: frontend library moves done by agents with engineer review",
+    "based_on": [
+     {
+      "source_id": "src_9011f02b6c",
+      "quote": "The experiment to migrate `styled-components` to `@compiled css-in-js` resulted in migrating majority of usages",
+      "date_quote": null,
+      "date": "2026-04-16",
+      "stale": null
+     }
+    ]
+   }
+  ],
+  "drafts": [
+   {
+    "name": "Taroon Mandhana",
+    "email": {
+     "subject": "Cognition <> Atlassian",
+     "body": "Hi Taroon,\n\nYour Mainstage point that coding isn't the bottleneck anymore stuck with me. If alignment is the real constraint, then the execution work your engineers still carry by hand is the cost worth removing.\n\nDevin is an autonomous software engineer. Your engineers stay the architects and set direction, and Devin takes delegated tickets through to a pull request they review. FE fundinfo reports a 10% immediate increase in engineering capacity with Devin (https://devin.ai/customers/fefundinfo).\n\nWould you be open to a 20 minute call to see where that fits next to the agent work your teams already run?\n\nBest,"
+    },
+    "linkedin_note": "Hi Taroon, your Mainstage case that alignment, not coding, is now the bottleneck matches how we built Devin. Engineers set direction, and Devin hands back a reviewed PR for each delegated ticket. Would love to connect.",
+    "linkedin_followup": "Thanks for connecting, Taroon. Atlassian's own study found 94% of engineering leaders say their teams already use AI, yet only 6% have the systems to scale and govern it. That gap is where Devin earns its place. Every task Devin takes on starts as a ticket and comes back as a pull request with a reviewer attached, so governance stays inside the workflow you already have. Happy to show how other large engineering orgs set that up next to in-house agents. Open to a short call?",
+    "built_from": [
+     {
+      "source_id": "src_5731b8a0ae",
+      "quote": "Coding isn't the bottleneck anymore. Alignment is. That's the case Taroon Mandhana, CTO AI and Teamwork at Atlassian, made on the Mainstage",
+      "date_quote": null,
+      "date": "2026-07-09",
+      "stale": null
+     },
+     {
+      "source_id": "src_0e5258e70c",
+      "quote": "94% of engineering leaders said their teams are already using AI, yet only 6% said they have the systems to scale and govern it",
+      "date_quote": null,
+      "date": "2026-10-07",
+      "stale": null
+     },
+     {
+      "source_id": "src_080a9af999",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-05-31",
+      "stale": null
+     },
+     {
+      "source_id": "src_0afe869dbc",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-06-01",
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Taroon said on the Mainstage that coding isn't the bottleneck anymore and alignment is",
+      "source_id": "src_5731b8a0ae",
+      "quote": "Coding isn't the bottleneck anymore. Alignment is. That's the case Taroon Mandhana, CTO AI and Teamwork at Atlassian, made on the Mainstage"
+     },
+     {
+      "text": "94% of engineering leaders say their teams already use AI, yet only 6% have the systems to scale and govern it",
+      "source_id": "src_0e5258e70c",
+      "quote": "94% of engineering leaders said their teams are already using AI, yet only 6% said they have the systems to scale and govern it"
+     }
+    ],
+    "notes": "- Do not pitch \"have you tried agents?\" or displacing Rovo Dev; Atlassian builds and runs its own coding agent, so position Devin alongside it.\n- Exec sponsor angle: his public alignment thesis plus a capacity proof point; no product tour.\n- No peer proof available (no peer is a public Devin customer); proof is use-case level.\n- Never mention the March CTO transition or workforce reductions.\n- LinkedIn follow-up is sendable after he accepts.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Suresh Kumar Khemka",
+    "email": {
+     "subject": "Cognition <> Atlassian",
+     "body": "Hi Suresh,\n\nSaw that you spoke on a KubeCon panel. Running the Compute Platform group means a steady queue of upgrade and migration tickets that are repetitive but still need careful review.\n\nDevin works those tickets the way an engineer would. It runs your build and tests in its own environment, then opens a pull request for your team to approve. Nubank used Devin on a large migration and reported an 8x engineering time efficiency gain (https://devin.ai/customers/nubank/).\n\nWould it be worth 20 minutes to map one platform migration on your backlog to a Devin pilot?\n\nBest,"
+    },
+    "linkedin_note": "Hi Suresh, enjoyed seeing your KubeCon panel. I work with platform teams that use Devin to take repetitive upgrade and migration tickets all the way to a reviewed PR. Would love to connect.",
+    "linkedin_followup": "Thanks for connecting, Suresh. One idea for Compute Platform: pick a single migration your team keeps deferring and let Devin run it as parallel sessions, each one a separate pull request your engineers review and merge. It plugs into the CI you already have, so your review bar does not change. If the first batch merges cleanly, you have a repeatable path for the rest of that backlog. I can walk you through how teams scope the first pilot. Open to a short call?",
+    "built_from": [
+     {
+      "source_id": "src_60e203593f",
+      "quote": "spoke at KubeCon + CloudNativeCon India 2026 in Mumbai",
+      "date_quote": null,
+      "date": "2026-06-19",
+      "stale": null
+     },
+     {
+      "source_id": "src_9a500dad61",
+      "quote": "Head of Engineering - Compute Platform @Atlassian",
+      "date_quote": null,
+      "date": "2026-10-03",
+      "stale": null
+     },
+     {
+      "source_id": "src_c667764b4e",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-06-20",
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Suresh spoke on a KubeCon panel",
+      "source_id": "src_60e203593f",
+      "quote": "spoke at KubeCon + CloudNativeCon India 2026 in Mumbai"
+     },
+     {
+      "text": "Suresh runs the Compute Platform group",
+      "source_id": "src_9a500dad61",
+      "quote": "Head of Engineering - Compute Platform @Atlassian"
+     }
+    ],
+    "notes": "- Do not claim he used Devin at Infosys; worked-at is not used, and leave prior-employer trivia out of LinkedIn.\n- Technical evaluator angle: how Devin runs on a platform team's stack and CI, not the CTO pitch.\n- Atlassian runs Rovo Dev internally; frame Devin as extra capacity, not a replacement.\n- LinkedIn follow-up is sendable after he accepts.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Hari L",
+    "email": {
+     "subject": "Cognition <> Atlassian",
+     "body": "Hi Hari,\n\nA recent Atlassian engineering post on vulnerability fixes put it well: routine fixes are rarely difficult in isolation, the interruption they cause is the problem. That handoff cost lands on whoever owns developer infrastructure.\n\nDevin takes those tickets end to end, from tracing the dependency to opening the pull request, then hands the change back for review. Itaú reports 70% of security vulnerabilities automatically remediated with Devin (https://devin.ai/customers/itau).\n\nWorth 20 minutes to see how it would sit next to the pipelines you already run?\n\nBest,"
+    },
+    "linkedin_note": "Hi Hari, enjoyed your Engineered by Atlassian podcast episode as head of Dev Infra. I help teams use Devin to take routine dependency and security tickets through to reviewed PRs. Would love to connect.",
+    "linkedin_followup": "Thanks for connecting, Hari. The angle I would suggest for an infra org is the overflow: the dependency bumps and cleanup tickets that sit in a queue because nobody wants to pick them up. Devin works them in parallel and opens pull requests that land in the same review flow your engineers use today. No new pipeline is required. If useful, I can show how teams set a weekly cleanup quota and track merge rate. Open to a short call?",
+    "built_from": [
+     {
+      "source_id": "src_f969c53f3d",
+      "quote": "Routine vulnerability fixes are rarely difficult in isolation. The interruption that they cause is the problem",
+      "date_quote": null,
+      "date": "2026-08-31",
+      "stale": null
+     },
+     {
+      "source_id": "src_5271759038",
+      "quote": "Excited to host Hari Lingamagunta, Head of Engineering, Dev Infra at Atlassian, on our latest episode of the Engineered by Atlassian podcast!",
+      "date_quote": null,
+      "date": "2026-05-12",
+      "stale": null
+     },
+     {
+      "source_id": "src_5903e45c48",
+      "quote": null,
+      "date_quote": null,
+      "date": null,
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "A recent Atlassian engineering post said routine vulnerability fixes are rarely difficult in isolation and the interruption they cause is the problem",
+      "source_id": "src_f969c53f3d",
+      "quote": "Routine vulnerability fixes are rarely difficult in isolation. The interruption that they cause is the problem"
+     },
+     {
+      "text": "Hari appeared on the Engineered by Atlassian podcast as head of Dev Infra",
+      "source_id": "src_5271759038",
+      "quote": "Excited to host Hari Lingamagunta, Head of Engineering, Dev Infra at Atlassian, on our latest episode of the Engineered by Atlassian podcast!"
+     }
+    ],
+    "notes": "- Do not suggest replacing the Agentic Pipelines work; Atlassian already runs Rovo Dev for vuln fixes, so pitch the remainder and overflow.\n- Technical evaluator angle: fit with existing CI and review flow.\n- Hari L's surname appears as Lingamagunta in the podcast host's post; confirm before sending.\n- LinkedIn follow-up is sendable after he accepts.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Pushyami G.",
+    "email": {
+     "subject": "Cognition <> Atlassian",
+     "body": "Hi Pushyami,\n\nYou set the roadmap for Jira frontend platform teams on performance and developer productivity, and Atlassian's frontend platform engineers have written about using an agent to migrate off styled-components. That post noted the hard part was tricky edge cases where codemods couldn't update them.\n\nDevin is built for that remainder. It works each change in its own session and opens a pull request once your tests pass. Evinova reports 3x faster code migrations with Devin (https://devin.ai/customers/evinova).\n\nOpen to a 20 minute call on whether your remaining migration work is a fit?\n\nBest,"
+    },
+    "linkedin_note": "Hi Pushyami, I follow the Jira frontend platform work on performance and developer productivity. I help teams hand Devin the long tail of migration and cleanup tickets, each one landing as a PR for review. Would love to connect.",
+    "linkedin_followup": "Thanks for connecting, Pushyami. A thought for frontend platform teams: once a library migration is mostly done, the leftovers stall because each one needs real judgment. Devin is useful exactly there. It reads the surrounding component before making the change, and it hands back a pull request with its reasoning written up. A good first test is one stuck slice of the backlog. Happy to share how that pilot gets scoped. Worth a short call?",
+    "built_from": [
+     {
+      "source_id": "src_4c22768e22",
+      "quote": "Set OKRs , roadmap and direction for Jira frontend platform teams to improve product performance and developer productivity.",
+      "date_quote": null,
+      "date": "2026-10-06",
+      "stale": null
+     },
+     {
+      "source_id": "src_9011f02b6c",
+      "quote": "The experiment to migrate `styled-components` to `@compiled css-in-js` resulted in migrating majority of usages",
+      "date_quote": null,
+      "date": "2026-04-16",
+      "stale": null
+     },
+     {
+      "source_id": "src_b417d7289b",
+      "quote": null,
+      "date_quote": null,
+      "date": "2026-07-02",
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "Pushyami sets the roadmap for Jira frontend platform teams on performance and developer productivity",
+      "source_id": "src_4c22768e22",
+      "quote": "Set OKRs , roadmap and direction for Jira frontend platform teams to improve product performance and developer productivity."
+     },
+     {
+      "text": "Atlassian frontend platform engineers used an agent to migrate off styled-components",
+      "source_id": "src_9011f02b6c",
+      "quote": "The experiment to migrate `styled-components` to `@compiled css-in-js` resulted in migrating majority of usages"
+     },
+     {
+      "text": "the hard part was tricky edge cases where codemods couldn't update them",
+      "source_id": "src_9011f02b6c",
+      "quote": "most of them tricky edge cases, where codemods couldn’t update them"
+     }
+    ],
+    "notes": "- Do not frame this as redoing the Rovo Dev migration; pitch the remainder that is still open.\n- Do not mention her prior employer; worked-at is not proof she used Devin.\n- Technical evaluator angle on her frontend platform remit.\n- The migration post is about 6 months old; check current status before sending.",
+    "low_confidence": false,
+    "lint": []
+   },
+   {
+    "name": "Saran Rajendran",
+    "email": {
+     "subject": "Cognition <> Atlassian",
+     "body": "Hi Saran,\n\nThe Jira team's agent system for engineering chores has more than 500 merged PRs in the past 70 days, covering work like old feature flags and flaky tests. That is strong evidence the long tail can be delegated.\n\nDevin can extend that to chores that need more context than a single work item prompt, such as multi-repo changes or bugs that need a reproduction first. Ramp says Devin fixes tens of thousands of hours of technical debt (https://devin.ai/customers/ramp/).\n\nWould it be worth 20 minutes to see where Devin fits next to your current setup?\n\nBest,"
+    },
+    "linkedin_note": "Hi Saran, the Jira chores system built on agents is one of the clearest examples of delegated maintenance I have seen. I help teams use Devin for the harder tickets in that long tail. Would love to connect.",
+    "linkedin_followup": "Thanks for connecting, Saran. Since you lead Jira Platform, one place Devin helps is the tickets that bounce off simpler automation because they need a reproduction or changes across more than one repo. Devin works those in its own environment and opens a pull request your engineers review, so the bar stays where you set it. If useful, I can share how teams pick the first batch of tickets and track merge rate. Open to a short call?",
+    "built_from": [
+     {
+      "source_id": "src_db30516f9a",
+      "quote": "We built a system in Jira to automate the bulk of this work. So far, it’s responsible for more than 500 merged PRs in the past 70 days.",
+      "date_quote": null,
+      "date": "2026-06-01",
+      "stale": null
+     },
+     {
+      "source_id": "src_7122611c18",
+      "quote": "Head of Engineering for Jira Platform",
+      "date_quote": null,
+      "date": "2026-09-26",
+      "stale": null
+     },
+     {
+      "source_id": "src_d43f49e7a2",
+      "quote": null,
+      "date_quote": null,
+      "date": "2025-03-25",
+      "stale": null
+     }
+    ],
+    "claims": [
+     {
+      "text": "The Jira team built a system that has more than 500 merged PRs in the past 70 days",
+      "source_id": "src_db30516f9a",
+      "quote": "We built a system in Jira to automate the bulk of this work. So far, it’s responsible for more than 500 merged PRs in the past 70 days."
+     },
+     {
+      "text": "it covers work like old feature flags and flaky tests",
+      "source_id": "src_db30516f9a",
+      "quote": "This includes work like cleaning up old feature flags, chasing flaky tests, fixing identified vulnerabilities, addressing accessibility issues, and chipping away at a long tail of bugs."
+     },
+     {
+      "text": "Saran leads Jira Platform",
+      "source_id": "src_7122611c18",
+      "quote": "Head of Engineering for Jira Platform"
+     }
+    ],
+    "notes": "- Do not say \"throw away\" the chores system; Atlassian runs Rovo Dev, so join the next wave of harder tickets.\n- Do not mention his prior employer; worked-at is not proof he used Devin.\n- Chores post is about 4 months old; still the freshest evidence for this team.\n- LinkedIn follow-up is sendable after he accepts.",
+    "low_confidence": false,
+    "lint": []
+   }
+  ]
+ },
+ "report": {
+  "dropped_count": 0,
+  "dropped": [],
+  "flags": [
+   {
+    "path": "signals[0].evidence[0]",
+    "flag": "dated 2026-06-01 — over 3 months old; may be outdated"
+   },
+   {
+    "path": "signals[0].evidence[1]",
+    "flag": "dated 2026-06-01 — over 3 months old; may be outdated"
+   },
+   {
+    "path": "signals[2].evidence[0]",
+    "flag": "dated 2026-04-16 — over 3 months old; may be outdated"
+   }
+  ]
+ },
+ "since_last_run": null,
+ "requested_by": "aniketn16"
+}

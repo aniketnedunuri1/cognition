@@ -1,0 +1,15 @@
+{
+ "comments": [
+  {
+   "id": "c1",
+   "processed": true,
+   "submitted_at": "2026-10-11T16:09:01+00:00",
+   "section": "Drafted messages",
+   "quote": "Devin works those tickets the way an engineer would: it clones the repo, runs your build and tests in its own environment, and opens a pull request for your team to approve",
+   "note": "I dont want you to use lists of 3. Use complete sentences.",
+   "tag": "applies always",
+   "rep": "aniketn16",
+   "processed_at": "2026-10-11T17:26:54+00:00"
+  }
+ ]
+}
