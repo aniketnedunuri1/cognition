@@ -29,6 +29,12 @@
    "scope": "global",
    "evidence": 1,
    "added": "2026-10-10"
+  },
+  {
+   "rule": "Never write lists of three in drafts, and that includes verb series such as 'it clones the repo, runs the tests, and opens a PR'. Write complete sentences that name at most two concrete things or actions each.",
+   "scope": "global",
+   "evidence": 1,
+   "added": "2026-10-11"
   }
  ],
  "golden_examples": {}
